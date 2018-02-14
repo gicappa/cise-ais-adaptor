@@ -1,0 +1,402 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>cise-ais-adaptor</artifactId>
+  <groupId>eu.europa.ec.jrc.marex</groupId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>cise-ais-adaptor</name>
+
+  <modules>
+    <module>ais-adaptor-api</module>
+    <module>ais-adaptor-domain</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- tester plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.20</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.surefire</groupId>
+              <artifactId>surefire-junit47</artifactId>
+              <version>2.20</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <!-- This conf avoid parallel execution on different JVM -->
+            <!-- Useful when spawning servers on junit rules -->
+            <forkCount>1</forkCount>
+            <reuseForks>false</reuseForks>
+            <!-- === -->
+
+            <useFile>${useFile}</useFile>
+            <excludedGroups>${testcase.excludedGroups}</excludedGroups>
+            <includes>
+              <include>**/*Spec.java</include>
+              <include>**/*Test*.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+
+        <!-- compiler plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.5.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+
+        <!-- create a launchable single jar with the whole application -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>2.4.3</version>
+          <configuration>
+            <createDependencyReducedPom>true</createDependencyReducedPom>
+            <filters>
+              <filter>
+                <artifact>*:*</artifact>
+                <excludes>
+                  <exclude>META-INF/*.SF</exclude>
+                  <exclude>META-INF/*.DSA</exclude>
+                  <exclude>META-INF/*.RSA</exclude>
+                </excludes>
+              </filter>
+            </filters>
+          </configuration>
+        </plugin>
+
+        <!-- create an appropriate javadoc -->
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+            <javadocDirectory>${main.basedir}/src/javadoc</javadocDirectory>
+            <docfilessubdirs>true</docfilessubdirs>
+            <aggregate>true</aggregate>
+            <show>private</show>
+            <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+            <docletArtifact>
+              <groupId>org.umlgraph</groupId>
+              <artifactId>umlgraph</artifactId>
+              <version>5.6.6</version>
+            </docletArtifact>
+            <additionalparam>
+              -inferrel
+              -attributes
+              -types
+              -visibility
+              -quiet
+              -hide java.*
+              -collpackages java.util.*
+              -qualify
+              -postfixpackage
+              -bgcolor white
+              -edgecolor "#A0A0A4"
+              -edgefontname "Helvetica"
+              -nodefontname "Helvetica"
+              -nodefontabstractname "Helvetica"
+              -nodefontclassabstractname "Helvetica"
+              -nodefontclassname "Helvetica"
+              -nodefontpackagename "Helvetica"
+              -nodefonttagname "Helvetica"
+              -edgefontcolor "#A0A0A4"
+              -nodefontcolor "#A0A0A4"
+              -edgefontsize 9
+              -nodefontclasssize 9
+              -nodefontpackagesize 9
+              -nodefontsize 9
+              -nodefonttagsize 9
+              -nodefillcolor "white"
+              <!-- -collapsible-->
+              <!-- -useimports-->
+              <!-- -apidocmap-->
+            </additionalparam>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+
+      </plugins>
+
+    </pluginManagement>
+
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- CISE Internal Dependencies -->
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-adaptor-domain</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>cise-data-model</artifactId>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <version>1.5.3.6-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>eucise-model-helpers</artifactId>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>eucise-service-model</artifactId>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>cise-gateway-domain</artifactId>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-gateway-transport</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>guava</artifactId>
+        <groupId>com.google.guava</groupId>
+        <version>22.0</version>
+      </dependency>
+
+      <!-- API / dropwizard -->
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-core</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-client</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-testing</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-metrics-graphite</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-validation</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-assets</artifactId>
+        <version>${dropwizard.version}</version>
+      </dependency>
+
+      <!-- XML Marshalling / Unmarshalling -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-xml</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-xml-provider</artifactId>
+        <version>${jackson.jaxrs.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>woodstox-core-asl</artifactId>
+        <version>4.4.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.aeonbits.owner</groupId>
+        <artifactId>owner-java8</artifactId>
+        <version>1.0.9</version>
+      </dependency>
+
+      <dependency>
+        <groupId>stax</groupId>
+        <artifactId>stax-api</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>1.7.25</version>
+      </dependency>
+
+      <dependency>
+        <groupId>dk.tbsalling</groupId>
+        <artifactId>aismessages</artifactId>
+        <version>2.2.1</version>
+      </dependency>
+
+      <!-- Test Libraries -->
+      <dependency>
+        <groupId>org.glassfish.jersey.test-framework</groupId>
+        <artifactId>jersey-test-framework-core</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+        <version>${jersey.version}</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>2.7.22</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-all</artifactId>
+        <version>1.3</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.greghaskins</groupId>
+        <artifactId>spectrum</artifactId>
+        <version>1.1.0</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.tomakehurst</groupId>
+        <artifactId>wiremock-standalone</artifactId>
+        <version>2.6.0</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mock-server</groupId>
+        <artifactId>mockserver-netty</artifactId>
+        <version>3.10.7</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <version>3.0.3</version>
+        <scope>test</scope>
+      </dependency>
+
+    </dependencies>
+
+  </dependencyManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>digit releases</id>
+      <name>DG DIGIT Repository</name>
+      <url>https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc
+      </url>
+    </repository>
+    <snapshotRepository>
+      <id>digit snapshots</id>
+      <name>DG DIGIT Snapshot Repository</name>
+      <url>
+        https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc-snapshots
+      </url>
+    </snapshotRepository>
+  </distributionManagement>
+  <properties>
+    <dropwizard.version>1.2.3</dropwizard.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <jersey.version>2.21</jersey.version>
+    <java.version>1.8</java.version>
+    <jackson.version>2.9.4</jackson.version>
+    <jackson.jaxrs.version>2.9.4</jackson.jaxrs.version>
+    <curator.apache.version>4.0.0</curator.apache.version>
+    <rabbitmq.client.version>5.0.0</rabbitmq.client.version>
+    <main.basedir>${project.basedir}</main.basedir>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>ciBuild</id>
+      <properties>
+        <testcase.excludedGroups>eu.eucise.tests.IntegrationTests
+        </testcase.excludedGroups>
+        <useFile>true</useFile>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <testcase.excludedGroups></testcase.excludedGroups>
+        <useFile>true</useFile>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>
