@@ -15,26 +15,43 @@ import static eu.eucise.helpers.PushBuilder.newPush;
  *
  */
 public class ToCISETranslator {
-    public Optional<Push> translate(AISMsg aisMessage) {
-        if (isTypeSupported(aisMessage)) {
+    public Optional<Push> translate(AISMsg aisMsg) {
+        if (isTypeSupported(aisMsg)) {
             return Optional.empty();
         }
 
-        Vessel vessel = new Vessel();
-        Objet.LocationRel locationRel = new Objet.LocationRel();
+        return Optional.of(newPush()
+                .addEntity(toVessel(latitude(aisMsg), longitude(aisMsg)))
+                .build());
+    }
 
-        vessel.getLocationRels().add(locationRel);
+    private Vessel toVessel(String latitude, String longitude) {
+        Vessel vessel = new Vessel();
+        vessel.getLocationRels().add(getLocationRel(latitude, longitude));
+        return vessel;
+    }
+
+    private Objet.LocationRel getLocationRel(String latitude, String longitude) {
+        Objet.LocationRel locationRel = new Objet.LocationRel();
+        locationRel.setLocation(toLocation(latitude, longitude));
+        return locationRel;
+    }
+
+    private String longitude(AISMsg aisMsg) {
+        return Float.toString(aisMsg.getLongitude());
+    }
+
+    private String latitude(AISMsg aisMsg) {
+        return Float.toString(aisMsg.getLatitude());
+    }
+
+    private Location toLocation(String latitude, String longitude) {
         Location location = new Location();
         Geometry geometry = new Geometry();
-        geometry.setLatitude(Float.toString(aisMessage.getLatitude()));
-        geometry.setLongitude(Float.toString(aisMessage.getLongitude()));
+        geometry.setLatitude(latitude);
+        geometry.setLongitude(longitude);
         location.getGeometries().add(geometry);
-        locationRel.setLocation(location);
-        Push push = newPush()
-                .addEntity(vessel)
-                .build();
-
-        return Optional.of(push);
+        return location;
     }
 
     private boolean isTypeSupported(AISMsg aisMessage) {
