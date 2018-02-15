@@ -36,6 +36,11 @@ public class ToInternalAISMessageTest {
         assertThat(translator.normalize(voyageMsg()).getMessageType(), is(5));
     }
 
+    @Test
+    public void it_maps_position_latitude() {
+        assertThat(translator.normalize(positionMsg()).getLatitude(), is(47.443634F));
+    }
+
 
     private AISMessage positionMsg() {
         return AISMessage.create(
