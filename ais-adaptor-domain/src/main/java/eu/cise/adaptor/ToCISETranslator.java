@@ -5,6 +5,7 @@ import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
+import sun.misc.FloatingDecimal;
 
 import java.util.Optional;
 
@@ -27,19 +28,23 @@ public class ToCISETranslator {
         }
 
         return Optional.of(newPush()
-                .addEntity(toVessel(latitude(aisMsg), longitude(aisMsg)))
+                .addEntity(toVessel(
+                        latitude(aisMsg),
+                        longitude(aisMsg),
+                        f2d(aisMsg.getCOG()))) // casting float to double
                 .build());
     }
 
-    private Vessel toVessel(String latitude, String longitude) {
+    private Vessel toVessel(String latitude, String longitude, double cog) {
         Vessel vessel = new Vessel();
-        vessel.getLocationRels().add(getLocationRel(latitude, longitude));
+        vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog));
         return vessel;
     }
 
-    private Objet.LocationRel getLocationRel(String latitude, String longitude) {
+    private Objet.LocationRel getLocationRel(String latitude, String longitude, double cog) {
         Objet.LocationRel locationRel = new Objet.LocationRel();
         locationRel.setLocation(toLocation(latitude, longitude));
+        locationRel.setCOG(cog);
         return locationRel;
     }
 
@@ -66,4 +71,9 @@ public class ToCISETranslator {
                 aisMessage.getMessageType() != 3 &&
                 aisMessage.getMessageType() != 5;
     }
+
+    private Double f2d(Float fValue) {
+        return Double.valueOf(fValue.toString());
+    }
 }
+

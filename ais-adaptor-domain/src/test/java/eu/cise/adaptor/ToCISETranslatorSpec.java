@@ -2,6 +2,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.datamodel.v1.entity.location.Geometry;
+import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -79,11 +80,11 @@ public class ToCISETranslatorSpec {
 
                 assertThat(v.getLocationRels(), is(not(empty())));
 
-                assertThat(v.getLocationRels().get(0).getLocation(), is(notNullValue()));
+                assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
 
-                assertThat(v.getLocationRels().get(0).getLocation().getGeometries(), is(not(empty())));
+                assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
 
-                assertThat(v.getLocationRels().get(0).getLocation().getGeometries().get(0), is(notNullValue()));
+                assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
             });
 
             it("returns an optional push latitude", () -> {
@@ -98,7 +99,16 @@ public class ToCISETranslatorSpec {
                 assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
             });
 
+            it("returns an optional push cog", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(extractLocationRel(v).getCOG(), is(211.9D));
+            });
         });
+    }
+
+    private Objet.LocationRel extractLocationRel(Vessel v) {
+        return v.getLocationRels().get(0);
     }
 
     private Geometry extractGeometry(Vessel v) {
