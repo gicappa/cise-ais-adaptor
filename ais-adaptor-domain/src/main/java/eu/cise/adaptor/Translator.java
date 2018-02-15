@@ -94,12 +94,10 @@ public class Translator {
      * @return
      */
     private NavigationalStatusType fromNavigationStatus(NavigationStatus ns) {
-        if (ns == null) return NavigationalStatusType.UNDEFINED_DEFAULT;
-
-        if (ns.equals(UnderwayUsingEngine))
-            return NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+        if (ns == null || !ns.equals(UnderwayUsingEngine))
+            return NavigationalStatusType.UNDEFINED_DEFAULT;
         else
-            throw new AISAdaptorException("Mapping not implemented yet!");
+            return NavigationalStatusType.UNDER_WAY_USING_ENGINE;
     }
 
     private Objet.LocationRel getLocationRel(String latitude,
