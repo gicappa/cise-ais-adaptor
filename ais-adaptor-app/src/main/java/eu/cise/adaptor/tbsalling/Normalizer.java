@@ -1,7 +1,10 @@
 package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
+import dk.tbsalling.aismessages.ais.messages.Metadata;
 import eu.cise.adaptor.InternalAISMessage;
+
+import java.util.Optional;
 
 /**
  * This classes normalize the AISMessage class read by the tbsalling's library
@@ -20,7 +23,16 @@ public class Normalizer {
         b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0F));
 
+        // TODO not very sure what to do in case of a missing timestamp
+        // * is it possible that the timestamp is missing?
+        // * should the message be dropped or not?
+        b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(null));
+
         return b;
+    }
+
+    private Optional<Metadata> oMeta(AISMessage m) {
+        return Optional.ofNullable(m.getMetadata());
     }
 
 }

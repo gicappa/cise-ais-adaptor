@@ -1,10 +1,15 @@
 package eu.cise.adaptor;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
+import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 import eu.cise.adaptor.tbsalling.Normalizer;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.Instant;
+import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,10 +24,13 @@ import static org.junit.Assert.assertThat;
 public class ToInternalAISMessageTest {
 
     private Normalizer translator;
+    private Instant moment;
+
 
     @Before
     public void before() {
         translator = new Normalizer();
+        moment = Instant.now();
     }
 
 
@@ -61,16 +69,25 @@ public class ToInternalAISMessageTest {
         assertThat(translator.normalize(positionMsg()).getTrueHeading(), is(210));
     }
 
+    @Test
+    public void it_maps_position_timestamp() {
+        assertThat(translator.normalize(positionMsg()).getTimestamp(), is(moment)); // 2018-02-15T09:52:25.049Z
+    }
+
     private AISMessage positionMsg() {
-        return AISMessage.create(
+        AISMessage aisMessage = AISMessage.create(
                 NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")
         );
+        aisMessage.setMetadata(new Metadata("SRC", moment));
+        return aisMessage;
     }
 
     private AISMessage voyageMsg() {
-        return AISMessage.create(
+        AISMessage aisMessage = AISMessage.create(
                 NMEAMessage.fromString("!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;=qA0J11EmSP0000,0*36"),
                 NMEAMessage.fromString("!ABVDM,2,2,2,A,00000000000,2*2D")
         );
+        aisMessage.setMetadata(new Metadata("SRC", moment));
+        return aisMessage;
     }
 }

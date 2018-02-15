@@ -1,5 +1,7 @@
 package eu.cise.adaptor;
 
+import java.time.Instant;
+
 public class InternalAISMessage {
     private int messageType;
     private float latitude;
@@ -7,6 +9,7 @@ public class InternalAISMessage {
     private int mmsi;
     private float cog;
     private int trueHeading;
+    private Instant timestamp;
 
     public int getMessageType() {
         return messageType;
@@ -30,6 +33,10 @@ public class InternalAISMessage {
 
     public int getTrueHeading() {
         return trueHeading;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
     }
 
     public static class Builder extends InternalAISMessage {
@@ -59,6 +66,11 @@ public class InternalAISMessage {
 
         public Builder withTrueHeading(int t) {
             super.trueHeading = t;
+            return this;
+        }
+
+        public Builder withTimestamp(Instant received) {
+            super.timestamp = received;
             return this;
         }
     }
