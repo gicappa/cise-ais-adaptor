@@ -13,9 +13,12 @@ public class Normalizer {
     public InternalAISMessage normalize(AISMessage m) {
         InternalAISMessage.Builder b = new InternalAISMessage.Builder(m.getMessageType().getCode());
 
+        b.withMMSI(m.getSourceMmsi().getMMSI());
+
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
-        b.withMMSI(m.getSourceMmsi().getMMSI());
+        b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
+
         return b;
     }
 
