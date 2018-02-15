@@ -20,10 +20,10 @@ It should be possible to decide the ouput PUSH message frequency specifying:
 ## General architecture
 The software is composed by two modules: 
 
-- ais-adaptor-api
+- ais-adaptor-app
 - ais-adaptor-domain
 
-### ais-adaptor-api
+### ais-adaptor-app
 Is the entry point that starts the message processing and it focus itself in 
 translating the AIS Message from the library specific on to a project domain
 specific so to be independent from the AIS library implementation.
