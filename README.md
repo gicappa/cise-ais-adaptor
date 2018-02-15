@@ -53,3 +53,12 @@ all the messages with a different message type:
 * There is a difference in latitude and longitude between the AIS and the
   CISE calculation. Here for simplicity it hasn't been taken into account.
   https://webgate.ec.europa.eu/CITnet/confluence/display/MAREX/AIS+Message+1%2C2%2C3
+  
+* The field Vessel.LocationRel.LocationQualitativeAccuracy has 
+  no correspondence in David's table but in the AISMessage objects there is 
+  a field named _positionAccuracy_ and it's a boolean that could correspond 
+  to HIGH(true) and LOW(false). It must be checked if it's correct.
+  
+* _getMetadata()_ doesn't return anything but _dataFields().get("metadata")_
+  does. Check if _getMetadata()_ it should be substituted with the latter 
+  or not.   
