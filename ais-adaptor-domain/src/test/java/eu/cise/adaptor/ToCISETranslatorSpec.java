@@ -104,6 +104,22 @@ public class ToCISETranslatorSpec {
 
                 assertThat(extractLocationRel(v).getCOG(), is(211.9D));
             });
+
+            it("returns an optional push true heading", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(extractLocationRel(v).getHeading(), is(210D));
+            });
+
+            it("returns an optional push heading (null for trueHeading=511)", () -> {
+                AISMsg mh = new AISMsg.Builder(1)
+                        .withTrueHeading(511)
+                        .build();
+
+                Vessel v = extractVessel(translator.translate(mh));
+
+                assertThat(extractLocationRel(v).getHeading(), is(nullValue()));
+            });
         });
     }
 
