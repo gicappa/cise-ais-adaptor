@@ -5,6 +5,7 @@ import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
+import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -138,6 +139,12 @@ public class ToCISETranslatorSpec {
                 Vessel v = extractVessel(translator.translate(m));
 
                 assertThat(v.getMMSI(), is(538005989L));
+            });
+
+            it("returns an optional push navigationStatus", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(v.getNavigationalStatus(), is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
             });
 
         });

@@ -11,7 +11,7 @@ public class AISMsg {
     private int trueHeading;
     private Instant timestamp;
     private float sog;
-    private Object navigationStatus;
+    private NavigationStatus navigationStatus;
 
     private AISMsg(Builder builder) {
         messageType = builder.messageType;
@@ -57,7 +57,7 @@ public class AISMsg {
         return sog;
     }
 
-    public Object getNavigationStatus() {
+    public NavigationStatus getNavigationStatus() {
         return navigationStatus;
     }
 
@@ -70,7 +70,7 @@ public class AISMsg {
         private int trueHeading;
         private Instant timestamp;
         private float sog;
-        private Object navigationStatus;
+        private NavigationStatus navigationStatus;
 
         public Builder(int messageType) {
             this.messageType = messageType;

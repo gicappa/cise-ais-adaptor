@@ -5,6 +5,7 @@ import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
+import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
 import eu.cise.servicemodel.v1.message.InformationSecurityLevelType;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.servicemodel.v1.message.PriorityType.LOW;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
@@ -63,7 +65,8 @@ public class Translator {
                         f2d(aisMsg.getCOG()), // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
                         f2d(aisMsg.getSOG()),  // casting float to double
-                        Long.valueOf(aisMsg.getMMSI())
+                        Long.valueOf(aisMsg.getMMSI()),
+                        fromNavigationStatus(aisMsg.getNavigationStatus())
                         )
                 )
 
@@ -75,12 +78,28 @@ public class Translator {
                             Double cog,
                             Double heading,
                             Double sog,
-                            Long mmsi) {
+                            Long mmsi,
+                            NavigationalStatusType nst) {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(mmsi);
         vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog, heading, sog));
+        vessel.setNavigationalStatus(nst);
         return vessel;
+    }
+
+    /**
+     * TODO Implement the mapping of all the Navigation Status cases
+     * @param ns
+     * @return
+     */
+    private NavigationalStatusType fromNavigationStatus(NavigationStatus ns) {
+        if (ns == null) return NavigationalStatusType.UNDEFINED_DEFAULT;
+
+        if (ns.equals(UnderwayUsingEngine))
+            return NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+        else
+            throw new AISAdaptorException("Mapping not implemented yet!");
     }
 
     private Objet.LocationRel getLocationRel(String latitude,
