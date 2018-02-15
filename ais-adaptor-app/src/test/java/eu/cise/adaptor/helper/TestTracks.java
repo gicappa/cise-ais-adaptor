@@ -1,6 +1,33 @@
 package eu.cise.adaptor.helper;
 
+import dk.tbsalling.aismessages.ais.messages.AISMessage;
+import dk.tbsalling.aismessages.ais.messages.Metadata;
+import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
+
+import java.time.Instant;
+
 public class TestTracks {
+
+    public Instant moment = Instant.now();
+
+    // Test Helpers ////////////////////////////////////////////////////////////
+    public AISMessage positionMsg() {
+        AISMessage aisMessage = AISMessage.create(
+                NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")
+        );
+        aisMessage.setMetadata(new Metadata("SRC", moment));
+        return aisMessage;
+    }
+
+    public AISMessage voyageMsg() {
+        AISMessage aisMessage = AISMessage.create(
+                NMEAMessage.fromString("!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;=qA0J11EmSP0000,0*36"),
+                NMEAMessage.fromString("!ABVDM,2,2,2,A,00000000000,2*2D")
+        );
+        aisMessage.setMetadata(new Metadata("SRC", moment));
+        return aisMessage;
+    }
+
     public String track1() {
         return new String(
                 "!AIVDM,1,1,,A,18UG;P0012G?Uq4EdHa=c;7@051@,0*53\n" +
@@ -84,4 +111,5 @@ public class TestTracks {
                         "!AIVDM,1,1,,A,152SGj001to?TvlEg4`H?6UL08Jo,0*36"
         );
     }
+
 }

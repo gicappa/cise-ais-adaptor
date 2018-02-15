@@ -1,8 +1,6 @@
 package eu.cise.adaptor;
 
-import dk.tbsalling.aismessages.ais.messages.AISMessage;
-import dk.tbsalling.aismessages.ais.messages.Metadata;
-import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
+import eu.cise.adaptor.helper.TestTracks;
 import eu.cise.adaptor.tbsalling.Normalizer;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,81 +21,62 @@ import static org.junit.Assert.assertThat;
 public class ToInternalAISMessageTest {
 
     private Normalizer translator;
-    private Instant moment;
-
+    private TestTracks t = new TestTracks();
 
     @Before
     public void before() {
         translator = new Normalizer();
-        moment = Instant.now();
     }
 
 
     @Test
     public void it_maps_position_message_type() {
-        assertThat(translator.normalize(positionMsg()).getMessageType(), is(1));
+        assertThat(translator.normalize(t.positionMsg()).getMessageType(), is(1));
     }
 
     @Test
     public void it_maps_voyage_message_type() {
-        assertThat(translator.normalize(voyageMsg()).getMessageType(), is(5));
+        assertThat(translator.normalize(t.voyageMsg()).getMessageType(), is(5));
     }
 
     @Test
     public void it_maps_position_latitude() {
-        assertThat(translator.normalize(positionMsg()).getLatitude(), is(47.443634F));
+        assertThat(translator.normalize(t.positionMsg()).getLatitude(), is(47.443634F));
     }
 
     @Test
     public void it_maps_position_longitude() {
-        assertThat(translator.normalize(positionMsg()).getLongitude(), is(-6.9895167F));
+        assertThat(translator.normalize(t.positionMsg()).getLongitude(), is(-6.9895167F));
     }
 
     @Test
     public void it_maps_position_MMSI() {
-        assertThat(translator.normalize(positionMsg()).getMMSI(), is(538005989));
+        assertThat(translator.normalize(t.positionMsg()).getMMSI(), is(538005989));
     }
 
     @Test
     public void it_maps_position_COG() {
-        assertThat(translator.normalize(positionMsg()).getCOG(), is(211.9F));
+        assertThat(translator.normalize(t.positionMsg()).getCOG(), is(211.9F));
     }
 
     @Test
     public void it_maps_position_true_heading() {
-        assertThat(translator.normalize(positionMsg()).getTrueHeading(), is(210));
+        assertThat(translator.normalize(t.positionMsg()).getTrueHeading(), is(210));
     }
 
     @Test
     public void it_maps_position_timestamp() {
-        assertThat(translator.normalize(positionMsg()).getTimestamp(), is(moment)); // 2018-02-15T09:52:25.049Z
+        assertThat(translator.normalize(t.positionMsg()).getTimestamp(), is(t.moment)); // 2018-02-15T09:52:25.049Z
     }
 
     @Test
     public void it_maps_position_SOG() {
-        assertThat(translator.normalize(positionMsg()).getSOG(), is(13.8F));
+        assertThat(translator.normalize(t.positionMsg()).getSOG(), is(13.8F));
     }
 
     @Test
     public void it_maps_position_navigational_status() {
-        assertThat(translator.normalize(positionMsg()).getNavigationStatus(), is(UnderwayUsingEngine));
+        assertThat(translator.normalize(t.positionMsg()).getNavigationStatus(), is(UnderwayUsingEngine));
     }
 
-    // Test Helpers ////////////////////////////////////////////////////////////
-    private AISMessage positionMsg() {
-        AISMessage aisMessage = AISMessage.create(
-                NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")
-        );
-        aisMessage.setMetadata(new Metadata("SRC", moment));
-        return aisMessage;
-    }
-
-    private AISMessage voyageMsg() {
-        AISMessage aisMessage = AISMessage.create(
-                NMEAMessage.fromString("!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;=qA0J11EmSP0000,0*36"),
-                NMEAMessage.fromString("!ABVDM,2,2,2,A,00000000000,2*2D")
-        );
-        aisMessage.setMetadata(new Metadata("SRC", moment));
-        return aisMessage;
-    }
 }
