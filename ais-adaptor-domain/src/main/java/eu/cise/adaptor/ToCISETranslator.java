@@ -25,7 +25,9 @@ public class ToCISETranslator {
 
         vessel.getLocationRels().add(locationRel);
         Location location = new Location();
-        location.getGeometries().add(new Geometry());
+        Geometry geometry = new Geometry();
+        geometry.setLatitude(Float.toString(aisMessage.getLatitude()));
+        location.getGeometries().add(geometry);
         locationRel.setLocation(location);
         Push push = newPush()
                 .addEntity(vessel)

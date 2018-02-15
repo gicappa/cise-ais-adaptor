@@ -1,6 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
+import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -81,10 +82,21 @@ public class ToCISETranslatorSpec {
                 assertThat(v.getLocationRels().get(0).getLocation(), is(notNullValue()));
 
                 assertThat(v.getLocationRels().get(0).getLocation().getGeometries(), is(not(empty())));
+
+                assertThat(v.getLocationRels().get(0).getLocation().getGeometries().get(0), is(notNullValue()));
             });
 
+            it("returns an optional push latitude", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
+            });
 
         });
+    }
+
+    private Geometry extractGeometry(Vessel v) {
+        return v.getLocationRels().get(0).getLocation().getGeometries().get(0);
     }
 
     private Vessel extractVessel(Optional<Push> translate) {
