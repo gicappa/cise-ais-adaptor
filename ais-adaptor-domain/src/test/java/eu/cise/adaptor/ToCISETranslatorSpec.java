@@ -2,7 +2,6 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.servicemodel.v1.message.CoreEntityPayload;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.junit.runner.RunWith;
@@ -11,10 +10,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresentAndIs;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static com.greghaskins.spectrum.Spectrum.xit;
 import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
@@ -64,7 +61,7 @@ public class ToCISETranslatorSpec {
 
             it("returns an optional push with a vessel", () -> {
 
-                XmlEntityPayload payload = (XmlEntityPayload) translator.translate(m).get().getPayload();
+                XmlEntityPayload payload = extractPayload(translator.translate(m));
                 assertThat("The XmlEntityPayload has not been created",
                         payload, is(notNullValue()));
 
@@ -76,14 +73,22 @@ public class ToCISETranslatorSpec {
                         vessels.get(0), instanceOf(Vessel.class));
             });
 
-            xit("returns an optional push with geometry", () -> {
-                Push push = translator.translate(m).get();
+            it("returns an optional push with geometry", () -> {
+                Vessel v = extractVessel(translator.translate(m));
 
-//                assertThat(push., );
+                assertThat(v.getLocationRels(), is(not(empty())));
             });
 
 
         });
+    }
+
+    private Vessel extractVessel(Optional<Push> translate) {
+        return (Vessel) extractPayload(translate).getAnies().get(0);
+    }
+
+    private XmlEntityPayload extractPayload(Optional<Push> m) {
+        return (XmlEntityPayload) m.get().getPayload();
     }
 }
 
