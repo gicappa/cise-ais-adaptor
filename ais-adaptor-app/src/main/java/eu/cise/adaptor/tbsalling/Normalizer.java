@@ -2,7 +2,7 @@ package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
-import eu.cise.adaptor.InternalAISMessage;
+import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.NavigationStatus;
 
 import java.util.Optional;
@@ -14,13 +14,14 @@ import java.util.Optional;
  */
 public class Normalizer {
 
-    public InternalAISMessage normalize(AISMessage m) {
-        InternalAISMessage.Builder b = new InternalAISMessage.Builder(m.getMessageType().getCode());
+    public AISMsg normalize(AISMessage m) {
+        Integer type = m.getMessageType().getCode();
+        AISMsg.Builder b = new AISMsg.Builder(type);
 
         // TODO the remaining fields are not supported by other type of messages
         // than message type 1,2,3
-        if (b.getMessageType() != 1 && b.getMessageType() != 2 && b.getMessageType() != 3)
-            return b;
+        if (isPositionMessage(type))
+            return b.build();
 
         b.withMMSI(m.getSourceMmsi().getMMSI());
 
@@ -36,7 +37,11 @@ public class Normalizer {
         // * should the message be dropped or not?
         b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(null));
 
-        return b;
+        return b.build();
+    }
+
+    private boolean isPositionMessage(Integer type) {
+        return type != 1 && type != 2 && type != 3;
     }
 
     private Optional<Metadata> oMeta(AISMessage m) {

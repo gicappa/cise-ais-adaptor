@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import java.time.Instant;
 
-public class InternalAISMessage {
+public class AISMsg {
     private int messageType;
     private float latitude;
     private float longitude;
@@ -12,6 +12,18 @@ public class InternalAISMessage {
     private Instant timestamp;
     private float sog;
     private Object navigationStatus;
+
+    private AISMsg(Builder builder) {
+        messageType = builder.messageType;
+        latitude = builder.latitude;
+        longitude = builder.longitude;
+        mmsi = builder.mmsi;
+        cog = builder.cog;
+        trueHeading = builder.trueHeading;
+        timestamp = builder.timestamp;
+        sog = builder.sog;
+        navigationStatus = builder.navigationStatus;
+    }
 
     public int getMessageType() {
         return messageType;
@@ -49,49 +61,63 @@ public class InternalAISMessage {
         return navigationStatus;
     }
 
-    public static class Builder extends InternalAISMessage {
+    public static class Builder {
+        private int messageType;
+        private float latitude;
+        private float longitude;
+        private int mmsi;
+        private float cog;
+        private int trueHeading;
+        private Instant timestamp;
+        private float sog;
+        private Object navigationStatus;
+
         public Builder(int messageType) {
-            super.messageType = messageType;
+            this.messageType = messageType;
         }
 
         public Builder withLatitude(float l) {
-            super.latitude = l;
+            this.latitude = l;
             return this;
         }
 
         public Builder withLongitude(float l) {
-            super.longitude = l;
+            this.longitude = l;
             return this;
         }
 
         public Builder withMMSI(int m) {
-            super.mmsi = m;
+            this.mmsi = m;
             return this;
         }
 
         public Builder withCOG(float c) {
-            super.cog = c;
+            this.cog = c;
             return this;
         }
 
         public Builder withTrueHeading(int t) {
-            super.trueHeading = t;
+            this.trueHeading = t;
             return this;
         }
 
         public Builder withTimestamp(Instant received) {
-            super.timestamp = received;
+            this.timestamp = received;
             return this;
         }
 
         public Builder withSOG(float s) {
-            super.sog = s;
+            this.sog = s;
             return this;
         }
 
         public Builder withNavigationStatus(NavigationStatus n) {
-            super.navigationStatus = n;
+            this.navigationStatus = n;
             return this;
+        }
+
+        public AISMsg build() {
+            return new AISMsg(this);
         }
     }
 

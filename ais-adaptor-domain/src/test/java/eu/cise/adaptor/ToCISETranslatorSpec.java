@@ -22,16 +22,15 @@ public class ToCISETranslatorSpec {
             describe("when a message type is not supported", () -> {
 
                 it("returns an empty optional", () -> {
-                    assertThat(translator.translate(new InternalAISMessage.Builder(8)), is(Optional.empty()));
+                    assertThat(translator.translate(new AISMsg.Builder(8).build()), is(Optional.empty()));
                 });
 
             });
 
-
             describe("when a message type is 1,2,3 or 5", () -> {
                 asList(1, 2, 3, 5).forEach((n) ->
                         it("returns an optional with a push message / " + n, () -> {
-                            assertThat(translator.translate(new InternalAISMessage.Builder(n)), is(not(Optional.empty())));
+                            assertThat(translator.translate(new AISMsg.Builder(n).build()), is(not(Optional.empty())));
                         })
                 );
             });
