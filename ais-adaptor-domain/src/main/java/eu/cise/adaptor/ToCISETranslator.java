@@ -27,6 +27,7 @@ public class ToCISETranslator {
         Location location = new Location();
         Geometry geometry = new Geometry();
         geometry.setLatitude(Float.toString(aisMessage.getLatitude()));
+        geometry.setLongitude(Float.toString(aisMessage.getLongitude()));
         location.getGeometries().add(geometry);
         locationRel.setLocation(location);
         Push push = newPush()

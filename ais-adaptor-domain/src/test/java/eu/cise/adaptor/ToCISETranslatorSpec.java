@@ -92,6 +92,12 @@ public class ToCISETranslatorSpec {
                 assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
             });
 
+            it("returns an optional push longitude", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+            });
+
         });
     }
 
