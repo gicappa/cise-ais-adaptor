@@ -3,12 +3,24 @@ package eu.cise.adaptor;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.object.Objet;
+import eu.cise.datamodel.v1.entity.object.SensorType;
+import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.authority.SeaBasinType;
+import eu.cise.servicemodel.v1.message.*;
+import eu.cise.servicemodel.v1.service.DataFreshnessType;
+import eu.eucise.helpers.ParticipantBuilder;
+import eu.eucise.helpers.ServiceBuilder;
 
+import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
+import static eu.cise.servicemodel.v1.message.PriorityType.LOW;
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
+import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
+import static eu.eucise.helpers.ServiceBuilder.newService;
 
 /**
  * This is the translator from the internal AISMsg object to a CISE Push message
@@ -19,13 +31,31 @@ import static eu.eucise.helpers.PushBuilder.newPush;
  * Please refer to:
  * https://webgate.ec.europa.eu/CITnet/confluence/display/MAREX/AIS+Message+1%2C2%2C3
  */
-public class ToCISETranslator {
+public class Translator {
     public Optional<Push> translate(AISMsg aisMsg) {
         if (isTypeSupported(aisMsg)) {
             return Optional.empty();
         }
 
         return Optional.of(newPush()
+                .id(UUID.randomUUID().toString())
+                .contextId(UUID.randomUUID().toString())
+                .correlationId(UUID.randomUUID().toString())
+                .creationDateTime(new Date())
+                .sender(newService()
+                        .id("123")
+                        .dataFreshness(DataFreshnessType.HISTORIC)
+                        .seaBasin(SeaBasinType.ARCTIC_OCEAN)
+                        .operation(PUSH)
+                        .participant(newParticipant())
+
+                        .build())
+                .priority(LOW)
+                .isRequiresAck(false)
+                .informationSecurityLevel(InformationSecurityLevelType.NON_CLASSIFIED)
+                .informationSensitivity(InformationSensitivityType.NON_SPECIFIED)
+                .isPersonalData(false)
+                .purpose(PurposeType.BORDER_MONITORING)
                 .addEntity(toVessel(
                         latitude(aisMsg),
                         longitude(aisMsg),
@@ -50,6 +80,8 @@ public class ToCISETranslator {
         locationRel.setLocation(toLocation(latitude, longitude));
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
+        locationRel.setSourceType(SourceType.DECLARATION);
+        locationRel.setSensorType(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
 
         return locationRel;
     }
