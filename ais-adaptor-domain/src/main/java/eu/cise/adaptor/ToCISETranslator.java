@@ -31,7 +31,10 @@ public class ToCISETranslator {
                 .addEntity(toVessel(
                         latitude(aisMsg),
                         longitude(aisMsg),
-                        f2d(aisMsg.getCOG()))) // casting float to double
+                        f2d(aisMsg.getCOG())) // casting float to double
+
+                )
+
                 .build());
     }
 
