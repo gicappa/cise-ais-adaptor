@@ -21,6 +21,7 @@ public class Normalizer {
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
         b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
+        b.withSOG((Float) m.dataFields().getOrDefault("speedOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0F));
 
         // TODO not very sure what to do in case of a missing timestamp

@@ -10,6 +10,7 @@ public class InternalAISMessage {
     private float cog;
     private int trueHeading;
     private Instant timestamp;
+    private float sog;
 
     public int getMessageType() {
         return messageType;
@@ -37,6 +38,10 @@ public class InternalAISMessage {
 
     public Instant getTimestamp() {
         return timestamp;
+    }
+
+    public float getSOG() {
+        return sog;
     }
 
     public static class Builder extends InternalAISMessage {
@@ -71,6 +76,11 @@ public class InternalAISMessage {
 
         public Builder withTimestamp(Instant received) {
             super.timestamp = received;
+            return this;
+        }
+
+        public Builder withSOG(float s) {
+            super.sog = s;
             return this;
         }
     }

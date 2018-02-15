@@ -74,6 +74,12 @@ public class ToInternalAISMessageTest {
         assertThat(translator.normalize(positionMsg()).getTimestamp(), is(moment)); // 2018-02-15T09:52:25.049Z
     }
 
+    @Test
+    public void it_maps_position_SOG() {
+        assertThat(translator.normalize(positionMsg()).getSOG(), is(13.8F));
+    }
+
+    // Test Helpers ////////////////////////////////////////////////////////////
     private AISMessage positionMsg() {
         AISMessage aisMessage = AISMessage.create(
                 NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")
