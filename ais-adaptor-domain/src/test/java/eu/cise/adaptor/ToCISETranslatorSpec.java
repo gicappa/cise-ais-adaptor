@@ -77,6 +77,8 @@ public class ToCISETranslatorSpec {
                 Vessel v = extractVessel(translator.translate(m));
 
                 assertThat(v.getLocationRels(), is(not(empty())));
+
+                assertThat(v.getLocationRels().get(0).getLocation(), is(notNullValue()));
             });
 
 
