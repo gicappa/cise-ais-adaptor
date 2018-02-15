@@ -13,6 +13,12 @@ import static eu.eucise.helpers.PushBuilder.newPush;
 /**
  * This is the translator from the internal AISMsg object to a CISE Push message
  *
+ * TODO There is a difference in latitude and longitude between the AIS and the
+ * CISE calculation. Here for simplicity it hasn't been taken into account.
+ *
+ * Please refer to:
+ * https://webgate.ec.europa.eu/CITnet/confluence/display/MAREX/AIS+Message+1%2C2%2C3
+ *
  */
 public class ToCISETranslator {
     public Optional<Push> translate(AISMsg aisMsg) {

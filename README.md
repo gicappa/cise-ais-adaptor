@@ -47,3 +47,9 @@ all the messages with a different message type:
 * PositionReportClassAAssignedSchedule(2),
 * PositionReportClassAResponseToInterrogation(3),
 * ShipAndVoyageRelatedData(5),
+
+# Development notes
+
+* There is a difference in latitude and longitude between the AIS and the
+  CISE calculation. Here for simplicity it hasn't been taken into account.
+  https://webgate.ec.europa.eu/CITnet/confluence/display/MAREX/AIS+Message+1%2C2%2C3
