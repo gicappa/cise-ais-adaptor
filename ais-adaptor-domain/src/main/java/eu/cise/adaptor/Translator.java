@@ -7,10 +7,11 @@ import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
-import eu.cise.servicemodel.v1.message.*;
+import eu.cise.servicemodel.v1.message.InformationSecurityLevelType;
+import eu.cise.servicemodel.v1.message.InformationSensitivityType;
+import eu.cise.servicemodel.v1.message.PurposeType;
+import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
-import eu.eucise.helpers.ParticipantBuilder;
-import eu.eucise.helpers.ServiceBuilder;
 
 import java.util.Date;
 import java.util.Optional;
@@ -60,28 +61,37 @@ public class Translator {
                         latitude(aisMsg),
                         longitude(aisMsg),
                         f2d(aisMsg.getCOG()), // casting float to double
-                        fromTrueHeading(aisMsg.getTrueHeading()))
+                        fromTrueHeading(aisMsg.getTrueHeading()),
+                        f2d(aisMsg.getSOG())) // casting float to double
                 )
 
                 .build());
     }
 
-    private Vessel toVessel(String latitude, String longitude, Double cog, Double heading) {
+    private Vessel toVessel(String latitude,
+                            String longitude,
+                            Double cog,
+                            Double heading,
+                            Double sog) {
+
         Vessel vessel = new Vessel();
-        vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog, heading));
+        vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog, heading, sog));
         return vessel;
     }
 
     private Objet.LocationRel getLocationRel(String latitude,
                                              String longitude,
                                              Double cog,
-                                             Double heading) {
+                                             Double heading,
+                                             Double sog) {
+
         Objet.LocationRel locationRel = new Objet.LocationRel();
         locationRel.setLocation(toLocation(latitude, longitude));
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
         locationRel.setSourceType(SourceType.DECLARATION);
         locationRel.setSensorType(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
+        locationRel.setSOG(sog);
 
         return locationRel;
     }

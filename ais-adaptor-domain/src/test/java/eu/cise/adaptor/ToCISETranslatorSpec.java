@@ -128,6 +128,12 @@ public class ToCISETranslatorSpec {
                 assertThat(extractLocationRel(v).getSensorType(), is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
             });
 
+            it("returns an optional push sog", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(extractLocationRel(v).getSOG(), is(13.8D));
+            });
+
         });
     }
 
