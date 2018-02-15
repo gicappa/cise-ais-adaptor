@@ -56,6 +56,11 @@ public class ToInternalAISMessageTest {
         assertThat(translator.normalize(positionMsg()).getCOG(), is(211.9F));
     }
 
+    @Test
+    public void it_maps_position_true_heading() {
+        assertThat(translator.normalize(positionMsg()).getTrueHeading(), is(210));
+    }
+
     private AISMessage positionMsg() {
         return AISMessage.create(
                 NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")

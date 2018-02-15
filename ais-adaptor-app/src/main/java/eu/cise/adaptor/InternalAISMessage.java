@@ -6,6 +6,7 @@ public class InternalAISMessage {
     private float longitude;
     private int mmsi;
     private float cog;
+    private int trueHeading;
 
     public int getMessageType() {
         return messageType;
@@ -25,6 +26,10 @@ public class InternalAISMessage {
 
     public float getCOG() {
         return cog;
+    }
+
+    public int getTrueHeading() {
+        return trueHeading;
     }
 
     public static class Builder extends InternalAISMessage {
@@ -49,6 +54,11 @@ public class InternalAISMessage {
 
         public Builder withCOG(float c) {
             super.cog = c;
+            return this;
+        }
+
+        public Builder withTrueHeading(int t) {
+            super.trueHeading = t;
             return this;
         }
     }
