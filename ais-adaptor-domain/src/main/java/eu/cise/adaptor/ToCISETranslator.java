@@ -1,5 +1,6 @@
 package eu.cise.adaptor;
 
+import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
@@ -23,7 +24,9 @@ public class ToCISETranslator {
         Objet.LocationRel locationRel = new Objet.LocationRel();
 
         vessel.getLocationRels().add(locationRel);
-        locationRel.setLocation(new Location());
+        Location location = new Location();
+        location.getGeometries().add(new Geometry());
+        locationRel.setLocation(location);
         Push push = newPush()
                 .addEntity(vessel)
                 .build();

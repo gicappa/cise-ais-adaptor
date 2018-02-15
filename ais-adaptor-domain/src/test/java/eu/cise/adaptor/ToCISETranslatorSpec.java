@@ -79,6 +79,8 @@ public class ToCISETranslatorSpec {
                 assertThat(v.getLocationRels(), is(not(empty())));
 
                 assertThat(v.getLocationRels().get(0).getLocation(), is(notNullValue()));
+
+                assertThat(v.getLocationRels().get(0).getLocation().getGeometries(), is(not(empty())));
             });
 
 
