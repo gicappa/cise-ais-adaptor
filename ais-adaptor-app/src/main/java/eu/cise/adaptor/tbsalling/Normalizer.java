@@ -3,6 +3,7 @@ package eu.cise.adaptor.tbsalling;
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import eu.cise.adaptor.InternalAISMessage;
+import eu.cise.adaptor.NavigationStatus;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class Normalizer {
         b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
         b.withSOG((Float) m.dataFields().getOrDefault("speedOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0F));
+        b.withNavigationStatus(NavigationStatus.valueOf((String)m.dataFields().get("navigationStatus")));
 
         // TODO not very sure what to do in case of a missing timestamp
         // * is it possible that the timestamp is missing?

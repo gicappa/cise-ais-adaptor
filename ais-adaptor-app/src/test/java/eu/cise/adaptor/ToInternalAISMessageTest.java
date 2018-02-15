@@ -4,13 +4,12 @@ import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 import eu.cise.adaptor.tbsalling.Normalizer;
-import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
-import java.util.Date;
 
+import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -77,6 +76,11 @@ public class ToInternalAISMessageTest {
     @Test
     public void it_maps_position_SOG() {
         assertThat(translator.normalize(positionMsg()).getSOG(), is(13.8F));
+    }
+
+    @Test
+    public void it_maps_position_navigational_status() {
+        assertThat(translator.normalize(positionMsg()).getNavigationStatus(), is(UnderwayUsingEngine));
     }
 
     // Test Helpers ////////////////////////////////////////////////////////////

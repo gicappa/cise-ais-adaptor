@@ -11,6 +11,7 @@ public class InternalAISMessage {
     private int trueHeading;
     private Instant timestamp;
     private float sog;
+    private Object navigationStatus;
 
     public int getMessageType() {
         return messageType;
@@ -42,6 +43,10 @@ public class InternalAISMessage {
 
     public float getSOG() {
         return sog;
+    }
+
+    public Object getNavigationStatus() {
+        return navigationStatus;
     }
 
     public static class Builder extends InternalAISMessage {
@@ -81,6 +86,11 @@ public class InternalAISMessage {
 
         public Builder withSOG(float s) {
             super.sog = s;
+            return this;
+        }
+
+        public Builder withNavigationStatus(NavigationStatus n) {
+            super.navigationStatus = n;
             return this;
         }
     }
