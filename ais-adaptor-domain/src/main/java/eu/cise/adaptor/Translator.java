@@ -62,7 +62,9 @@ public class Translator {
                         longitude(aisMsg),
                         f2d(aisMsg.getCOG()), // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
-                        f2d(aisMsg.getSOG())) // casting float to double
+                        f2d(aisMsg.getSOG()),  // casting float to double
+                        Long.valueOf(aisMsg.getMMSI())
+                        )
                 )
 
                 .build());
@@ -72,9 +74,11 @@ public class Translator {
                             String longitude,
                             Double cog,
                             Double heading,
-                            Double sog) {
+                            Double sog,
+                            Long mmsi) {
 
         Vessel vessel = new Vessel();
+        vessel.setMMSI(mmsi);
         vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog, heading, sog));
         return vessel;
     }

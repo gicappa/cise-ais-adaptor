@@ -134,6 +134,12 @@ public class ToCISETranslatorSpec {
                 assertThat(extractLocationRel(v).getSOG(), is(13.8D));
             });
 
+            it("returns an optional push MMSI", () -> {
+                Vessel v = extractVessel(translator.translate(m));
+
+                assertThat(v.getMMSI(), is(538005989L));
+            });
+
         });
     }
 
