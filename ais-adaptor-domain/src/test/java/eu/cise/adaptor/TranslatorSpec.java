@@ -130,6 +130,15 @@ public class TranslatorSpec {
                     assertThat(extractLocationRel(v).getSOG(), is(13.8D));
                 });
 
+                it("returns an Optional<Push> sog (null for SOG=1023)", () -> {
+                    AISMsg ms = new AISMsg.Builder(1)
+                            .withSOG(1023f)
+                            .build();
+
+                    Vessel vs = extractVessel(translator.translate(ms));
+                    assertThat(extractLocationRel(vs).getSOG(), is(nullValue()));
+                });
+
                 it("returns an Optional<Push> MMSI", () -> {
                     assertThat(v.getMMSI(), is(538005989L));
                 });

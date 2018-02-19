@@ -150,7 +150,7 @@ public class Translator {
     }
 
     private Double fromSpeedOverGround(Float sog) {
-        return f2d(sog) / 10D;
+        return sog == 1023 ? null : f2d(sog) / 10D;
     }
 
     private Double fromTrueHeading(int th) {
