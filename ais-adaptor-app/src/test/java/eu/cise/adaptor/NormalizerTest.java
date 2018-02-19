@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.helper.TestTracks;
-import eu.cise.adaptor.tbsalling.Normalizer;
+import eu.cise.adaptor.tbsalling.DefaultNormalizer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,12 +20,12 @@ import static org.junit.Assert.assertThat;
 
 public class NormalizerTest {
 
-    private Normalizer n;
+    private DefaultNormalizer n;
     private TestTracks t = new TestTracks();
 
     @Before
     public void before() {
-        n = new Normalizer();
+        n = new DefaultNormalizer();
     }
 
 

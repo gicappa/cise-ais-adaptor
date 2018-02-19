@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public class AISMessageHandler implements Consumer<AISMessage> {
 
-    private final Normalizer normalizer;
+    private final DefaultNormalizer normalizer;
     private final Translator translator;
     private final Dispatcher dispatcher;
     private final AISProcessor processor;
@@ -17,7 +17,7 @@ public class AISMessageHandler implements Consumer<AISMessage> {
 
     public AISMessageHandler() {
         translator = new DefaultTranslator();
-        normalizer = new Normalizer();
+        normalizer = new DefaultNormalizer();
         mapper = new DefaultXmlMapper.Pretty();
         dispatcher = message -> {
             System.out.println(mapper.toXML(message));
