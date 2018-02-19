@@ -8,8 +8,6 @@ import java.time.Instant;
 
 public class TestTracks {
 
-    public Instant moment = Instant.now();
-
     // Test Helpers ////////////////////////////////////////////////////////////
     public AISMessage positionMsg() {
         AISMessage aisMessage = AISMessage.create(
@@ -18,9 +16,9 @@ public class TestTracks {
         return aisMessage;
     }
 
-    public AISMessage positionMsgWithTime() {
+    public AISMessage positionMsgWithTime(Instant i) {
         AISMessage aisMessage = positionMsg();
-        aisMessage.setMetadata(new Metadata("SRC", moment));
+        aisMessage.setMetadata(new Metadata("SRC", i));
         return aisMessage;
     }
 

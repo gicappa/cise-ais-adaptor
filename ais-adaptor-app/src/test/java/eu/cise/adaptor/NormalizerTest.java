@@ -76,7 +76,9 @@ public class NormalizerTest {
 
     @Test
     public void it_maps_timestamp() {
-        assertThat(n.normalize(t.positionMsgWithTime()).getTimestamp(), is(t.moment)); // 2018-02-15T09:52:25.049Z
+        Instant dateTime = Instant.parse("2018-02-19T14:43:16.550Z");
+
+        assertThat(n.normalize(t.positionMsgWithTime(dateTime)).getTimestamp(), is(dateTime)); // 2018-02-15T09:52:25.049Z
     }
 
     @Test
