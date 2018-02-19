@@ -63,7 +63,7 @@ public class Translator {
                         longitude(aisMsg),
                         fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
-                        f2d(aisMsg.getSOG()),  // casting float to double
+                        fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
                         Long.valueOf(aisMsg.getMMSI()),
                         fromNavigationStatus(aisMsg.getNavigationStatus())
                         )
@@ -147,6 +147,10 @@ public class Translator {
 
     private Double fromCourseOverGround(Float cog) {
         return cog == 3600 ? null : f2d(cog) / 10D;
+    }
+
+    private Double fromSpeedOverGround(Float sog) {
+        return f2d(sog) / 10D;
     }
 
     private Double fromTrueHeading(int th) {

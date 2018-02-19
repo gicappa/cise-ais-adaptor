@@ -44,7 +44,7 @@ public class TranslatorSpec {
                     .withCOG(2119.0F)
                     .withTrueHeading(210)
                     .withTimestamp(Instant.now())
-                    .withSOG(13.8F)
+                    .withSOG(138.0F)
                     .withMMSI(538005989)
                     .withNavigationStatus(UnderwayUsingEngine)
                     .build();
@@ -126,7 +126,7 @@ public class TranslatorSpec {
                     assertThat(extractLocationRel(v).getSensorType(), is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
                 });
 
-                it("returns an Optional<Push> sog", () -> {
+                it("returns an Optional<Push> sog (in knots instead of 1/10th of knots)", () -> {
                     assertThat(extractLocationRel(v).getSOG(), is(13.8D));
                 });
 
