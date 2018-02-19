@@ -1,26 +1,34 @@
 package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
-import eu.cise.adaptor.DefaultTranslator;
+import eu.cise.adaptor.*;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class AISMessageHandler implements Consumer<AISMessage> {
 
-    private final Normalizer normalizer = new Normalizer();
-    private final DefaultTranslator translator = new DefaultTranslator();
-    private final XmlMapper mapper = new DefaultXmlMapper.Pretty();
+    private final Normalizer normalizer;
+    private final Translator translator;
+    private final Dispatcher dispatcher;
+    private final AISProcessor processor;
+    private final XmlMapper mapper;
+
+    public AISMessageHandler() {
+        translator = new DefaultTranslator();
+        normalizer = new Normalizer();
+        mapper = new DefaultXmlMapper.Pretty();
+        dispatcher = message -> {
+            System.out.println(mapper.toXML(message));
+            return Result.SUCCESS;
+        };
+
+        processor = new DefaultAISProcessor(translator, dispatcher);
+    }
 
     @Override
-    public void accept(AISMessage t) {
-        String result = Optional.of(normalizer.normalize(t))
-                .flatMap(translator::translate)
-                .map(mapper::toXML)
-                .orElse("-- Skipping AIS MessageType not supported --\n");
-
-        System.out.println(result);
+    public void accept(AISMessage aisMessage) {
+        processor.process(normalizer.normalize(aisMessage));
     }
 }
