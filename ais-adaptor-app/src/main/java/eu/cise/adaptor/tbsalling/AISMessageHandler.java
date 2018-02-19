@@ -5,6 +5,7 @@ import eu.cise.adaptor.Translator;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class AISMessageHandler implements Consumer<AISMessage> {
@@ -15,12 +16,11 @@ public class AISMessageHandler implements Consumer<AISMessage> {
 
     @Override
     public void accept(AISMessage t) {
-        System.out.println(
-                translator.translate(
-                        normalizer.normalize(t))
-                        .map(mapper::toXML)
-                        .orElse("*** Message not supported \n"));
+        String result = Optional.of(normalizer.normalize(t))
+                .flatMap(translator::translate)
+                .map(mapper::toXML)
+                .orElse("-- Skipping AIS MessageType not supported --\n");
 
+        System.out.println(result);
     }
-
 }
