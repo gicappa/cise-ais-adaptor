@@ -75,7 +75,7 @@ public class AISMsg {
         private int mmsi;
         private float cog;
         private int trueHeading;
-        private Instant timestamp;
+        private Instant timestamp = Instant.MIN;
         private float sog;
         private NavigationStatus navigationStatus;
 

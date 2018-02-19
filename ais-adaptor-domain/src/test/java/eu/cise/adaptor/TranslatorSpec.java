@@ -11,6 +11,9 @@ import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.junit.runner.RunWith;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +47,7 @@ public class TranslatorSpec {
                     .withPositionAccuracy(1)
                     .withCOG(2119.0F)
                     .withTrueHeading(210)
-                    .withTimestamp(Instant.now())
+                    .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
                     .withSOG(138.0F)
                     .withMMSI(538005989)
                     .withNavigationStatus(UnderwayUsingEngine)
@@ -144,6 +147,18 @@ public class TranslatorSpec {
                     assertThat(extractLocationRel(vs).getSOG(), is(nullValue()));
                 });
 
+                it("returns an Optional<Push> periodOfTime.startDate", () -> {
+                    //"2018-02-19T14:43:16.550Z"
+                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartDate(),
+                            is(xmlDate(2018, 02, 19)));
+                });
+
+                it("returns an Optional<Push> periodOfTime.startTime", () -> {
+                    //"2018-02-19T14:43:16.550Z"
+                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartTime(),
+                            is(xmlTime(14, 43, 16)));
+                });
+
                 it("returns an Optional<Push> MMSI", () -> {
                     assertThat(v.getMMSI(), is(538005989L));
                 });
@@ -154,6 +169,20 @@ public class TranslatorSpec {
             });
 
         });
+    }
+
+    private XMLGregorianCalendar xmlDate(int year, int month, int day)
+            throws DatatypeConfigurationException {
+        return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(year, month, day,
+                        0, 0, 0, 0, 0);
+    }
+
+    private XMLGregorianCalendar xmlTime(int hour, int minute, int second)
+            throws DatatypeConfigurationException {
+        return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(1970, 1, 1,
+                        hour, minute, second, 0, 0);
     }
 
     private Objet.LocationRel extractLocationRel(Vessel v) {

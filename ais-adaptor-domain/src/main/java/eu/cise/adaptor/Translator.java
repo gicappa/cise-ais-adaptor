@@ -6,6 +6,7 @@ import eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
+import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
@@ -15,7 +16,12 @@ import eu.cise.servicemodel.v1.message.PurposeType;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.*;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,6 +71,7 @@ public class Translator {
                         fromPositionAccuracy(aisMsg),
                         fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
+                        aisMsg.getTimestamp(),
                         fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
                         Long.valueOf(aisMsg.getMMSI()),
                         fromNavigationStatus(aisMsg.getNavigationStatus())
@@ -85,13 +92,14 @@ public class Translator {
                             LocationQualitativeAccuracyType lqat,
                             Double cog,
                             Double heading,
+                            Instant timestamp,
                             Double sog,
                             Long mmsi,
                             NavigationalStatusType nst) {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(mmsi);
-        vessel.getLocationRels().add(getLocationRel(latitude, longitude, lqat, cog, heading, sog));
+        vessel.getLocationRels().add(getLocationRel(latitude, longitude, lqat, cog, heading, timestamp, sog));
         vessel.setNavigationalStatus(nst);
         return vessel;
     }
@@ -101,17 +109,57 @@ public class Translator {
                                              LocationQualitativeAccuracyType lqat,
                                              Double cog,
                                              Double heading,
+                                             Instant timestamp,
                                              Double sog) {
 
         Objet.LocationRel locationRel = new Objet.LocationRel();
         locationRel.setLocation(toLocation(latitude, longitude, lqat));
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
+
+        if (!timestamp.equals(Instant.MIN)) {
+            Period period = new Period();
+            period.setStartDate(toXMLDate(LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"))));
+            period.setStartTime(toXMLTime(LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"))));
+            locationRel.setPeriodOfTime(period);
+        }
+
         locationRel.setSourceType(SourceType.DECLARATION);
         locationRel.setSensorType(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
         locationRel.setSOG(sog);
 
         return locationRel;
+    }
+
+    private XMLGregorianCalendar toXMLDate(LocalDateTime date) {
+        XMLGregorianCalendar c = toXMLDateTime(date);
+        c.setTime(0,0,0);
+        return c;
+    }
+    private XMLGregorianCalendar toXMLTime(LocalDateTime date) {
+        XMLGregorianCalendar c = toXMLDateTime(date);
+        c.setYear(1970);
+        c.setMonth(01);
+        c.setDay(01);
+        c.setMillisecond(0);
+        return c;
+    }
+
+    private XMLGregorianCalendar toXMLDateTime(LocalDateTime date) {
+        try {
+            GregorianCalendar calendar = GregorianCalendar.from(date.atZone(ZoneId.of("UTC")));
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private XMLGregorianCalendar toXMLTime(LocalTime time) {
+        try {
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(0, 1, 1, time.getHour(), time.getMinute(), time.getSecond(), 0, 0);
+        } catch (DatatypeConfigurationException var3) {
+            throw new RuntimeException(var3);
+        }
     }
 
     private String longitude(AISMsg aisMsg) {
