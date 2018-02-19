@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Spectrum.class)
-public class ToCISETranslatorSpec {
+public class TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 

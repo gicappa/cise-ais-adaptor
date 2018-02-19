@@ -61,4 +61,35 @@ all the messages with a different message type:
   
 * _getMetadata()_ doesn't return anything but _dataFields().get("metadata")_
   does. Check if _getMetadata()_ it should be substituted with the latter 
-  or not.   
+  or not.
+
+The following message types are the one supported byt the chosen AIS library but
+our implementation only support four of them.  
+
+* ShipAndVoyageRelatedData: _SUPPORTED_
+* PositionReportClassAScheduled: _SUPPORTED_
+* PositionReportClassAAssignedSchedule: _SUPPORTED_
+* PositionReportClassAResponseToInterrogation: _SUPPORTED_
+* BaseStationReport:
+* AddressedBinaryMessage:
+* BinaryAcknowledge:
+* BinaryBroadcastMessage:
+* StandardSARAircraftPositionReport:
+* UTCAndDateInquiry:
+* UTCAndDateResponse:
+* AddressedSafetyRelatedMessage:
+* SafetyRelatedAcknowledge:
+* SafetyRelatedBroadcastMessage:
+* Interrogation:
+* AssignedModeCommand:
+* GNSSBinaryBroadcastMessage:
+* StandardClassBCSPositionReport:
+* ExtendedClassBEquipmentPositionReport:
+* DataLinkManagement:
+* AidToNavigationReport:
+* ChannelManagement:
+* GroupAssignmentCommand:
+* ClassBCSStaticDataReport:
+* BinaryMessageSingleSlot:
+* BinaryMessageMultipleSlot:
+* LongRangeBroadcastMessage:
