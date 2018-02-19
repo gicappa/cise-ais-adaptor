@@ -15,7 +15,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.greghaskins.spectrum.Spectrum.beforeEach;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
@@ -95,8 +94,14 @@ public class TranslatorSpec {
                     assertThat(extractLocationRel(v).getCOG(), is(211.9D));
                 });
 
-                it("returns an Optional<Push> cog", () -> {
-                    assertThat(extractLocationRel(v).getCOG(), is(211.9D));
+                it("returns an Optional<Push> cog (null for cog=3600)", () -> {
+                    AISMsg mc = new AISMsg.Builder(1)
+                            .withCOG(3600f)
+                            .build();
+
+                    Vessel vc = extractVessel(translator.translate(mc));
+
+                    assertThat(extractLocationRel(vc).getCOG(), is(nullValue()));
                 });
 
                 it("returns an Optional<Push> true heading", () -> {

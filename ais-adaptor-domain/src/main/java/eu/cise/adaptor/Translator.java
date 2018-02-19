@@ -51,7 +51,6 @@ public class Translator {
                         .seaBasin(SeaBasinType.ARCTIC_OCEAN)
                         .operation(PUSH)
                         .participant(newParticipant())
-
                         .build())
                 .priority(LOW)
                 .isRequiresAck(false)
@@ -62,7 +61,7 @@ public class Translator {
                 .addEntity(toVessel(
                         latitude(aisMsg),
                         longitude(aisMsg),
-                        f2d(aisMsg.getCOG()), // casting float to double
+                        fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
                         f2d(aisMsg.getSOG()),  // casting float to double
                         Long.valueOf(aisMsg.getMMSI()),
@@ -90,6 +89,7 @@ public class Translator {
 
     /**
      * TODO Implement the mapping of all the Navigation Status cases
+     *
      * @param ns
      * @return
      */
@@ -145,11 +145,12 @@ public class Translator {
         return Double.valueOf(fValue.toString());
     }
 
+    private Double fromCourseOverGround(Float cog) {
+        return cog == 3600 ? null : f2d(cog);
+    }
+
     private Double fromTrueHeading(int th) {
-        if (th == 511)
-            return null;
-        else
-            return Double.valueOf(th);
+        return th == 511 ? null : Double.valueOf(th);
     }
 
 }
