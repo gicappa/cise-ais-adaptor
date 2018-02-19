@@ -5,6 +5,7 @@ import dk.tbsalling.aismessages.ais.messages.Metadata;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.NavigationStatus;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,6 +14,14 @@ import static java.lang.Boolean.FALSE;
 /**
  * This classes normalize the AISMessage class read by the tbsalling's library
  * into an internal one.
+ *
+ * The message is translated field by field in order to support many different
+ * AIS libraries.
+ *
+ * The timestamp sometimes is not filled in the source AISMessage object and in
+ * this case the timestamp field is filled with Instant.MIN value.
+ *
+ * @return an AISMsg object
  */
 public class Normalizer {
 
@@ -26,7 +35,6 @@ public class Normalizer {
             return b.build();
 
         b.withMMSI(m.getSourceMmsi().getMMSI());
-
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
         b.withPositionAccuracy(getPositionAccuracy(m.dataFields()));
@@ -34,12 +42,7 @@ public class Normalizer {
         b.withSOG((Float) m.dataFields().getOrDefault("speedOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0));
         b.withNavigationStatus(NavigationStatus.valueOf((String) m.dataFields().get("navigationStatus")));
-
-        // TODO not very sure what to do in case of a missing timestamp
-        // * is it possible that the timestamp is missing?
-        // * should the message be dropped or not?
-        b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(null));
-
+        b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(Instant.MIN));
         return b.build();
     }
 

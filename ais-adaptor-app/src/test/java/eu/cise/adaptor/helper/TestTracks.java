@@ -15,16 +15,21 @@ public class TestTracks {
         AISMessage aisMessage = AISMessage.create(
                 NMEAMessage.fromString("!AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15")
         );
+        return aisMessage;
+    }
+
+    public AISMessage positionMsgWithTime() {
+        AISMessage aisMessage = positionMsg();
         aisMessage.setMetadata(new Metadata("SRC", moment));
         return aisMessage;
     }
+
 
     public AISMessage voyageMsg() {
         AISMessage aisMessage = AISMessage.create(
                 NMEAMessage.fromString("!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;=qA0J11EmSP0000,0*36"),
                 NMEAMessage.fromString("!ABVDM,2,2,2,A,00000000000,2*2D")
         );
-        aisMessage.setMetadata(new Metadata("SRC", moment));
         return aisMessage;
     }
 
