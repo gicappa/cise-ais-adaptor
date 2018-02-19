@@ -31,7 +31,7 @@ public class TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 
-            Translator translator = new Translator();
+            Translator translator = new DefaultTranslator();
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->
