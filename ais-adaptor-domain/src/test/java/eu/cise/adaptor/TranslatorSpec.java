@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static com.greghaskins.spectrum.Spectrum.beforeEach;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
@@ -37,15 +38,7 @@ public class TranslatorSpec {
                 );
             });
 
-            describe("when a message type is 1,2,3 or 5", () -> {
-                asList(1, 2, 3, 5).forEach((n) ->
-                                it("returns an optional with a push message / " + n, () ->
-                                        assertThat(translator.translate(new AISMsg.Builder(n).build()),
-                                                is(not(Optional.empty()))))
-                );
-            });
-
-            AISMsg m = new AISMsg.Builder(1)
+            final AISMsg m = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
                     .withLongitude(-6.9895167F)
                     //.withPositionAccuracy(DEFAULT)
@@ -57,94 +50,88 @@ public class TranslatorSpec {
                     .withNavigationStatus(UnderwayUsingEngine)
                     .build();
 
-            it("returns an optional push with a vessel", () -> {
+            describe("when a message type is 1,2,3 or 5", () -> {
+                final Vessel v = extractVessel(translator.translate(m));
 
-                XmlEntityPayload payload = extractPayload(translator.translate(m));
-                assertThat("The XmlEntityPayload has not been created",
-                        payload, is(notNullValue()));
+                asList(1, 2, 3, 5).forEach((n) ->
+                        it("returns an optional with a push message / " + n, () ->
+                                assertThat(translator.translate(new AISMsg.Builder(n).build()),
+                                        is(not(Optional.empty()))))
+                );
 
-                List<Object> vessels = payload.getAnies();
-                assertThat("There must be at least one vessel element i the payload",
-                        vessels, is(not(empty())));
+                it("returns an Optional<Push> with a vessel", () -> {
 
-                assertThat("The element in the payload must be a Vessel",
-                        vessels.get(0), instanceOf(Vessel.class));
-            });
+                    XmlEntityPayload payload = extractPayload(translator.translate(m));
+                    assertThat("The XmlEntityPayload has not been created",
+                            payload, is(notNullValue()));
 
-            it("returns an optional push with geometry", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                    List<Object> vessels = payload.getAnies();
+                    assertThat("There must be at least one vessel element i the payload",
+                            vessels, is(not(empty())));
 
-                assertThat(v.getLocationRels(), is(not(empty())));
+                    assertThat("The element in the payload must be a Vessel",
+                            vessels.get(0), instanceOf(Vessel.class));
+                });
 
-                assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
+                it("returns an Optional<Push> with geometry", () -> {
+                    assertThat(v.getLocationRels(), is(not(empty())));
 
-                assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
+                    assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
 
-                assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
-            });
+                    assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
 
-            it("returns an optional push latitude", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
+                });
 
-                assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
-            });
+                it("returns an Optional<Push> latitude", () -> {
+                    assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
+                });
 
-            it("returns an optional push longitude", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                it("returns an Optional<Push> longitude", () -> {
+                    assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+                });
 
-                assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
-            });
+                it("returns an Optional<Push> cog", () -> {
+                    assertThat(extractLocationRel(v).getCOG(), is(211.9D));
+                });
 
-            it("returns an optional push cog", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                it("returns an Optional<Push> cog", () -> {
+                    assertThat(extractLocationRel(v).getCOG(), is(211.9D));
+                });
 
-                assertThat(extractLocationRel(v).getCOG(), is(211.9D));
-            });
+                it("returns an Optional<Push> true heading", () -> {
+                    assertThat(extractLocationRel(v).getHeading(), is(210D));
+                });
 
-            it("returns an optional push true heading", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                it("returns an Optional<Push> heading (null for trueHeading=511)", () -> {
+                    AISMsg mh = new AISMsg.Builder(1)
+                            .withTrueHeading(511)
+                            .build();
 
-                assertThat(extractLocationRel(v).getHeading(), is(210D));
-            });
+                    Vessel vh = extractVessel(translator.translate(mh));
 
-            it("returns an optional push heading (null for trueHeading=511)", () -> {
-                AISMsg mh = new AISMsg.Builder(1)
-                        .withTrueHeading(511)
-                        .build();
+                    assertThat(extractLocationRel(vh).getHeading(), is(nullValue()));
+                });
 
-                Vessel v = extractVessel(translator.translate(mh));
+                it("returns an Optional<Push> source type", () -> {
+                    assertThat(extractLocationRel(v).getSourceType(), is(SourceType.DECLARATION));
+                });
 
-                assertThat(extractLocationRel(v).getHeading(), is(nullValue()));
-            });
+                it("returns an Optional<Push> sensor type", () -> {
+                    assertThat(extractLocationRel(v).getSensorType(), is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
+                });
 
-            it("returns an optional push source type", () -> {
-                Vessel v = extractVessel(translator.translate(m));
+                it("returns an Optional<Push> sog", () -> {
+                    assertThat(extractLocationRel(v).getSOG(), is(13.8D));
+                });
 
-                assertThat(extractLocationRel(v).getSourceType(), is(SourceType.DECLARATION));
-            });
+                it("returns an Optional<Push> MMSI", () -> {
+                    assertThat(v.getMMSI(), is(538005989L));
+                });
 
-            it("returns an optional push sensor type", () -> {
-                Vessel v = extractVessel(translator.translate(m));
-
-                assertThat(extractLocationRel(v).getSensorType(), is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
-            });
-
-            it("returns an optional push sog", () -> {
-                Vessel v = extractVessel(translator.translate(m));
-
-                assertThat(extractLocationRel(v).getSOG(), is(13.8D));
-            });
-
-            it("returns an optional push MMSI", () -> {
-                Vessel v = extractVessel(translator.translate(m));
-
-                assertThat(v.getMMSI(), is(538005989L));
-            });
-
-            it("returns an optional push navigationStatus", () -> {
-                Vessel v = extractVessel(translator.translate(m));
-
-                assertThat(v.getNavigationalStatus(), is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
+                it("returns an Optional<Push> navigationStatus", () -> {
+                    assertThat(v.getNavigationalStatus(), is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
+                });
             });
 
         });
