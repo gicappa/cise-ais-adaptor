@@ -146,7 +146,7 @@ public class Translator {
     }
 
     private Double fromCourseOverGround(Float cog) {
-        return cog == 3600 ? null : f2d(cog);
+        return cog == 3600 ? null : f2d(cog) / 10D;
     }
 
     private Double fromTrueHeading(int th) {

@@ -41,7 +41,7 @@ public class TranslatorSpec {
                     .withLatitude(47.443634F)
                     .withLongitude(-6.9895167F)
                     //.withPositionAccuracy(DEFAULT)
-                    .withCOG(211.9F)
+                    .withCOG(2119.0F)
                     .withTrueHeading(210)
                     .withTimestamp(Instant.now())
                     .withSOG(13.8F)
@@ -90,7 +90,7 @@ public class TranslatorSpec {
                     assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
                 });
 
-                it("returns an Optional<Push> cog", () -> {
+                it("returns an Optional<Push> cog (in degrees instead of 1/10 od degrees)", () -> {
                     assertThat(extractLocationRel(v).getCOG(), is(211.9D));
                 });
 
