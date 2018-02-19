@@ -2,6 +2,7 @@ package eu.cise.adaptor;
 
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
+import eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
@@ -61,6 +62,7 @@ public class Translator {
                 .addEntity(toVessel(
                         latitude(aisMsg),
                         longitude(aisMsg),
+                        fromPositionAccuracy(aisMsg),
                         fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
                         fromTrueHeading(aisMsg.getTrueHeading()),
                         fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
@@ -72,8 +74,15 @@ public class Translator {
                 .build());
     }
 
+    private LocationQualitativeAccuracyType fromPositionAccuracy(AISMsg aisMsg) {
+        return aisMsg.getPositionAccuracy() == 1 ?
+                LocationQualitativeAccuracyType.HIGH :
+                LocationQualitativeAccuracyType.LOW;
+    }
+
     private Vessel toVessel(String latitude,
                             String longitude,
+                            LocationQualitativeAccuracyType lqat,
                             Double cog,
                             Double heading,
                             Double sog,
@@ -82,9 +91,68 @@ public class Translator {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(mmsi);
-        vessel.getLocationRels().add(getLocationRel(latitude, longitude, cog, heading, sog));
+        vessel.getLocationRels().add(getLocationRel(latitude, longitude, lqat, cog, heading, sog));
         vessel.setNavigationalStatus(nst);
         return vessel;
+    }
+
+    private Objet.LocationRel getLocationRel(String latitude,
+                                             String longitude,
+                                             LocationQualitativeAccuracyType lqat,
+                                             Double cog,
+                                             Double heading,
+                                             Double sog) {
+
+        Objet.LocationRel locationRel = new Objet.LocationRel();
+        locationRel.setLocation(toLocation(latitude, longitude, lqat));
+        locationRel.setCOG(cog);
+        locationRel.setHeading(heading);
+        locationRel.setSourceType(SourceType.DECLARATION);
+        locationRel.setSensorType(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
+        locationRel.setSOG(sog);
+
+        return locationRel;
+    }
+
+    private String longitude(AISMsg aisMsg) {
+        return Float.toString(aisMsg.getLongitude());
+    }
+
+    private String latitude(AISMsg aisMsg) {
+        return Float.toString(aisMsg.getLatitude());
+    }
+
+    private Location toLocation(String latitude, String longitude, LocationQualitativeAccuracyType lqat) {
+        Location location = new Location();
+        Geometry geometry = new Geometry();
+        geometry.setLatitude(latitude);
+        geometry.setLongitude(longitude);
+        location.getGeometries().add(geometry);
+        location.setLocationQualitativeAccuracy(lqat);
+        return location;
+    }
+
+    private boolean isTypeSupported(AISMsg aisMessage) {
+        return aisMessage.getMessageType() != 1 &&
+                aisMessage.getMessageType() != 2 &&
+                aisMessage.getMessageType() != 3 &&
+                aisMessage.getMessageType() != 5;
+    }
+
+    private Double f2d(Float fValue) {
+        return Double.valueOf(fValue.toString());
+    }
+
+    private Double fromCourseOverGround(Float cog) {
+        return cog == 3600 ? null : f2d(cog) / 10D;
+    }
+
+    private Double fromSpeedOverGround(Float sog) {
+        return sog == 1023 ? null : f2d(sog) / 10D;
+    }
+
+    private Double fromTrueHeading(int th) {
+        return th == 511 ? null : Double.valueOf(th);
     }
 
     /**
@@ -132,63 +200,6 @@ public class Translator {
                 return UNDEFINED_DEFAULT;
         }
 
-    }
-
-    private Objet.LocationRel getLocationRel(String latitude,
-                                             String longitude,
-                                             Double cog,
-                                             Double heading,
-                                             Double sog) {
-
-        Objet.LocationRel locationRel = new Objet.LocationRel();
-        locationRel.setLocation(toLocation(latitude, longitude));
-        locationRel.setCOG(cog);
-        locationRel.setHeading(heading);
-        locationRel.setSourceType(SourceType.DECLARATION);
-        locationRel.setSensorType(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
-        locationRel.setSOG(sog);
-
-        return locationRel;
-    }
-
-    private String longitude(AISMsg aisMsg) {
-        return Float.toString(aisMsg.getLongitude());
-    }
-
-    private String latitude(AISMsg aisMsg) {
-        return Float.toString(aisMsg.getLatitude());
-    }
-
-    private Location toLocation(String latitude, String longitude) {
-        Location location = new Location();
-        Geometry geometry = new Geometry();
-        geometry.setLatitude(latitude);
-        geometry.setLongitude(longitude);
-        location.getGeometries().add(geometry);
-        return location;
-    }
-
-    private boolean isTypeSupported(AISMsg aisMessage) {
-        return aisMessage.getMessageType() != 1 &&
-                aisMessage.getMessageType() != 2 &&
-                aisMessage.getMessageType() != 3 &&
-                aisMessage.getMessageType() != 5;
-    }
-
-    private Double f2d(Float fValue) {
-        return Double.valueOf(fValue.toString());
-    }
-
-    private Double fromCourseOverGround(Float cog) {
-        return cog == 3600 ? null : f2d(cog) / 10D;
-    }
-
-    private Double fromSpeedOverGround(Float sog) {
-        return sog == 1023 ? null : f2d(sog) / 10D;
-    }
-
-    private Double fromTrueHeading(int th) {
-        return th == 511 ? null : Double.valueOf(th);
     }
 
 }

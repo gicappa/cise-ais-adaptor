@@ -18,6 +18,7 @@ import java.util.Optional;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -40,7 +41,7 @@ public class TranslatorSpec {
             final AISMsg m = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
                     .withLongitude(-6.9895167F)
-                    //.withPositionAccuracy(DEFAULT)
+                    .withPositionAccuracy(1)
                     .withCOG(2119.0F)
                     .withTrueHeading(210)
                     .withTimestamp(Instant.now())
@@ -88,6 +89,10 @@ public class TranslatorSpec {
 
                 it("returns an Optional<Push> longitude", () -> {
                     assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+                });
+
+                it("returns an Optional<Push> location qualitative  accuracy", () -> {
+                    assertThat(extractLocationRel(v).getLocation().getLocationQualitativeAccuracy(), is(HIGH));
                 });
 
                 it("returns an Optional<Push> cog (in degrees instead of 1/10 od degrees)", () -> {

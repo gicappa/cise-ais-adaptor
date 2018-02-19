@@ -12,11 +12,13 @@ public class AISMsg {
     private Instant timestamp;
     private float sog;
     private NavigationStatus navigationStatus;
+    private int positionAccuracy;
 
     private AISMsg(Builder builder) {
         messageType = builder.messageType;
         latitude = builder.latitude;
         longitude = builder.longitude;
+        positionAccuracy = builder.positionAccuracy;
         mmsi = builder.mmsi;
         cog = builder.cog;
         trueHeading = builder.trueHeading;
@@ -61,10 +63,15 @@ public class AISMsg {
         return navigationStatus;
     }
 
+    public Integer getPositionAccuracy() {
+        return positionAccuracy;
+    }
+
     public static class Builder {
         private int messageType;
         private float latitude;
         private float longitude;
+        private int positionAccuracy;
         private int mmsi;
         private float cog;
         private int trueHeading;
@@ -83,6 +90,11 @@ public class AISMsg {
 
         public Builder withLongitude(float l) {
             this.longitude = l;
+            return this;
+        }
+
+        public Builder withPositionAccuracy(int la) {
+            this.positionAccuracy = la;
             return this;
         }
 

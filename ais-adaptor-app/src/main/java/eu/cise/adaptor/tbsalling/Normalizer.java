@@ -5,12 +5,14 @@ import dk.tbsalling.aismessages.ais.messages.Metadata;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.NavigationStatus;
 
+import java.util.Map;
 import java.util.Optional;
+
+import static java.lang.Boolean.FALSE;
 
 /**
  * This classes normalize the AISMessage class read by the tbsalling's library
  * into an internal one.
- *
  */
 public class Normalizer {
 
@@ -27,6 +29,7 @@ public class Normalizer {
 
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
+        b.withPositionAccuracy(getPositionAccuracy(m.dataFields()));
         b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
         b.withSOG((Float) m.dataFields().getOrDefault("speedOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0));
@@ -38,6 +41,14 @@ public class Normalizer {
         b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(null));
 
         return b.build();
+    }
+
+
+    /**
+     * @return 1 if position accuracy lte 10m; 0 otherwise.
+     */
+    private int getPositionAccuracy(Map<String, Object> m) {
+        return (Boolean) m.getOrDefault("positionAccuracy", FALSE) ? 1 : 0;
     }
 
     private boolean isPositionMessage(Integer type) {
