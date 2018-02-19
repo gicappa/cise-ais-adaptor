@@ -1,9 +1,14 @@
 package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
-import eu.cise.adaptor.*;
+import eu.cise.adaptor.AISProcessor;
+import eu.cise.adaptor.DefaultAISProcessor;
+import eu.cise.adaptor.DefaultTranslator;
+import eu.cise.adaptor.Translator;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;
+import jrc.cise.gw.communication.DispatchResult;
+import jrc.cise.gw.communication.Dispatcher;
 
 import java.util.function.Consumer;
 
@@ -19,9 +24,9 @@ public class AISMessageHandler implements Consumer<AISMessage> {
         translator = new DefaultTranslator();
         normalizer = new DefaultNormalizer();
         mapper = new DefaultXmlMapper.Pretty();
-        dispatcher = message -> {
+        dispatcher = (message, address) -> {
             System.out.println(mapper.toXML(message));
-            return Result.SUCCESS;
+            return DispatchResult.success();
         };
 
         processor = new DefaultAISProcessor(translator, dispatcher);

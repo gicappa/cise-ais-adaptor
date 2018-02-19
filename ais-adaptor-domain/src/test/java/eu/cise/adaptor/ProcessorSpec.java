@@ -2,6 +2,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.servicemodel.v1.message.Push;
+import jrc.cise.gw.communication.Dispatcher;
 import org.junit.runner.RunWith;
 
 import java.time.Instant;
@@ -52,7 +53,7 @@ public class ProcessorSpec {
             it("dispatches the translated CISE message", () -> {
                 processor.process(aisMessage);
 
-                verify(dispatcher).dispatch(ciseMessage);
+                verify(dispatcher).send(eq(ciseMessage), any());
             });
 
         });

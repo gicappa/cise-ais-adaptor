@@ -1,6 +1,8 @@
 package eu.cise.adaptor;
 
-import static eu.cise.adaptor.Result.NOT_SENT;
+
+import jrc.cise.gw.communication.DispatchResult;
+import jrc.cise.gw.communication.Dispatcher;
 
 public class DefaultAISProcessor implements AISProcessor {
 
@@ -14,6 +16,8 @@ public class DefaultAISProcessor implements AISProcessor {
 
     @Override
     public void process(AISMsg message) {
-        translator.translate(message).map(dispatcher::dispatch).orElse(NOT_SENT);
+        translator.translate(message)
+                .map(m -> dispatcher.send(m, "http://10.1.1.100:8080/messages"))
+                .orElse(DispatchResult.success());
     }
 }

@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-    <artifactId>cise-ais-adaptor-domain</artifactId>
+  <artifactId>cise-ais-adaptor-domain</artifactId>
 
   <dependencies>
     <dependency>
@@ -26,6 +26,16 @@
     <dependency>
       <artifactId>eucise-model-helpers</artifactId>
       <groupId>eu.europa.ec.jrc.marex</groupId>
+    </dependency>
+
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>cise-gateway-domain</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>cise-gateway-transport</artifactId>
     </dependency>
 
     <dependency>
