@@ -19,9 +19,11 @@ import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,8 +121,8 @@ public class Translator {
 
         if (!timestamp.equals(Instant.MIN)) {
             Period period = new Period();
-            period.setStartDate(toXMLDate(LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"))));
-            period.setStartTime(toXMLTime(LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"))));
+            period.setStartDate(toXMLDate(timestamp));
+            period.setStartTime(toXMLTime(timestamp));
             locationRel.setPeriodOfTime(period);
         }
 
@@ -131,35 +133,22 @@ public class Translator {
         return locationRel;
     }
 
-    private XMLGregorianCalendar toXMLDate(LocalDateTime date) {
-        XMLGregorianCalendar c = toXMLDateTime(date);
-        c.setTime(0,0,0);
-        return c;
-    }
-    private XMLGregorianCalendar toXMLTime(LocalDateTime date) {
-        XMLGregorianCalendar c = toXMLDateTime(date);
-        c.setYear(1970);
-        c.setMonth(01);
-        c.setDay(01);
-        c.setMillisecond(0);
-        return c;
-    }
-
-    private XMLGregorianCalendar toXMLDateTime(LocalDateTime date) {
+    private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes, int seconds) {
         try {
-            GregorianCalendar calendar = GregorianCalendar.from(date.atZone(ZoneId.of("UTC")));
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(year, month, day, hours, minutes, seconds, 0, 0);
         } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new AISAdaptorException("Can't create a correct XMLGregorianCalendar DATE/TIME out of the instant ", e);
         }
     }
 
-    private XMLGregorianCalendar toXMLTime(LocalTime time) {
-        try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(0, 1, 1, time.getHour(), time.getMinute(), time.getSecond(), 0, 0);
-        } catch (DatatypeConfigurationException var3) {
-            throw new RuntimeException(var3);
-        }
+    private XMLGregorianCalendar toXMLDate(Instant timestamp) {
+        LocalDateTime l = LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"));
+        return toXMLCalendar(l.getYear(), l.getMonthValue(), l.getDayOfMonth(), 0, 0, 0);
+    }
+
+    private XMLGregorianCalendar toXMLTime(Instant timestamp) {
+        LocalDateTime l = LocalDateTime.ofInstant(timestamp, ZoneId.of("UTC"));
+        return toXMLCalendar(1970, 01, 01, l.getHour(), l.getMinute(), l.getSecond());
     }
 
     private String longitude(AISMsg aisMsg) {
