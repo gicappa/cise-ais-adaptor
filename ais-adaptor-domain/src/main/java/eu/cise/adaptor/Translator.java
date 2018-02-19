@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
 import static eu.cise.servicemodel.v1.message.PriorityType.LOW;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
@@ -88,16 +88,50 @@ public class Translator {
     }
 
     /**
-     * TODO Implement the mapping of all the Navigation Status cases
-     *
      * @param ns
      * @return
      */
     private NavigationalStatusType fromNavigationStatus(NavigationStatus ns) {
-        if (ns == null || !ns.equals(UnderwayUsingEngine))
-            return NavigationalStatusType.UNDEFINED_DEFAULT;
-        else
-            return NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+        if (ns == null)
+            return UNDEFINED_DEFAULT;
+
+        switch (ns) {
+            case UnderwayUsingEngine:
+                return UNDER_WAY_USING_ENGINE;
+            case AtAnchor:
+                return AT_ANCHOR;
+            case NotUnderCommand:
+                return NOT_UNDER_COMMAND;
+            case RestrictedManoeuverability:
+                return RESTRICTED_MANOEUVRABILITY;
+            case ConstrainedByHerDraught:
+                return CONSTRAINED_BY_HER_DRAUGHT;
+            case Moored:
+                return MOORED;
+            case Aground:
+                return AGROUND;
+            case EngagedInFising:
+                return ENGAGED_IN_FISHING;
+            case UnderwaySailing:
+                return UNDER_WAY_SAILING;
+            case ReservedForFutureUse9:
+                return OTHER;
+            case ReservedForFutureUse10:
+                return OTHER;
+            case PowerDrivenVesselTowingAstern:
+                return POWER_DRIVEN_VESSEL_TOWING_ASTERN;
+            case PowerDrivenVesselPushingAheadOrTowingAlongside:
+                return POWER_DRIVEN_VESSEL_TOWIG_AHEAD_OR_PUSHING_ALONGSIDE;
+            case ReservedForFutureUse13:
+                return OTHER;
+            case SartMobOrEpirb:
+                return OTHER;
+            case Undefined:
+                return UNDEFINED_DEFAULT;
+            default:
+                return UNDEFINED_DEFAULT;
+        }
+
     }
 
     private Objet.LocationRel getLocationRel(String latitude,
