@@ -16,7 +16,7 @@ public class MainApp {
     public MainApp() {
         this.banner = new Banner();
         this.context = new ClassPathXmlApplicationContext("/context-ais.xml");
-        this.aisConsumer = context.getBean("fileAISConsumer", AISConsumer.class);
+        this.aisConsumer = context.getBean("socketAISConsumer", AISConsumer.class);
     }
 
     public static void main(String[] args) {
@@ -28,7 +28,6 @@ public class MainApp {
             banner.print(VERSION);
 
             System.out.println("Press a key to start consuming AIS Messages.");
-
             System.in.read();
 
             aisConsumer.run();

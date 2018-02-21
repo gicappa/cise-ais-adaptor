@@ -18,6 +18,7 @@ public class DefaultAISProcessor implements AISProcessor {
 
     @Override
     public void process(AISMsg message) {
+        System.out.print(".");
         translator.translate(message)
                 .map(m -> dispatcher.send(m, config.getGatewayAddress()))
                 .orElse(DispatchResult.success());
