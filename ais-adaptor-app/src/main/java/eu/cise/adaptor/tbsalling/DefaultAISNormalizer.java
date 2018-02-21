@@ -2,6 +2,7 @@ package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
+import eu.cise.adaptor.AISNormalizer;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.NavigationStatus;
 
@@ -23,7 +24,7 @@ import static java.lang.Boolean.FALSE;
  *
  * @return an AISMsg object
  */
-public class DefaultNormalizer implements Normalizer {
+public class DefaultAISNormalizer implements AISNormalizer {
 
     public AISMsg normalize(AISMessage m) {
         Integer type = m.getMessageType().getCode();

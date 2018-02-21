@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.helper.TestTracks;
-import eu.cise.adaptor.tbsalling.DefaultNormalizer;
+import eu.cise.adaptor.tbsalling.DefaultAISNormalizer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,14 +18,14 @@ import static org.junit.Assert.assertThat;
 // !ABVDM,2,2,2,A,00000000000,2*2D
 // {toStern=18, metadata=Metadata{source='SRC', received=2018-02-15T09:52:24.986Z}, destination=DEWVN, imo.IMO=9301134, toPort=14, dataTerminalReady=false, nmeaMessages=[Ldk.tbsalling.aismessages.nmea.messages.NMEAMessage;@6e5df971, shipName=LANGENESS, sourceMmsi.MMSI=305506000, positionFixingDevice=CombinedGpsGlonass, valid=true, eta=18-07 17:00, draught=10.4, messageType=ShipAndVoyageRelatedData, toStarboard=11, callsign=V2EP6, shipType=CargoHazardousA, toBow=143, repeatIndicator=1, transponderClass=A}
 
-public class NormalizerTest {
+public class AISNormalizerTest {
 
-    private DefaultNormalizer n;
+    private DefaultAISNormalizer n;
     private TestTracks t = new TestTracks();
 
     @Before
     public void before() {
-        n = new DefaultNormalizer();
+        n = new DefaultAISNormalizer();
     }
 
 

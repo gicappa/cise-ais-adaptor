@@ -263,6 +263,12 @@
         <version>2.2.1</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>5.0.4.RELEASE</version>
+      </dependency>
+
       <!-- Test Libraries -->
       <dependency>
         <groupId>org.glassfish.jersey.test-framework</groupId>

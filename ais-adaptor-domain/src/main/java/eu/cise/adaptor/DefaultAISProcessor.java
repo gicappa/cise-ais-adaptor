@@ -8,16 +8,18 @@ public class DefaultAISProcessor implements AISProcessor {
 
     private final Translator translator;
     private final Dispatcher dispatcher;
+    private final AISAdaptorConfig config;
 
-    public DefaultAISProcessor(Translator translator, Dispatcher dispatcher) {
+    public DefaultAISProcessor(Translator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
         this.translator = translator;
         this.dispatcher = dispatcher;
+        this.config = config;
     }
 
     @Override
     public void process(AISMsg message) {
         translator.translate(message)
-                .map(m -> dispatcher.send(m, "http://10.1.1.100:8080/messages"))
+                .map(m -> dispatcher.send(m, config.getGatewayAddress()))
                 .orElse(DispatchResult.success());
     }
 }

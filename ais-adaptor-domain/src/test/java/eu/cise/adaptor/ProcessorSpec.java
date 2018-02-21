@@ -19,9 +19,10 @@ public class ProcessorSpec {
 
             Translator translator = mock(Translator.class);
             Dispatcher dispatcher = mock(Dispatcher.class);
+            AISAdaptorConfig config = mock(AISAdaptorConfig.class);
             Push ciseMessage = new Push();
 
-            AISProcessor processor = new DefaultAISProcessor(translator, dispatcher);
+            AISProcessor processor = new DefaultAISProcessor(translator, dispatcher, config);
 
             final AISMsg aisMessage = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
@@ -37,11 +38,13 @@ public class ProcessorSpec {
 
             beforeEach(() -> {
                 when(translator.translate(aisMessage)).thenReturn(Optional.of(ciseMessage));
+                when(config.getGatewayAddress()).thenReturn("http://gateway.addr.gov/messages");
             });
 
             afterEach(() -> {
                 reset(translator);
                 reset(dispatcher);
+                reset(config);
             });
 
             it("translates an AIS message into a CISE one", () -> {
@@ -53,7 +56,7 @@ public class ProcessorSpec {
             it("dispatches the translated CISE message", () -> {
                 processor.process(aisMessage);
 
-                verify(dispatcher).send(eq(ciseMessage), any());
+                verify(dispatcher).send(eq(ciseMessage), eq("http://gateway.addr.gov/messages"));
             });
 
         });

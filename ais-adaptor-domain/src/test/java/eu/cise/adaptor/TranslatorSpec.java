@@ -9,6 +9,7 @@ import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -31,7 +32,8 @@ public class TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 
-            Translator translator = new DefaultTranslator();
+            AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
+            Translator translator = new DefaultTranslator(config);
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->

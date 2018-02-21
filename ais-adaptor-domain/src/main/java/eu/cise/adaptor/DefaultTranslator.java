@@ -10,11 +10,9 @@ import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
-import eu.cise.servicemodel.v1.message.InformationSecurityLevelType;
-import eu.cise.servicemodel.v1.message.InformationSensitivityType;
-import eu.cise.servicemodel.v1.message.PurposeType;
-import eu.cise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.message.*;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
+import eu.cise.servicemodel.v1.service.ServiceOperationType;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -44,6 +42,12 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
  */
 public class DefaultTranslator implements Translator {
 
+    private final AISAdaptorConfig config;
+
+    public DefaultTranslator(AISAdaptorConfig config) {
+        this.config = config;
+    }
+
     @Override
     public Optional<Push> translate(AISMsg aisMsg) {
         if (isTypeSupported(aisMsg)) {
@@ -56,18 +60,18 @@ public class DefaultTranslator implements Translator {
                 .correlationId(UUID.randomUUID().toString())
                 .creationDateTime(new Date())
                 .sender(newService()
-                        .id("123")
-                        .dataFreshness(DataFreshnessType.HISTORIC)
-                        .seaBasin(SeaBasinType.ARCTIC_OCEAN)
-                        .operation(PUSH)
-                        .participant(newParticipant())
+                        .id(config.getServiceId())
+                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
+                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
+                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
+                        .participant(newParticipant().endpointUrl(config.getEndpointUrl()))
                         .build())
-                .priority(LOW)
+                .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
-                .informationSecurityLevel(InformationSecurityLevelType.NON_CLASSIFIED)
-                .informationSensitivity(InformationSensitivityType.NON_SPECIFIED)
+                .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
+                .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
                 .isPersonalData(false)
-                .purpose(PurposeType.BORDER_MONITORING)
+                .purpose(PurposeType.fromValue(config.getPurpose()))
                 .addEntity(toVessel(
                         latitude(aisMsg),
                         longitude(aisMsg),
