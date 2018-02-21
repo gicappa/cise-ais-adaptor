@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
-import static eu.cise.servicemodel.v1.message.PriorityType.LOW;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
@@ -64,8 +63,11 @@ public class DefaultTranslator implements Translator {
                         .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
                         .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
                         .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                        .participant(newParticipant().endpointUrl(config.getEndpointUrl()))
-                        .build())
+                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
+                .recipient(newService()
+                        .id("it.mm-ls01.vessel.push.mms04")
+                        .operation(PUSH)
+                )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
                 .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
@@ -105,6 +107,12 @@ public class DefaultTranslator implements Translator {
                             NavigationalStatusType nst) {
 
         Vessel vessel = new Vessel();
+
+        // This is needed because the AIS doesn't have an IMO number specified
+        // but only the MMSI and the light client we built
+        if (config.isDemoEnvironment())
+            vessel.setIMONumber(mmsi);
+
         vessel.setMMSI(mmsi);
         vessel.getLocationRels().add(getLocationRel(latitude, longitude, lqat, cog, heading, timestamp, sog));
         vessel.setNavigationalStatus(nst);
@@ -123,6 +131,10 @@ public class DefaultTranslator implements Translator {
         locationRel.setLocation(toLocation(latitude, longitude, lqat));
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
+
+        if (config.isOverridingTimestamps()) {
+            timestamp = Instant.now();
+        }
 
         if (!timestamp.equals(Instant.MIN)) {
             Period period = new Period();
