@@ -23,10 +23,6 @@ public class MainApp {
         new MainApp().run();
     }
 
-    public static void main(String[] args) {
-        new MainApp().run();
-    }
-
     public void run() {
         try {
             banner.print(VERSION);
