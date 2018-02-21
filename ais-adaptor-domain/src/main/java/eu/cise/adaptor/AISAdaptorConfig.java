@@ -6,6 +6,12 @@ import org.aeonbits.owner.Config.Sources;
 @Sources("classpath:ais-adaptor.properties")
 public interface AISAdaptorConfig extends Config {
 
+    @Key("demo-environment")
+    boolean isDemoEnvironment();
+
+    @Key("override-timestamps")
+    boolean isOverridingTimestamps();
+
     @Key("gateway.address")
     String getGatewayAddress();
 

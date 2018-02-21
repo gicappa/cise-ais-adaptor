@@ -1,11 +1,7 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.tbsalling.FileAISConsumer;
-import eu.cise.adaptor.tbsalling.SocketAISConsumer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.IOException;
 
 /**
  * Application entry point
@@ -17,14 +13,14 @@ public class MainApp {
     private final Banner banner;
     private final ApplicationContext context;
 
-    public static void main(String[] args) {
-        new MainApp().run();
-    }
-
     public MainApp() {
         this.banner = new Banner();
         this.context = new ClassPathXmlApplicationContext("/context-ais.xml");
         this.aisConsumer = context.getBean("fileAISConsumer", AISConsumer.class);
+    }
+
+    public static void main(String[] args) {
+        new MainApp().run();
     }
 
     public void run() {
