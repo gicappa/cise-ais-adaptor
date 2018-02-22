@@ -10,7 +10,7 @@
 
   <bean id="socketAISConsumer"
         class="eu.cise.adaptor.tbsalling.SocketAISConsumer">
-    <constructor-arg value="139.191.9.35"/>
+    <constructor-arg value="localhost"/>
     <constructor-arg value="60000"/>
   </bean>
 
