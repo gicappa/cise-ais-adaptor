@@ -11,9 +11,9 @@ public class FileAISSource implements AISSource {
 
     private final AISInputStreamReader aisStream;
 
-    public FileAISSource(String filename) {
+    public FileAISSource(String filename, AISMessageHandler aisMessageConsumer) {
         InputStream inputStream = getClass().getResourceAsStream(filename);
-        aisStream = new AISInputStreamReader(inputStream, new AISMessageHandler());
+        aisStream = new AISInputStreamReader(inputStream, aisMessageConsumer);
     }
 
     public void run() {
