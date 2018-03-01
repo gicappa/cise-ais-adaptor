@@ -1,6 +1,6 @@
 package eu.cise.adaptor;
 
 @FunctionalInterface
-public interface AISConsumer {
+public interface AISSource {
     void run();
 }

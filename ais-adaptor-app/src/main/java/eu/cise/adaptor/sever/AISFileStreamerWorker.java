@@ -31,9 +31,8 @@ public class AISFileStreamerWorker extends Thread {
 
             while (inputReader.ready()) {
                 out.println(inputReader.readLine());
-                Thread.sleep(1000);
+                Thread.sleep(50);
             }
-
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

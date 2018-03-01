@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="fileAISConsumer" class="eu.cise.adaptor.tbsalling.FileAISConsumer">
-    <constructor-arg value="/aistest.stream.txt"/>
+  <bean id="fileAISSource" class="eu.cise.adaptor.tbsalling.FileAISSource">
+    <constructor-arg value="/raw-ais/nmea-sample"/>
   </bean>
 
-  <bean id="socketAISConsumer"
-        class="eu.cise.adaptor.tbsalling.SocketAISConsumer">
+  <bean id="socketAISSource"
+        class="eu.cise.adaptor.tbsalling.SocketAISSource">
     <constructor-arg value="localhost"/>
     <constructor-arg value="60000"/>
   </bean>

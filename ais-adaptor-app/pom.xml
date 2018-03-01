@@ -83,6 +83,11 @@
       <artifactId>log4j-over-slf4j</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>dk.tbsalling</groupId>
+      <artifactId>aisutils</artifactId>
+    </dependency>
+
     <!-- test -->
     <dependency>
       <groupId>io.rest-assured</groupId>

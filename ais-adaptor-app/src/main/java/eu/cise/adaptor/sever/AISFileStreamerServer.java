@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class AISFileStreamerServer {
 
     public static final int PORT = 60000;
-    public static final String AIS_FILE_NAME="/RTI_aistracesfile.txt";
+    public static final String AIS_FILE_NAME="/aistest.stream.txt";
     public static final int N_THREADS = 10;
 
     public static void main(String[] args) {

@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.servicemodel.v1.message.Push;
-import jrc.cise.gw.communication.Dispatcher;
+import jrc.cise.gw.sending.Dispatcher;
 import org.junit.runner.RunWith;
 
 import java.time.Instant;

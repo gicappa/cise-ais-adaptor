@@ -1,8 +1,8 @@
 package eu.cise.adaptor;
 
 
-import jrc.cise.gw.communication.DispatchResult;
-import jrc.cise.gw.communication.Dispatcher;
+import jrc.cise.gw.sending.DispatchResult;
+import jrc.cise.gw.sending.Dispatcher;
 
 public class DefaultAISProcessor implements AISProcessor {
 

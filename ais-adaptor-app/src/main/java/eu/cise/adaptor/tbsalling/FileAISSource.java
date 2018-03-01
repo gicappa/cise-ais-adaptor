@@ -2,17 +2,16 @@ package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.AISInputStreamReader;
 import eu.cise.adaptor.AISAdaptorException;
-import eu.cise.adaptor.AISConsumer;
-import eu.cise.adaptor.tbsalling.AISMessageHandler;
+import eu.cise.adaptor.AISSource;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FileAISConsumer implements AISConsumer {
+public class FileAISSource implements AISSource {
 
     private final AISInputStreamReader aisStream;
 
-    public FileAISConsumer(String filename) {
+    public FileAISSource(String filename) {
         InputStream inputStream = getClass().getResourceAsStream(filename);
         aisStream = new AISInputStreamReader(inputStream, new AISMessageHandler());
     }
@@ -21,7 +20,7 @@ public class FileAISConsumer implements AISConsumer {
         try {
             aisStream.run();
         } catch (IOException e) {
-            throw new AISAdaptorException();
+            throw new AISAdaptorException(e);
         }
     }
 

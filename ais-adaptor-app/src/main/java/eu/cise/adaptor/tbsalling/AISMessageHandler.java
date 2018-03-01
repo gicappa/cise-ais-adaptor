@@ -2,11 +2,7 @@ package eu.cise.adaptor.tbsalling;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import eu.cise.adaptor.*;
-import eu.eucise.xml.DefaultXmlMapper;
-import eu.eucise.xml.XmlMapper;
-import jrc.cise.gw.DefaultDiscoveryService;
-import jrc.cise.gw.communication.DispatchResult;
-import jrc.cise.gw.communication.Dispatcher;
+import jrc.cise.gw.sending.Dispatcher;
 import jrc.cise.transport.RestDispatcher;
 import org.aeonbits.owner.ConfigFactory;
 

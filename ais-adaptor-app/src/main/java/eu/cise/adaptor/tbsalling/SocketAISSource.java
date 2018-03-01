@@ -3,18 +3,17 @@ package eu.cise.adaptor.tbsalling;
 import dk.tbsalling.aismessages.nmea.NMEAMessageHandler;
 import dk.tbsalling.aismessages.nmea.NMEAMessageSocketClient;
 import eu.cise.adaptor.AISAdaptorException;
-import eu.cise.adaptor.AISConsumer;
-import eu.cise.adaptor.tbsalling.AISMessageHandler;
+import eu.cise.adaptor.AISSource;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 
 @SuppressWarnings("unused")
-public class SocketAISConsumer implements AISConsumer {
+public class SocketAISSource implements AISSource {
 
     private final NMEAMessageSocketClient nmeaMessageHandler;
 
-    public SocketAISConsumer(String host, int port) {
+    public SocketAISSource(String host, int port) {
         try {
             nmeaMessageHandler = new NMEAMessageSocketClient(
                     host, port,
