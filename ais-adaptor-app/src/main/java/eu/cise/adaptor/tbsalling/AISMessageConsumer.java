@@ -8,7 +8,7 @@ import org.aeonbits.owner.ConfigFactory;
 
 import java.util.function.Consumer;
 
-public class AISMessageHandler implements Consumer<AISMessage> {
+public class AISMessageConsumer implements Consumer<AISMessage> {
 
     private final DefaultAISNormalizer normalizer;
     private final Translator translator;
@@ -16,7 +16,7 @@ public class AISMessageHandler implements Consumer<AISMessage> {
     private final AISProcessor processor;
     private final AISAdaptorConfig config;
 
-    public AISMessageHandler() {
+    public AISMessageConsumer() {
 
         config = ConfigFactory.create(AISAdaptorConfig.class);
         translator = new DefaultTranslator(config);

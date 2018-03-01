@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="aisConsumer" class="eu.cise.adaptor.tbsalling.AISMessageHandler"/>
+  <bean id="aisConsumer" class="eu.cise.adaptor.tbsalling.AISMessageConsumer"/>
 
   <bean id="fileAISSource" class="eu.cise.adaptor.tbsalling.FileAISSource">
     <constructor-arg value="/raw-ais/nmea-sample"/>

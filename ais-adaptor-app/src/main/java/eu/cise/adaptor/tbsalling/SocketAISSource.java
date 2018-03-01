@@ -17,7 +17,7 @@ public class SocketAISSource implements AISSource {
         try {
             nmeaMessageHandler = new NMEAMessageSocketClient(
                     host, port,
-                    new NMEAMessageHandler("AISAdaptor", new AISMessageHandler())
+                    new NMEAMessageHandler("AISAdaptor", new AISMessageConsumer())
             );
         } catch (UnknownHostException e) {
             throw new AISAdaptorException(e);
