@@ -13,11 +13,11 @@ public class SocketAISSource implements AISSource {
 
     private final NMEAMessageSocketClient nmeaMessageHandler;
 
-    public SocketAISSource(String host, int port) {
+    public SocketAISSource(String host, int port, AISMessageConsumer aisMessageConsumer) {
         try {
             nmeaMessageHandler = new NMEAMessageSocketClient(
                     host, port,
-                    new NMEAMessageHandler("AISAdaptor", new AISMessageConsumer())
+                    new NMEAMessageHandler("AISAdaptor", aisMessageConsumer)
             );
         } catch (UnknownHostException e) {
             throw new AISAdaptorException(e);

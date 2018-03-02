@@ -65,7 +65,7 @@ public class DefaultTranslator implements Translator {
                         .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
                         .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
                 .recipient(newService()
-                        .id("it.mm-ls01.vessel.push.mms04")
+                        .id("it.gc-ls01.vessel.push.gcs04")
                         .operation(PUSH)
                 )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))

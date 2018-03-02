@@ -33,6 +33,12 @@
       <artifactId>cise-gateway-domain</artifactId>
     </dependency>
 
+    <!-- EUCISE dependencies -->
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>eucise-com-signature-lib</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-gateway-transport</artifactId>
