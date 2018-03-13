@@ -1,6 +1,8 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.tbs.FileAppContext;
+import eu.cise.adaptor.tbs.TBSAISNormalizer;
+import eu.cise.adaptor.tbs.TBSSourceFactory;
+import org.aeonbits.owner.ConfigFactory;
 
 /**
  * Application entry point
@@ -10,12 +12,21 @@ public class MainApp {
     public static final String VERSION = "1.0";
     private final AISSource aisSource;
     private final Banner banner;
-    private final AppContext appContext;
+    private final AISSourceFactory appContext;
+    private final AISMessageConsumer consumer;
+    private final AISAdaptorConfig config;
 
     public MainApp() {
         banner = new Banner();
-        appContext = new FileAppContext();
-        aisSource = appContext.buildSource();
+        
+        config = ConfigFactory.create(AISAdaptorConfig.class);
+        consumer = new AISMessageConsumer(
+                new TBSAISNormalizer(),
+                new DefaultAISProcessor(new DefaultTranslator(config), dispatcher, config));
+
+
+        appContext = new TBSSourceFactory(consumer);
+        aisSource = appContext.newFileSource("/raw-ais/nmea-sample");
     }
 
     public static void main(String[] args) {
