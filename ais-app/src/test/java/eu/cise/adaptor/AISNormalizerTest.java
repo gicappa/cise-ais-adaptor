@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.helper.TestTracks;
-import eu.cise.adaptor.tbsalling.DefaultAISNormalizer;
+import eu.cise.adaptor.tbs.DefaultAISNormalizer;
 import org.junit.Before;
 import org.junit.Test;
 

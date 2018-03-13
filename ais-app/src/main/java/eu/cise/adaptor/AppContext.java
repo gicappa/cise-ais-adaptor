@@ -1,9 +1,9 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.tbsalling.AISMessageConsumer;
-import eu.cise.adaptor.tbsalling.DefaultAISNormalizer;
-import eu.cise.adaptor.tbsalling.FileAISSource;
-import eu.cise.adaptor.tbsalling.SocketAISSource;
+import eu.cise.adaptor.tbs.AISMessageConsumer;
+import eu.cise.adaptor.tbs.DefaultAISNormalizer;
+import eu.cise.adaptor.tbs.FileAISSource;
+import eu.cise.adaptor.tbs.SocketAISSource;
 import jrc.cise.gw.sending.Dispatcher;
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

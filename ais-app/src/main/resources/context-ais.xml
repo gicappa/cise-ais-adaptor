@@ -4,16 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="configFactory" class="eu.cise.adaptor.AISConfigFactory"/>
-
-  <bean id="config" factory-bean="configFactory" factory-method="create"/>
-
-  <bean id="translator" class="eu.cise.adaptor.DefaultTranslator">
-    <constructor-arg ref="config"/>
-  </bean>
-
-  <bean id="normalizer" class="eu.cise.adaptor.tbsalling.DefaultAISNormalizer"/>
-
   <bean id="dispatcher" class="jrc.cise.transport.RestDispatcher"/>
 
   <bean id="certificateRegistry" class="jrc.cise.gw.signature.DefaultCertificateRegistry">
@@ -32,29 +22,6 @@
   <bean id="signingDispatcher" class="jrc.cise.gw.signature.SignatureDispatcherDecorator">
     <constructor-arg ref="dispatcher"/>
     <constructor-arg ref="signatureService"/>
-  </bean>
-
-  <bean id="processor" class="eu.cise.adaptor.DefaultAISProcessor">
-    <constructor-arg ref="translator"/>
-    <constructor-arg ref="signingDispatcher"/>
-    <constructor-arg ref="config"/>
-  </bean>
-
-  <bean id="aisConsumer" class="eu.cise.adaptor.tbsalling.AISMessageConsumer">
-    <constructor-arg index="0" ref="normalizer"/>
-    <constructor-arg index="1" ref="processor"/>
-  </bean>
-
-  <bean id="fileAISSource" class="eu.cise.adaptor.tbsalling.FileAISSource">
-    <constructor-arg value="/raw-ais/nmea-sample"/>
-    <constructor-arg ref="aisConsumer"/>
-  </bean>
-
-  <bean id="socketAISSource"
-        class="eu.cise.adaptor.tbsalling.SocketAISSource">
-    <constructor-arg value="localhost"/>
-    <constructor-arg value="60000"/>
-    <constructor-arg ref="aisConsumer"/>
   </bean>
 
 </beans>

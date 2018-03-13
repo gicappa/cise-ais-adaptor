@@ -1,4 +1,4 @@
-package eu.cise.adaptor.tbsalling;
+package eu.cise.adaptor.tbs;
 
 import dk.tbsalling.aismessages.nmea.NMEAMessageHandler;
 import dk.tbsalling.aismessages.nmea.NMEAMessageSocketClient;

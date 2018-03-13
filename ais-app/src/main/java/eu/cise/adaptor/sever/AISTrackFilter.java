@@ -1,4 +1,4 @@
-package eu.cise.adaptor.tbsalling;
+package eu.cise.adaptor.sever;
 
 import dk.tbsalling.aismessages.AISInputStreamReader;
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
