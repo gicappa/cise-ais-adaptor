@@ -16,7 +16,7 @@ public class FileAISSource implements AISSource {
         aisStream = new AISInputStreamReader(inputStream, aisMessageConsumer);
     }
 
-    public void run() {
+    public void startConsuming() {
         try {
             aisStream.run();
         } catch (IOException e) {

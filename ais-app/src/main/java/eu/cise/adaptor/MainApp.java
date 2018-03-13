@@ -23,7 +23,7 @@ public class MainApp {
     public void run() {
         try {
             banner.print(VERSION);
-            aisSource.run();
+            aisSource.startConsuming();
         } catch (Throwable e) {
             throw new AISAdaptorException(e);
         }

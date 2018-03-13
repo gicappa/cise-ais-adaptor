@@ -25,7 +25,7 @@ public class SocketAISSource implements AISSource {
     }
 
     @Override
-    public void run() {
+    public void startConsuming() {
         try {
             nmeaMessageHandler.run();
         } catch (IOException e) {
