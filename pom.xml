@@ -11,8 +11,8 @@
   <name>cise-ais-adaptor</name>
 
   <modules>
-    <module>ais-adaptor-app</module>
-    <module>ais-adaptor-domain</module>
+    <module>ais-app</module>
+    <module>ais-domain</module>
   </modules>
 
   <build>
