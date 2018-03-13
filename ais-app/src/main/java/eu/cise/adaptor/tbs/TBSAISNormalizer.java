@@ -24,7 +24,7 @@ import static java.lang.Boolean.FALSE;
  *
  * @return an AISMsg object
  */
-public class DefaultAISNormalizer implements AISNormalizer<AISMessage> {
+public class TBSAISNormalizer implements AISNormalizer<AISMessage> {
 
     public AISMsg normalize(AISMessage m) {
         Integer type = m.getMessageType().getCode();

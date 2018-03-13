@@ -1,7 +1,6 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.tbs.AISMessageConsumer;
-import eu.cise.adaptor.tbs.DefaultAISNormalizer;
+import eu.cise.adaptor.tbs.TBSAISNormalizer;
 import eu.cise.adaptor.tbs.FileAISSource;
 import eu.cise.adaptor.tbs.SocketAISSource;
 import jrc.cise.gw.sending.Dispatcher;
@@ -29,7 +28,7 @@ public interface AppContext {
             return new FileAISSource(
                     "/raw-ais/nmea-sample",
                     new AISMessageConsumer(
-                            new DefaultAISNormalizer(),
+                            new TBSAISNormalizer(),
                             new DefaultAISProcessor(new DefaultTranslator(config), dispatcher, config)));
         }
     }
@@ -52,7 +51,7 @@ public interface AppContext {
                     "localhost",
                     8080,
                     new AISMessageConsumer(
-                            new DefaultAISNormalizer(),
+                            new TBSAISNormalizer(),
                             new DefaultAISProcessor(new DefaultTranslator(config), dispatcher, config)));
         }
     }

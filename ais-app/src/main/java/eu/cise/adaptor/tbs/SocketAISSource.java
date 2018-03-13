@@ -3,6 +3,7 @@ package eu.cise.adaptor.tbs;
 import dk.tbsalling.aismessages.nmea.NMEAMessageHandler;
 import dk.tbsalling.aismessages.nmea.NMEAMessageSocketClient;
 import eu.cise.adaptor.AISAdaptorException;
+import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
 
 import java.io.IOException;
