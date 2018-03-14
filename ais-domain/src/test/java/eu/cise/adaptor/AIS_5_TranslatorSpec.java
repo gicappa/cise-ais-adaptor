@@ -44,7 +44,7 @@ public class AIS_5_TranslatorSpec {
                     .withUserId(12345678)
                     .build();
 
-            xdescribe("when a message type is 5", () -> {
+            describe("when a message type is 5", () -> {
                 final Vessel v = extractVessel(translator.translate(m));
 
 //                it("returns an Optional<Push> with a InvolvedEventRel", () -> {
@@ -52,7 +52,7 @@ public class AIS_5_TranslatorSpec {
 //                });
 
                 it("returns an Optional<Push> with an MMSI", () -> {
-                    assertThat(v.getMMSI(), is(12345678));
+                    assertThat(v.getMMSI(), is(12345678L));
                 });
             });
 
