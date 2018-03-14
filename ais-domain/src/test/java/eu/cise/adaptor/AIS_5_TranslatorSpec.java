@@ -1,0 +1,74 @@
+package eu.cise.adaptor;
+
+import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.translate.AISTranslator;
+import eu.cise.adaptor.translate.DefaultAISTranslator;
+import eu.cise.datamodel.v1.entity.location.Geometry;
+import eu.cise.datamodel.v1.entity.object.Objet;
+import eu.cise.datamodel.v1.entity.object.SensorType;
+import eu.cise.datamodel.v1.entity.object.SourceType;
+import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
+import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import eu.cise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.message.XmlEntityPayload;
+import org.aeonbits.owner.ConfigFactory;
+import org.junit.runner.RunWith;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
+import static com.greghaskins.spectrum.Spectrum.describe;
+import static com.greghaskins.spectrum.Spectrum.it;
+import static com.greghaskins.spectrum.Spectrum.xdescribe;
+import static eu.cise.adaptor.helpers.Utils.extractLocationRel;
+import static eu.cise.adaptor.helpers.Utils.extractVessel;
+import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
+@RunWith(Spectrum.class)
+public class AIS_5_TranslatorSpec {
+    {
+        describe("an AIS to CISE message translator", () -> {
+
+            AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
+            AISTranslator translator = new DefaultAISTranslator(config);
+
+            final AISMsg m = new AISMsg.Builder(1)
+                    .withLatitude(47.443634F)
+                    .withLongitude(-6.9895167F)
+                    .withPositionAccuracy(1)
+                    .withCOG(2119.0F)
+                    .withTrueHeading(210)
+                    .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
+                    .withSOG(138.0F)
+                    .withMMSI(538005989)
+                    .withNavigationStatus(UnderwayUsingEngine)
+                    .build();
+
+            xdescribe("when a message type is 1,2,3 or 5", () -> {
+                final Vessel v = extractVessel(translator.translate(m));
+
+                it("returns an Optional<Push> with a Location", () -> {
+                    assertThat(v.getLocationRels(), is(not(empty())));
+
+                    assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
+
+                    assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
+
+                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
+                });
+
+            });
+
+        });
+    }
+
+}
+

@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
+import static eu.cise.adaptor.helpers.Utils.*;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static java.util.Arrays.asList;
@@ -30,20 +31,12 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Spectrum.class)
-public class TranslatorSpec {
+public class AIS_1_2_3_TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
             AISTranslator translator = new DefaultAISTranslator(config);
-
-            describe("when a message type is not supported", () -> {
-                asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->
-                        it("returns an empty optional / " + n, () -> {
-                            assertThat(translator.translate(new AISMsg.Builder(8).build()), is(Optional.empty()));
-                        })
-                );
-            });
 
             final AISMsg m = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
@@ -57,28 +50,8 @@ public class TranslatorSpec {
                     .withNavigationStatus(UnderwayUsingEngine)
                     .build();
 
-            describe("when a message type is 1,2,3 or 5", () -> {
+            describe("when a message type is 1,2,3", () -> {
                 final Vessel v = extractVessel(translator.translate(m));
-
-                asList(1, 2, 3, 5).forEach((n) ->
-                        it("returns an optional with a push message / " + n, () ->
-                                assertThat(translator.translate(new AISMsg.Builder(n).build()),
-                                        is(not(Optional.empty()))))
-                );
-
-                it("returns an Optional<Push> with a vessel", () -> {
-
-                    XmlEntityPayload payload = extractPayload(translator.translate(m));
-                    assertThat("The XmlEntityPayload has not been created",
-                            payload, is(notNullValue()));
-
-                    List<Object> vessels = payload.getAnies();
-                    assertThat("There must be at least one vessel element i the payload",
-                            vessels, is(not(empty())));
-
-                    assertThat("The element in the payload must be a Vessel",
-                            vessels.get(0), instanceOf(Vessel.class));
-                });
 
                 it("returns an Optional<Push> with geometry", () -> {
                     assertThat(v.getLocationRels(), is(not(empty())));
@@ -173,36 +146,6 @@ public class TranslatorSpec {
             });
 
         });
-    }
-
-    private XMLGregorianCalendar xmlDate(int year, int month, int day)
-            throws DatatypeConfigurationException {
-        return DatatypeFactory.newInstance()
-                .newXMLGregorianCalendar(year, month, day,
-                        0, 0, 0, 0, 0);
-    }
-
-    private XMLGregorianCalendar xmlTime(int hour, int minute, int second)
-            throws DatatypeConfigurationException {
-        return DatatypeFactory.newInstance()
-                .newXMLGregorianCalendar(1970, 1, 1,
-                        hour, minute, second, 0, 0);
-    }
-
-    private Objet.LocationRel extractLocationRel(Vessel v) {
-        return v.getLocationRels().get(0);
-    }
-
-    private Geometry extractGeometry(Vessel v) {
-        return v.getLocationRels().get(0).getLocation().getGeometries().get(0);
-    }
-
-    private Vessel extractVessel(Optional<Push> translate) {
-        return (Vessel) extractPayload(translate).getAnies().get(0);
-    }
-
-    private XmlEntityPayload extractPayload(Optional<Push> m) {
-        return (XmlEntityPayload) m.get().getPayload();
     }
 }
 
