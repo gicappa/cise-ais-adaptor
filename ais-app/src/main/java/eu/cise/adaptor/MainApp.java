@@ -10,7 +10,7 @@ public class MainApp {
 
     public static final String VERSION = "1.0";
     private final Banner banner;
-    private final AISApp aisApp;
+    private final MainAISApp aisApp;
     private final Dispatcher dispatcher;
     private final AISNormalizer aisNormalizer;
     private final AISSource aisSource;
@@ -22,7 +22,7 @@ public class MainApp {
         aisNormalizer = appContext.getBean(AISNormalizer.class);
         aisSource = appContext.getBean(AISSource.class);
 
-        aisApp = new AISApp(aisSource, aisNormalizer, dispatcher);
+        aisApp = new MainAISApp(aisSource, aisNormalizer, dispatcher);
     }
 
     public static void main(String[] args) {

@@ -3,14 +3,14 @@ package eu.cise.adaptor;
 import jrc.cise.gw.sending.Dispatcher;
 import org.aeonbits.owner.ConfigFactory;
 
-public class AISApp<T> implements Runnable {
+public class MainAISApp<T> implements Runnable {
 
     private final AISAdaptorConfig config;
     private final AISSource aisSource;
     private final AISNormalizer<T> aisNormalizer;
     private final Dispatcher dispatcher;
 
-    public AISApp(AISSource aisSource, AISNormalizer<T> aisNormalizer, Dispatcher dispatcher) {
+    public MainAISApp(AISSource aisSource, AISNormalizer<T> aisNormalizer, Dispatcher dispatcher) {
         config = ConfigFactory.create(AISAdaptorConfig.class);
         this.aisSource = aisSource;
         this.aisNormalizer = aisNormalizer;
