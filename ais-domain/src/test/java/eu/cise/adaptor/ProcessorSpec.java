@@ -17,7 +17,7 @@ public class ProcessorSpec {
     {
         describe("process the AISMsg message", () -> {
 
-            Translator translator = mock(Translator.class);
+            AISTranslator translator = mock(AISTranslator.class);
             Dispatcher dispatcher = mock(Dispatcher.class);
             AISAdaptorConfig config = mock(AISAdaptorConfig.class);
             Push ciseMessage = new Push();

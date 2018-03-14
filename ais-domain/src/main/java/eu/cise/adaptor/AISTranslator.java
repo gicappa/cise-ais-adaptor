@@ -5,6 +5,6 @@ import eu.cise.servicemodel.v1.message.Push;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface Translator {
+public interface AISTranslator {
     Optional<Push> translate(AISMsg aisMsg);
 }

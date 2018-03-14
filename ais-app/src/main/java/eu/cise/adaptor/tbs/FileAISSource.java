@@ -4,25 +4,29 @@ import dk.tbsalling.aismessages.AISInputStreamReader;
 import eu.cise.adaptor.AISAdaptorException;
 import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
+import org.aeonbits.owner.ConfigFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Consumer;
 
 public class FileAISSource implements AISSource {
 
-    private final AISInputStreamReader aisStream;
+    private final InputStream inputStream;
 
-    public FileAISSource(String filename, AISMessageConsumer aisMessageConsumer) {
-        InputStream inputStream = getClass().getResourceAsStream(filename);
-        aisStream = new AISInputStreamReader(inputStream, aisMessageConsumer);
+    public FileAISSource() {
+        FileAISSourceConfig config = ConfigFactory.create(FileAISSourceConfig.class);
+
+        inputStream = getClass().getResourceAsStream(config.getAISSourceFilename());
     }
 
-    public void startConsuming() {
+    @Override
+    public <T> void startConsuming(AISMessageConsumer<T> consumer) {
         try {
+            AISInputStreamReader aisStream = new AISInputStreamReader(inputStream, (Consumer) consumer);
             aisStream.run();
         } catch (IOException e) {
             throw new AISAdaptorException(e);
         }
     }
-
 }

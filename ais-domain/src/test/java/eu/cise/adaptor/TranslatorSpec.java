@@ -33,7 +33,7 @@ public class TranslatorSpec {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            Translator translator = new DefaultTranslator(config);
+            AISTranslator translator = new DefaultAISTranslator(config);
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->

@@ -24,4 +24,8 @@
     <constructor-arg ref="signatureService"/>
   </bean>
 
+  <bean id="tbsAISNormalizer" class="eu.cise.adaptor.tbs.TbsAISNormalizer"/>
+
+  <bean id="fileAISSource" class="eu.cise.adaptor.tbs.FileAISSource" />
+
 </beans>

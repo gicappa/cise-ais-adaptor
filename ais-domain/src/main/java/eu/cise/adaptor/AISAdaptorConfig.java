@@ -41,4 +41,5 @@ public interface AISAdaptorConfig extends Config {
 
     @Key("message.purpose")
     String getPurpose();
+
 }

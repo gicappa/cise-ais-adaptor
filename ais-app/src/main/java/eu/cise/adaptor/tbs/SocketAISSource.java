@@ -7,31 +7,32 @@ import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class SocketAISSource implements AISSource {
 
-    private final NMEAMessageSocketClient nmeaMessageHandler;
+    private final String host;
+    private final int port;
 
-    public SocketAISSource(String host, int port, AISMessageConsumer aisMessageConsumer) {
-        try {
-            nmeaMessageHandler = new NMEAMessageSocketClient(
-                    host, port,
-                    new NMEAMessageHandler("AISAdaptor", aisMessageConsumer)
-            );
-        } catch (UnknownHostException e) {
-            throw new AISAdaptorException(e);
-        }
+    public SocketAISSource(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
     @Override
-    public void startConsuming() {
+    public <AISMessage> void startConsuming(AISMessageConsumer<AISMessage> consumer) {
         try {
+            NMEAMessageSocketClient nmeaMessageHandler = new NMEAMessageSocketClient(
+                    host, port, new NMEAMessageHandler("AISAdaptor", (Consumer) consumer)
+            );
+
             nmeaMessageHandler.run();
+
         } catch (IOException e) {
             throw new AISAdaptorException(e);
         }
 
     }
+
 }

@@ -2,5 +2,7 @@ package eu.cise.adaptor;
 
 @FunctionalInterface
 public interface AISSource {
-    void startConsuming();
+
+    <T> void startConsuming(AISMessageConsumer<T> consumer);
+
 }

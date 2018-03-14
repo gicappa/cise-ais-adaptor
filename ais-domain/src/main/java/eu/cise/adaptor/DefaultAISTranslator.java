@@ -39,11 +39,11 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
  * Please refer to:
  * https://webgate.ec.europa.eu/CITnet/confluence/display/MAREX/AIS+Message+1%2C2%2C3
  */
-public class DefaultTranslator implements Translator {
+public class DefaultAISTranslator implements AISTranslator {
 
     private final AISAdaptorConfig config;
 
-    public DefaultTranslator(AISAdaptorConfig config) {
+    public DefaultAISTranslator(AISAdaptorConfig config) {
         this.config = config;
     }
 

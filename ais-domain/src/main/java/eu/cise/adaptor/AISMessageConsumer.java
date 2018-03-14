@@ -1,5 +1,6 @@
 package eu.cise.adaptor;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class AISMessageConsumer<T> implements Consumer<T> {
@@ -15,5 +16,14 @@ public class AISMessageConsumer<T> implements Consumer<T> {
     @Override
     public void accept(T aisMessage) {
         processor.process(normalizer.normalize(aisMessage));
+    }
+
+    @Override
+    public Consumer<T> andThen(Consumer<? super T> after) {
+        Objects.requireNonNull(after);
+        return (T t) -> {
+            accept(t);
+            after.accept(t);
+        };
     }
 }

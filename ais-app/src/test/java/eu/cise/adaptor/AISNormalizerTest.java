@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.helper.TestTracks;
-import eu.cise.adaptor.tbs.TBSAISNormalizer;
+import eu.cise.adaptor.tbs.TbsAISNormalizer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,12 +20,12 @@ import static org.junit.Assert.assertThat;
 
 public class AISNormalizerTest {
 
-    private TBSAISNormalizer n;
+    private TbsAISNormalizer n;
     private TestTracks t = new TestTracks();
 
     @Before
     public void before() {
-        n = new TBSAISNormalizer();
+        n = new TbsAISNormalizer();
     }
 
 

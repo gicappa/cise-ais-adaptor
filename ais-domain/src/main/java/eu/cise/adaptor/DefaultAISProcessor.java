@@ -6,11 +6,11 @@ import jrc.cise.gw.sending.Dispatcher;
 
 public class DefaultAISProcessor implements AISProcessor {
 
-    private final Translator translator;
+    private final AISTranslator translator;
     private final Dispatcher dispatcher;
     private final AISAdaptorConfig config;
 
-    public DefaultAISProcessor(Translator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
+    public DefaultAISProcessor(AISTranslator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
         this.translator = translator;
         this.dispatcher = dispatcher;
         this.config = config;
