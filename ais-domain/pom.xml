@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>cise-ais-adaptor-domain</artifactId>
+  <artifactId>cise-ais-domain</artifactId>
 
   <dependencies>
     <dependency>

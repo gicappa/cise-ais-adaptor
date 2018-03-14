@@ -4,6 +4,7 @@ package eu.cise.adaptor.process;
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.translate.AISTranslator;
 import jrc.cise.gw.sending.DispatchResult;
 import jrc.cise.gw.sending.Dispatcher;
 

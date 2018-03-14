@@ -10,13 +10,13 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>cise-ais-adaptor-server-example</artifactId>
+  <artifactId>cise-ais-server-example</artifactId>
 
   <dependencies>
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-ais-adaptor-tbs-source-adapter</artifactId>
+      <artifactId>cise-ais-tbs-source-adapter</artifactId>
     </dependency>
 
     <dependency>

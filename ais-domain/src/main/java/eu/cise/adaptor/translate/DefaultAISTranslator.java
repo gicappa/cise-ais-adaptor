@@ -1,4 +1,4 @@
-package eu.cise.adaptor.process;
+package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;

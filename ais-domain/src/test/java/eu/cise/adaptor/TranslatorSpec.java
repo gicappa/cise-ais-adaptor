@@ -1,8 +1,8 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.process.AISTranslator;
-import eu.cise.adaptor.process.DefaultAISTranslator;
+import eu.cise.adaptor.translate.AISTranslator;
+import eu.cise.adaptor.translate.DefaultAISTranslator;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;

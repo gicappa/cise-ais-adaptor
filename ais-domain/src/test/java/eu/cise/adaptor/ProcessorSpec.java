@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.process.AISProcessor;
-import eu.cise.adaptor.process.AISTranslator;
+import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.servicemodel.v1.message.Push;
 import jrc.cise.gw.sending.Dispatcher;

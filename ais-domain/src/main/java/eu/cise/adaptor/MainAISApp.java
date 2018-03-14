@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.process.DefaultAISProcessor;
-import eu.cise.adaptor.process.DefaultAISTranslator;
+import eu.cise.adaptor.translate.DefaultAISTranslator;
 import jrc.cise.gw.sending.Dispatcher;
 import org.aeonbits.owner.ConfigFactory;
 
