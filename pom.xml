@@ -13,6 +13,7 @@
   <modules>
     <module>ais-app</module>
     <module>ais-domain</module>
+    <module>ais-tbs-source-adapter</module>
   </modules>
 
   <build>
@@ -144,6 +145,12 @@
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
         <artifactId>cise-ais-adaptor-domain</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-adaptor-tbs-source-adapter</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
 
