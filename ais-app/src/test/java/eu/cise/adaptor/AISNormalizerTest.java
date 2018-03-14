@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.time.Instant;
 
-import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

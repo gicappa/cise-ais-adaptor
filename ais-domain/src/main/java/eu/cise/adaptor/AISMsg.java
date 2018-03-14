@@ -1,5 +1,7 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.normalize.NavigationStatus;
+
 import java.time.Instant;
 
 public class AISMsg {

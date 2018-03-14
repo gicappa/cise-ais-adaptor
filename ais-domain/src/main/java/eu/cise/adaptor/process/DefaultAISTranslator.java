@@ -1,5 +1,9 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.process;
 
+import eu.cise.adaptor.AISAdaptorConfig;
+import eu.cise.adaptor.AISMsg;
+import eu.cise.adaptor.normalize.NavigationStatus;
+import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType;

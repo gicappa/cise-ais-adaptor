@@ -2,9 +2,9 @@ package eu.cise.adaptor.tbs;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
-import eu.cise.adaptor.AISNormalizer;
+import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.AISMsg;
-import eu.cise.adaptor.NavigationStatus;
+import eu.cise.adaptor.normalize.NavigationStatus;
 
 import java.time.Instant;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.exceptions;
 
 /**
  * Generic unchecked exception to manage error handling in the application

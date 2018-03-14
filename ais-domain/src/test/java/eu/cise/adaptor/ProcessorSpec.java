@@ -1,6 +1,9 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.process.AISProcessor;
+import eu.cise.adaptor.process.AISTranslator;
+import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.servicemodel.v1.message.Push;
 import jrc.cise.gw.sending.Dispatcher;
 import org.junit.runner.RunWith;
@@ -9,7 +12,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.*;
-import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static org.mockito.Mockito.*;
 
 @RunWith(Spectrum.class)

@@ -1,5 +1,7 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.normalize.AISNormalizer;
 import jrc.cise.gw.sending.Dispatcher;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

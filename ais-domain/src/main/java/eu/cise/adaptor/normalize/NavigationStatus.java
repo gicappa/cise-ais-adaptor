@@ -1,4 +1,4 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.normalize;
 
 public enum NavigationStatus {
 

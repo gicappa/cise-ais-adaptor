@@ -1,6 +1,9 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.process;
 
 
+import eu.cise.adaptor.AISAdaptorConfig;
+import eu.cise.adaptor.AISMsg;
+import eu.cise.adaptor.exceptions.AISAdaptorException;
 import jrc.cise.gw.sending.DispatchResult;
 import jrc.cise.gw.sending.Dispatcher;
 

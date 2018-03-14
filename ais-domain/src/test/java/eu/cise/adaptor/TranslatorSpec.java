@@ -1,6 +1,8 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.process.AISTranslator;
+import eu.cise.adaptor.process.DefaultAISTranslator;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
@@ -21,7 +23,7 @@ import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.cise.adaptor.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;

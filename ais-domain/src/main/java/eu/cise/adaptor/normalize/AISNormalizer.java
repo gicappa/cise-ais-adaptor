@@ -1,4 +1,6 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.normalize;
+
+import eu.cise.adaptor.AISMsg;
 
 /**
  * What a normalizer does is to abstract from the AIS library used to read

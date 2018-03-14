@@ -1,5 +1,8 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.normalize.AISNormalizer;
+import eu.cise.adaptor.process.AISProcessor;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 
