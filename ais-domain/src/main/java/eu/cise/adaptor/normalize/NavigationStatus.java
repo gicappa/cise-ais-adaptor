@@ -2,7 +2,7 @@ package eu.cise.adaptor.normalize;
 
 public enum NavigationStatus {
 
-    UnderwayUsingEngine (0),
+    UnderwayUsingEngine(0),
     AtAnchor(1),
     NotUnderCommand(2),
     RestrictedManoeuverability(3),
@@ -19,19 +19,11 @@ public enum NavigationStatus {
     SartMobOrEpirb(14),
     Undefined(15);
 
+    private final Integer code;
+
     NavigationStatus(Integer code) {
         this.code = code;
     }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getValue() {
-        return toString();
-    }
-
-    private final Integer code;
 
     public static NavigationStatus fromInteger(Integer integer) {
         if (integer != null) {
@@ -42,5 +34,13 @@ public enum NavigationStatus {
             }
         }
         return null;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getValue() {
+        return toString();
     }
 }

@@ -1,9 +1,9 @@
 package eu.cise.adaptor.tbs;
 
 import dk.tbsalling.aismessages.AISInputStreamReader;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
+import eu.cise.adaptor.exceptions.AISAdaptorException;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.io.IOException;

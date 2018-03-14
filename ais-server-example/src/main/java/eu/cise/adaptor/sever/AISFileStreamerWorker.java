@@ -1,6 +1,9 @@
 package eu.cise.adaptor.sever;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -12,7 +15,7 @@ public class AISFileStreamerWorker extends Thread {
     private final Socket socket;
     private final BufferedReader inputReader;
 
-    public AISFileStreamerWorker(String filename, Socket socket)  {
+    public AISFileStreamerWorker(String filename, Socket socket) {
         this.socket = socket;
         this.inputReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
     }

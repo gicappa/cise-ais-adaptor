@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <bean id="dispatcher" class="jrc.cise.transport.RestDispatcher"/>
 
-  <bean id="certificateRegistry" class="jrc.cise.gw.signature.DefaultCertificateRegistry">
+  <bean id="certificateRegistry"
+        class="jrc.cise.gw.signature.DefaultCertificateRegistry">
     <constructor-arg value="eu.cise.es.gc-ls01"/>
     <constructor-arg value="cisePrivate.jks"/>
     <constructor-arg value="cisecise"/>
@@ -15,17 +16,19 @@
     <constructor-arg value="cisecise"/>
   </bean>
 
-  <bean id="signatureService" class="jrc.cise.gw.signature.DefaultSignatureService">
+  <bean id="signatureService"
+        class="jrc.cise.gw.signature.DefaultSignatureService">
     <constructor-arg ref="certificateRegistry"/>
   </bean>
 
-  <bean id="signingDispatcher" class="jrc.cise.gw.signature.SignatureDispatcherDecorator">
+  <bean id="signingDispatcher"
+        class="jrc.cise.gw.signature.SignatureDispatcherDecorator">
     <constructor-arg ref="dispatcher"/>
     <constructor-arg ref="signatureService"/>
   </bean>
 
   <bean id="tbsAISNormalizer" class="eu.cise.adaptor.tbs.TbsAISNormalizer"/>
 
-  <bean id="fileAISSource" class="eu.cise.adaptor.tbs.FileAISSource" />
+  <bean id="fileAISSource" class="eu.cise.adaptor.tbs.FileAISSource"/>
 
 </beans>

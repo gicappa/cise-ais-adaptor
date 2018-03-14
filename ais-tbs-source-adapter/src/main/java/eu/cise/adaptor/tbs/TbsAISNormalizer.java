@@ -2,8 +2,8 @@ package eu.cise.adaptor.tbs;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
-import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.AISMsg;
+import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.normalize.NavigationStatus;
 
 import java.time.Instant;
@@ -15,10 +15,10 @@ import static java.lang.Boolean.FALSE;
 /**
  * This classes normalize the AISMessage class read by the tbsalling's library
  * into an internal one.
- *
+ * <p>
  * The message is translated field by field in order to support many different
  * AIS libraries.
- *
+ * <p>
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
  *
