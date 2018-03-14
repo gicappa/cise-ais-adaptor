@@ -35,7 +35,7 @@ public class ProcessorSpec {
                     .withTrueHeading(210)
                     .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
                     .withSOG(138.0F)
-                    .withMMSI(538005989)
+                    .withUserId(538005989)
                     .withNavigationStatus(UnderwayUsingEngine)
                     .build();
 

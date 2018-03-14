@@ -40,31 +40,20 @@ public class AIS_5_TranslatorSpec {
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
             AISTranslator translator = new DefaultAISTranslator(config);
 
-            final AISMsg m = new AISMsg.Builder(1)
-                    .withLatitude(47.443634F)
-                    .withLongitude(-6.9895167F)
-                    .withPositionAccuracy(1)
-                    .withCOG(2119.0F)
-                    .withTrueHeading(210)
-                    .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
-                    .withSOG(138.0F)
-                    .withMMSI(538005989)
-                    .withNavigationStatus(UnderwayUsingEngine)
+            final AISMsg m = new AISMsg.Builder(5)
+                    .withUserId(12345678)
                     .build();
 
-            xdescribe("when a message type is 1,2,3 or 5", () -> {
+            xdescribe("when a message type is 5", () -> {
                 final Vessel v = extractVessel(translator.translate(m));
 
-                it("returns an Optional<Push> with a Location", () -> {
-                    assertThat(v.getLocationRels(), is(not(empty())));
+//                it("returns an Optional<Push> with a InvolvedEventRel", () -> {
+//                    assertThat(v.getInvolvedEventRels(), is(not(empty())));
+//                });
 
-                    assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
-
-                    assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
-
-                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
+                it("returns an Optional<Push> with an MMSI", () -> {
+                    assertThat(v.getMMSI(), is(12345678));
                 });
-
             });
 
         });

@@ -1,6 +1,7 @@
 package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AISAdaptorConfig;
+import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.normalize.NavigationStatus;
@@ -53,10 +54,49 @@ public class DefaultAISTranslator implements AISTranslator {
 
     @Override
     public Optional<Push> translate(AISMsg aisMsg) {
-        if (isTypeSupported(aisMsg)) {
-            return Optional.empty();
-        }
+        if (aisMsg.getMessageType() == 1 ||
+                aisMsg.getMessageType() == 2 ||
+                aisMsg.getMessageType() == 3)
+            return translateAISMsg123(aisMsg);
+        else if (aisMsg.getMessageType() == 5)
+            return translateAISMsg5(aisMsg);
 
+        return Optional.empty();
+    }
+
+    private Optional<Push> translateAISMsg5(AISMsg aisMsg) {
+        return Optional.of(newPush()
+                .id(UUID.randomUUID().toString())
+                .contextId(UUID.randomUUID().toString())
+                .correlationId(UUID.randomUUID().toString())
+                .creationDateTime(new Date())
+                .sender(newService()
+                        .id(config.getServiceId())
+                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
+                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
+                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
+                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
+                .recipient(newService()
+                        .id("it.gc-ls01.vessel.push.gcs04")
+                        .operation(PUSH)
+                )
+                .priority(PriorityType.fromValue(config.getMessagePriority()))
+                .isRequiresAck(false)
+                .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
+                .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
+                .isPersonalData(false)
+                .purpose(PurposeType.fromValue(config.getPurpose()))
+                .addEntity(toVessel5(Long.valueOf(aisMsg.getUserId())))
+                .build());
+    }
+
+    private Vessel toVessel5(Long userId) {
+        Vessel vessel = new Vessel();
+        vessel.setMMSI(userId);
+        return vessel;
+    }
+
+    private Optional<Push> translateAISMsg123(AISMsg aisMsg) {
         return Optional.of(newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())
@@ -86,7 +126,7 @@ public class DefaultAISTranslator implements AISTranslator {
                         fromTrueHeading(aisMsg.getTrueHeading()),
                         aisMsg.getTimestamp(),
                         fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
-                        Long.valueOf(aisMsg.getMMSI()),
+                        Long.valueOf(aisMsg.getUserId()),
                         fromNavigationStatus(aisMsg.getNavigationStatus())
                         )
                 )

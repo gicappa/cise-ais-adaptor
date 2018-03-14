@@ -56,7 +56,7 @@ public class AISNormalizerTest {
 
     @Test
     public void it_maps__MMSI() {
-        assertThat(n.normalize(t.positionMsg()).getMMSI(), is(538005989));
+        assertThat(n.normalize(t.positionMsg()).getUserId(), is(538005989));
     }
 
     @Test

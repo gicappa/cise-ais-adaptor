@@ -5,10 +5,11 @@ import eu.cise.adaptor.normalize.NavigationStatus;
 import java.time.Instant;
 
 public class AISMsg {
+
     private int messageType;
     private float latitude;
     private float longitude;
-    private int mmsi;
+    private int userId;
     private float cog;
     private int trueHeading;
     private Instant timestamp;
@@ -16,12 +17,12 @@ public class AISMsg {
     private NavigationStatus navigationStatus;
     private int positionAccuracy;
 
-    private AISMsg(Builder builder) {
+    private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
         latitude = builder.latitude;
         longitude = builder.longitude;
         positionAccuracy = builder.positionAccuracy;
-        mmsi = builder.mmsi;
+        userId = builder.userId;
         cog = builder.cog;
         trueHeading = builder.trueHeading;
         timestamp = builder.timestamp;
@@ -41,8 +42,8 @@ public class AISMsg {
         return longitude;
     }
 
-    public int getMMSI() {
-        return mmsi;
+    public int getUserId() {
+        return userId;
     }
 
     public float getCOG() {
@@ -74,7 +75,7 @@ public class AISMsg {
         private float latitude;
         private float longitude;
         private int positionAccuracy;
-        private int mmsi;
+        private int userId;
         private float cog;
         private int trueHeading;
         private Instant timestamp = Instant.MIN;
@@ -85,47 +86,47 @@ public class AISMsg {
             this.messageType = messageType;
         }
 
-        public Builder withLatitude(float l) {
+        public AISMsg.Builder withLatitude(float l) {
             this.latitude = l;
             return this;
         }
 
-        public Builder withLongitude(float l) {
+        public AISMsg.Builder withLongitude(float l) {
             this.longitude = l;
             return this;
         }
 
-        public Builder withPositionAccuracy(int la) {
+        public AISMsg.Builder withPositionAccuracy(int la) {
             this.positionAccuracy = la;
             return this;
         }
 
-        public Builder withMMSI(int m) {
-            this.mmsi = m;
+        public AISMsg.Builder withUserId(int m) {
+            this.userId = m;
             return this;
         }
 
-        public Builder withCOG(float c) {
+        public AISMsg.Builder withCOG(float c) {
             this.cog = c;
             return this;
         }
 
-        public Builder withTrueHeading(int t) {
+        public AISMsg.Builder withTrueHeading(int t) {
             this.trueHeading = t;
             return this;
         }
 
-        public Builder withTimestamp(Instant received) {
+        public AISMsg.Builder withTimestamp(Instant received) {
             this.timestamp = received;
             return this;
         }
 
-        public Builder withSOG(float s) {
+        public AISMsg.Builder withSOG(float s) {
             this.sog = s;
             return this;
         }
 
-        public Builder withNavigationStatus(NavigationStatus n) {
+        public AISMsg.Builder withNavigationStatus(NavigationStatus n) {
             this.navigationStatus = n;
             return this;
         }

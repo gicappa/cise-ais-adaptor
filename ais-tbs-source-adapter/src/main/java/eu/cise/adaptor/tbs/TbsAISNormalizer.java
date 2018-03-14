@@ -35,7 +35,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         if (isPositionMessage(type))
             return b.build();
 
-        b.withMMSI(m.getSourceMmsi().getMMSI());
+        b.withUserId(m.getSourceMmsi().getMMSI());
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
         b.withPositionAccuracy(getPositionAccuracy(m.dataFields()));

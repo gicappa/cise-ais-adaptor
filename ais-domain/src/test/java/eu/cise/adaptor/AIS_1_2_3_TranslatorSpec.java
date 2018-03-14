@@ -3,30 +3,20 @@ package eu.cise.adaptor;
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
-import eu.cise.datamodel.v1.entity.location.Geometry;
-import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.servicemodel.v1.message.Push;
-import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.helpers.Utils.*;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -46,7 +36,7 @@ public class AIS_1_2_3_TranslatorSpec {
                     .withTrueHeading(210)
                     .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
                     .withSOG(138.0F)
-                    .withMMSI(538005989)
+                    .withUserId(538005989)
                     .withNavigationStatus(UnderwayUsingEngine)
                     .build();
 
