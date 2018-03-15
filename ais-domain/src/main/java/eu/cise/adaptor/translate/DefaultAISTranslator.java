@@ -8,6 +8,7 @@ import eu.cise.adaptor.normalize.NavigationStatus;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType;
+import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
@@ -93,6 +95,12 @@ public class DefaultAISTranslator implements AISTranslator {
     private Vessel toVessel5(Long userId) {
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
+        Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
+        Movement movement = new Movement();
+        movement.setMovementType(VOYAGE);
+        involvedEventRel.setEvent(movement);
+        vessel.getInvolvedEventRels().add(involvedEventRel);
+
         return vessel;
     }
 

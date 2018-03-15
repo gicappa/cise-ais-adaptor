@@ -3,7 +3,10 @@ package eu.cise.adaptor;
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
+import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.Geometry;
+import eu.cise.datamodel.v1.entity.movement.Movement;
+import eu.cise.datamodel.v1.entity.movement.MovementType;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
@@ -28,6 +31,7 @@ import static eu.cise.adaptor.helpers.Utils.extractLocationRel;
 import static eu.cise.adaptor.helpers.Utils.extractVessel;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
+import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -47,9 +51,17 @@ public class AIS_5_TranslatorSpec {
             describe("when a message type is 5", () -> {
                 final Vessel v = extractVessel(translator.translate(m));
 
-//                it("returns an Optional<Push> with a InvolvedEventRel", () -> {
-//                    assertThat(v.getInvolvedEventRels(), is(not(empty())));
-//                });
+                it("returns an Optional<Push> with a InvolvedEventRel", () -> {
+                    assertThat(v.getInvolvedEventRels(), is(not(empty())));
+                });
+
+                it("returns an Optional<Push> with an Movement", () -> {
+                    assertThat(getMovement(v), instanceOf(Movement.class));
+                });
+
+                it("returns an Optional<Push> with an MovementType", () -> {
+                    assertThat(getMovement(v).getMovementType(), is(VOYAGE));
+                });
 
                 it("returns an Optional<Push> with an MMSI", () -> {
                     assertThat(v.getMMSI(), is(12345678L));
@@ -57,6 +69,10 @@ public class AIS_5_TranslatorSpec {
             });
 
         });
+    }
+
+    private Movement getMovement(Vessel v) {
+        return (Movement)v.getInvolvedEventRels().get(0).getEvent();
     }
 
 }
