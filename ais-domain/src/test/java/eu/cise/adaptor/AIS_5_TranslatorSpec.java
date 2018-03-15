@@ -50,6 +50,9 @@ public class AIS_5_TranslatorSpec {
 
             final AISMsg m = new AISMsg.Builder(5)
                     .withUserId(12345678)
+                    .withShipName("QUEEN MARY III")
+                    .withDimensionC(10)
+                    .withDimensionD(20)
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -81,6 +84,14 @@ public class AIS_5_TranslatorSpec {
 
                 it("returns an Optional<Push> with an MMSI", () -> {
                     assertThat(v.getMMSI(), is(12345678L));
+                });
+
+                it("returns an Optional<Push> with an ship name", () -> {
+                    assertThat(v.getNames(), is(not(empty())));
+                    assertThat(v.getNames().get(0), is("QUEEN MARY III"));
+                });
+                it("returns an Optional<Push> with an ship name", () -> {
+                    assertThat(v.getBeam(), is(30));
                 });
             });
 

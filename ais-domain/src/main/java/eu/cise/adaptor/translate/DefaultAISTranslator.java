@@ -1,7 +1,6 @@
 package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AISAdaptorConfig;
-
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.normalize.NavigationStatus;
@@ -90,11 +89,15 @@ public class DefaultAISTranslator implements AISTranslator {
                 .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntity(toVessel5(Long.valueOf(aisMsg.getUserId())))
+                .addEntity(toVessel5(
+                        Long.valueOf(aisMsg.getUserId()),
+                        aisMsg.getShipName(),
+                        aisMsg.getDimensionC() + aisMsg.getDimensionD()
+                ))
                 .build());
     }
 
-    private Vessel toVessel5(Long userId) {
+    private Vessel toVessel5(Long userId, String vesselName, int beam) {
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
         Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
@@ -105,6 +108,8 @@ public class DefaultAISTranslator implements AISTranslator {
         movement.getLocationRels().add(locationRel);
         involvedEventRel.setEvent(movement);
         vessel.getInvolvedEventRels().add(involvedEventRel);
+        vessel.getNames().add(vesselName);
+        vessel.setBeam(beam);
 
         return vessel;
     }
@@ -241,13 +246,6 @@ public class DefaultAISTranslator implements AISTranslator {
         location.getGeometries().add(geometry);
         location.setLocationQualitativeAccuracy(lqat);
         return location;
-    }
-
-    private boolean isTypeSupported(AISMsg aisMessage) {
-        return aisMessage.getMessageType() != 1 &&
-                aisMessage.getMessageType() != 2 &&
-                aisMessage.getMessageType() != 3 &&
-                aisMessage.getMessageType() != 5;
     }
 
     private Double f2d(Float fValue) {
