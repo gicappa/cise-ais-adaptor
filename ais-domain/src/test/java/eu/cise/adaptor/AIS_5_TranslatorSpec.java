@@ -6,6 +6,8 @@ import eu.cise.adaptor.translate.DefaultAISTranslator;
 import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
+import eu.cise.datamodel.v1.entity.location.LocationZoneType;
+import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.movement.MovementType;
 import eu.cise.datamodel.v1.entity.object.Objet;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.Spectrum.xdescribe;
+import static com.greghaskins.spectrum.dsl.specification.Specification.xit;
 import static eu.cise.adaptor.helpers.Utils.extractLocationRel;
 import static eu.cise.adaptor.helpers.Utils.extractVessel;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
@@ -69,7 +72,11 @@ public class AIS_5_TranslatorSpec {
                 });
 
                 it("returns an Optional<Push> with a Location", () -> {
-                    assertThat(getLocation(v), instanceOf(Location.class));
+                    assertThat(getLocation(v), instanceOf(PortLocation.class));
+                });
+
+                xit("returns an Optional<Push> with a LocationCode", () -> {
+                    assertThat(getLocation(v).getLocationCode(), is("FRLEH"));
                 });
 
                 it("returns an Optional<Push> with an MMSI", () -> {
@@ -80,8 +87,8 @@ public class AIS_5_TranslatorSpec {
         });
     }
 
-    private Location getLocation(Vessel v) {
-        return getMovement(v).getLocationRels().get(0).getLocation();
+    private PortLocation getLocation(Vessel v) {
+        return (PortLocation) getMovement(v).getLocationRels().get(0).getLocation();
     }
 
     private Movement getMovement(Vessel v) {
