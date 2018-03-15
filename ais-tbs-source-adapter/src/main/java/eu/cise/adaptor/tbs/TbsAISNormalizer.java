@@ -6,7 +6,13 @@ import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.normalize.NavigationStatus;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +31,16 @@ import static java.lang.Boolean.FALSE;
  * @return an AISMsg object
  */
 public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
+
+    private final Clock clock;
+
+    public TbsAISNormalizer() {
+        this.clock = Clock.systemUTC();
+    }
+
+    public TbsAISNormalizer(Clock clock) {
+        this.clock = clock;
+    }
 
     public AISMsg normalize(AISMessage m) {
         Integer type = m.getMessageType().getCode();
@@ -48,8 +64,31 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
 
         // VOYAGE
         b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
+        b.withETA(computeETA(m));
 
         return b.build();
+    }
+
+    // eta=18-07 17:00
+    private Instant computeETA(AISMessage m) {
+        String etaStr = (String) m.dataFields().get("eta");
+        String[] etadt = etaStr.split(" ");
+        String dateTimeString = getCurrentYear() + "-" + switchDayMonth(etadt[0]) + "T" + etadt[1] + ":00.000Z";
+        Instant eta = Instant.parse(dateTimeString);
+
+        if (eta.isBefore(Instant.now(clock)))
+            eta  = eta.plus(365, ChronoUnit.DAYS);
+
+        return eta;
+    }
+
+    private String switchDayMonth(String dayMonth) {
+        String a[] = dayMonth.split("-");
+        return a[1]+"-"+a[0];
+    }
+
+    private int getCurrentYear() {
+        return LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).getYear();
     }
 
     private NavigationStatus getNavigationStatus(String ns) {

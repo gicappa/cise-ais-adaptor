@@ -6,6 +6,8 @@ import java.time.Instant;
 
 public class AISMsg {
 
+
+    // POSITION
     private int messageType;
     private float latitude;
     private float longitude;
@@ -16,7 +18,10 @@ public class AISMsg {
     private float sog;
     private NavigationStatus navigationStatus;
     private int positionAccuracy;
+
+    // VOYAGE
     private String destination;
+    private Instant eta;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -31,6 +36,7 @@ public class AISMsg {
         navigationStatus = builder.navigationStatus;
 
         destination = builder.destination;
+        eta = builder.eta;
     }
 
     public int getMessageType() {
@@ -77,8 +83,14 @@ public class AISMsg {
         return destination;
     }
 
+    public Instant getETA() {
+        return eta;
+    }
+
     public static class Builder {
         private int messageType;
+
+        // POSITION
         private float latitude;
         private float longitude;
         private int positionAccuracy;
@@ -88,7 +100,10 @@ public class AISMsg {
         private Instant timestamp = Instant.MIN;
         private float sog;
         private NavigationStatus navigationStatus;
+
+        // VOYAGE
         private String destination;
+        private Instant eta;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -140,7 +155,6 @@ public class AISMsg {
         }
 
         // VOYAGE
-
         public Builder withDestination(String destination) {
             this.destination = destination;
             return this;
@@ -148,6 +162,11 @@ public class AISMsg {
 
         public AISMsg build() {
             return new AISMsg(this);
+        }
+
+        public Builder withETA(Instant eta) {
+            this.eta = eta;
+            return this;
         }
     }
 

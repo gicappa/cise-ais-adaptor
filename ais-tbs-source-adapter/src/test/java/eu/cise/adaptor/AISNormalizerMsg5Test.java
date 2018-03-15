@@ -6,6 +6,10 @@ import eu.cise.adaptor.tbs.TbsAISNormalizer;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,16 +39,31 @@ public class AISNormalizerMsg5Test {
     @Test
     public void it_maps_voyage_message_type() {
         assertThat(n.normalize(voyageMsg()).getMessageType(), is(5));
-
     }
 
     @Test
-    public void it_maps_voyage_message() {
+    public void it_maps_voyage_message_destination() {
         assertThat(n.normalize(voyageMsg()).getDestination(), is("DEWVN"));
     }
 
+    @Test
+    // eta=18-07 17:00
+    public void it_maps_voyage_message_ETA_on_the_next_year() {
+        Clock beforeJuly2018 = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.systemDefault());
 
+        n = new TbsAISNormalizer(beforeJuly2018);
 
+        assertThat(n.normalize(voyageMsg()).getETA(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
+    }
 
+    @Test
+    // eta=18-07 17:00
+    public void it_maps_voyage_message_ETA_on_the_current_year() {
+        Clock afterJuly2018 = Clock.fixed(Instant.parse("2018-10-18T17:00:00.00Z"), ZoneId.systemDefault());
+
+        n = new TbsAISNormalizer(afterJuly2018);
+
+        assertThat(n.normalize(voyageMsg()).getETA(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
+    }
 
 }
