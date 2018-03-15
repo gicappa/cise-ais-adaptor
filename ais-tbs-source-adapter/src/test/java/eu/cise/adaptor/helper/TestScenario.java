@@ -6,7 +6,7 @@ import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 
 import java.time.Instant;
 
-public class TestTracks {
+public class TestScenario {
 
     // Test Helpers ////////////////////////////////////////////////////////////
     public AISMessage positionMsg() {

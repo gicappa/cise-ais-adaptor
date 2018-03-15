@@ -35,6 +35,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         if (isPositionMessage(type))
             return b.build();
 
+        // POSITION
         b.withUserId(m.getSourceMmsi().getMMSI());
         b.withLatitude((Float) m.dataFields().getOrDefault("latitude", 0F));
         b.withLongitude((Float) m.dataFields().getOrDefault("longitude", 0F));
@@ -42,11 +43,18 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withCOG((Float) m.dataFields().getOrDefault("courseOverGround", 0F));
         b.withSOG((Float) m.dataFields().getOrDefault("speedOverGround", 0F));
         b.withTrueHeading((Integer) m.dataFields().getOrDefault("trueHeading", 0));
-        b.withNavigationStatus(NavigationStatus.valueOf((String) m.dataFields().get("navigationStatus")));
+        b.withNavigationStatus(getNavigationStatus((String) m.dataFields().get("navigationStatus")));
         b.withTimestamp(oMeta(m).map(Metadata::getReceived).orElse(Instant.MIN));
+
+        // VOYAGE
+        b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
+
         return b.build();
     }
 
+    private NavigationStatus getNavigationStatus(String ns) {
+        return ns == null ? null : NavigationStatus.valueOf(ns);
+    }
 
     /**
      * @return 1 if position accuracy lte 10m; 0 otherwise.
@@ -56,7 +64,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
     }
 
     private boolean isPositionMessage(Integer type) {
-        return type != 1 && type != 2 && type != 3;
+        return type != 1 && type != 2 && type != 3 && type != 5;
     }
 
     private Optional<Metadata> oMeta(AISMessage m) {

@@ -16,6 +16,7 @@ public class AISMsg {
     private float sog;
     private NavigationStatus navigationStatus;
     private int positionAccuracy;
+    private String destination;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -28,6 +29,8 @@ public class AISMsg {
         timestamp = builder.timestamp;
         sog = builder.sog;
         navigationStatus = builder.navigationStatus;
+
+        destination = builder.destination;
     }
 
     public int getMessageType() {
@@ -70,6 +73,10 @@ public class AISMsg {
         return positionAccuracy;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
     public static class Builder {
         private int messageType;
         private float latitude;
@@ -81,6 +88,7 @@ public class AISMsg {
         private Instant timestamp = Instant.MIN;
         private float sog;
         private NavigationStatus navigationStatus;
+        private String destination;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -128,6 +136,13 @@ public class AISMsg {
 
         public AISMsg.Builder withNavigationStatus(NavigationStatus n) {
             this.navigationStatus = n;
+            return this;
+        }
+
+        // VOYAGE
+
+        public Builder withDestination(String destination) {
+            this.destination = destination;
             return this;
         }
 
