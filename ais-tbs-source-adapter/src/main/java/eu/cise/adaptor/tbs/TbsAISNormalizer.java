@@ -65,6 +65,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withETA(computeETA(m));
         b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0L));
         b.withCallSign((String) m.dataFields().getOrDefault("callsign", ""));
+        b.withDraught((Float) m.dataFields().getOrDefault("draught", 0F));
 
         return b.build();
     }

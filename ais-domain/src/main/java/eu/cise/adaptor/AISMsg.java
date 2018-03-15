@@ -24,6 +24,7 @@ public class AISMsg {
     private Instant eta;
     private final Integer imoNumber;
     private String callsign;
+    private float draught;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -41,6 +42,7 @@ public class AISMsg {
         eta = builder.eta;
         imoNumber = builder.imoNumber;
         callsign = builder.callsign;
+        draught = builder.draught;
     }
 
     public int getMessageType() {
@@ -99,6 +101,10 @@ public class AISMsg {
         return callsign;
     }
 
+    public Float getDraught() {
+        return draught;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -118,6 +124,7 @@ public class AISMsg {
         private Instant eta;
         private Integer imoNumber;
         private String callsign;
+        private float draught;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -184,12 +191,17 @@ public class AISMsg {
             return null;
         }
 
+        public Builder withCallSign(String callsign) {
+            this.callsign = callsign;
+            return this;
+        }
+
         public AISMsg build() {
             return new AISMsg(this);
         }
 
-        public Builder withCallSign(String callsign) {
-            this.callsign = callsign;
+        public Builder withDraught(Float draught) {
+            this.draught = draught;
             return this;
         }
     }

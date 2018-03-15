@@ -112,4 +112,10 @@ public class AISNormalizerMsg5Test {
     @Test
     public void it_maps_voyage_message_call_sign() {
         assertThat(n.normalize(voyageMsg()).getCallSign(), is("V2EP6"));
-    }}
+    }
+
+    @Test
+    public void it_maps_voyage_message_draught() {
+        assertThat(n.normalize(voyageMsg()).getDraught(), is(10.4F));
+    }
+}
