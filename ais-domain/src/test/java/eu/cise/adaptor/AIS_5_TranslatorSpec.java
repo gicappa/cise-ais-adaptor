@@ -54,6 +54,7 @@ public class AIS_5_TranslatorSpec {
                     .withDimensionC(10)
                     .withDimensionD(20)
                     .withCallSign("C1PP4")
+                    .withDraught(34.5F)
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -96,6 +97,9 @@ public class AIS_5_TranslatorSpec {
                 });
                 it("returns an Optional<Push> with a call sign", () -> {
                     assertThat(v.getCallSign(), is("C1PP4"));
+                });
+                it("returns an Optional<Push> with a draught", () -> {
+                    assertThat(v.getDraught(), is(34.5D));
                 });
             });
 
