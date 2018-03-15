@@ -6,13 +6,11 @@ import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.normalize.NavigationStatus;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,6 +64,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
         b.withETA(computeETA(m));
         b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0L));
+        b.withCallSign((String) m.dataFields().getOrDefault("callsign", ""));
 
         return b.build();
     }
@@ -78,14 +77,14 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         Instant eta = Instant.parse(dateTimeString);
 
         if (eta.isBefore(Instant.now(clock)))
-            eta  = eta.plus(365, ChronoUnit.DAYS);
+            eta = eta.plus(365, ChronoUnit.DAYS);
 
         return eta;
     }
 
     private String switchDayMonth(String dayMonth) {
         String a[] = dayMonth.split("-");
-        return a[1]+"-"+a[0];
+        return a[1] + "-" + a[0];
     }
 
     private int getCurrentYear() {

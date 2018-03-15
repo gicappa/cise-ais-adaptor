@@ -108,4 +108,8 @@ public class AISNormalizerMsg5Test {
     public void it_maps_voyage_message_imo_number() {
         assertThat(n.normalize(voyageMsg()).getIMONumber(), is(9301134));
     }
-}
+
+    @Test
+    public void it_maps_voyage_message_call_sign() {
+        assertThat(n.normalize(voyageMsg()).getCallSign(), is("V2EP6"));
+    }}

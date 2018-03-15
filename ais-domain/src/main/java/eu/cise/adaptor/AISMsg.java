@@ -23,6 +23,7 @@ public class AISMsg {
     private String destination;
     private Instant eta;
     private final Integer imoNumber;
+    private String callsign;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -39,6 +40,7 @@ public class AISMsg {
         destination = builder.destination;
         eta = builder.eta;
         imoNumber = builder.imoNumber;
+        callsign = builder.callsign;
     }
 
     public int getMessageType() {
@@ -93,6 +95,10 @@ public class AISMsg {
         return imoNumber;
     }
 
+    public String getCallSign() {
+        return callsign;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -111,6 +117,7 @@ public class AISMsg {
         private String destination;
         private Instant eta;
         private Integer imoNumber;
+        private String callsign;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -179,6 +186,11 @@ public class AISMsg {
 
         public AISMsg build() {
             return new AISMsg(this);
+        }
+
+        public Builder withCallSign(String callsign) {
+            this.callsign = callsign;
+            return this;
         }
     }
 
