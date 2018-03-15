@@ -2,7 +2,7 @@
 
 ## Overview 
 
-The CISE AIS Adaptor is a sofwtare meant to read/consume AIS Tracks, 
+The CISE AIS Adaptor is a software meant to read/consume AIS Tracks, 
 process them translating them into a CISE Data Model complian message 
 and to send PUSH messages to a pre-configured number of consumers.
 
@@ -20,10 +20,12 @@ It should be possible to decide the ouput PUSH message frequency specifying:
 ## General architecture
 The software is composed by two modules: 
 
-- ais-adaptor-app
-- ais-adaptor-domain
+- ais-app
+- ais-domain
+- ais-tbs-source-adapter
+- ais-server-example
 
-### ais-adaptor-app
+### ais-app
 Is the entry point that starts the message processing and it focus itself in 
 translating the AIS Message from the library specific on to a project domain
 specific so to be independent from the AIS library implementation.
@@ -31,9 +33,17 @@ specific so to be independent from the AIS library implementation.
 The module will load the messages from a file or from a socket and will translate
 it to the InternalAISMessage so to be processed by the domain module   
 
-### ais-adaptor-domain
+### ais-domain
 Is the module that translates the InternalAISMessage into a CISE Message and 
 that delivers the message to the CISE Gateway
+
+### ais-server-example
+
+TBD
+
+### ais-tbs-source-adapter
+
+TBD
 
 ## Message Mapping 
 
