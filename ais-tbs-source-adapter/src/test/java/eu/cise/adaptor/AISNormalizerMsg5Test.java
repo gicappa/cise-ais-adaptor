@@ -120,7 +120,12 @@ public class AISNormalizerMsg5Test {
     }
 
     @Test
-    public void it_maps_voyage_message_dimensions() {
+    public void it_maps_voyage_message_dimension_C() {
         assertThat(n.normalize(voyageMsg()).getDimensionC(), is(14));
+    }
+
+    @Test
+    public void it_maps_voyage_message_dimension_D() {
+        assertThat(n.normalize(voyageMsg()).getDimensionD(), is(11));
     }
 }

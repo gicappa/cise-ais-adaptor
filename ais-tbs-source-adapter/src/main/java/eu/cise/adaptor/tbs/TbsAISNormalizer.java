@@ -67,6 +67,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withCallSign((String) m.dataFields().getOrDefault("callsign", ""));
         b.withDraught((Float) m.dataFields().getOrDefault("draught", 0F));
         b.withDimensionC((Integer) m.dataFields().getOrDefault("toPort", 0));
+        b.withDimensionD((Integer) m.dataFields().getOrDefault("toStarboard", 0));
 
         return b.build();
     }
