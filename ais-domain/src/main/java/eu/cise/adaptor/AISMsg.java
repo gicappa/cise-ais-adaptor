@@ -27,6 +27,7 @@ public class AISMsg {
     private float draught;
     private Integer dimensionC;
     private Integer dimensionD;
+    private Integer dimensionA;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -47,6 +48,7 @@ public class AISMsg {
         draught = builder.draught;
         dimensionC = builder.dimensionC;
         dimensionD = builder.dimensionD;
+        dimensionA = builder.dimensionA;
     }
 
     public int getMessageType() {
@@ -117,6 +119,10 @@ public class AISMsg {
         return dimensionD;
     }
 
+    public Integer getDimensionA() {
+        return dimensionA;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -139,6 +145,7 @@ public class AISMsg {
         private float draught;
         private Integer dimensionC;
         private Integer dimensionD;
+        private Integer dimensionA;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -226,6 +233,11 @@ public class AISMsg {
 
         public Builder withDimensionD(Integer toStarboard) {
             this.dimensionD = toStarboard;
+            return this;
+        }
+
+        public Builder withDimensionA(Integer toBow) {
+            this.dimensionA = toBow;
             return this;
         }
     }
