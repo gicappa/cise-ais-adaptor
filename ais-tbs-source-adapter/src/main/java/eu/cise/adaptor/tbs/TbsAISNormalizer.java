@@ -2,6 +2,7 @@ package eu.cise.adaptor.tbs;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
+import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.normalize.NavigationStatus;
@@ -70,8 +71,18 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withDimensionD((Integer) m.dataFields().getOrDefault("toStarboard", 0));
         b.withDimensionA((Integer) m.dataFields().getOrDefault("toBow", 0));
         b.withDimensionB((Integer) m.dataFields().getOrDefault("toStern", 0));
+        b.withShipType(translateShipType(m));
 
         return b.build();
+    }
+
+    private Integer translateShipType(AISMessage m) {
+        String shipType = (String) m.dataFields().get("shipType");
+
+        if (shipType == null)
+            return 0;
+
+        return ShipType.valueOf(shipType).getCode();
     }
 
     // eta=18-07 17:00

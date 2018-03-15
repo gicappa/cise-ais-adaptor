@@ -138,4 +138,10 @@ public class AISNormalizerMsg5Test {
     public void it_maps_voyage_message_dimension_B() {
         assertThat(n.normalize(voyageMsg()).getDimensionB(), is(18));
     }
+
+    @Test
+    //CargoHazardousA(71),
+    public void it_maps_voyage_message_lenght() {
+        assertThat(n.normalize(voyageMsg()).getShipType(), is(71));
+    }
 }
