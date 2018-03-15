@@ -5,6 +5,7 @@ import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
 import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.Geometry;
+import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.movement.MovementType;
 import eu.cise.datamodel.v1.entity.object.Objet;
@@ -63,12 +64,24 @@ public class AIS_5_TranslatorSpec {
                     assertThat(getMovement(v).getMovementType(), is(VOYAGE));
                 });
 
+                it("returns an Optional<Push> with a LocationRel", () -> {
+                    assertThat(getMovement(v).getLocationRels(), is(not(empty())));
+                });
+
+                it("returns an Optional<Push> with a Location", () -> {
+                    assertThat(getLocation(v), instanceOf(Location.class));
+                });
+
                 it("returns an Optional<Push> with an MMSI", () -> {
                     assertThat(v.getMMSI(), is(12345678L));
                 });
             });
 
         });
+    }
+
+    private Location getLocation(Vessel v) {
+        return getMovement(v).getLocationRels().get(0).getLocation();
     }
 
     private Movement getMovement(Vessel v) {

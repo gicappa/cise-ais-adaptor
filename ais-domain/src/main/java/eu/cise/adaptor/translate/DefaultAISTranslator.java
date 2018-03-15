@@ -5,6 +5,7 @@ import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.normalize.NavigationStatus;
+import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType;
@@ -98,6 +99,9 @@ public class DefaultAISTranslator implements AISTranslator {
         Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
         Movement movement = new Movement();
         movement.setMovementType(VOYAGE);
+        Event.LocationRel locationRel = new Event.LocationRel();
+        locationRel.setLocation(new Location());
+        movement.getLocationRels().add(locationRel);
         involvedEventRel.setEvent(movement);
         vessel.getInvolvedEventRels().add(involvedEventRel);
 
