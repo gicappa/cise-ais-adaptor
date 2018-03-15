@@ -65,6 +65,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         // VOYAGE
         b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
         b.withETA(computeETA(m));
+        b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0L));
 
         return b.build();
     }

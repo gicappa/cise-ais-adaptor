@@ -22,6 +22,7 @@ public class AISMsg {
     // VOYAGE
     private String destination;
     private Instant eta;
+    private final Integer imoNumber;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -37,6 +38,7 @@ public class AISMsg {
 
         destination = builder.destination;
         eta = builder.eta;
+        imoNumber = builder.imoNumber;
     }
 
     public int getMessageType() {
@@ -87,6 +89,10 @@ public class AISMsg {
         return eta;
     }
 
+    public Integer getIMONumber() {
+        return imoNumber;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -104,6 +110,7 @@ public class AISMsg {
         // VOYAGE
         private String destination;
         private Instant eta;
+        private Integer imoNumber;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -160,13 +167,18 @@ public class AISMsg {
             return this;
         }
 
-        public AISMsg build() {
-            return new AISMsg(this);
-        }
-
         public Builder withETA(Instant eta) {
             this.eta = eta;
             return this;
+        }
+
+        public Builder withIMONumber(Integer imoNumber) {
+            this.imoNumber = imoNumber;
+            return null;
+        }
+
+        public AISMsg build() {
+            return new AISMsg(this);
         }
     }
 
