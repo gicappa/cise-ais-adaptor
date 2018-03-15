@@ -53,6 +53,7 @@ public class AIS_5_TranslatorSpec {
                     .withShipName("QUEEN MARY III")
                     .withDimensionC(10)
                     .withDimensionD(20)
+                    .withCallSign("C1PP4")
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -92,6 +93,9 @@ public class AIS_5_TranslatorSpec {
                 });
                 it("returns an Optional<Push> with an ship name", () -> {
                     assertThat(v.getBeam(), is(30));
+                });
+                it("returns an Optional<Push> with a call sign", () -> {
+                    assertThat(v.getCallSign(), is("C1PP4"));
                 });
             });
 
