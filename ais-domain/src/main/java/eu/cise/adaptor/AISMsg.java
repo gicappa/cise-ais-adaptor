@@ -25,6 +25,7 @@ public class AISMsg {
     private final Integer imoNumber;
     private String callsign;
     private float draught;
+    private Integer dimensionC;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -43,6 +44,7 @@ public class AISMsg {
         imoNumber = builder.imoNumber;
         callsign = builder.callsign;
         draught = builder.draught;
+        dimensionC = builder.dimensionC;
     }
 
     public int getMessageType() {
@@ -105,6 +107,10 @@ public class AISMsg {
         return draught;
     }
 
+    public Integer getDimensionC() {
+        return dimensionC;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -125,6 +131,7 @@ public class AISMsg {
         private Integer imoNumber;
         private String callsign;
         private float draught;
+        private Integer dimensionC;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -202,6 +209,11 @@ public class AISMsg {
 
         public Builder withDraught(Float draught) {
             this.draught = draught;
+            return this;
+        }
+
+        public Builder withDimensionC(Integer toPort) {
+            this.dimensionC = toPort;
             return this;
         }
     }

@@ -118,4 +118,9 @@ public class AISNormalizerMsg5Test {
     public void it_maps_voyage_message_draught() {
         assertThat(n.normalize(voyageMsg()).getDraught(), is(10.4F));
     }
+
+    @Test
+    public void it_maps_voyage_message_dimensions() {
+        assertThat(n.normalize(voyageMsg()).getDimensionC(), is(14));
+    }
 }
