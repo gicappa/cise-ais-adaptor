@@ -28,6 +28,7 @@ public class AISMsg {
     private Integer dimensionC;
     private Integer dimensionD;
     private Integer dimensionA;
+    private Integer dimensionB;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -49,6 +50,7 @@ public class AISMsg {
         dimensionC = builder.dimensionC;
         dimensionD = builder.dimensionD;
         dimensionA = builder.dimensionA;
+        dimensionB = builder.dimensionB;
     }
 
     public int getMessageType() {
@@ -123,6 +125,10 @@ public class AISMsg {
         return dimensionA;
     }
 
+    public Integer getDimensionB() {
+        return dimensionB;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -146,6 +152,7 @@ public class AISMsg {
         private Integer dimensionC;
         private Integer dimensionD;
         private Integer dimensionA;
+        private Integer dimensionB;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -238,6 +245,11 @@ public class AISMsg {
 
         public Builder withDimensionA(Integer toBow) {
             this.dimensionA = toBow;
+            return this;
+        }
+
+        public Builder withDimensionB(Integer toStern) {
+            this.dimensionB = toStern;
             return this;
         }
     }
