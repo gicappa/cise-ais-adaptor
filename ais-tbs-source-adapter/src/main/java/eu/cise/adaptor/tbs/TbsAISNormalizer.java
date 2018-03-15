@@ -72,6 +72,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         b.withDimensionA((Integer) m.dataFields().getOrDefault("toBow", 0));
         b.withDimensionB((Integer) m.dataFields().getOrDefault("toStern", 0));
         b.withShipType(translateShipType(m));
+        b.withShipName((String) m.dataFields().getOrDefault("shipName", ""));
 
         return b.build();
     }

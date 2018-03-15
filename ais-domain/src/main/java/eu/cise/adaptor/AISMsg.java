@@ -30,6 +30,7 @@ public class AISMsg {
     private Integer dimensionA;
     private Integer dimensionB;
     private Integer shipType;
+    private String shipName;
 
     private AISMsg(AISMsg.Builder builder) {
         messageType = builder.messageType;
@@ -53,6 +54,7 @@ public class AISMsg {
         dimensionA = builder.dimensionA;
         dimensionB = builder.dimensionB;
         shipType = builder.shipType;
+        shipName = builder.shipName;
     }
 
     public int getMessageType() {
@@ -135,6 +137,10 @@ public class AISMsg {
         return shipType;
     }
 
+    public String getShipName() {
+        return shipName;
+    }
+
     public static class Builder {
         private int messageType;
 
@@ -160,6 +166,7 @@ public class AISMsg {
         private Integer dimensionA;
         private Integer dimensionB;
         private Integer shipType;
+        private String shipName;
 
         public Builder(int messageType) {
             this.messageType = messageType;
@@ -262,6 +269,11 @@ public class AISMsg {
 
         public Builder withShipType(Integer shipType) {
             this.shipType = shipType;
+            return this;
+        }
+
+        public Builder withShipName(String shipName) {
+            this.shipName = shipName;
             return this;
         }
     }

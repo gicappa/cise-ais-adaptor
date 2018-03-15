@@ -140,8 +140,13 @@ public class AISNormalizerMsg5Test {
     }
 
     @Test
-    //CargoHazardousA(71),
-    public void it_maps_voyage_message_lenght() {
+    //CargoHazardousA(71)
+    public void it_maps_voyage_message_ship_type() {
         assertThat(n.normalize(voyageMsg()).getShipType(), is(71));
+    }
+
+    @Test
+    public void it_maps_voyage_message_ship_name() {
+        assertThat(n.normalize(voyageMsg()).getShipName(), is("LANGENESS"));
     }
 }
