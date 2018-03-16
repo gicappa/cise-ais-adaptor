@@ -93,12 +93,20 @@ public class DefaultAISTranslator implements AISTranslator {
                         Long.valueOf(aisMsg.getUserId()),
                         aisMsg.getShipName(),
                         aisMsg.getDimensionC() + aisMsg.getDimensionD(),
-                        aisMsg.getCallSign(), f2d(aisMsg.getDraught())
+                        aisMsg.getCallSign(),
+                        f2d(aisMsg.getDraught()),
+                        Long.valueOf(aisMsg.getIMONumber())
                 ))
                 .build());
     }
 
-    private Vessel toVessel5(Long userId, String vesselName, int beam, String callSign, Double draught) {
+    private Vessel toVessel5(Long userId,
+                             String vesselName,
+                             Integer beam,
+                             String callSign,
+                             Double draught,
+                             Long imoNumber) {
+
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
         Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
@@ -113,6 +121,8 @@ public class DefaultAISTranslator implements AISTranslator {
         vessel.setBeam(beam);
         vessel.setCallSign(callSign);
         vessel.setDraught(draught);
+        if (imoNumber != null)
+            vessel.setIMONumber(imoNumber);
 
         return vessel;
     }

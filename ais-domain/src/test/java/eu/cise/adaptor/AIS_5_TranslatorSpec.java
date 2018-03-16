@@ -55,6 +55,7 @@ public class AIS_5_TranslatorSpec {
                     .withDimensionD(20)
                     .withCallSign("C1PP4")
                     .withDraught(34.5F)
+                    .withIMONumber(123456)
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -63,31 +64,24 @@ public class AIS_5_TranslatorSpec {
                 it("returns an Optional<Push> with a InvolvedEventRel", () -> {
                     assertThat(v.getInvolvedEventRels(), is(not(empty())));
                 });
-
                 it("returns an Optional<Push> with an Movement", () -> {
                     assertThat(getMovement(v), instanceOf(Movement.class));
                 });
-
                 it("returns an Optional<Push> with an MovementType", () -> {
                     assertThat(getMovement(v).getMovementType(), is(VOYAGE));
                 });
-
                 it("returns an Optional<Push> with a LocationRel", () -> {
                     assertThat(getMovement(v).getLocationRels(), is(not(empty())));
                 });
-
                 it("returns an Optional<Push> with a Location", () -> {
                     assertThat(getLocation(v), instanceOf(PortLocation.class));
                 });
-
                 xit("returns an Optional<Push> with a LocationCode", () -> {
                     assertThat(getLocation(v).getLocationCode(), is("FRLEH"));
                 });
-
                 it("returns an Optional<Push> with an MMSI", () -> {
                     assertThat(v.getMMSI(), is(12345678L));
                 });
-
                 it("returns an Optional<Push> with an ship name", () -> {
                     assertThat(v.getNames(), is(not(empty())));
                     assertThat(v.getNames().get(0), is("QUEEN MARY III"));
@@ -101,8 +95,10 @@ public class AIS_5_TranslatorSpec {
                 it("returns an Optional<Push> with a draught", () -> {
                     assertThat(v.getDraught(), is(34.5D));
                 });
+                it("returns an Optional<Push> with an imo number", () -> {
+                    assertThat(v.getIMONumber(), is(123456L));
+                });
             });
-
         });
     }
 

@@ -230,7 +230,7 @@ public class AISMsg {
 
         public Builder withIMONumber(Integer imoNumber) {
             this.imoNumber = imoNumber;
-            return null;
+            return this;
         }
 
         public Builder withCallSign(String callsign) {
