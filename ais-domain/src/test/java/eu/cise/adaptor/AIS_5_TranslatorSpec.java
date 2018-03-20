@@ -98,6 +98,10 @@ public class AIS_5_TranslatorSpec {
                 it("returns an Optional<Push> with an imo number", () -> {
                     assertThat(v.getIMONumber(), is(123456L));
                 });
+                it("returns an Optional<Push> with an ship type", () -> {
+                    assertThat(v.getShipTypes(), is(not(empty())));
+                    assertThat(v.getShipTypes().get(0), is(987654L));
+                });
             });
         });
     }

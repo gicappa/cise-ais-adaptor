@@ -1,5 +1,6 @@
 package eu.cise.adaptor.translate;
 
+import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
@@ -95,7 +96,8 @@ public class DefaultAISTranslator implements AISTranslator {
                         aisMsg.getDimensionC() + aisMsg.getDimensionD(),
                         aisMsg.getCallSign(),
                         f2d(aisMsg.getDraught()),
-                        Long.valueOf(aisMsg.getIMONumber())
+                        Long.valueOf(aisMsg.getIMONumber()),
+                        Long.valueOf(aisMsg.getUserId())
                 ))
                 .build());
     }
@@ -105,7 +107,8 @@ public class DefaultAISTranslator implements AISTranslator {
                              Integer beam,
                              String callSign,
                              Double draught,
-                             Long imoNumber) {
+                             Long imoNumber,
+                             Long mmsi) {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
@@ -123,6 +126,8 @@ public class DefaultAISTranslator implements AISTranslator {
         vessel.setDraught(draught);
         if (imoNumber != null)
             vessel.setIMONumber(imoNumber);
+
+        vessel.setMMSI(mmsi);
 
         return vessel;
     }
@@ -224,6 +229,11 @@ public class DefaultAISTranslator implements AISTranslator {
 
         return locationRel;
     }
+
+    private ShipType fromAISShipType(Integer st) {
+        switch(st) {
+    }
+
 
     private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes, int seconds) {
         try {
