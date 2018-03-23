@@ -99,7 +99,8 @@ public class DefaultAISTranslator implements AISTranslator {
                         f2d(aisMsg.getDraught()),
                         Long.valueOf(aisMsg.getIMONumber()),
                         Long.valueOf(aisMsg.getUserId()),
-                        fromAISShipType(aisMsg.getShipType())
+                        fromAISShipType(aisMsg.getShipType()),
+                        aisMsg.getDestination()
                 ))
                 .build());
     }
@@ -112,7 +113,9 @@ public class DefaultAISTranslator implements AISTranslator {
                              Double draught,
                              Long imoNumber,
                              Long mmsi,
-                             VesselType shipType) {
+                             VesselType shipType,
+                             String locationCode
+    ) {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
@@ -120,8 +123,11 @@ public class DefaultAISTranslator implements AISTranslator {
         Movement movement = new Movement();
         movement.setMovementType(VOYAGE);
         Event.LocationRel locationRel = new Event.LocationRel();
-        locationRel.setLocation(new PortLocation());
+        PortLocation location = new PortLocation();
+        location.setLocationCode(locationCode);
+        locationRel.setLocation(location);
         movement.getLocationRels().add(locationRel);
+
         involvedEventRel.setEvent(movement);
         vessel.getInvolvedEventRels().add(involvedEventRel);
         vessel.getNames().add(vesselName);
@@ -134,6 +140,8 @@ public class DefaultAISTranslator implements AISTranslator {
 
         vessel.setMMSI(mmsi);
         vessel.getShipTypes().add(shipType);
+
+
 
         return vessel;
     }
