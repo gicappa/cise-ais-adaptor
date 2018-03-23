@@ -10,18 +10,15 @@ public class AISAdaptorException extends RuntimeException {
     }
 
     public AISAdaptorException(String message) {
-        super(message);
+        super("\n\n" + message);
     }
 
     public AISAdaptorException(String message, Throwable cause) {
-        super(message, cause);
+        super("\n\n" +message, cause);
     }
 
     public AISAdaptorException(Throwable cause) {
         super(cause);
     }
 
-    protected AISAdaptorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
