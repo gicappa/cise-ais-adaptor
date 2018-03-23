@@ -15,6 +15,7 @@ import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import eu.cise.datamodel.v1.entity.vessel.VesselType;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
@@ -56,6 +57,7 @@ public class AIS_5_TranslatorSpec {
                     .withCallSign("C1PP4")
                     .withDraught(34.5F)
                     .withIMONumber(123456)
+                    .withShipType(84)
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -100,7 +102,7 @@ public class AIS_5_TranslatorSpec {
                 });
                 it("returns an Optional<Push> with an ship type", () -> {
                     assertThat(v.getShipTypes(), is(not(empty())));
-                    assertThat(v.getShipTypes().get(0), is(987654L));
+                    assertThat(v.getShipTypes().get(0), is(VesselType.OIL_TANKER));
                 });
             });
         });

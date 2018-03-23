@@ -1,6 +1,5 @@
 package eu.cise.adaptor.translate;
 
-import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
@@ -17,6 +16,7 @@ import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import eu.cise.datamodel.v1.entity.vessel.VesselType;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
 import eu.cise.servicemodel.v1.message.*;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
@@ -97,7 +97,8 @@ public class DefaultAISTranslator implements AISTranslator {
                         aisMsg.getCallSign(),
                         f2d(aisMsg.getDraught()),
                         Long.valueOf(aisMsg.getIMONumber()),
-                        Long.valueOf(aisMsg.getUserId())
+                        Long.valueOf(aisMsg.getUserId()),
+                        fromAISShipType(aisMsg.getShipType())
                 ))
                 .build());
     }
@@ -108,7 +109,8 @@ public class DefaultAISTranslator implements AISTranslator {
                              String callSign,
                              Double draught,
                              Long imoNumber,
-                             Long mmsi) {
+                             Long mmsi,
+                             VesselType shipType) {
 
         Vessel vessel = new Vessel();
         vessel.setMMSI(userId);
@@ -128,6 +130,7 @@ public class DefaultAISTranslator implements AISTranslator {
             vessel.setIMONumber(imoNumber);
 
         vessel.setMMSI(mmsi);
+        vessel.getShipTypes().add(shipType);
 
         return vessel;
     }
@@ -230,8 +233,63 @@ public class DefaultAISTranslator implements AISTranslator {
         return locationRel;
     }
 
-    private ShipType fromAISShipType(Integer st) {
+    private VesselType fromAISShipType(Integer st) {
         switch(st) {
+            case 30: return VesselType.FISHING_VESSEL;
+            case 31: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 32: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 33: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 34: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 35: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 40: return VesselType.HIGH_SPEED_CRAFT;
+            case 41: return VesselType.HIGH_SPEED_CRAFT;
+            case 42: return VesselType.HIGH_SPEED_CRAFT;
+            case 43: return VesselType.HIGH_SPEED_CRAFT;
+            case 44: return VesselType.HIGH_SPEED_CRAFT;
+            case 45: return VesselType.HIGH_SPEED_CRAFT;
+            case 46: return VesselType.HIGH_SPEED_CRAFT;
+            case 47: return VesselType.HIGH_SPEED_CRAFT;
+            case 48: return VesselType.HIGH_SPEED_CRAFT;
+            case 49: return VesselType.HIGH_SPEED_CRAFT;
+            case 50: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 51: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 52: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 53: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 54: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 55: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 58: return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 60: return VesselType.PASSENGER_SHIP;
+            case 61: return VesselType.PASSENGER_SHIP;
+            case 62: return VesselType.PASSENGER_SHIP;
+            case 63: return VesselType.PASSENGER_SHIP;
+            case 64: return VesselType.PASSENGER_SHIP;
+            case 65: return VesselType.PASSENGER_SHIP;
+            case 66: return VesselType.PASSENGER_SHIP;
+            case 67: return VesselType.PASSENGER_SHIP;
+            case 68: return VesselType.PASSENGER_SHIP;
+            case 69: return VesselType.PASSENGER_SHIP;
+            case 70: return VesselType.GENERAL_CARGO_SHIP;
+            case 71: return VesselType.GENERAL_CARGO_SHIP;
+            case 72: return VesselType.GENERAL_CARGO_SHIP;
+            case 73: return VesselType.GENERAL_CARGO_SHIP;
+            case 74: return VesselType.GENERAL_CARGO_SHIP;
+            case 75: return VesselType.GENERAL_CARGO_SHIP;
+            case 76: return VesselType.GENERAL_CARGO_SHIP;
+            case 77: return VesselType.GENERAL_CARGO_SHIP;
+            case 78: return VesselType.GENERAL_CARGO_SHIP;
+            case 79: return VesselType.GENERAL_CARGO_SHIP;
+            case 80: return VesselType.OIL_TANKER;
+            case 81: return VesselType.OIL_TANKER;
+            case 82: return VesselType.OIL_TANKER;
+            case 83: return VesselType.OIL_TANKER;
+            case 84: return VesselType.OIL_TANKER;
+            case 85: return VesselType.OIL_TANKER;
+            case 86: return VesselType.OIL_TANKER;
+            case 87: return VesselType.OIL_TANKER;
+            case 88: return VesselType.OIL_TANKER;
+            case 89: return VesselType.OIL_TANKER;
+            default: return VesselType.OTHER;
+        }
     }
 
 
