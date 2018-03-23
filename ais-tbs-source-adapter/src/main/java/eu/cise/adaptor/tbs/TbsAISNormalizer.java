@@ -64,7 +64,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
         // VOYAGE
         b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
         b.withETA(computeETA(m));
-        b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0L));
+        b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0));
         b.withCallSign((String) m.dataFields().getOrDefault("callsign", ""));
         b.withDraught((Float) m.dataFields().getOrDefault("draught", 0F));
         b.withDimensionC((Integer) m.dataFields().getOrDefault("toPort", 0));
@@ -89,6 +89,8 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
     // eta=18-07 17:00
     private Instant computeETA(AISMessage m) {
         String etaStr = (String) m.dataFields().get("eta");
+        if (etaStr == null) return null;
+
         String[] etadt = etaStr.split(" ");
         String dateTimeString = getCurrentYear() + "-" + switchDayMonth(etadt[0]) + "T" + etadt[1] + ":00.000Z";
         Instant eta = Instant.parse(dateTimeString);
