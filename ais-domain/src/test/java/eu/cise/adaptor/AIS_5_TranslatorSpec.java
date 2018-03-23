@@ -94,6 +94,32 @@ public class AIS_5_TranslatorSpec {
                     });
 
                 });
+                context("Involved Event with a port name", () -> {
+                    final AISMsg m1 = new AISMsg.Builder(5)
+                            .withUserId(12345678)
+                            .withShipName("QUEEN MARY III")
+                            .withDimensionA(100)
+                            .withDimensionB(20)
+                            .withDimensionC(10)
+                            .withDimensionD(20)
+                            .withCallSign("C1PP4")
+                            .withDraught(34.5F)
+                            .withIMONumber(123456)
+                            .withShipType(84)
+                            .withDestination("Le Havre")
+                            .build();
+
+                    final Movement mo = getMovement(extractVessel(translator.translate(m1)));
+
+                    it("returns an Optional<Push> with a LocationCode", () -> {
+                        assertThat(getLocation(mo).getLocationCode(), is(nullValue()));
+                    });
+                    it("returns an Optional<Push> with a PortName", () -> {
+                        assertThat(getLocation(mo).getPortName(), is("Le Havre"));
+                    });
+
+                });
+
             });
         });
     }

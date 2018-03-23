@@ -28,9 +28,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
@@ -124,8 +122,12 @@ public class DefaultAISTranslator implements AISTranslator {
         movement.setMovementType(VOYAGE);
         Event.LocationRel locationRel = new Event.LocationRel();
         PortLocation location = new PortLocation();
-        location.setLocationCode(locationCode);
+
+        if (isLocationCode(locationCode))
+            location.setLocationCode(locationCode);
+
         location.setPortName(locationCode);
+
         locationRel.setLocation(location);
         movement.getLocationRels().add(locationRel);
 
@@ -143,6 +145,28 @@ public class DefaultAISTranslator implements AISTranslator {
         vessel.getShipTypes().add(shipType);
 
         return vessel;
+    }
+
+    private static final Set<String> ISO_COUNTRIES = new HashSet<>
+            (Arrays.asList(Locale.getISOCountries()));
+
+    public static boolean isValidISOCountry(String s) {
+        return ISO_COUNTRIES.contains(s);
+    }
+
+    private boolean isLocationCode(String locationCode) {
+        if (locationCode == null)
+            return false;
+
+        if (locationCode.trim().length() != 5)
+            return false;
+
+        String countryCode = locationCode.substring(0, 2);
+
+        if (!isValidISOCountry(countryCode))
+            return false;
+
+        return true;
     }
 
     private Optional<Push> translateAISMsg123(AISMsg aisMsg) {
