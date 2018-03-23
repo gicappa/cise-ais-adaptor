@@ -72,7 +72,7 @@ public class AIS_5_TranslatorSpec {
                 it("returns an Optional<Push> with a InvolvedEventRel", () -> {
                     assertThat(v.getInvolvedEventRels(), is(not(empty())));
                 });
-                context("Involved Event", () -> {
+                context("Involved Event with a location code", () -> {
                     final Movement mo = getMovement(extractVessel(translator.translate(m)));
                     it("returns an Optional<Push> with an Movement", () -> {
                         assertThat(mo, instanceOf(Movement.class));
@@ -88,6 +88,9 @@ public class AIS_5_TranslatorSpec {
                     });
                     it("returns an Optional<Push> with a LocationCode", () -> {
                         assertThat(getLocation(mo).getLocationCode(), is("FRLEH"));
+                    });
+                    it("returns an Optional<Push> with a PortName", () -> {
+                        assertThat(getLocation(mo).getPortName(), is("FRLEH"));
                     });
 
                 });

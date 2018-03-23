@@ -125,6 +125,7 @@ public class DefaultAISTranslator implements AISTranslator {
         Event.LocationRel locationRel = new Event.LocationRel();
         PortLocation location = new PortLocation();
         location.setLocationCode(locationCode);
+        location.setPortName(locationCode);
         locationRel.setLocation(location);
         movement.getLocationRels().add(locationRel);
 
@@ -140,8 +141,6 @@ public class DefaultAISTranslator implements AISTranslator {
 
         vessel.setMMSI(mmsi);
         vessel.getShipTypes().add(shipType);
-
-
 
         return vessel;
     }
