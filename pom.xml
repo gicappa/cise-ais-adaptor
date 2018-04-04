@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -11,8 +11,10 @@
   <name>cise-ais-adaptor</name>
 
   <modules>
-    <module>ais-adaptor-app</module>
-    <module>ais-adaptor-domain</module>
+    <module>ais-app</module>
+    <module>ais-domain</module>
+    <module>ais-tbs-source-adapter</module>
+    <module>ais-server-example</module>
   </modules>
 
   <build>
@@ -143,7 +145,13 @@
       <!-- CISE Internal Dependencies -->
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-adaptor-domain</artifactId>
+        <artifactId>cise-ais-domain</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-tbs-source-adapter</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
 
