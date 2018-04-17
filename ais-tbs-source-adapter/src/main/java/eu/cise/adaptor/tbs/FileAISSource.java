@@ -17,7 +17,16 @@ public class FileAISSource implements AISSource {
     public FileAISSource() {
         FileAISSourceConfig config = ConfigFactory.create(FileAISSourceConfig.class);
 
+        if (config.getAISSourceFilename() == null)
+            throw new AISAdaptorException("ais-source.file.name property is not \n" +
+                    "specified in the file ais-adaptor.properties");
+
         inputStream = getClass().getResourceAsStream(config.getAISSourceFilename());
+
+        if (inputStream == null)
+            throw new AISAdaptorException("ais-source.file.name property set to \n" +
+                    "a not existing filename: " + config.getAISSourceFilename());
+
     }
 
     @Override
