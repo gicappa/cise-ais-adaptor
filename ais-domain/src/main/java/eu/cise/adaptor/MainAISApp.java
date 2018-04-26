@@ -18,6 +18,8 @@ public class MainAISApp<T> implements Runnable {
         this.aisSource = aisSource;
         this.aisNormalizer = aisNormalizer;
         this.dispatcher = dispatcher;
+
+        System.out.println("config = " + config);
     }
 
     @Override
