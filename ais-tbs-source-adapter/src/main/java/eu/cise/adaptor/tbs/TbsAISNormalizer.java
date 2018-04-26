@@ -9,9 +9,6 @@ import eu.cise.adaptor.normalize.NavigationStatus;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,14 +28,14 @@ import static java.lang.Boolean.FALSE;
  */
 public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
 
-    private final Clock clock;
+    private final Eta eta;
 
     public TbsAISNormalizer() {
-        this.clock = Clock.systemUTC();
+        this(Clock.systemUTC());
     }
 
     public TbsAISNormalizer(Clock clock) {
-        this.clock = clock;
+        this.eta = new Eta(clock);
     }
 
     public AISMsg normalize(AISMessage m) {
@@ -63,7 +60,7 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
 
         // VOYAGE
         b.withDestination((String) m.dataFields().getOrDefault("destination", ""));
-        b.withETA(computeETA(m));
+        b.withEta(eta.computeETA((String) m.dataFields().get("eta")));
         b.withIMONumber((Integer) m.dataFields().getOrDefault("imo.IMO", 0));
         b.withCallSign((String) m.dataFields().getOrDefault("callsign", ""));
         b.withDraught((Float) m.dataFields().getOrDefault("draught", 0F));
@@ -84,30 +81,6 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
             return 0;
 
         return ShipType.valueOf(shipType).getCode();
-    }
-
-    // eta=18-07 17:00
-    private Instant computeETA(AISMessage m) {
-        String etaStr = (String) m.dataFields().get("eta");
-        if (etaStr == null) return null;
-
-        String[] etadt = etaStr.split(" ");
-        String dateTimeString = getCurrentYear() + "-" + switchDayMonth(etadt[0]) + "T" + etadt[1] + ":00.000Z";
-        Instant eta = Instant.parse(dateTimeString);
-
-        if (eta.isBefore(Instant.now(clock)))
-            eta = eta.plus(365, ChronoUnit.DAYS);
-
-        return eta;
-    }
-
-    private String switchDayMonth(String dayMonth) {
-        String a[] = dayMonth.split("-");
-        return a[1] + "-" + a[0];
-    }
-
-    private int getCurrentYear() {
-        return LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).getYear();
     }
 
     private NavigationStatus getNavigationStatus(String ns) {

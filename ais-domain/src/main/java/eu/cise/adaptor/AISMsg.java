@@ -47,7 +47,7 @@ public class AISMsg {
         destination = builder.destination;
         eta = builder.eta;
         imoNumber = builder.imoNumber;
-        callsign = builder.callsign;
+        callsign = builder.callSign;
         draught = builder.draught;
         dimensionC = builder.dimensionC;
         dimensionD = builder.dimensionD;
@@ -101,11 +101,11 @@ public class AISMsg {
         return destination;
     }
 
-    public Instant getETA() {
+    public Instant getEta() {
         return eta;
     }
 
-    public Integer getIMONumber() {
+    public Integer getImoNumber() {
         return imoNumber;
     }
 
@@ -159,7 +159,7 @@ public class AISMsg {
         private String destination;
         private Instant eta;
         private Integer imoNumber;
-        private String callsign;
+        private String callSign;
         private float draught;
         private Integer dimensionC;
         private Integer dimensionD;
@@ -223,7 +223,7 @@ public class AISMsg {
             return this;
         }
 
-        public Builder withETA(Instant eta) {
+        public Builder withEta(Instant eta) {
             this.eta = eta;
             return this;
         }
@@ -234,7 +234,7 @@ public class AISMsg {
         }
 
         public Builder withCallSign(String callsign) {
-            this.callsign = callsign;
+            this.callSign = callsign;
             return this;
         }
 

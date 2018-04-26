@@ -62,6 +62,15 @@ public class AISNormalizerMsg5Test {
         );
     }
 
+    AISMessage voyageMsgNoMonthDay() {
+        return AISMessage.create(
+                NMEAMessage.fromString(
+                        "!AIVDM,2,1,8,B,56?cVR42>RBT5HAJ220<N3;3:22222222222220n5Hk7540Ht02CQ2@H8888,0*66"),
+                NMEAMessage.fromString(
+                        "!AIVDM,2,2,8,B,88888888880,2*2F")
+        );
+    }
+
     @Before
     public void before() {
         n = new TbsAISNormalizer();
@@ -91,7 +100,7 @@ public class AISNormalizerMsg5Test {
 
         n = new TbsAISNormalizer(beforeJuly2018);
 
-        assertThat(n.normalize(voyageMsg()).getETA(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
+        assertThat(n.normalize(voyageMsg()).getEta(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
     }
 
     @Test
@@ -101,12 +110,18 @@ public class AISNormalizerMsg5Test {
 
         n = new TbsAISNormalizer(afterJuly2018);
 
-        assertThat(n.normalize(voyageMsg()).getETA(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
+        assertThat(n.normalize(voyageMsg()).getEta(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
+    }
+
+    //00-00 24:60
+    @Test
+    public void it_maps_voyage_message_ETA_on_1970_when_month_and_day_are_not_available() {
+        assertThat(n.normalize(voyageMsgNoMonthDay()).getEta(), is(Instant.parse("1970-01-01T00:00:00.00Z")));
     }
 
     @Test
     public void it_maps_voyage_message_imo_number() {
-        assertThat(n.normalize(voyageMsg()).getIMONumber(), is(9301134));
+        assertThat(n.normalize(voyageMsg()).getImoNumber(), is(9301134));
     }
 
     @Test

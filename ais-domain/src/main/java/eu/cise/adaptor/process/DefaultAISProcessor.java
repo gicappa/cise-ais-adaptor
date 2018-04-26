@@ -6,6 +6,9 @@ import eu.cise.adaptor.translate.AISTranslator;
 import jrc.cise.gw.sending.DispatchResult;
 import jrc.cise.gw.sending.Dispatcher;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class DefaultAISProcessor implements AISProcessor {
@@ -13,13 +16,11 @@ public class DefaultAISProcessor implements AISProcessor {
     private final AISTranslator translator;
     private final Dispatcher dispatcher;
     private final AISAdaptorConfig config;
-//    private final ExecutorService executor;
 
     public DefaultAISProcessor(AISTranslator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
         this.translator = translator;
         this.dispatcher = dispatcher;
         this.config = config;
-//        executor = Executors.newSingleThreadExecutor();
     }
 
     @Override

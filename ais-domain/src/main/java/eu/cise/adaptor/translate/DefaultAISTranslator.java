@@ -110,7 +110,7 @@ public class DefaultAISTranslator implements AISTranslator {
     }
 
     private Long getImoNumber(AISMsg aisMsg) {
-        return aisMsg.getIMONumber() == null ? null : Long.valueOf(aisMsg.getIMONumber());
+        return aisMsg.getImoNumber() == null ? null : Long.valueOf(aisMsg.getImoNumber());
     }
 
     private Double getLength(AISMsg aisMsg) {

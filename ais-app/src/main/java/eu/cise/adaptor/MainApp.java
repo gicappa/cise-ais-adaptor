@@ -10,7 +10,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class MainApp {
 
     public static final String VERSION = "1.0";
-    private static boolean isDebug;
 
     private final Banner banner;
     private final MainAISApp aisApp;

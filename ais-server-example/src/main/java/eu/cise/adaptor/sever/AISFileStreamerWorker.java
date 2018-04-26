@@ -12,6 +12,7 @@ import java.net.Socket;
  * passed from the server the data coming from the file.
  */
 public class AISFileStreamerWorker extends Thread {
+
     private final Socket socket;
     private final BufferedReader inputReader;
 
