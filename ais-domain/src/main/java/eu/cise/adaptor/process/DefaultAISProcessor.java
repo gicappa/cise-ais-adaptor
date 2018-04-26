@@ -2,12 +2,9 @@ package eu.cise.adaptor.process;
 
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.translate.AISTranslator;
 import jrc.cise.gw.sending.DispatchResult;
 import jrc.cise.gw.sending.Dispatcher;
-
-import java.util.concurrent.*;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
@@ -39,7 +36,7 @@ public class DefaultAISProcessor implements AISProcessor {
                 System.out.println(result.getResult());
 
             Thread.sleep(100);
-        } catch (InterruptedException|ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             //throw new AISAdaptorException(e);
         }
     }

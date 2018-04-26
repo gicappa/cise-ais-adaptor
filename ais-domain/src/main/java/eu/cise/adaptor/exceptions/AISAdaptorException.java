@@ -14,7 +14,7 @@ public class AISAdaptorException extends RuntimeException {
     }
 
     public AISAdaptorException(String message, Throwable cause) {
-        super("\n\n" +message, cause);
+        super("\n\n" + message, cause);
     }
 
     public AISAdaptorException(Throwable cause) {
