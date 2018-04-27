@@ -46,8 +46,7 @@ public class MainApp {
     }
 
     public void run() {
-        banner.print(VERSION);
-
+        banner.print();
         aisApp.run();
     }
 
