@@ -59,6 +59,21 @@
           </configuration>
         </plugin>
 
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.1.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true
+                </addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true
+                </addDefaultSpecificationEntries>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+
         <!-- create a launchable single jar with the whole application -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -76,55 +91,6 @@
                 </excludes>
               </filter>
             </filters>
-          </configuration>
-        </plugin>
-
-        <!-- create an appropriate javadoc -->
-        <plugin>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.7</version>
-          <configuration>
-            <javadocDirectory>${main.basedir}/src/javadoc</javadocDirectory>
-            <docfilessubdirs>true</docfilessubdirs>
-            <aggregate>true</aggregate>
-            <show>private</show>
-            <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-            <docletArtifact>
-              <groupId>org.umlgraph</groupId>
-              <artifactId>umlgraph</artifactId>
-              <version>5.6.6</version>
-            </docletArtifact>
-            <additionalparam>
-              -inferrel
-              -attributes
-              -types
-              -visibility
-              -quiet
-              -hide java.*
-              -collpackages java.util.*
-              -qualify
-              -postfixpackage
-              -bgcolor white
-              -edgecolor "#A0A0A4"
-              -edgefontname "Helvetica"
-              -nodefontname "Helvetica"
-              -nodefontabstractname "Helvetica"
-              -nodefontclassabstractname "Helvetica"
-              -nodefontclassname "Helvetica"
-              -nodefontpackagename "Helvetica"
-              -nodefonttagname "Helvetica"
-              -edgefontcolor "#A0A0A4"
-              -nodefontcolor "#A0A0A4"
-              -edgefontsize 9
-              -nodefontclasssize 9
-              -nodefontpackagesize 9
-              -nodefontsize 9
-              -nodefonttagsize 9
-              -nodefillcolor "white"
-              <!-- -collapsible-->
-              <!-- -useimports-->
-              <!-- -apidocmap-->
-            </additionalparam>
           </configuration>
         </plugin>
 
@@ -158,6 +124,48 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <!-- create an appropriate javadoc -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <javadocDirectory>${main.basedir}/src/javadoc</javadocDirectory>
+          <docfilessubdirs>true</docfilessubdirs>
+          <aggregate>true</aggregate>
+          <show>private</show>
+          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+          <docletArtifact>
+            <groupId>org.umlgraph</groupId>
+            <artifactId>umlgraph</artifactId>
+            <version>5.6.6</version>
+          </docletArtifact>
+          <additionalparam>
+            -inferrel
+            -attributes
+            -types
+            -visibility
+            -quiet
+            -hide java.*
+            -collpackages java.util.*
+            -qualify
+            -postfixpackage
+            -bgcolor white
+            -edgecolor "#4D7A97"
+            -edgefontname "Arial"
+            -edgefontcolor "#4D7A97"
+            -edgefontsize 9
+
+            -nodefillcolor white
+            -nodefontname "Arial"
+            -nodefontcolor "#2e2e2e"
+            -nodefontsize 9
+            -nodefontclasssize 10
+            -nodefontpackagesize 8
+            -nodefontpackagename "Arial"
+            -nodefonttagsize 8
+          </additionalparam>
+        </configuration>
       </plugin>
     </plugins>
   </build>

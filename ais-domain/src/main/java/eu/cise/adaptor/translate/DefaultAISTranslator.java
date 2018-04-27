@@ -454,8 +454,10 @@ public class DefaultAISTranslator implements AISTranslator {
     }
 
     /**
-     * @param ns
-     * @return
+     * It translates the navigation status from AIS to CISE model.
+     *
+     * @param ns the navigation status to be translated from AIS Message
+     * @return the NavigationalStatusType enum coming from the CISE data model
      */
     private NavigationalStatusType fromNavigationStatus(NavigationStatus ns) {
         if (ns == null)

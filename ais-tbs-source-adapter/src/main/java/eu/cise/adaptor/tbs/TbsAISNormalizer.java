@@ -23,8 +23,6 @@ import static java.lang.Boolean.FALSE;
  * <p>
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
- *
- * @return an AISMsg object
  */
 public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
 
@@ -88,9 +86,11 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
     }
 
     /**
+     * @param m is a map containing the properties coming from the AIS
+     *          unmarshalling
      * @return 1 if position accuracy lte 10m; 0 otherwise.
      */
-    private int getPositionAccuracy(Map<String, Object> m) {
+    int getPositionAccuracy(Map<String, Object> m) {
         return (Boolean) m.getOrDefault("positionAccuracy", FALSE) ? 1 : 0;
     }
 
