@@ -32,7 +32,7 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-gateway-domain</artifactId>
+      <artifactId>eucise-com-signature-lib</artifactId>
     </dependency>
 
     <!-- external dependencies -->

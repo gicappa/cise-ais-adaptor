@@ -12,6 +12,15 @@
 
   <artifactId>cise-ais-server-example</artifactId>
 
+  <dependencies>
+
+    <dependency>
+      <groupId>dk.tbsalling</groupId>
+      <artifactId>aismessages</artifactId>
+    </dependency>
+
+  </dependencies>
+
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>

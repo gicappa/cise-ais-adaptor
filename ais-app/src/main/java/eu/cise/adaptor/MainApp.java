@@ -1,15 +1,13 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import jrc.cise.gw.sending.Dispatcher;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Application entry point
  */
 public class MainApp {
-
-    public static final String VERSION = "1.0";
 
     private final Banner banner;
     private final MainAISApp aisApp;

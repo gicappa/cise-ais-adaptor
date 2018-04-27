@@ -103,3 +103,14 @@ our implementation only support four of them.
 * BinaryMessageSingleSlot:
 * BinaryMessageMultipleSlot:
 * LongRangeBroadcastMessage:
+
+
+
+# TODO
+
+* README
+* ASCIIDOC
+* CONTRIBUTING
+* DEPENDENCIES <<<
+* DISTRIBUTION
+* ERROR CODE on EXCEPTIONS with LEGENDA

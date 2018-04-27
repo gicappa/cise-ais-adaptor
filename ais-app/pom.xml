@@ -56,9 +56,15 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-gateway-domain</artifactId>
+      <artifactId>cise-ais-transport</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>cise-ais-tbs-source-adapter</artifactId>
+    </dependency>
+
+    <!-- external dependencies -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>

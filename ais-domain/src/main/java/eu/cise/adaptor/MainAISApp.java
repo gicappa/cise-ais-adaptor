@@ -1,9 +1,9 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
-import jrc.cise.gw.sending.Dispatcher;
 import org.aeonbits.owner.ConfigFactory;
 
 public class MainAISApp<T> implements Runnable {
