@@ -32,7 +32,7 @@
                   <mainClass>eu.cise.adaptor.MainApp</mainClass>
                 </transformer>
               </transformers>
-              <finalName>ais-adaptor</finalName>
+              <finalName>cise-ais-adaptor</finalName>
             </configuration>
           </execution>
         </executions>
@@ -70,6 +70,10 @@
       <artifactId>spring-context</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
   </dependencies>
 
   <properties>

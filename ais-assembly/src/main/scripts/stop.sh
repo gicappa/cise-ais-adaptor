@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-GW_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+SW_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
-exec ${GW_HOME}/bin/gateway.sh stop
+exec ${SW_HOME}/bin/cise-ais-adaptor.sh stop
