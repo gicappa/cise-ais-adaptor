@@ -2,9 +2,11 @@ package eu.cise.adaptor;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -57,7 +59,7 @@ public class Banner {
 
             Files.readAllLines(getURIBannerFile()).stream().forEach(System.out::println);
 
-        } catch (URISyntaxException | IOException e) {
+        } catch (IOException e) {
             // If the file have issues the banner won't be displayed.
             // We can deal with that :)
         }
@@ -92,8 +94,18 @@ public class Banner {
         return this.getClass().getPackage().getImplementationVersion();
     }
 
-    private Path getURIBannerFile() throws URISyntaxException {
-        return Paths.get(getClass().getResource("/banner.txt").toURI());
+    private Path getURIBannerFile() {
+        return Optional.ofNullable(getBannerURL()).map((URL url) -> {
+            try {
+                return url.toURI();
+            } catch (URISyntaxException e) {
+
+            }
+        }).map();
+    }
+
+    private URL getBannerURL() {
+        return getClass().getResource("banner.txt");
     }
 
 }

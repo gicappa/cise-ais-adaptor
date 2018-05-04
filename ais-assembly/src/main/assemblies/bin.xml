@@ -38,7 +38,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.parent.basedir}/ais-assembly/src/main/conf</directory>
+      <directory>${project.parent.basedir}/ais-domain/src/main/resources</directory>
       <outputDirectory>/conf</outputDirectory>
       <includes>
         <include>*</include>

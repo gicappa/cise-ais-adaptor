@@ -26,7 +26,6 @@ public class FileAISSource implements AISSource {
         if (inputStream == null)
             throw new AISAdaptorException("ais-source.file.name property set to \n" +
                     "a not existing filename: " + config.getAISSourceFilename());
-
     }
 
     @Override

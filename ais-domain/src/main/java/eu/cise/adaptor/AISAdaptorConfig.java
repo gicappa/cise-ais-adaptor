@@ -3,7 +3,7 @@ package eu.cise.adaptor;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 
-@Sources("classpath:ais-adaptor.properties")
+@Sources({"file:${confdir}/conf/ais-adaptor.properties", "classpath:ais-adaptor.properties"})
 public interface AISAdaptorConfig extends Config {
 
     @Key("demo-environment")

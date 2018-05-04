@@ -26,14 +26,15 @@ KO="[${RED}x${NOR}]"
 # FUNCTIONS ###
 function log_exit_msg {
 
-test $? -eq 0 && echo "${OK} cise-ais-adaptor started at `date -Iseconds`" || \
-    echo "${KO} cise-ais-adaptor not started"; exit 1
+E=$?
+test ${E} -eq 0 && echo "${OK} cise-ais-adaptor started at `date -Iseconds`" || \
+    echo "${KO} cise-ais-adaptor not started"; exit ${E}
 
 }
 
 function log_start_msg {
 
-echo ">>> CISE AIS Adaptor <<<"
+echo "${GRE}>>> CISE AIS Adaptor <<<${NOR}"
 echo "> Java path:    ${JAVA_EXEC}"
 echo "> Java version: ${JAVA_VERSION}"
 
@@ -62,7 +63,7 @@ sleep 1
 kill -0 ${pid} > /dev/null 2>&1
 echo ${pid} > ${PID_FILE}
 
-echo ">>> 'tail -100f logs/localhost.log' will check the server log files"
+echo "> 'tail -100f logs/localhost.log' will check the server log files"
 echo
 log_exit_msg
 
@@ -81,7 +82,7 @@ if [ "$JAVA_VERSION" == "1.9" ]; then
 fi
 
 SW_RUN_CMD="${JAVA_EXEC} ${JAVA_OPTS} -Dconfdir=${SW_HOME}/conf/ \
--Djava.io.tmpdir=${SW_HOME}/tmp -jar ${SW_HOME}/lib/cise-ais-adaptor.jar"
+-Djava.io.tmpdir=${SW_HOME}/tmp -jar ${SW_HOME}/lib/cise-ais-adaptor.jar -d"
 
 }
 
@@ -121,7 +122,7 @@ case $1 in
         PIDS=`ps aux | grep cise-ais-adaptor.jar | grep -v grep | awk '{ printf $2" " }'`
 
         (kill -15 ${PIDS} 2>&1) > /dev/null && \
-            echo "> cise-ais-adaptor has been stopped" || echo "xxx the cise-ais-adaptor was not running"
+            echo "${OK} cise-ais-adaptor has been stopped" || echo "${KO} the cise-ais-adaptor was not running"
 
         rm -f ${PID_FILE}
         ;;
@@ -136,7 +137,7 @@ case $1 in
         ;;
     *)
         echo "Usage: cise-ais-adaptor.sh {start|stop|restart|debug-start|debug-run|status}"
-        exit 1
+        exit 0
         ;;
 esac
 
