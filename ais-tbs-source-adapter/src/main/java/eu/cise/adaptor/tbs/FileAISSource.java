@@ -21,7 +21,7 @@ public class FileAISSource implements AISSource {
             throw new AISAdaptorException("ais-source.file.name property is not \n" +
                     "specified in the file ais-adaptor.properties");
 
-        inputStream = getClass().getResourceAsStream(config.getAISSourceFilename());
+        inputStream = FileAISSource.class.getClassLoader().getResourceAsStream(config.getAISSourceFilename());
 
         if (inputStream == null)
             throw new AISAdaptorException("ais-source.file.name property set to \n" +

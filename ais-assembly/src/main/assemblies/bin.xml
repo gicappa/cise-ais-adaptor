@@ -8,6 +8,12 @@
   <formats>
     <format>tar.gz</format>
   </formats>
+  <files>
+    <file>
+      <source>${project.parent.basedir}/ais-app/src/test/java/example.ais.stream.txt</source>
+      <outputDirectory>/conf</outputDirectory>
+    </file>
+  </files>
   <fileSets>
     <fileSet>
       <directory>${project.parent.basedir}</directory>

@@ -99,7 +99,7 @@ if [ "$JAVA_VERSION" == "1.9" ]; then
     JAVA_OPTS="${JAVA_OPTS} --add-modules java.xml.bind"
 fi
 
-SW_RUN_CMD="${JAVA_EXEC} ${JAVA_OPTS} -Dconfdir=${SW_HOME}/conf/ \
+SW_RUN_CMD="${JAVA_EXEC} ${JAVA_OPTS} -Dconf.dir=${SW_HOME}/conf/ \
     -Djava.io.tmpdir=${SW_HOME}/tmp -jar ${SW_HOME}/lib/cise-ais-adaptor.jar -d"
 
 }

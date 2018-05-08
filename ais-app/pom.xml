@@ -30,6 +30,10 @@
                 <transformer
                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>eu.cise.adaptor.MainApp</mainClass>
+                  <manifestEntries>
+                    <Class-Path>./conf ../conf</Class-Path>
+                    <Version>${version}</Version>
+                  </manifestEntries>
                 </transformer>
               </transformers>
               <finalName>cise-ais-adaptor</finalName>
