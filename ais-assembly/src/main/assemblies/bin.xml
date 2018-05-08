@@ -32,7 +32,7 @@
     </fileSet>
     <fileSet>
       <directory>${project.parent.basedir}/ais-assembly/src/main/scripts</directory>
-      <outputDirectory>/bin</outputDirectory>
+      <outputDirectory>/</outputDirectory>
       <includes>
         <include>*</include>
       </includes>

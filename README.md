@@ -114,3 +114,6 @@ our implementation only support four of them.
 * DEPENDENCIES <<<
 * DISTRIBUTION
 * ERROR CODE on EXCEPTIONS with LEGENDA
+* Document how to handle certificates and where to put them.
+* Create a test example 
+* Create a support for environments (dev, test, prod)

@@ -1,6 +1,7 @@
 package eu.cise.adaptor;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -41,7 +42,7 @@ public class Banner {
      * enriched by this information from a maven plugin.
      */
     public void print() {
-        printBanner();
+        getURIBannerFile().map(this::printBanner).orElse(null);
 
         printVersion();
     }
@@ -52,17 +53,18 @@ public class Banner {
      *
      * <p>If the file is not present doesn't display anything.
      */
-    public void printBanner() {
+    public Path printBanner(Path bannerFilePath) {
         try {
-            if (!Files.exists(getURIBannerFile()))
-                return;
+            if (!Files.exists(bannerFilePath))
+                return bannerFilePath;
 
-            Files.readAllLines(getURIBannerFile()).stream().forEach(System.out::println);
+            Files.readAllLines(bannerFilePath).stream().forEach(System.out::println);
 
         } catch (IOException e) {
             // If the file have issues the banner won't be displayed.
             // We can deal with that :)
         }
+        return bannerFilePath;
     }
 
     /**
@@ -85,7 +87,7 @@ public class Banner {
      * available  in the <tt>MANIFEST.MF</tt> file, the hard coded string DEV
      */
     public String getVersion() {
-        return getManifestVersion() == null ? "DEV" : getManifestVersion();
+        return Optional.ofNullable(getManifestVersion()).orElse("DEV");
     }
 
     // Private /////////////////////////////////////////////////////////////////
@@ -94,14 +96,18 @@ public class Banner {
         return this.getClass().getPackage().getImplementationVersion();
     }
 
-    private Path getURIBannerFile() {
-        return Optional.ofNullable(getBannerURL()).map((URL url) -> {
-            try {
-                return url.toURI();
-            } catch (URISyntaxException e) {
+    private Optional<Path> getURIBannerFile() {
+        return Optional.ofNullable(getBannerURL())
+                .map(this::toURI)
+                .map(Paths::get);
+    }
 
-            }
-        }).map();
+    private URI toURI(URL url) {
+        try {
+            return url.toURI();
+        } catch (URISyntaxException e) {
+            return null;
+        }
     }
 
     private URL getBannerURL() {
