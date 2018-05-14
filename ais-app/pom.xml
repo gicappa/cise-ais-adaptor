@@ -68,12 +68,6 @@
       <artifactId>cise-ais-tbs-source-adapter</artifactId>
     </dependency>
 
-    <!-- external dependencies -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

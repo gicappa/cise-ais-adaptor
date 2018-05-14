@@ -25,17 +25,11 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
 
-public class AppContext {
+public interface AppContext {
 
-    public Dispatcher makeDispatcher() {
-        return null;
-    }
+    Dispatcher makeDispatcher();
 
-    public AISNormalizer makeNormilizer() {
-        return null;
-    }
+    AISNormalizer makeNormalizer();
 
-    public AISSource makeSource() {
-        return null;
-    }
+    AISSource makeSource();
 }
