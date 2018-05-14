@@ -13,7 +13,7 @@
   <modules>
     <module>ais-app</module>
     <module>ais-domain</module>
-    <module>ais-tbs-source-adapter</module>
+    <module>ais-source-adapter</module>
     <module>ais-server-example</module>
     <module>ais-transport</module>
     <module>ais-assembly</module>
@@ -189,7 +189,7 @@
 
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-tbs-source-adapter</artifactId>
+        <artifactId>cise-ais-source-adapter</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
 

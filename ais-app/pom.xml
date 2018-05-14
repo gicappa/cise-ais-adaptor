@@ -65,7 +65,7 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-ais-tbs-source-adapter</artifactId>
+      <artifactId>cise-ais-source-adapter</artifactId>
     </dependency>
 
     <dependency>

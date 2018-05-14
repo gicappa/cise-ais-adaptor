@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>cise-ais-tbs-source-adapter</artifactId>
+  <artifactId>cise-ais-source-adapter</artifactId>
 
   <dependencies>
 
