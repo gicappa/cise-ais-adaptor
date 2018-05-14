@@ -17,6 +17,7 @@
     <module>ais-server-example</module>
     <module>ais-transport</module>
     <module>ais-assembly</module>
+    <module>ais-docs</module>
   </modules>
 
   <build>

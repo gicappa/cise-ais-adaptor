@@ -15,14 +15,12 @@ import java.security.cert.X509Certificate;
 @SuppressWarnings("unused")
 public class DefaultCertificateRegistry implements CertificateRegistry {
 
-
     private String privateJKSName;
     private String privateJKSPassword;
     private String privateKeyPassword;
     private String publicJKSName;
     private String publicJKSPassword;
     private String gatewayID;
-
 
     public DefaultCertificateRegistry(String gatewayID,
                                       String privateJKSName,
