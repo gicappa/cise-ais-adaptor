@@ -45,7 +45,7 @@ public class TestCiseWorker extends Thread {
             manageOutput(socket.getOutputStream());
             socket.shutdownOutput();
 
-        } catch (IOException /*| InterruptedException*/ e) {
+        } catch (IOException e) {
             throw new AISAdaptorException(e);
         }
     }
@@ -57,7 +57,19 @@ public class TestCiseWorker extends Thread {
     }
 
     private void manageInput(InputStream inputStream) throws IOException {
-        xmlMapper.fromXML(convertStreamToString(inputStream));
+        String xml = extractBody(convertStreamToString(inputStream));
+        System.out.println("***");
+        System.out.print(xml.charAt(0));
+        System.out.print(xml.charAt(1));
+        System.out.print(xml.charAt(2));
+        System.out.print(xml.charAt(3));
+        System.out.print(xml.charAt(4));
+        System.out.print(xml.charAt(5));
+
+        System.out.println("***");
+        xmlMapper.fromXML(xml);
+
+
     }
 
     private String buildResponse(String body) {
@@ -86,7 +98,7 @@ public class TestCiseWorker extends Thread {
         return sb.toString();
     }
 
-    private synchronized String extractBody(String request) {
+    private String extractBody(String request) {
         String[] lines = request.split(System.getProperty("line.separator"));
         StringBuffer sbuf = new StringBuffer();
         boolean isHeader = true;
