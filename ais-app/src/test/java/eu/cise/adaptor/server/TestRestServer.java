@@ -36,16 +36,17 @@ public class TestRestServer implements Runnable {
     public void run() {
         ExecutorService executors = Executors.newFixedThreadPool(workerThreadNum);
 
-        System.out.println("*** AIS File Streamer Server v1.0");
+        System.out.println("Test HTTP Server Started");
+
         try (ServerSocket listener = new ServerSocket(port)) {
-            System.out.println("* Listening for new client on port: " + port);
+            System.out.println("Listening for new client on port: " + port);
 
             while (shouldRun.get()) {
-                invocationNum.getAndIncrement();
                 executors.execute(new TestCiseWorker(listener.accept()));
+                invocationNum.getAndIncrement();
             }
         } catch (IOException /*| InterruptedException*/ e) {
-            e.printStackTrace();
+            System.out.println("Interrupted thread [" + e.getMessage() + "]");
             executors.shutdownNow();
             Thread.currentThread().interrupt();
         }
