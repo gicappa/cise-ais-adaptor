@@ -77,7 +77,7 @@ public class JerseyRestClient implements RestClient {
         try {
             return function.apply(address);
         } catch (Throwable t) {
-            throw new AISAdaptorException("Error while contacting address=" + address + "|");
+            throw new AISAdaptorException("Error while contacting address|" + address, t);
         }
     }
 

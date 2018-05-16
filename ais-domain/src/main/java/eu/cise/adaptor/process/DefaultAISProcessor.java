@@ -6,6 +6,8 @@ import eu.cise.adaptor.dispatch.DispatchResult;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.translate.AISTranslator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +22,7 @@ public class DefaultAISProcessor implements AISProcessor {
     private final Dispatcher dispatcher;
     private final AISAdaptorConfig config;
     private final ExecutorService pool;
+    private final Logger logger = LoggerFactory.getLogger("ais-processor");
 
     public DefaultAISProcessor(AISTranslator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
         this.translator = translator;
@@ -44,11 +47,11 @@ public class DefaultAISProcessor implements AISProcessor {
             if (!result.isOK())
                 System.out.println(result.getResult());
 
-            Thread.sleep(100);
+//            Thread.sleep(100);// parametrize
         } catch (InterruptedException e) {
             throw new AISAdaptorException(e);
-        } catch ( ExecutionException e1) {
-            System.err.println(e1.getMessage());
+        } catch (ExecutionException ee) {
+            logger.debug("error", ee);
         }
     }
 }

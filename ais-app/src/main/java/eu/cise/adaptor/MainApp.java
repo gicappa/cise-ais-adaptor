@@ -28,6 +28,7 @@ public class MainApp implements Runnable {
             CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
 
             new MainApp(config).run();
+
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
 
