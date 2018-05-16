@@ -7,26 +7,34 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class EndToEndConversionTest {
 
     private CertificateConfig config;
+    private Thread threadMainApp;
     private TestRestServer testRestServer;
-    private MainApp app;
 
     @Before
     public void before() {
         config = ConfigFactory.create(CertificateConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
-        app = new MainApp(config);
+        threadMainApp = new Thread(new MainApp(config));
     }
 
     @Test
     public void it_deserialize_a_message_from_a_file() {
-        app.run();
+        try {
+            threadMainApp.start();
 
-        assertEquals(96, testRestServer.countInvocations());
+            threadMainApp.join(30000);
+
+            assertEquals(96, testRestServer.countInvocations());
+        } catch (InterruptedException e) {
+            testRestServer.shutdown();
+            fail("An exception occurred");
+        }
     }
 
     @After
