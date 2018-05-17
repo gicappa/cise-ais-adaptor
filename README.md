@@ -117,3 +117,5 @@ our implementation only support four of them.
 * Document how to handle certificates and where to put them.
 * Create a test example 
 * Create a support for environments (dev, test, prod)
+* Adding a logger class in the domain
+* Explaining in the documentation why there are messages of two types (AISMsg and AISMessage)

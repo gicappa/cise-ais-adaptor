@@ -8,13 +8,11 @@ import eu.eucise.helpers.AckBuilder;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Date;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static eu.cise.servicemodel.v1.message.InformationSecurityLevelType.NON_CLASSIFIED;
 import static eu.cise.servicemodel.v1.message.InformationSensitivityType.GREEN;
@@ -27,24 +25,26 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
  * data from the classpath and that will stream on the TCP/IP socket connection
  * passed from the server the data coming from the file.
  */
-public class TestCiseWorker extends Thread {
+public class TestCiseWorker implements Runnable {
 
     private final Socket socket;
+    private final Consumer<String> requestConsumer;
     private final XmlMapper xmlMapper;
 
-    public TestCiseWorker(Socket socket) {
+    public TestCiseWorker(Socket socket, Consumer<String> requestConsumer) {
         this.socket = socket;
+        this.requestConsumer = requestConsumer;
         this.xmlMapper = new DefaultXmlMapper();
+
     }
 
     @Override
     public void run() {
         try {
             manageInput(socket.getInputStream());
-            socket.shutdownInput();
             manageOutput(socket.getOutputStream());
+            socket.shutdownInput();
             socket.shutdownOutput();
-
         } catch (IOException e) {
             throw new AISAdaptorException(e);
         }
@@ -56,8 +56,8 @@ public class TestCiseWorker extends Thread {
         out.flush();
     }
 
-    private void manageInput(InputStream inputStream) throws IOException {
-        xmlMapper.fromXML(convertStreamToString(inputStream));
+    private void manageInput(InputStream inputStream) {
+        requestConsumer.accept(convertStreamToString(inputStream));
     }
 
     private String buildResponse(String body) {
@@ -76,28 +76,28 @@ public class TestCiseWorker extends Thread {
         return xmlMapper.toXML(buildAck().build());
     }
 
-    private String convertStreamToString(InputStream is) throws IOException {
-        StringBuffer sb = new StringBuffer();
+    private String convertStreamToString(InputStream is) {
 
-        while (is.available() > 0) {
-            sb.append((char) is.read());
-        }
-
-        return sb.toString();
-    }
-
-    private synchronized String extractBody(String request) {
-        String[] lines = request.split(System.getProperty("line.separator"));
-        StringBuffer sbuf = new StringBuffer();
-        boolean isHeader = true;
-        for (int i = 0; i < lines.length; i++) {
-            if (isHeader && lines[i].isEmpty()) {
-                isHeader = false;
-                continue;
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            int contentLength = -1;
+            while (!(line = reader.readLine()).isEmpty()) {
+                if (line.indexOf("Content-Length: ") > -1) {
+                    contentLength = Integer.valueOf(line.substring("Content-Length: ".length()));
+                }
             }
-            sbuf.append(lines[i]);
+
+            if (contentLength == -1) {
+                throw new AISAdaptorException("No HTTP Header 'Content-Length' specified while it's mandatory");
+            }
+
+            char[] body = new char[contentLength];
+            reader.read(body, 0, contentLength);
+            return new String(body);
+        } catch (IOException e) {
+            throw new AISAdaptorException(e);
         }
-        return sbuf.toString();
     }
 
     private AckBuilder buildAck() {

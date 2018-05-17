@@ -8,13 +8,13 @@ import org.aeonbits.owner.ConfigFactory;
 public class MainApp implements Runnable {
 
     private final Banner banner;
-    private final MainAISApp aisApp;
+    private final AISApp aisApp;
     private final DefaultAppContext ctx;
 
     public MainApp(CertificateConfig config) {
         ctx = new DefaultAppContext(config);
         banner = new Banner();
-        aisApp = new MainAISApp(ctx.makeSource(), ctx.makeNormalizer(), ctx.makeDispatcher());
+        aisApp = new AISApp(ctx.makeSource(), ctx.makeNormalizer(), ctx.makeDispatcher());
     }
 
     @Override
