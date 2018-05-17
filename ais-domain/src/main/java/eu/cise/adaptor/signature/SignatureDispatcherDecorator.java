@@ -1,4 +1,5 @@
 package eu.cise.adaptor.signature;
+
 import eu.cise.adaptor.dispatch.DispatchResult;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;

@@ -7,9 +7,7 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
 public interface CertificateRegistry {
-
    Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForCurrentGateway();
-
+   Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForAlias(String keyAlias);
    X509Certificate findPublicCertificate(String certIdentifierInJKS);
-
 }

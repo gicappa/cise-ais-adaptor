@@ -213,12 +213,6 @@
 
       <!-- EUCISE dependencies -->
       <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>eucise-com-signature-lib</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-
-      <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
         <version>1.5.3.6-SNAPSHOT</version>

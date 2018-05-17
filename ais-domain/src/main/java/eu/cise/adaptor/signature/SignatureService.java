@@ -1,8 +1,8 @@
-
 package eu.cise.adaptor.signature;
 
 import eu.cise.servicemodel.v1.message.Message;
 
+@SuppressWarnings("unused")
 public interface SignatureService {
     /**
      * This method will validate the signature of an incoming message against
