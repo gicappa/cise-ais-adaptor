@@ -10,7 +10,7 @@
   </formats>
   <files>
     <file>
-      <source>${project.parent.basedir}/ais-app/src/test/java/example.ais.stream.txt</source>
+      <source>${project.parent.basedir}/ais-app/src/test/resources/example.ais.stream.txt</source>
       <outputDirectory>/conf</outputDirectory>
     </file>
   </files>
