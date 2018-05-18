@@ -26,7 +26,7 @@ public class DefaultCertificateRegistry {
     }
 
     public PrivateKey findPrivateKey() {
-        return findPrivateKey(myPrivateKey.keyAlias());
+        return findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
     }
 
     public X509Certificate findPrivateCertificate() {
@@ -37,8 +37,8 @@ public class DefaultCertificateRegistry {
         return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0]);
     }
 
-    public PrivateKey findPrivateKey(String keyAlias) {
-        return safe(() -> ksPrivate.findPrivateKey(keyAlias, myPrivateKey.password()));
+    public PrivateKey findPrivateKey(String keyAlias, String password) {
+        return safe(() -> ksPrivate.findPrivateKey(keyAlias, password));
     }
 
     public X509Certificate findPublicCertificate(String certificateAlias) {

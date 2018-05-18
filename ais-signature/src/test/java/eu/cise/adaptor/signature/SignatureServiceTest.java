@@ -4,10 +4,10 @@ import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
-import eu.cise.servicemodel.v1.message.*;
+import eu.cise.servicemodel.v1.message.Message;
+import eu.cise.servicemodel.v1.message.PullResponse;
+import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import eu.cise.servicemodel.v1.service.Service;
-import eu.cise.servicemodel.v1.service.ServiceOperationType;
-import eu.eucise.helpers.DateHelper;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.DefaultXmlValidator;
 import eu.eucise.xml.XmlMapper;
@@ -20,13 +20,30 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.UUID;
 
+import static eu.cise.servicemodel.v1.message.InformationSecurityLevelType.NON_CLASSIFIED;
+import static eu.cise.servicemodel.v1.message.InformationSensitivityType.AMBER;
+import static eu.cise.servicemodel.v1.message.PriorityType.HIGH;
+import static eu.cise.servicemodel.v1.message.PurposeType.BORDER_MONITORING;
+import static eu.cise.servicemodel.v1.message.ResponseCodeType.SUCCESS;
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.PULL;
+import static eu.eucise.helpers.DateHelper.toXMLGregorianCalendar;
+import static eu.eucise.helpers.PullResponseBuilder.newPullResponse;
+import static eu.eucise.helpers.ServiceBuilder.newService;
+
 
 public class SignatureServiceTest {
-    public SignatureService sigService;
+
+    private SignatureService signature;
+    private XmlMapper xmlMapper;
+    private XmlValidator xmlValidator;
+    private Message msg;
 
     @Before
-    public void setupTest() {
-        sigService = new DefaultSignatureService(
+    public void before() {
+        xmlMapper = new DefaultXmlMapper();
+        xmlValidator = new DefaultXmlValidator();
+        msg = buildMessage();
+        signature = new DefaultSignatureService(
                 new DefaultCertificateRegistry(new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
                         new KeyStoreInfo("cisePrivate.jks", "cisecise"),
                         new KeyStoreInfo("cisePublic.jks", "cisecise")));
@@ -34,48 +51,38 @@ public class SignatureServiceTest {
 
     @Test
     public void when_aaa() {
-        SignatureHelper sh = new SignatureHelper();
-        XmlMapper xmlMapper = new DefaultXmlMapper();
-        XmlValidator xmlValidator = new DefaultXmlValidator();
-
-        Message msg = buildMessage();
-
-        Message signedMsg = sh.sign("eu.cise.es.gc-ls01", msg);
-
+        Message signedMsg = signature.sign(msg);
         String messageXML = xmlMapper.toXML(signedMsg);
 
         xmlValidator.validate(messageXML);
-
         signedMsg = xmlMapper.fromXML(messageXML);
 
-        sigService.verifySignature(signedMsg);
+        signature.verifySignature(signedMsg);
     }
 
     @Test
-    public void test_signing_and_verification_of_signature() throws Exception {
-        long time_1 = System.currentTimeMillis();
-        Message msg = buildMessage();
-        Message signedMsg = sigService.sign(msg);
-        sigService.verifySignature(signedMsg);
-        long time_2 = System.currentTimeMillis();
-        System.out.println("Operation took " + (time_2 - time_1) + "ms");
+    public void test_signing_and_verification_of_signature() {
+        long startTime = System.currentTimeMillis();
+        Message signedMsg = signature.sign(msg);
+        signature.verifySignature(signedMsg);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Operation took " + (endTime - startTime) + "ms");
     }
 
     @Test
     public void test_verification_of_signature_on_LC_Message() throws Exception {
         String messageXML = new String(Files.readAllBytes(Paths.get(getClass().getResource("/SignedPushVessels.xml").toURI())), "UTF-8");
         Message signedMsg = new DefaultXmlMapper.PrettyNotValidating().fromXML(messageXML);
-        sigService.verifySignature(signedMsg);
+        signature.verifySignature(signedMsg);
     }
 
 
     @Test(expected = AISAdaptorException.class)
     public void test_verification_fails_if_message_was_tampered_with() {
         long time_1 = System.currentTimeMillis();
-        Message msg = buildMessage();
-        Message signedMsg = sigService.sign(msg);
+        Message signedMsg = signature.sign(msg);
         signedMsg.setMessageID("lulu");
-        sigService.verifySignature(signedMsg);
+        signature.verifySignature(signedMsg);
         long time_2 = System.currentTimeMillis();
         System.out.println("Operation took " + (time_2 - time_1) + "ms");
     }
@@ -84,43 +91,38 @@ public class SignatureServiceTest {
     public void test_verification_fails_if_payload_was_tampered_with() {
         long time_1 = System.currentTimeMillis();
         Message msg = buildMessage();
-        Message signedMsg = sigService.sign(msg);
+        Message signedMsg = signature.sign(msg);
         ((Vessel) ((XmlEntityPayload) signedMsg.getPayload()).getAnies().get(0)).setDeadweight(88);
-        sigService.verifySignature(signedMsg);
+        signature.verifySignature(signedMsg);
         long time_2 = System.currentTimeMillis();
         System.out.println("Operation took " + (time_2 - time_1) + "ms");
     }
 
 
     private Message buildMessage() {
-        PullResponse msg = new PullResponse();
         String uuid = UUID.randomUUID().toString();
-        msg.setContextID(uuid);
-        msg.setCorrelationID(uuid);
-        msg.setCreationDateTime(DateHelper.toXMLGregorianCalendar(new Date()));
-        msg.setMessageID(uuid);
-        msg.setPriority(PriorityType.HIGH);
-        msg.setRequiresAck(false);
-        Service sender = new Service();
-        sender.setServiceID("es.gc-ls01.maritimesafetyincident.pullresponse.gcs04");
-        sender.setServiceOperation(ServiceOperationType.PULL);
-        msg.setSender(sender);
-        msg.setResultCode(ResponseCodeType.SUCCESS);
+        return newPullResponse()
+                .contextId(uuid)
+                .correlationId(uuid)
+                .creationDateTime(new Date())
+                .id(uuid)
+                .priority(HIGH)
+                .isRequiresAck(false)
+                .sender(newService().id("es.gc-ls01.maritimesafetyincident.pullresponse.gcs04")
+                        .operation(PULL))
+                .resultCode(SUCCESS)
+                .recipient(newService().id("myService2")
+                        .operation(PULL))
+                .addEntity(buildVessel())
+                .informationSecurityLevel(NON_CLASSIFIED)
+                .informationSensitivity(AMBER)
+                .isPersonalData(false)
+                .purpose(BORDER_MONITORING)
+                .retentionPeriod(new Date())
+                .build();
+    }
 
-        Service receiver = new Service();
-        receiver.setServiceID("myService2");
-        receiver.setServiceOperation(ServiceOperationType.PULL);
-        msg.setRecipient(receiver);
-
-        XmlEntityPayload payload = new XmlEntityPayload();
-        payload.setInformationSecurityLevel(InformationSecurityLevelType.NON_CLASSIFIED);
-        payload.setInformationSensitivity(InformationSensitivityType.AMBER);
-        payload.setIsPersonalData(false);
-        payload.setPurpose(PurposeType.BORDER_MONITORING);
-        payload.setRetentionPeriod(DateHelper.toXMLGregorianCalendar(new Date()));
-        payload.setEnsureEncryption(false);
-
-
+    private Vessel buildVessel() {
         Vessel v = new Vessel();
         v.getNames().add("The Mother Queen");
         v.setDeadweight(30);
@@ -132,11 +134,7 @@ public class SignatureServiceTest {
         v.setNavigationalStatus(NavigationalStatusType.ENGAGED_IN_FISHING);
         v.getShipTypes().add(VesselType.FISHING_VESSEL);
         v.setYearBuilt(1978);
-
-        payload.getAnies().add(v);
-
-        msg.setPayload(payload);
-        return msg;
+        return v;
     }
 
 }
