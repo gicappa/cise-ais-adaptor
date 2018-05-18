@@ -4,82 +4,61 @@ import eu.cise.adaptor.exceptions.AISAdaptorException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static eu.cise.adaptor.signature.ExceptionHandler.safe;
+
 @SuppressWarnings("unused")
 public class DefaultCertificateRegistry implements CertificateRegistry {
 
     private final KeyStoreInfo ksPrivate;
     private final KeyStoreInfo ksPublic;
-    private String privateJKSName;
-    private String privateJKSPassword;
-    private String privateKeyPassword;
-    private String publicJKSName;
-    private String publicJKSPassword;
-    private String gatewayID;
+    private final PrivateKeyInfo myPrivateKey;
     private Map<String, X509Certificate> publicCertMap = new ConcurrentHashMap<>();
 
 
-    public DefaultCertificateRegistry(PrivateKeyInfo privateKey,
+    public DefaultCertificateRegistry(PrivateKeyInfo myPrivateKey,
                                       KeyStoreInfo ksPrivate,
                                       KeyStoreInfo ksPublic) {
 
-        this.gatewayID = privateKey.id();
-        this.privateKeyPassword = privateKey.password();
+        this.myPrivateKey = myPrivateKey;
         this.ksPrivate = ksPrivate;
         this.ksPublic = ksPublic;
-
     }
 
     @Override
     public Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForCurrentGateway() {
-        String keyAliasForCurrentGateway = getKeyAliasForCurrentGateway();
-        return findPrivateKeyAndCertificateForAlias(keyAliasForCurrentGateway);
+        return findPrivateKeyAndCertificateForAlias(myPrivateKey.keyAlias());
     }
 
     @Override
     public Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForAlias(String keyAlias) {
-        try {
-            KeyStore jks = getKeyStore(ksPrivate.name(), ksPrivate.password());
-            Certificate[] certificateChain = jks.getCertificateChain(keyAlias);
-            PrivateKey privateKey = (PrivateKey) jks.getKey(keyAlias, privateKeyPassword.toCharArray());
-            return new ImmutablePair<>(new Certificate[]{certificateChain[0]}, privateKey);
-        } catch (GeneralSecurityException | IOException e) {
-            throw new AISAdaptorException(e);
-        }
+        return new ImmutablePair<>(findCertificate(keyAlias), findPrivateKey(keyAlias));
     }
 
-    private KeyStore getKeyStore(String jksName, String keyStorePw) throws IOException, GeneralSecurityException {
-        KeyStore jks = KeyStore.getInstance("JKS");
-        jks.load(this.getClass().getResourceAsStream("/" + jksName), keyStorePw.toCharArray());
-        return jks;
+    public Certificate[] findCertificate(String keyAlias) {
+        return safe(() -> ksPrivate.findCertificateChain(keyAlias));
     }
 
-    private String getKeyAliasForCurrentGateway() {
-        return gatewayID + ".key";
+    public PrivateKey findPrivateKey(String keyAlias) {
+        return safe(() -> ksPrivate.findPrivateKey(keyAlias, myPrivateKey.password()));
     }
 
     @Override
-    public X509Certificate findPublicCertificate(String certAliasInJKS) {
-        try {
-            if (publicCertMap.containsKey(certAliasInJKS)) {
-                return publicCertMap.get(certAliasInJKS);
-            } else {
-                KeyStore keystore = getKeyStore(ksPublic.name(), ksPublic.password());
-                X509Certificate cert = (X509Certificate) keystore.getCertificate(certAliasInJKS);
-                publicCertMap.put(certAliasInJKS, cert);
-                return cert;
+    public X509Certificate findPublicCertificate(String certificateAlias) {
+        return safe(() -> {
+            if (!publicCertMap.containsKey(certificateAlias)) {
+                publicCertMap.put(certificateAlias, ksPublic.findPublicCertificate(certificateAlias));
             }
-        } catch (GeneralSecurityException | IOException e) {
-            throw new AISAdaptorException(e);
-        }
+
+            return publicCertMap.get(certificateAlias);
+
+        });
     }
 
 }

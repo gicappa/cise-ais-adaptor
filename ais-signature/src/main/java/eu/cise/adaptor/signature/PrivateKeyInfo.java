@@ -10,8 +10,8 @@ public class PrivateKeyInfo {
         this.password = password;
     }
 
-    public String id() {
-        return id;
+    public String keyAlias() {
+        return id + ".key";
     }
 
     public String password() {

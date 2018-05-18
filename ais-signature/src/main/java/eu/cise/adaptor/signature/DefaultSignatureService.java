@@ -38,8 +38,6 @@ public class DefaultSignatureService implements SignatureService {
         Pair<Certificate[], PrivateKey> certPair = certificateRegistry.findPrivateKeyAndCertificateForCurrentGateway();
         signatureDelegate = new SignatureDelegate((X509Certificate) certPair.getKey()[0], certPair.getValue());
         initCertificateExtractionXPath();
-
-
     }
 
     private void initCertificateExtractionXPath() {
