@@ -1,46 +1,44 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
-import eu.cise.adaptor.normalize.AISNormalizer;
-import jrc.cise.gw.sending.Dispatcher;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.aeonbits.owner.ConfigFactory;
 
 /**
- * Application entry point
+ * The MainApp class is the application entry point. It accepts the
  */
-public class MainApp {
+public class MainApp implements Runnable {
 
-    public static final String VERSION = "1.0";
     private final Banner banner;
-    private final MainAISApp aisApp;
-    private final Dispatcher dispatcher;
-    private final AISNormalizer aisNormalizer;
-    private final AISSource aisSource;
+    private final AISApp aisApp;
+    private final DefaultAppContext ctx;
 
-    public MainApp() {
+    public MainApp(CertificateConfig config) {
+        ctx = new DefaultAppContext(config);
         banner = new Banner();
-        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("app-context.xml");
-        dispatcher = appContext.getBean(Dispatcher.class);
-        aisNormalizer = appContext.getBean(AISNormalizer.class);
-        aisSource = appContext.getBean(AISSource.class);
+        aisApp = new AISApp(ctx.makeSource(), ctx.makeNormalizer(), ctx.makeDispatcher());
+    }
 
-        aisApp = new MainAISApp(aisSource, aisNormalizer, dispatcher);
+    @Override
+    public void run() {
+        banner.print();
+        aisApp.run();
     }
 
     public static void main(String[] args) {
-        new MainApp().run();
-    }
-
-    public void run() {
         try {
-            banner.print(VERSION);
+            CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
 
-            aisApp.run();
+            new MainApp(config).run();
 
         } catch (Throwable e) {
-            throw new AISAdaptorException(e);
-        }
+            System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
 
+            if (optionDebug(args))
+                e.printStackTrace();
+        }
+    }
+
+    private static boolean optionDebug(String[] args) {
+        return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
     }
 
 }

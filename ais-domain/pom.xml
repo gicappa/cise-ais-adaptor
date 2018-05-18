@@ -13,6 +13,8 @@
   <artifactId>cise-ais-domain</artifactId>
 
   <dependencies>
+
+    <!-- internal dependencies -->
     <dependency>
       <artifactId>cise-data-model</artifactId>
       <groupId>eu.europa.ec.jrc.marex</groupId>
@@ -30,33 +32,20 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-gateway-domain</artifactId>
-    </dependency>
-
-    <!-- EUCISE dependencies -->
-    <dependency>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>eucise-com-signature-lib</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-gateway-transport</artifactId>
-    </dependency>
-
-    <dependency>
-      <artifactId>guava</artifactId>
-      <groupId>com.google.guava</groupId>
-    </dependency>
-
+    <!-- external dependencies -->
     <dependency>
       <groupId>org.aeonbits.owner</groupId>
-      <artifactId>owner-java8</artifactId>
+      <artifactId>owner</artifactId>
     </dependency>
 
+    <!-- test dependencies -->
     <dependency>
-      <groupId>dk.tbsalling</groupId>
-      <artifactId>aismessages</artifactId>
+      <groupId>com.greghaskins</groupId>
+      <artifactId>spectrum</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -68,17 +57,6 @@
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.npathai</groupId>
-      <artifactId>hamcrest-optional</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.greghaskins</groupId>
-      <artifactId>spectrum</artifactId>
       <scope>test</scope>
     </dependency>
 

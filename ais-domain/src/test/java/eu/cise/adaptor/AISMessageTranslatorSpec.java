@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
+import static com.greghaskins.spectrum.Spectrum.fit;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.helpers.Utils.extractPayload;
 import static java.util.Arrays.asList;
