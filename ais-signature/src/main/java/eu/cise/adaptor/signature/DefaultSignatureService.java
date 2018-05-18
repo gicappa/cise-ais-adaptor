@@ -2,7 +2,6 @@ package eu.cise.adaptor.signature;
 
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -15,8 +14,10 @@ import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.*;
-import java.security.cert.Certificate;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -26,17 +27,16 @@ public class DefaultSignatureService implements SignatureService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CertificateRegistry certificateRegistry;
+    private final DefaultCertificateRegistry registry;
     private final SignatureDelegate signatureDelegate;
     private XPathExpression certXPath;
 
 
-    public DefaultSignatureService(CertificateRegistry certificateRegistry) {
+    public DefaultSignatureService(DefaultCertificateRegistry registry) {
 //      initJavaUtilLogging();  this should be used if unexpected behaviour appears in the XML SIG
 
-        this.certificateRegistry = certificateRegistry;
-        Pair<Certificate[], PrivateKey> certPair = certificateRegistry.findPrivateKeyAndCertificateForCurrentGateway();
-        signatureDelegate = new SignatureDelegate((X509Certificate) certPair.getKey()[0], certPair.getValue());
+        this.registry = registry;
+        signatureDelegate = new SignatureDelegate(registry.findPrivateCertificate(), registry.findPrivateKey());
         initCertificateExtractionXPath();
     }
 
@@ -84,7 +84,7 @@ public class DefaultSignatureService implements SignatureService {
                     .replace("eu.cise.", "").replace(' ', '-')
                     .toLowerCase() + ".cert";
 
-            X509Certificate caCert = this.certificateRegistry.findPublicCertificate(issuerCertNameInJKS);
+            X509Certificate caCert = this.registry.findPublicCertificate(issuerCertNameInJKS);
 
             certificate.verify(caCert.getPublicKey());
         } catch (XPathExpressionException | IOException | CertificateException | NoSuchAlgorithmException |

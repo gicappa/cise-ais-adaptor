@@ -9,7 +9,7 @@ import java.security.cert.X509Certificate;
 
 public class SignatureHelper {
 
-    private static final CertificateRegistry certificateRegistry =
+    private static final DefaultCertificateRegistry certificateRegistry =
             new DefaultCertificateRegistry(
                     new PrivateKeyInfo("gw01", "cisecise"),
                     new KeyStoreInfo("cisePrivate.jks", "cisecise"),
@@ -17,8 +17,13 @@ public class SignatureHelper {
 
 
     public Message sign(String signerCISEID, Message message) {
-        Pair<Certificate[], PrivateKey> pair = certificateRegistry.findPrivateKeyAndCertificateForAlias(signerCISEID + ".key");
-        SignatureDelegate sigDel = new SignatureDelegate((X509Certificate) (pair.getKey()[0]), pair.getValue());
+        X509Certificate certificate = certificateRegistry.findPrivateCertificate(keyAlias(signerCISEID));
+        PrivateKey privateKey = certificateRegistry.findPrivateKey(keyAlias(signerCISEID));
+        SignatureDelegate sigDel = new SignatureDelegate(certificate, privateKey);
         return sigDel.signMessageWithDelegatesPrivateKey(message);
+    }
+
+    private String keyAlias(String signerCISEID) {
+        return signerCISEID + ".key";
     }
 }

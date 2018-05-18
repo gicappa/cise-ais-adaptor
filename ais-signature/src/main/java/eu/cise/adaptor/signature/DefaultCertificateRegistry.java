@@ -1,12 +1,6 @@
 package eu.cise.adaptor.signature;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static eu.cise.adaptor.signature.ExceptionHandler.safe;
 
 @SuppressWarnings("unused")
-public class DefaultCertificateRegistry implements CertificateRegistry {
+public class DefaultCertificateRegistry {
 
     private final KeyStoreInfo ksPrivate;
     private final KeyStoreInfo ksPublic;
@@ -31,25 +25,22 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
         this.ksPublic = ksPublic;
     }
 
-    @Override
-    public Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForCurrentGateway() {
-        return findPrivateKeyAndCertificateForAlias(myPrivateKey.keyAlias());
+    public PrivateKey findPrivateKey() {
+        return findPrivateKey(myPrivateKey.keyAlias());
     }
 
-    @Override
-    public Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForAlias(String keyAlias) {
-        return new ImmutablePair<>(findCertificate(keyAlias), findPrivateKey(keyAlias));
+    public X509Certificate findPrivateCertificate() {
+        return findPrivateCertificate(myPrivateKey.keyAlias());
     }
 
-    public Certificate[] findCertificate(String keyAlias) {
-        return safe(() -> ksPrivate.findCertificateChain(keyAlias));
+    public X509Certificate findPrivateCertificate(String keyAlias) {
+        return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0]);
     }
 
     public PrivateKey findPrivateKey(String keyAlias) {
         return safe(() -> ksPrivate.findPrivateKey(keyAlias, myPrivateKey.password()));
     }
 
-    @Override
     public X509Certificate findPublicCertificate(String certificateAlias) {
         return safe(() -> {
             if (!publicCertMap.containsKey(certificateAlias)) {
