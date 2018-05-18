@@ -2,10 +2,7 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.signature.DefaultCertificateRegistry;
-import eu.cise.adaptor.signature.DefaultSignatureService;
-import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
-import eu.cise.adaptor.signature.SignatureService;
+import eu.cise.adaptor.signature.*;
 import eu.cise.adaptor.tbs.FileAISSource;
 import eu.cise.adaptor.tbs.TbsAISNormalizer;
 
@@ -33,17 +30,21 @@ public class DefaultAppContext implements AppContext {
     }
 
     private SignatureService makeSignatureService() {
-        return new DefaultSignatureService(makeCertificateRegistry());
+        return new DefaultSignatureService(
+                new PrivateKeyInfo(
+                        config.getGatewayId(),
+                        config.getPrivateKeyPassword()),
+                makeCertificateRegistry());
     }
 
     private DefaultCertificateRegistry makeCertificateRegistry() {
         return new DefaultCertificateRegistry(
-                config.getGatewayId(),
-                config.getPrivateJKSName(),
-                config.getPrivateJKSPassword(),
-                config.getPrivateKeyPassword(),
-                config.getPublicJKSName(),
-                config.getPublicJKSPassword());
+                new KeyStoreInfo(
+                        config.getPrivateJKSName(),
+                        config.getPrivateJKSPassword()),
+                new KeyStoreInfo(
+                        config.getPublicJKSName(),
+                        config.getPublicJKSPassword()));
     }
 
     private RestDispatcher makeRestDispatcher() {

@@ -2,8 +2,6 @@ package eu.cise.adaptor.signature;
 
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import sun.security.x509.X500Name;
 
@@ -13,7 +11,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -21,55 +18,40 @@ import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.logging.LogManager;
+
+import static eu.cise.adaptor.signature.ExceptionHandler.safe;
 
 public class DefaultSignatureService implements SignatureService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private final DefaultCertificateRegistry registry;
-    private final SignatureDelegate signatureDelegate;
+    public static final String X_PATH_TO_CERTIFICATE = "//*[local-name() = 'KeyInfo']/*[local-name() = 'X509Data']/*[local-name() = 'X509Certificate']";
+    private final CertificateRegistry registry;
+    private final SignatureDelegate signature;
     private XPathExpression certXPath;
 
-
-    public DefaultSignatureService(DefaultCertificateRegistry registry) {
-//      initJavaUtilLogging();  this should be used if unexpected behaviour appears in the XML SIG
-
+    public DefaultSignatureService(PrivateKeyInfo myPrivateKey, CertificateRegistry registry) {
         this.registry = registry;
-        signatureDelegate = new SignatureDelegate(registry.findPrivateCertificate(), registry.findPrivateKey());
-        initCertificateExtractionXPath();
+
+        signature = new SignatureDelegate(
+                registry.findPrivateCertificate(myPrivateKey.keyAlias()),
+                registry.findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password()));
+
+        certXPath = compileXPath(X_PATH_TO_CERTIFICATE);
     }
 
-    private void initCertificateExtractionXPath() {
-        try {
-            certXPath = XPathFactory.newInstance().newXPath().compile("//*[local-name() = 'KeyInfo']/*[local-name() = 'X509Data']/*[local-name() = 'X509Certificate']");
-        } catch (XPathExpressionException e) {
-            throw new AISAdaptorException(e);
-        }
-    }
-
-
-    private void initJavaUtilLogging() {
-        InputStream configFile = this.getClass().getResourceAsStream("/logging.properties");
-        if (configFile != null) {
-            try {
-                LogManager.getLogManager().readConfiguration(configFile);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private XPathExpression compileXPath(String xPathCertificate) {
+        return safe(() -> XPathFactory.newInstance().newXPath().compile(xPathCertificate));
     }
 
     @Override
-    public void verifySignature(Message message) {
-        signatureDelegate.verifySignatureWithMessageCertificate(message);
+    public void verify(Message message) {
+        signature.verifySignatureWithMessageCertificate(message);
         verifyCertificateAgainstCACert(message);
     }
 
 
     @Override
     public Message sign(Message message) {
-        return signatureDelegate.signMessageWithDelegatesPrivateKey(message);
+        return signature.signMessageWithDelegatesPrivateKey(message);
     }
 
     private void verifyCertificateAgainstCACert(Message message) {
@@ -84,7 +66,7 @@ public class DefaultSignatureService implements SignatureService {
                     .replace("eu.cise.", "").replace(' ', '-')
                     .toLowerCase() + ".cert";
 
-            X509Certificate caCert = this.registry.findPublicCertificate(issuerCertNameInJKS);
+            X509Certificate caCert = registry.findPublicCertificate(issuerCertNameInJKS);
 
             certificate.verify(caCert.getPublicKey());
         } catch (XPathExpressionException | IOException | CertificateException | NoSuchAlgorithmException |

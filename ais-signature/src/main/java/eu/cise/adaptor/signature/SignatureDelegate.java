@@ -37,7 +37,7 @@ public class SignatureDelegate {
     public SignatureDelegate(X509Certificate certificate, PrivateKey privateKey) {
         this.certificate = certificate;
         this.privateKey = privateKey;
-        signatureFactory = buildXMLSignatureFactory();
+        this.signatureFactory = buildXMLSignatureFactory();
     }
 
     public void verifySignatureWithMessageCertificate(Message message) {

@@ -8,39 +8,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import static eu.cise.adaptor.signature.ExceptionHandler.safe;
 
 @SuppressWarnings("unused")
-public class DefaultCertificateRegistry {
+public class DefaultCertificateRegistry implements CertificateRegistry {
 
     private final KeyStoreInfo ksPrivate;
     private final KeyStoreInfo ksPublic;
-    private final PrivateKeyInfo myPrivateKey;
     private Map<String, X509Certificate> publicCertMap = new ConcurrentHashMap<>();
 
 
-    public DefaultCertificateRegistry(PrivateKeyInfo myPrivateKey,
-                                      KeyStoreInfo ksPrivate,
-                                      KeyStoreInfo ksPublic) {
-
-        this.myPrivateKey = myPrivateKey;
+    public DefaultCertificateRegistry(KeyStoreInfo ksPrivate, KeyStoreInfo ksPublic) {
         this.ksPrivate = ksPrivate;
         this.ksPublic = ksPublic;
     }
 
-    public PrivateKey findPrivateKey() {
-        return findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
-    }
-
-    public X509Certificate findPrivateCertificate() {
-        return findPrivateCertificate(myPrivateKey.keyAlias());
-    }
-
-    public X509Certificate findPrivateCertificate(String keyAlias) {
-        return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0]);
-    }
-
+    @Override
     public PrivateKey findPrivateKey(String keyAlias, String password) {
         return safe(() -> ksPrivate.findPrivateKey(keyAlias, password));
     }
 
+    @Override
+    public X509Certificate findPrivateCertificate(String keyAlias) {
+        return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0]);
+    }
+
+    @Override
     public X509Certificate findPublicCertificate(String certificateAlias) {
         return safe(() -> {
             if (!publicCertMap.containsKey(certificateAlias)) {
