@@ -40,19 +40,6 @@ public class SignatureDelegate {
         this.signatureFactory = buildXMLSignatureFactory();
     }
 
-    public void verifySignatureWithMessageCertificate(Message message) {
-        Document doc = noValidationMapper.toDOM(message);
-        verifySignatureForDocument(message.getMessageID(), doc);
-    }
-
-    public Message signMessageWithDelegatesPrivateKey(Message message) {
-        Document unsignedDoc = noValidationMapper.toDOM(message);
-        removeSignatureElementIfAny(unsignedDoc);
-        Document signedDoc = signDoc(unsignedDoc);
-        Message outMessage = noValidationMapper.fromDOM(signedDoc);
-        return outMessage;
-    }
-
     private XMLSignatureFactory buildXMLSignatureFactory() {
         try {
             return XMLSignatureFactory.getInstance("DOM", "XMLDSig");

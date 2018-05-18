@@ -2,15 +2,16 @@ package eu.cise.adaptor.signature;
 
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import sun.security.x509.X500Name;
 
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -20,6 +21,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import static eu.cise.adaptor.signature.ExceptionHandler.safe;
+import static javax.xml.xpath.XPathConstants.NODE;
 
 public class DefaultSignatureService implements SignatureService {
 
@@ -44,35 +46,76 @@ public class DefaultSignatureService implements SignatureService {
 
     @Override
     public void verify(Message message) {
-        signature.verifySignatureWithMessageCertificate(message);
         verifyCertificateAgainstCACert(message);
+        verifySignatureWithMessageCertificate(message);
     }
 
 
     @Override
     public Message sign(Message message) {
-        return signature.signMessageWithDelegatesPrivateKey(message);
+        return signMessageWithDelegatesPrivateKey(message);
+    }
+
+    public void verifySignatureWithMessageCertificate(Message message) {
+        Document doc = noValidationMapper.toDOM(message);
+        verifySignatureForDocument(message.getMessageID(), doc);
+    }
+
+    public Message signMessageWithDelegatesPrivateKey(Message message) {
+        Document unsignedDoc = noValidationMapper.toDOM(message);
+        removeSignatureElementIfAny(unsignedDoc);
+        Document signedDoc = signDoc(unsignedDoc);
+        Message outMessage = noValidationMapper.fromDOM(signedDoc);
+        return outMessage;
     }
 
     private void verifyCertificateAgainstCACert(Message message) {
         try {
-            Element certEl = (Element) certXPath.evaluate(message.getAny(), XPathConstants.NODE);
-            String certBase64 = certEl.getFirstChild().getNodeValue().replace("\n", "");
-            String certText = "-----BEGIN CERTIFICATE-----\n" + certBase64 + "\n-----END CERTIFICATE-----";
-            X509Certificate certificate = (X509Certificate)
-                    CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(certText.getBytes("UTF-8")));
 
-            String issuerCertNameInJKS = ((X500Name) certificate.getIssuerDN()).getOrganization()
-                    .replace("eu.cise.", "").replace(' ', '-')
-                    .toLowerCase() + ".cert";
+            X509Certificate certificate = parseBase64Certificate(
+                    addBeginEndToCertificate(
+                            removeCarriageReturn(
+                                    extractCertificateText(
+                                            getCertificateElement(message)))));
+
+            String issuerCertNameInJKS = extractIssuerNameFrom(certificate);
 
             X509Certificate caCert = registry.findPublicCertificate(issuerCertNameInJKS);
 
             certificate.verify(caCert.getPublicKey());
+
         } catch (XPathExpressionException | IOException | CertificateException | NoSuchAlgorithmException |
                 SignatureException | NoSuchProviderException | InvalidKeyException e) {
             throw new AISAdaptorException("Exception at certificate verification for message with ID {" + message.getMessageID() + "}", e);
         }
+    }
+
+    private String extractIssuerNameFrom(X509Certificate certificate) throws IOException {
+        return ((X500Name) certificate.getIssuerDN())
+                .getOrganization().replace("eu.cise.", "")
+                .replace(' ', '-')
+                .toLowerCase() + ".cert";
+    }
+
+    private X509Certificate parseBase64Certificate(String certText) throws CertificateException, UnsupportedEncodingException {
+        return (X509Certificate) CertificateFactory.getInstance("X.509")
+                .generateCertificate(new ByteArrayInputStream(certText.getBytes("UTF-8")));
+    }
+
+    private String removeCarriageReturn(String text) {
+        return text.replace("\n", "");
+    }
+
+    private String extractCertificateText(Element certificateElement) {
+        return certificateElement.getFirstChild().getNodeValue();
+    }
+
+    private Element getCertificateElement(Message message) throws XPathExpressionException {
+        return (Element) certXPath.evaluate(message.getAny(), NODE);
+    }
+
+    private String addBeginEndToCertificate(String certBase64) {
+        return "-----BEGIN CERTIFICATE-----\n" + certBase64 + "\n-----END CERTIFICATE-----";
     }
 
 }

@@ -13,7 +13,6 @@ import java.security.cert.X509Certificate;
 import java.util.Optional;
 
 public class CertificateKeySelector extends KeySelector {
-
     @Override
     public KeySelectorResult select(KeyInfo keyInfo,
                                     Purpose purpose,
