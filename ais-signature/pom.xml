@@ -20,48 +20,21 @@
       <artifactId>cise-ais-domain</artifactId>
     </dependency>
 
-    <!-- internal dependencies -->
-<!--
     <dependency>
-      <artifactId>cise-data-model</artifactId>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
 
     <dependency>
-      <artifactId>eucise-service-model</artifactId>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>1.7.25</version>
     </dependency>
 
     <dependency>
-      <artifactId>eucise-model-helpers</artifactId>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
     </dependency>
-
-    &lt;!&ndash; external dependencies &ndash;&gt;
-    <dependency>
-      <groupId>org.aeonbits.owner</groupId>
-      <artifactId>owner</artifactId>
-    </dependency>
-
-    &lt;!&ndash; test dependencies &ndash;&gt;
-    <dependency>
-      <groupId>com.greghaskins</groupId>
-      <artifactId>spectrum</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <scope>test</scope>
-    </dependency>
--->
-
   </dependencies>
 </project>

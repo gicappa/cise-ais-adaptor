@@ -16,9 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public class DefaultCertificateRegistry implements CertificateRegistry {
 
-
+    private final KeyStoreInfo ksPrivate;
+    private final KeyStoreInfo ksPublic;
     private String privateJKSName;
-    private String keyStorePassword;
+    private String privateJKSPassword;
     private String privateKeyPassword;
     private String publicJKSName;
     private String publicJKSPassword;
@@ -26,18 +27,15 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
     private Map<String, X509Certificate> publicCertMap = new ConcurrentHashMap<>();
 
 
-    public DefaultCertificateRegistry(String gatewayID,
-                                      String privateJKSName,
-                                      String privateJKSPassword,
-                                      String privateKeyPassword,
-                                      String publicJKSName,
-                                      String publicJKSPassword) {
-        this.privateJKSName = privateJKSName;
-        this.keyStorePassword = privateJKSPassword;
-        this.privateKeyPassword = privateKeyPassword;
-        this.publicJKSName = publicJKSName;
-        this.publicJKSPassword = publicJKSPassword;
-        this.gatewayID = gatewayID;
+    public DefaultCertificateRegistry(PrivateKeyInfo privateKey,
+                                      KeyStoreInfo ksPrivate,
+                                      KeyStoreInfo ksPublic) {
+
+        this.gatewayID = privateKey.id();
+        this.privateKeyPassword = privateKey.password();
+        this.ksPrivate = ksPrivate;
+        this.ksPublic = ksPublic;
+
     }
 
     @Override
@@ -49,7 +47,7 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
     @Override
     public Pair<Certificate[], PrivateKey> findPrivateKeyAndCertificateForAlias(String keyAlias) {
         try {
-            KeyStore jks = getKeyStore(privateJKSName, keyStorePassword);
+            KeyStore jks = getKeyStore(ksPrivate.name(), ksPrivate.password());
             Certificate[] certificateChain = jks.getCertificateChain(keyAlias);
             PrivateKey privateKey = (PrivateKey) jks.getKey(keyAlias, privateKeyPassword.toCharArray());
             return new ImmutablePair<>(new Certificate[]{certificateChain[0]}, privateKey);
@@ -74,7 +72,7 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
             if (publicCertMap.containsKey(certAliasInJKS)) {
                 return publicCertMap.get(certAliasInJKS);
             } else {
-                KeyStore keystore = getKeyStore(publicJKSName, publicJKSPassword);
+                KeyStore keystore = getKeyStore(ksPublic.name(), ksPublic.password());
                 X509Certificate cert = (X509Certificate) keystore.getCertificate(certAliasInJKS);
                 publicCertMap.put(certAliasInJKS, cert);
                 return cert;
