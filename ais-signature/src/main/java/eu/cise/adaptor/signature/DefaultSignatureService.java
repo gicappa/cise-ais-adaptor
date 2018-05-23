@@ -46,32 +46,18 @@ public class DefaultSignatureService implements SignatureService {
 
     @Override
     public void verify(Message message) {
+        signature.verifySignatureWithMessageCertificate(message);
         verifyCertificateAgainstCACert(message);
-        verifySignatureWithMessageCertificate(message);
     }
 
 
     @Override
     public Message sign(Message message) {
-        return signMessageWithDelegatesPrivateKey(message);
-    }
-
-    public void verifySignatureWithMessageCertificate(Message message) {
-        Document doc = noValidationMapper.toDOM(message);
-        verifySignatureForDocument(message.getMessageID(), doc);
-    }
-
-    public Message signMessageWithDelegatesPrivateKey(Message message) {
-        Document unsignedDoc = noValidationMapper.toDOM(message);
-        removeSignatureElementIfAny(unsignedDoc);
-        Document signedDoc = signDoc(unsignedDoc);
-        Message outMessage = noValidationMapper.fromDOM(signedDoc);
-        return outMessage;
+        return signature.signMessageWithDelegatesPrivateKey(message);
     }
 
     private void verifyCertificateAgainstCACert(Message message) {
         try {
-
             X509Certificate certificate = parseBase64Certificate(
                     addBeginEndToCertificate(
                             removeCarriageReturn(

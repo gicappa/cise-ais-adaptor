@@ -48,6 +48,19 @@ public class SignatureDelegate {
         }
     }
 
+    public void verifySignatureWithMessageCertificate(Message message) {
+        Document doc = noValidationMapper.toDOM(message);
+        verifySignatureForDocument(message.getMessageID(), doc);
+    }
+
+    public Message signMessageWithDelegatesPrivateKey(Message message) {
+        Document unsignedDoc = noValidationMapper.toDOM(message);
+        removeSignatureElementIfAny(unsignedDoc);
+        Document signedDoc = signDoc(unsignedDoc);
+        Message outMessage = noValidationMapper.fromDOM(signedDoc);
+        return outMessage;
+    }
+
     private void verifySignatureForDocument(String messageID, Document doc) {
         Element sigEl = getSignatureElement(messageID, doc);
         try {

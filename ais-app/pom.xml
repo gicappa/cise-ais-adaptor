@@ -32,7 +32,7 @@
                   <mainClass>eu.cise.adaptor.MainApp</mainClass>
                   <manifestEntries>
                     <Class-Path>./conf ../conf</Class-Path>
-                    <Version>${version}</Version>
+                    <Version>${project.version}</Version>
                   </manifestEntries>
                 </transformer>
               </transformers>
