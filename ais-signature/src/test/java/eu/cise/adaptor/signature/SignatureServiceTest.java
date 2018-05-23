@@ -1,5 +1,8 @@
 package eu.cise.adaptor.signature;
 
+import eu.cise.adaptor.KeyStoreInfo;
+import eu.cise.adaptor.PrivateKeyInfo;
+import eu.cise.adaptor.SignatureService;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;

@@ -1,6 +1,4 @@
-package eu.cise.adaptor.signature;
-
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+package eu.cise.adaptor.exceptions;
 
 @SuppressWarnings("unused")
 public class ExceptionHandler {

@@ -1,4 +1,4 @@
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor;
 
 import eu.cise.servicemodel.v1.message.Message;
 
@@ -9,7 +9,7 @@ public interface SignatureService {
      * the public key of the Sender System (Gateway or Legacy System).
      *
      * @throws eu.cise.adaptor.exceptions.AISAdaptorException in case the
-     * verification process fails
+     *                                                        verification process fails
      */
     void verify(Message message);
 

@@ -1,4 +1,4 @@
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor;
 
 public class PrivateKeyInfo {
 

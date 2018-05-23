@@ -1,11 +1,14 @@
 package eu.cise.adaptor.signature;
 
+import eu.cise.adaptor.CertificateRegistry;
+import eu.cise.adaptor.KeyStoreInfo;
+
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static eu.cise.adaptor.signature.ExceptionHandler.safe;
+import static eu.cise.adaptor.exceptions.ExceptionHandler.safe;
 
 @SuppressWarnings("unused")
 public class DefaultCertificateRegistry implements CertificateRegistry {

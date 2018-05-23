@@ -1,8 +1,10 @@
 package eu.cise.adaptor.signature;
 
+import eu.cise.adaptor.CertificateRegistry;
+import eu.cise.adaptor.PrivateKeyInfo;
+import eu.cise.adaptor.SignatureService;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import sun.security.x509.X500Name;
 
@@ -20,7 +22,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import static eu.cise.adaptor.signature.ExceptionHandler.safe;
+import static eu.cise.adaptor.exceptions.ExceptionHandler.safe;
 import static javax.xml.xpath.XPathConstants.NODE;
 
 public class DefaultSignatureService implements SignatureService {

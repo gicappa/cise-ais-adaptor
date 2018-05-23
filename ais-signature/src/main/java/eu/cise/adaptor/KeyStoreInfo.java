@@ -1,11 +1,11 @@
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor;
 
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
-import static eu.cise.adaptor.signature.ExceptionHandler.safe;
+import static eu.cise.adaptor.exceptions.ExceptionHandler.safe;
 
 public class KeyStoreInfo {
 
