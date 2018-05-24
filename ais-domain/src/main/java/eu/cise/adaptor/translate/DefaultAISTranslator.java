@@ -32,7 +32,6 @@ import java.util.*;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
-import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
@@ -85,8 +84,8 @@ public class DefaultAISTranslator implements AISTranslator {
                         .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
                         .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
                 .recipient(newService()
-                        .id("it.gc-ls01.vessel.push.gcs04")
-                        .operation(PUSH)
+                        .id(config.getRecipientServiceId())
+                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
                 )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
@@ -199,8 +198,8 @@ public class DefaultAISTranslator implements AISTranslator {
                         .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
                         .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
                 .recipient(newService()
-                        .id("it.gc-ls01.vessel.push.gcs04")
-                        .operation(PUSH)
+                        .id(config.getRecipientServiceId())
+                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
                 )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
