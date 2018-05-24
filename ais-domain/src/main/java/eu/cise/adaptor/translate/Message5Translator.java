@@ -10,25 +10,25 @@ import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
-public class ModelTranslator implements Translator<AISMsg, Entity> {
+public class Message5Translator implements Translator<AISMsg, Entity> {
 
-    public ModelTranslator() {
-        Message5Translator message5Translator =hc4f29b7
+    private static final Set<String> ISO_COUNTRIES = new HashSet<>
+            (Arrays.asList(Locale.getISOCountries()));
+    private final AISAdaptorConfig config;
+
+    public Message5Translator(AISAdaptorConfig config) {
+        this.config = config;
     }
 
     @Override
-    public Entity translate(AISMsg aisMsg) {
-        if (aisMsg.getMessageType() == 1 ||
-                aisMsg.getMessageType() == 2 ||
-                aisMsg.getMessageType() == 3)
-            return Optional.of(translateAISMsg123(aisMsg));
-        else if (aisMsg.getMessageType() == 5)
-            return Optional.of(serviceTranslator.translate(modelTranslator.translate(aisMsg)));
-
+    public Entity translate(AISMsg message) {
         Vessel vessel = new Vessel();
 
         Long imoNumber = getImoNumber(message);
