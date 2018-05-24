@@ -3,6 +3,7 @@ package eu.cise.adaptor;
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
+import eu.cise.adaptor.translate.ServiceBlahBlah;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
@@ -26,7 +27,7 @@ public class AIS_1_2_3_TranslatorSpec {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            AISTranslator translator = new DefaultAISTranslator(config);
+            AISTranslator translator = new DefaultAISTranslator(config, new ServiceBlahBlah(config));
 
             final AISMsg m = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)

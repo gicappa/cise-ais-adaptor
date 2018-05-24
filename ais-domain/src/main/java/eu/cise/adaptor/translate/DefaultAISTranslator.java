@@ -49,10 +49,13 @@ public class DefaultAISTranslator implements AISTranslator {
 
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
-    private final AISAdaptorConfig config;
 
-    public DefaultAISTranslator(AISAdaptorConfig config) {
+    private final AISAdaptorConfig config;
+    private final ServiceBlahBlah serviceBlahBlah;
+
+    public DefaultAISTranslator(AISAdaptorConfig config, ServiceBlahBlah serviceBlahBlah) {
         this.config = config;
+        this.serviceBlahBlah = serviceBlahBlah;
     }
 
     public static boolean isValidISOCountry(String s) {
@@ -72,40 +75,18 @@ public class DefaultAISTranslator implements AISTranslator {
     }
 
     private Optional<Push> translateAISMsg5(AISMsg aisMsg) {
-        return Optional.of(newPush()
-                .id(UUID.randomUUID().toString())
-                .contextId(UUID.randomUUID().toString())
-                .correlationId(UUID.randomUUID().toString())
-                .creationDateTime(new Date())
-                .sender(newService()
-                        .id(config.getServiceId())
-                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
-                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
-                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-                .recipient(newService()
-                        .id(config.getRecipientServiceId())
-                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-                )
-                .priority(PriorityType.fromValue(config.getMessagePriority()))
-                .isRequiresAck(false)
-                .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
-                .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
-                .isPersonalData(false)
-                .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntity(toVessel5(
-                        Long.valueOf(aisMsg.getUserId()),
-                        aisMsg.getShipName(),
-                        getBeam(aisMsg),
-                        getLength(aisMsg),
-                        aisMsg.getCallSign(),
-                        f2d(aisMsg.getDraught()),
-                        getImoNumber(aisMsg),
-                        Long.valueOf(aisMsg.getUserId()),
-                        fromAISShipType(aisMsg.getShipType()),
-                        aisMsg.getDestination()
-                ))
-                .build());
+        return serviceBlahBlah.vest(toVessel5(
+                Long.valueOf(aisMsg.getUserId()),
+                aisMsg.getShipName(),
+                getBeam(aisMsg),
+                getLength(aisMsg),
+                aisMsg.getCallSign(),
+                f2d(aisMsg.getDraught()),
+                getImoNumber(aisMsg),
+                Long.valueOf(aisMsg.getUserId()),
+                fromAISShipType(aisMsg.getShipType()),
+                aisMsg.getDestination()
+        ));
     }
 
     private Long getImoNumber(AISMsg aisMsg) {
