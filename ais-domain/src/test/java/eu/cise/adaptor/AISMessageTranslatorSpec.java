@@ -3,7 +3,8 @@ package eu.cise.adaptor;
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
-import eu.cise.adaptor.translate.ServiceBlahBlah;
+import eu.cise.adaptor.translate.ModelTranslator;
+import eu.cise.adaptor.translate.ServiceTranslator;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.fit;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.helpers.Utils.extractPayload;
 import static java.util.Arrays.asList;
@@ -26,7 +26,7 @@ public class AISMessageTranslatorSpec {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            AISTranslator translator = new DefaultAISTranslator(config, new ServiceBlahBlah(config));
+            AISTranslator translator = new DefaultAISTranslator(config, new ModelTranslator(config), new ServiceTranslator(config));
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->

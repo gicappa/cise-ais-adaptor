@@ -17,10 +17,7 @@ import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
-import eu.cise.servicemodel.v1.authority.SeaBasinType;
-import eu.cise.servicemodel.v1.message.*;
-import eu.cise.servicemodel.v1.service.DataFreshnessType;
-import eu.cise.servicemodel.v1.service.ServiceOperationType;
+import eu.cise.servicemodel.v1.message.Push;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -32,9 +29,6 @@ import java.util.*;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
-import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
-import static eu.eucise.helpers.PushBuilder.newPush;
-import static eu.eucise.helpers.ServiceBuilder.newService;
 
 /**
  * This is the translator from the internal AISMsg object to a CISE Push message
@@ -51,11 +45,11 @@ public class DefaultAISTranslator implements AISTranslator {
             (Arrays.asList(Locale.getISOCountries()));
 
     private final AISAdaptorConfig config;
-    private final ServiceBlahBlah serviceBlahBlah;
+    private final ServiceTranslator serviceTranslator;
 
-    public DefaultAISTranslator(AISAdaptorConfig config, ServiceBlahBlah serviceBlahBlah) {
+    public DefaultAISTranslator(AISAdaptorConfig config, ModelTranslator modelTranslator, ServiceTranslator serviceTranslator) {
         this.config = config;
-        this.serviceBlahBlah = serviceBlahBlah;
+        this.serviceTranslator = serviceTranslator;
     }
 
     public static boolean isValidISOCountry(String s) {
@@ -75,7 +69,7 @@ public class DefaultAISTranslator implements AISTranslator {
     }
 
     private Optional<Push> translateAISMsg5(AISMsg aisMsg) {
-        return serviceBlahBlah.vest(toVessel5(
+        return serviceTranslator.translate(toVessel5(
                 Long.valueOf(aisMsg.getUserId()),
                 aisMsg.getShipName(),
                 getBeam(aisMsg),
@@ -167,41 +161,19 @@ public class DefaultAISTranslator implements AISTranslator {
     }
 
     private Optional<Push> translateAISMsg123(AISMsg aisMsg) {
-        return Optional.of(newPush()
-                .id(UUID.randomUUID().toString())
-                .contextId(UUID.randomUUID().toString())
-                .correlationId(UUID.randomUUID().toString())
-                .creationDateTime(new Date())
-                .sender(newService()
-                        .id(config.getServiceId())
-                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
-                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
-                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-                .recipient(newService()
-                        .id(config.getRecipientServiceId())
-                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-                )
-                .priority(PriorityType.fromValue(config.getMessagePriority()))
-                .isRequiresAck(false)
-                .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
-                .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
-                .isPersonalData(false)
-                .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntity(toVessel(
-                        latitude(aisMsg),
-                        longitude(aisMsg),
-                        fromPositionAccuracy(aisMsg),
-                        fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
-                        fromTrueHeading(aisMsg.getTrueHeading()),
-                        aisMsg.getTimestamp(),
-                        fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
-                        Long.valueOf(aisMsg.getUserId()),
-                        fromNavigationStatus(aisMsg.getNavigationStatus())
-                        )
-                )
 
-                .build());
+        return serviceTranslator.translate(toVessel(
+                latitude(aisMsg),
+                longitude(aisMsg),
+                fromPositionAccuracy(aisMsg),
+                fromCourseOverGround(aisMsg.getCOG()),  // casting float to double
+                fromTrueHeading(aisMsg.getTrueHeading()),
+                aisMsg.getTimestamp(),
+                fromSpeedOverGround(aisMsg.getSOG()),  // casting float to double
+                Long.valueOf(aisMsg.getUserId()),
+                fromNavigationStatus(aisMsg.getNavigationStatus())
+                )
+        );
     }
 
     private LocationQualitativeAccuracyType fromPositionAccuracy(AISMsg aisMsg) {

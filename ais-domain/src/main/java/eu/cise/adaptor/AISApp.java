@@ -4,7 +4,8 @@ import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.adaptor.translate.DefaultAISTranslator;
-import eu.cise.adaptor.translate.ServiceBlahBlah;
+import eu.cise.adaptor.translate.ModelTranslator;
+import eu.cise.adaptor.translate.ServiceTranslator;
 import org.aeonbits.owner.ConfigFactory;
 
 public class AISApp<T> implements Runnable {
@@ -38,6 +39,6 @@ public class AISApp<T> implements Runnable {
     }
 
     private DefaultAISTranslator createTranslator() {
-        return new DefaultAISTranslator(config, new ServiceBlahBlah(config));
+        return new DefaultAISTranslator(config, new ModelTranslator(config), new ServiceTranslator(config));
     }
 }

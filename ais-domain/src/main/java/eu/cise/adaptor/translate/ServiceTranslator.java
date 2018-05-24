@@ -15,14 +15,15 @@ import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
-public class ServiceBlahBlah {
+public class ServiceTranslator implements Translator<Entity, Push> {
     private final AISAdaptorConfig config;
 
-    public ServiceBlahBlah(AISAdaptorConfig config) {
+    public ServiceTranslator(AISAdaptorConfig config) {
         this.config = config;
     }
 
-    public Optional<Push> vest(Entity entity) {
+    @Override
+    public Optional<Push> translate(Entity entity) {
         return Optional.of(newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())

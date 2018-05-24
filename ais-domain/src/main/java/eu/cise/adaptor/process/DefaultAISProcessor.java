@@ -24,7 +24,9 @@ public class DefaultAISProcessor implements AISProcessor {
     private final ExecutorService pool;
     private final Logger logger = LoggerFactory.getLogger("ais-processor");
 
-    public DefaultAISProcessor(AISTranslator translator, Dispatcher dispatcher, AISAdaptorConfig config) {
+    public DefaultAISProcessor(AISTranslator translator,
+                               Dispatcher dispatcher,
+                               AISAdaptorConfig config) {
         this.translator = translator;
         this.dispatcher = dispatcher;
         this.config = config;
