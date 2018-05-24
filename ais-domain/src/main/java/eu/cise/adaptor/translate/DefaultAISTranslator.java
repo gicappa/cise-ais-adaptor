@@ -40,7 +40,9 @@ public class DefaultAISTranslator implements AISTranslator {
     private final ModelTranslator modelTranslator;
     private final ServiceTranslator serviceTranslator;
 
-    public DefaultAISTranslator(AISAdaptorConfig config, ModelTranslator modelTranslator, ServiceTranslator serviceTranslator) {
+    public DefaultAISTranslator(AISAdaptorConfig config,
+                                ModelTranslator modelTranslator,
+                                ServiceTranslator serviceTranslator) {
         this.config = config;
         this.modelTranslator = modelTranslator;
         this.serviceTranslator = serviceTranslator;
@@ -51,14 +53,14 @@ public class DefaultAISTranslator implements AISTranslator {
         if (aisMsg.getMessageType() == 1 ||
                 aisMsg.getMessageType() == 2 ||
                 aisMsg.getMessageType() == 3)
-            return translateAISMsg123(aisMsg);
+            return Optional.of(translateAISMsg123(aisMsg));
         else if (aisMsg.getMessageType() == 5)
-            return serviceTranslator.translate(modelTranslator.translate(aisMsg).get());
+            return Optional.of(serviceTranslator.translate(modelTranslator.translate(aisMsg)));
 
         return Optional.empty();
     }
 
-    private Optional<Push> translateAISMsg123(AISMsg aisMsg) {
+    private Push translateAISMsg123(AISMsg aisMsg) {
 
         return serviceTranslator.translate(toVessel(
                 latitude(aisMsg),

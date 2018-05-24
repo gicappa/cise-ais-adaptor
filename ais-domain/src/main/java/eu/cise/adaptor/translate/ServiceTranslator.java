@@ -23,8 +23,8 @@ public class ServiceTranslator implements Translator<Entity, Push> {
     }
 
     @Override
-    public Optional<Push> translate(Entity entity) {
-        return Optional.of(newPush()
+    public Push translate(Entity entity) {
+        return newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())
                 .correlationId(UUID.randomUUID().toString())
@@ -46,8 +46,7 @@ public class ServiceTranslator implements Translator<Entity, Push> {
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
                 .addEntity(entity)
-                .build()
-        );
+                .build();
     }
 
 }

@@ -24,29 +24,78 @@ public class ModelTranslator implements Translator<AISMsg, Entity> {
         this.config = config;
     }
 
+    @Override
+    public Entity translate(AISMsg message) {
+        Vessel vessel = new Vessel();
+
+        Long imoNumber = getImoNumber(message);
+        if (imoNumber != null)
+            vessel.setIMONumber(imoNumber);
+
+        vessel.setMMSI(Long.valueOf(message.getUserId()));
+        vessel.getInvolvedEventRels().add(getInvolvedEventRel(message));
+        vessel.getNames().add(message.getShipName());
+        vessel.setBeam(getBeam(message));
+        vessel.setLength(getLength(message));
+        vessel.setCallSign(message.getCallSign());
+        vessel.setDraught(f2d(message.getDraught()));
+        vessel.setMMSI(Long.valueOf(message.getUserId()));
+        vessel.getShipTypes().add(fromAISShipType(message.getShipType()));
+
+        return vessel;
+    }
+
+    private Objet.InvolvedEventRel getInvolvedEventRel(AISMsg message) {
+        Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
+        involvedEventRel.setEvent(getMovement(message));
+        return involvedEventRel;
+    }
+
+    private Movement getMovement(AISMsg message) {
+        Movement movement = new Movement();
+        movement.setMovementType(VOYAGE);
+        movement.getLocationRels().add(getLocationRel(message));
+        return movement;
+    }
+
+    private Event.LocationRel getLocationRel(AISMsg message) {
+        Event.LocationRel locationRel = new Event.LocationRel();
+        locationRel.setLocation(getPortLocation(message));
+        return locationRel;
+    }
+
+    private PortLocation getPortLocation(AISMsg message) {
+        PortLocation location = new PortLocation();
+
+        String locationCode = message.getDestination();
+        if (isLocationCode(locationCode))
+            location.setLocationCode(locationCode);
+
+        location.setPortName(locationCode);
+        return location;
+    }
+
+    private boolean isLocationCode(String locationCode) {
+        if (locationCode == null)
+            return false;
+
+        if (locationCode.trim().length() != 5)
+            return false;
+
+        String countryCode = locationCode.substring(0, 2);
+
+        if (!isValidISOCountry(countryCode))
+            return false;
+
+        return true;
+    }
+
     public static boolean isValidISOCountry(String s) {
         return ISO_COUNTRIES.contains(s);
     }
 
-
     private Double f2d(Float fValue) {
         return Double.valueOf(fValue.toString());
-    }
-
-    @Override
-    public Optional<Entity> translate(AISMsg aisMsg) {
-        return Optional.of(toVessel5(
-                Long.valueOf(aisMsg.getUserId()),
-                aisMsg.getShipName(),
-                getBeam(aisMsg),
-                getLength(aisMsg),
-                aisMsg.getCallSign(),
-                f2d(aisMsg.getDraught()),
-                getImoNumber(aisMsg),
-                Long.valueOf(aisMsg.getUserId()),
-                fromAISShipType(aisMsg.getShipType()),
-                aisMsg.getDestination()
-        ));
     }
 
     private Long getImoNumber(AISMsg aisMsg) {
@@ -65,65 +114,6 @@ public class ModelTranslator implements Translator<AISMsg, Entity> {
             return null;
 
         return aisMsg.getDimensionC() + aisMsg.getDimensionD();
-    }
-
-    private Vessel toVessel5(Long userId,
-                             String vesselName,
-                             Integer beam,
-                             Double length,
-                             String callSign,
-                             Double draught,
-                             Long imoNumber,
-                             Long mmsi,
-                             VesselType shipType,
-                             String locationCode
-    ) {
-
-        Vessel vessel = new Vessel();
-        vessel.setMMSI(userId);
-        Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
-        Movement movement = new Movement();
-        movement.setMovementType(VOYAGE);
-        Event.LocationRel locationRel = new Event.LocationRel();
-        PortLocation location = new PortLocation();
-
-        if (isLocationCode(locationCode))
-            location.setLocationCode(locationCode);
-
-        location.setPortName(locationCode);
-
-        locationRel.setLocation(location);
-        movement.getLocationRels().add(locationRel);
-
-        involvedEventRel.setEvent(movement);
-        vessel.getInvolvedEventRels().add(involvedEventRel);
-        vessel.getNames().add(vesselName);
-        vessel.setBeam(beam);
-        vessel.setLength(length);
-        vessel.setCallSign(callSign);
-        vessel.setDraught(draught);
-        if (imoNumber != null)
-            vessel.setIMONumber(imoNumber);
-
-        vessel.setMMSI(mmsi);
-        vessel.getShipTypes().add(shipType);
-
-        return vessel;
-    }
-
-    private boolean isLocationCode(String locationCode) {
-        if (locationCode == null)
-            return false;
-
-        if (locationCode.trim().length() != 5)
-            return false;
-
-        String countryCode = locationCode.substring(0, 2);
-
-        if (!isValidISOCountry(countryCode))
-            return false;
-
-        return true;
     }
 
     private VesselType fromAISShipType(Integer st) {
