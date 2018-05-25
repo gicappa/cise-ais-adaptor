@@ -1,32 +1,27 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.AISTranslator;
-import eu.cise.adaptor.translate.DefaultAISTranslator;
 import eu.cise.adaptor.translate.ModelTranslator;
-import eu.cise.adaptor.translate.ServiceTranslator;
+import eu.cise.datamodel.v1.entity.Entity;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.cise.adaptor.helpers.Utils.extractPayload;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Spectrum.class)
-public class AISMessageTranslatorSpec {
+public class ModelTranslatorSpec {
     {
-        describe("an AIS to CISE message translator", () -> {
+        describe("an AIS to CISE model translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            AISTranslator translator = new DefaultAISTranslator(new ModelTranslator(config), new ServiceTranslator(config));
+            ModelTranslator translator = new ModelTranslator(config);
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->
@@ -43,31 +38,19 @@ public class AISMessageTranslatorSpec {
                                     .withUserId(538005989)
                                     .build();
 
-                            it("returns an optional with a push message / " + n, () ->
+                            it("returns an optional with an entity / " + n, () ->
                                     assertThat(translator.translate(m), is(not(Optional.empty()))));
 
-                            it("returns an Optional<Push> with an XmlEntityPayload", () -> {
-                                XmlEntityPayload payload = extractPayload(translator.translate(m));
-                                assertThat("The XmlEntityPayload has not been created",
-                                        payload, is(notNullValue()));
-                            });
-
-                            it("returns an Optional<Push> with a vessel", () -> {
-                                XmlEntityPayload payload = extractPayload(translator.translate(m));
-                                List<Object> vessels = payload.getAnies();
-                                assertThat("There must be at least one vessel element i the payload",
-                                        vessels, is(not(empty())));
+                            it("returns an Optional<Vessel>", () -> {
+                                Entity entity = translator.translate(m).get();
 
                                 assertThat("The element in the payload must be a Vessel",
-                                        vessels.get(0), instanceOf(Vessel.class));
+                                        entity, instanceOf(Vessel.class));
                             });
                         }
                 );
-
             });
-
         });
     }
-
 }
 

@@ -24,7 +24,7 @@ import java.time.ZoneId;
 
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
 
-public class Message123Translator implements Translator<AISMsg, Entity> {
+public class Message123Translator implements Translator<AISMsg, Vessel> {
 
     private final AISAdaptorConfig config;
 
@@ -33,7 +33,7 @@ public class Message123Translator implements Translator<AISMsg, Entity> {
     }
 
     @Override
-    public Entity translate(AISMsg aisMsg) {
+    public Vessel translate(AISMsg aisMsg) {
 
         // casting float to double
         // casting float to double

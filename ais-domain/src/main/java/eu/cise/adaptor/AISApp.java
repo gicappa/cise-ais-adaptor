@@ -3,7 +3,6 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.process.DefaultAISProcessor;
-import eu.cise.adaptor.translate.DefaultAISTranslator;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
 import org.aeonbits.owner.ConfigFactory;
@@ -26,8 +25,7 @@ public class AISApp<T> implements Runnable {
 
     @Override
     public void run() {
-        AISMessageConsumer<T> consumer = createConsumer();
-        aisSource.startConsuming(consumer);
+        aisSource.startConsuming(createConsumer());
     }
 
     private AISMessageConsumer<T> createConsumer() {
@@ -35,10 +33,7 @@ public class AISApp<T> implements Runnable {
     }
 
     private DefaultAISProcessor createProcessor() {
-        return new DefaultAISProcessor(createTranslator(), dispatcher, config);
+        return new DefaultAISProcessor(new ModelTranslator(config), new ServiceTranslator(config), dispatcher, config);
     }
 
-    private DefaultAISTranslator createTranslator() {
-        return new DefaultAISTranslator(new ModelTranslator(config), new ServiceTranslator(config));
-    }
 }

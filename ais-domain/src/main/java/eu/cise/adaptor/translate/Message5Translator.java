@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
-public class Message5Translator implements Translator<AISMsg, Entity> {
+public class Message5Translator implements Translator<AISMsg, Vessel> {
 
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
@@ -29,7 +29,7 @@ public class Message5Translator implements Translator<AISMsg, Entity> {
     }
 
     @Override
-    public Entity translate(AISMsg message) {
+    public Vessel translate(AISMsg message) {
         Vessel vessel = new Vessel();
 
         Long imoNumber = getImoNumber(message);
