@@ -6,7 +6,7 @@ import eu.cise.adaptor.signature.DefaultCertificateRegistry;
 import eu.cise.adaptor.signature.DefaultSignatureService;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.tbs.FileAISSource;
-import eu.cise.adaptor.tbs.TbsAISNormalizer;
+import eu.cise.adaptor.tbs.TBSAISNormalizer;
 
 public class DefaultAppContext implements AppContext {
 
@@ -23,7 +23,7 @@ public class DefaultAppContext implements AppContext {
 
     @Override
     public AISNormalizer makeNormalizer() {
-        return new TbsAISNormalizer();
+        return new TBSAISNormalizer();
     }
 
     @Override

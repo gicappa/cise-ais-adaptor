@@ -1,20 +1,17 @@
 package eu.cise.adaptor.tbs;
 
-import dk.tbsalling.aismessages.AISInputStreamReader;
-import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
+import eu.cise.adaptor.InputStreamToStream;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class FileAISSource implements AISSource {
 
-    private final InputStream inputStream;
     private final FileAISSourceConfig config;
 
     public FileAISSource() {
@@ -23,14 +20,7 @@ public class FileAISSource implements AISSource {
         if (config.getAISSourceFilename() == null)
             throw new AISAdaptorException("The 'ais-source.file.name' property is not " +
                     "set in the ais-adaptor.properties file");
-
-        inputStream = open(config.getAISSourceFilename());
-
-        if (inputStream == null) {
-            throw new AISAdaptorException("The file '" + config.getAISSourceFilename() +
-                    "' does not exists neither in the /conf/ directory nor in the classpath");
         }
-    }
 
     public InputStream open(String filename) {
         InputStream is = openFile(filename);
@@ -54,12 +44,14 @@ public class FileAISSource implements AISSource {
     }
 
     @Override
-    public <T> void startConsuming(AISMessageConsumer<T> consumer) {
-        try {
-            AISInputStreamReader aisStream = new AISInputStreamReader(inputStream, (Consumer) consumer);
-            aisStream.run();
-        } catch (IOException e) {
-            throw new AISAdaptorException(e);
+    public Stream<String> open() {
+        InputStream inputStream = open(config.getAISSourceFilename());
+
+        if (inputStream == null) {
+            throw new AISAdaptorException("The file '" + config.getAISSourceFilename() +
+                    "' does not exists neither in the /conf/ directory nor in the classpath");
         }
+
+        return new InputStreamToStream().stream(inputStream);
     }
 }

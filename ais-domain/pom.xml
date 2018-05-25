@@ -54,6 +54,10 @@
       <artifactId>hamcrest-all</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>cise-ais-source-adapter</artifactId>
+    </dependency>
 
   </dependencies>
 </project>

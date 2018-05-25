@@ -24,15 +24,15 @@ import static java.lang.Boolean.FALSE;
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
  */
-public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
+public class TBSAISNormalizer implements AISNormalizer<AISMessage> {
 
     private final Eta eta;
 
-    public TbsAISNormalizer() {
+    public TBSAISNormalizer() {
         this(Clock.systemUTC());
     }
 
-    public TbsAISNormalizer(Clock clock) {
+    public TBSAISNormalizer(Clock clock) {
         this.eta = new Eta(clock);
     }
 
@@ -101,5 +101,4 @@ public class TbsAISNormalizer implements AISNormalizer<AISMessage> {
     private Optional<Metadata> oMeta(AISMessage m) {
         return Optional.ofNullable(m.getMetadata());
     }
-
 }

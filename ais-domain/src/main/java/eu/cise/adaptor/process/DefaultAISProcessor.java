@@ -5,7 +5,6 @@ import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.dispatch.DispatchResult;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
-import eu.cise.adaptor.translate.AISTranslator;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
 import org.slf4j.Logger;
@@ -42,8 +41,7 @@ public class DefaultAISProcessor implements AISProcessor {
     public void process(AISMsg message) {
         try {
 
-            DispatchResult result = supplyAsync(
-                    () -> modelTranslator.translate(message)
+            DispatchResult result = supplyAsync(() -> modelTranslator.translate(message)
                             .map(e -> serviceTranslator.translate(e))
                             .map(m -> dispatcher.send(m, config.getGatewayAddress()))
                             .orElse(DispatchResult.success())
