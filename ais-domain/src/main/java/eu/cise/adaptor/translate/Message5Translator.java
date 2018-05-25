@@ -21,10 +21,8 @@ public class Message5Translator implements Translator<AISMsg, Entity> {
 
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
-    private final AISAdaptorConfig config;
 
-    public Message5Translator(AISAdaptorConfig config) {
-        this.config = config;
+    public Message5Translator() {
     }
 
     @Override
