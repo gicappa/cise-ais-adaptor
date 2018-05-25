@@ -2,7 +2,9 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.signature.*;
+import eu.cise.adaptor.signature.DefaultCertificateRegistry;
+import eu.cise.adaptor.signature.DefaultSignatureService;
+import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.tbs.FileAISSource;
 import eu.cise.adaptor.tbs.TbsAISNormalizer;
 

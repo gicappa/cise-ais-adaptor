@@ -1,8 +1,6 @@
 package eu.cise.adaptor;
 
 
-import org.aeonbits.owner.Config;
-
 import static org.aeonbits.owner.Config.Sources;
 
 @SuppressWarnings("unused")

@@ -7,6 +7,7 @@ import java.time.Instant;
 public class AISMsg {
 
 
+    private final Integer imoNumber;
     // POSITION
     private int messageType;
     private float latitude;
@@ -18,11 +19,9 @@ public class AISMsg {
     private float sog;
     private NavigationStatus navigationStatus;
     private int positionAccuracy;
-
     // VOYAGE
     private String destination;
     private Instant eta;
-    private final Integer imoNumber;
     private String callsign;
     private float draught;
     private Integer dimensionC;

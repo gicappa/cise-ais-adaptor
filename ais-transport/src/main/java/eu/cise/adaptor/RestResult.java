@@ -40,6 +40,10 @@ public class RestResult implements Serializable {
         this.message = message;
     }
 
+    public static boolean isOK(final int statusCode) {
+        return statusCode / 100 == 2;
+    }
+
     public Integer getCode() {
         return code;
     }
@@ -54,10 +58,6 @@ public class RestResult implements Serializable {
 
     public String getMessage() {
         return message;
-    }
-
-    public static boolean isOK(final int statusCode) {
-        return statusCode / 100 == 2;
     }
 
     @Override

@@ -21,10 +21,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
 
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
 

@@ -1,6 +1,5 @@
 package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.servicemodel.v1.message.Push;
 
@@ -21,8 +20,8 @@ public class DefaultAISTranslator implements AISTranslator {
     private final ServiceTranslator serviceTranslator;
 
     public DefaultAISTranslator(
-                                ModelTranslator modelTranslator,
-                                ServiceTranslator serviceTranslator) {
+            ModelTranslator modelTranslator,
+            ServiceTranslator serviceTranslator) {
         this.modelTranslator = modelTranslator;
         this.serviceTranslator = serviceTranslator;
     }

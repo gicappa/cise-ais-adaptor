@@ -1,6 +1,5 @@
 package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.datamodel.v1.entity.Entity;
 import eu.cise.datamodel.v1.entity.event.Event;
@@ -23,6 +22,10 @@ public class Message5Translator implements Translator<AISMsg, Entity> {
             (Arrays.asList(Locale.getISOCountries()));
 
     public Message5Translator() {
+    }
+
+    public static boolean isValidISOCountry(String s) {
+        return ISO_COUNTRIES.contains(s);
     }
 
     @Override
@@ -89,10 +92,6 @@ public class Message5Translator implements Translator<AISMsg, Entity> {
             return false;
 
         return true;
-    }
-
-    public static boolean isValidISOCountry(String s) {
-        return ISO_COUNTRIES.contains(s);
     }
 
     private Double f2d(Float fValue) {
