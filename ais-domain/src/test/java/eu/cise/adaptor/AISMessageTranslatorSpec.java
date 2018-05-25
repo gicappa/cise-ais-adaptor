@@ -26,7 +26,7 @@ public class AISMessageTranslatorSpec {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            AISTranslator translator = new DefaultAISTranslator(config, new ModelTranslator(config), new ServiceTranslator(config));
+            AISTranslator translator = new DefaultAISTranslator(new ModelTranslator(config), new ServiceTranslator(config));
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->

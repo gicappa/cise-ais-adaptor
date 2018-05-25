@@ -26,7 +26,7 @@ public class AIS_5_TranslatorSpec {
         describe("an AIS to CISE message translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            AISTranslator translator = new DefaultAISTranslator(config, new ModelTranslator(config), new ServiceTranslator(config));
+            AISTranslator translator = new DefaultAISTranslator(new ModelTranslator(config), new ServiceTranslator(config));
 
             final AISMsg m = new AISMsg.Builder(5)
                     .withUserId(12345678)

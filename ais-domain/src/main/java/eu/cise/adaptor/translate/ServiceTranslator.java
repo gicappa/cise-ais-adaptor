@@ -8,7 +8,6 @@ import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;

@@ -39,6 +39,6 @@ public class AISApp<T> implements Runnable {
     }
 
     private DefaultAISTranslator createTranslator() {
-        return new DefaultAISTranslator(config, new ModelTranslator(config), new ServiceTranslator(config));
+        return new DefaultAISTranslator(new ModelTranslator(config), new ServiceTranslator(config));
     }
 }
