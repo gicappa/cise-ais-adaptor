@@ -4,11 +4,13 @@ import dk.tbsalling.aismessages.nmea.NMEAMessageHandler;
 import dk.tbsalling.aismessages.nmea.NMEAMessageSocketClient;
 import eu.cise.adaptor.AISMessageConsumer;
 import eu.cise.adaptor.AISSource;
+import eu.cise.adaptor.InputStreamToStream;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class SocketAISSource implements AISSource {
@@ -34,7 +36,7 @@ public class SocketAISSource implements AISSource {
     }
 
     @Override
-    public InputStream open() {
-        return null;
+    public Stream open() {
+        return new InputStreamToStream().stream(null);
     }
 }
