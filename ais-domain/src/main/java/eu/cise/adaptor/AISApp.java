@@ -19,13 +19,12 @@ public class AISApp<T> implements Runnable {
         this.aisNormalizer = aisNormalizer;
         this.dispatcher = dispatcher;
 
-        System.out.println("config = " + config);
+        System.out.println("config = " + config); //TODO
     }
 
     @Override
     public void run() {
         AISMessageConsumer<T> consumer = createConsumer();
-
         aisSource.startConsuming(consumer);
     }
 

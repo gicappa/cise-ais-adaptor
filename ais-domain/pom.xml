@@ -30,11 +30,6 @@
       <groupId>eu.europa.ec.jrc.marex</groupId>
     </dependency>
 
-    <dependency>
-      <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>eucise-com-signature-lib</artifactId>
-    </dependency>
-
     <!-- external dependencies -->
     <dependency>
       <groupId>org.aeonbits.owner</groupId>

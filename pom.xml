@@ -13,6 +13,7 @@
   <modules>
     <module>ais-app</module>
     <module>ais-domain</module>
+    <module>ais-signature</module>
     <module>ais-source-adapter</module>
     <module>ais-server-example</module>
     <module>ais-transport</module>
@@ -211,13 +212,13 @@
         <version>1.0-SNAPSHOT</version>
       </dependency>
 
-      <!-- EUCISE dependencies -->
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>eucise-com-signature-lib</artifactId>
-        <version>1.0.2</version>
+        <artifactId>cise-ais-signature</artifactId>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
 
+      <!-- EUCISE dependencies -->
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
@@ -258,6 +259,12 @@
         <groupId>stax</groupId>
         <artifactId>stax-api</artifactId>
         <version>1.0.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.25</version>
       </dependency>
 
       <dependency>

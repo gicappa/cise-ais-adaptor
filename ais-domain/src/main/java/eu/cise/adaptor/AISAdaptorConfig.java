@@ -16,19 +16,25 @@ public interface AISAdaptorConfig extends Config {
     @Key("gateway.address")
     String getGatewayAddress();
 
-    @Key("service.id")
+    @Key("recipient.service.id")
+    String getRecipientServiceId();
+
+    @Key("recipient.service.operation")
+    String getRecipientServiceOperation();
+
+    @Key("sender.service.id")
     String getServiceId();
 
-    @Key("service.data-freshness-type")
+    @Key("sender.service.data-freshness-type")
     String getDataFreshnessType();
 
-    @Key("service.sea-basin-type")
+    @Key("sender.service.sea-basin-type")
     String getSeaBasinType();
 
-    @Key("service.participant.url")
+    @Key("sender.service.participant.url")
     String getEndpointUrl();
 
-    @Key("service.operation")
+    @Key("sender.service.operation")
     String getServiceOperation();
 
     @Key("message.priority")
@@ -43,4 +49,6 @@ public interface AISAdaptorConfig extends Config {
     @Key("message.purpose")
     String getPurpose();
 
+    @Key("processing.idle.time")
+    long getProcessingIdleTime();
 }

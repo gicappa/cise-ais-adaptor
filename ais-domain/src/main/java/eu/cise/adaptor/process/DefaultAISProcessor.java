@@ -38,8 +38,7 @@ public class DefaultAISProcessor implements AISProcessor {
             CompletableFuture<DispatchResult> cf = supplyAsync(
                     () -> translator.translate(message)
                             .map(m -> dispatcher.send(m, config.getGatewayAddress()))
-                            .orElse(DispatchResult.success()
-                            )
+                            .orElse(DispatchResult.success())
                     , pool);
 
             DispatchResult result = cf.get();
@@ -47,7 +46,7 @@ public class DefaultAISProcessor implements AISProcessor {
             if (!result.isOK())
                 System.out.println(result.getResult());
 
-//            Thread.sleep(100);// parametrize
+            Thread.sleep(config.getProcessingIdleTime());
         } catch (InterruptedException e) {
             throw new AISAdaptorException(e);
         } catch (ExecutionException ee) {

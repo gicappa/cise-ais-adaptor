@@ -35,9 +35,7 @@ public class AISMessageTranslatorSpec {
                 );
             });
 
-
             describe("when a message type is 1,2,3 or 5", () -> {
-
 
                 asList(1, 2, 3, 5).forEach((n) -> {
                             final AISMsg m = new AISMsg.Builder(n)
