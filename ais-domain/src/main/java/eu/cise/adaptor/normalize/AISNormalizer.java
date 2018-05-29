@@ -13,6 +13,6 @@ import java.util.Optional;
  * represent an AIS message coming will normalize it to a {@link AISMsg}
  * that is a domain object.
  */
+@FunctionalInterface
 public interface AISNormalizer extends Translator<String, Optional<AISMsg>> {
-    Optional<AISMsg> normalize(String m);
 }

@@ -6,6 +6,7 @@ import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.normalize.NavigationStatus;
+import eu.cise.adaptor.translate.Translator;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -24,7 +25,7 @@ import static java.lang.Boolean.FALSE;
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
  */
-public class TBSAISNormalizer implements AISNormalizer<AISMessage> {
+public class TBSAISNormalizer implements Translator<AISMessage, AISMsg> {
 
     private final Eta eta;
 
@@ -36,7 +37,8 @@ public class TBSAISNormalizer implements AISNormalizer<AISMessage> {
         this.eta = new Eta(clock);
     }
 
-    public AISMsg normalize(AISMessage m) {
+    @Override
+    public AISMsg translate(AISMessage m) {
         Integer type = m.getMessageType().getCode();
         AISMsg.Builder b = new AISMsg.Builder(type);
 
@@ -101,4 +103,5 @@ public class TBSAISNormalizer implements AISNormalizer<AISMessage> {
     private Optional<Metadata> oMeta(AISMessage m) {
         return Optional.ofNullable(m.getMetadata());
     }
+
 }

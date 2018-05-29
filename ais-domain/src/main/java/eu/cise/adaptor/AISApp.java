@@ -2,12 +2,13 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
+import eu.cise.adaptor.process.AISProcessor;
 import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
 import org.aeonbits.owner.ConfigFactory;
 
-public class AISApp<T> implements Runnable {
+public class AISApp implements Runnable {
 
     private final AISAdaptorConfig config;
     private final AISSource aisSource;
@@ -24,17 +25,15 @@ public class AISApp<T> implements Runnable {
 
     @Override
     public void run() {
-
+        AISProcessor p = createProcessor();
 
         aisSource.open()
-                .map(aisNormalizer::normalize)
-        ;
+                .map(aisNormalizer::translate)
+                .map(aisMsg -> aisMsg.map(x -> p.process(x)))
+                .filter(d -> d.map(a -> a.isOK()).orElse(true))
+                .forEach(a -> System.out.println("a = " + a));
 
 
-    }
-
-    private AISMessageConsumer<T> createConsumer() {
-        return new AISMessageConsumer(aisNormalizer, createProcessor());
     }
 
     private DefaultAISProcessor createProcessor() {

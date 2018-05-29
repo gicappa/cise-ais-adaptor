@@ -1,7 +1,9 @@
 package eu.cise.adaptor.process;
 
 import eu.cise.adaptor.AISMsg;
+import eu.cise.adaptor.dispatch.DispatchResult;
 
+@FunctionalInterface
 public interface AISProcessor {
-    void process(AISMsg message);
+    DispatchResult process(AISMsg message);
 }

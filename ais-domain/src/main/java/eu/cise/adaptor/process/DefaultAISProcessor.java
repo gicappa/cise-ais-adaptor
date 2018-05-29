@@ -38,7 +38,7 @@ public class DefaultAISProcessor implements AISProcessor {
     }
 
     @Override
-    public void process(AISMsg message) {
+    public DispatchResult process(AISMsg message) {
         try {
 
             DispatchResult result = supplyAsync(() -> modelTranslator.translate(message)
@@ -51,10 +51,12 @@ public class DefaultAISProcessor implements AISProcessor {
                 System.out.println(result.getResult());
 
             Thread.sleep(config.getProcessingIdleTime());
+            return result;
         } catch (InterruptedException e) {
             throw new AISAdaptorException(e);
         } catch (ExecutionException ee) {
             logger.debug("error", ee);
+            return DispatchResult.failure();
         }
     }
 }

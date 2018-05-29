@@ -24,8 +24,8 @@ public class DelayedProcessor implements AISProcessor {
     }
 
     @Override
-    public void process(AISMsg message) {
-
+    public DispatchResult process(AISMsg message) {
+        return null;
 //        new BufferedReader().lines
 
     }

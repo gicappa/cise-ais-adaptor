@@ -78,12 +78,12 @@ public class AISNormalizerMsg5Test {
 
     @Test
     public void it_maps_voyage_message_type() {
-        assertThat(n.normalize(voyageMsg()).getMessageType(), is(5));
+        assertThat(n.translate(voyageMsg()).getMessageType(), is(5));
     }
 
     @Test
     public void it_maps_voyage_message_destination() {
-        assertThat(n.normalize(voyageMsg()).getDestination(), is("DEWVN"));
+        assertThat(n.translate(voyageMsg()).getDestination(), is("DEWVN"));
     }
 
 
@@ -100,7 +100,7 @@ public class AISNormalizerMsg5Test {
 
         n = new TBSAISNormalizer(beforeJuly2018);
 
-        assertThat(n.normalize(voyageMsg()).getEta(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
+        assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
     }
 
     @Test
@@ -110,58 +110,58 @@ public class AISNormalizerMsg5Test {
 
         n = new TBSAISNormalizer(afterJuly2018);
 
-        assertThat(n.normalize(voyageMsg()).getEta(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
+        assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
     }
 
     //00-00 24:60
     @Test
     public void it_maps_voyage_message_ETA_on_1970_when_month_and_day_are_not_available() {
-        assertThat(n.normalize(voyageMsgNoMonthDay()).getEta(), is(Instant.parse("1970-01-01T00:00:00.00Z")));
+        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(), is(Instant.parse("1970-01-01T00:00:00.00Z")));
     }
 
     @Test
     public void it_maps_voyage_message_imo_number() {
-        assertThat(n.normalize(voyageMsg()).getImoNumber(), is(9301134));
+        assertThat(n.translate(voyageMsg()).getImoNumber(), is(9301134));
     }
 
     @Test
     public void it_maps_voyage_message_call_sign() {
-        assertThat(n.normalize(voyageMsg()).getCallSign(), is("V2EP6"));
+        assertThat(n.translate(voyageMsg()).getCallSign(), is("V2EP6"));
     }
 
     @Test
     public void it_maps_voyage_message_draught() {
-        assertThat(n.normalize(voyageMsg()).getDraught(), is(10.4F));
+        assertThat(n.translate(voyageMsg()).getDraught(), is(10.4F));
     }
 
     @Test
     public void it_maps_voyage_message_dimension_C() {
-        assertThat(n.normalize(voyageMsg()).getDimensionC(), is(14));
+        assertThat(n.translate(voyageMsg()).getDimensionC(), is(14));
     }
 
     @Test
     public void it_maps_voyage_message_dimension_D() {
-        assertThat(n.normalize(voyageMsg()).getDimensionD(), is(11));
+        assertThat(n.translate(voyageMsg()).getDimensionD(), is(11));
     }
 
     @Test
     public void it_maps_voyage_message_dimension_A() {
-        assertThat(n.normalize(voyageMsg()).getDimensionA(), is(143));
+        assertThat(n.translate(voyageMsg()).getDimensionA(), is(143));
     }
 
     @Test
     public void it_maps_voyage_message_dimension_B() {
-        assertThat(n.normalize(voyageMsg()).getDimensionB(), is(18));
+        assertThat(n.translate(voyageMsg()).getDimensionB(), is(18));
     }
 
     @Test
     //CargoHazardousA(71)
     public void it_maps_voyage_message_ship_type() {
-        assertThat(n.normalize(voyageMsg()).getShipType(), is(71));
+        assertThat(n.translate(voyageMsg()).getShipType(), is(71));
     }
 
     @Test
     public void it_maps_voyage_message_ship_name() {
-        assertThat(n.normalize(voyageMsg()).getShipName(), is("LANGENESS"));
+        assertThat(n.translate(voyageMsg()).getShipName(), is("LANGENESS"));
     }
 }

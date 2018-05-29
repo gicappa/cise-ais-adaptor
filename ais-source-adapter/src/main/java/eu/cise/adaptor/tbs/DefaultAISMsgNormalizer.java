@@ -1,9 +1,7 @@
 package eu.cise.adaptor.tbs;
 
-import dk.tbsalling.aismessages.nmea.NMEAMessageHandler;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.translate.Translator;
 
 import java.util.Optional;
 
@@ -23,9 +21,9 @@ public class DefaultAISMsgNormalizer implements AISNormalizer {
     }
 
     @Override
-    public Optional<AISMsg> normalize(String type) {
+    public Optional<AISMsg> translate(String type) {
         return nt.translate(type)
                 .map(nmea -> simpleNMEAWhatever.translate(nmea))
-                .flatMap(aisMessage -> aisMessage.map(a ->  tn.normalize(a)));
+                .flatMap(aisMessage -> aisMessage.map(a -> tn.translate(a)));
     }
 }
