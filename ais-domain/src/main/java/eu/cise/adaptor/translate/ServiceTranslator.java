@@ -8,13 +8,14 @@ import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
-public class ServiceTranslator implements Translator<Entity, Push> {
+public class ServiceTranslator implements Translator<List<Entity>, Push> {
     private final AISAdaptorConfig config;
 
     public ServiceTranslator(AISAdaptorConfig config) {
@@ -22,7 +23,7 @@ public class ServiceTranslator implements Translator<Entity, Push> {
     }
 
     @Override
-    public Push translate(Entity entity) {
+    public Push translate(List<Entity> entity) {
         return newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())
@@ -44,7 +45,7 @@ public class ServiceTranslator implements Translator<Entity, Push> {
                 .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntity(entity)
+                .addEntities(entity)
                 .build();
     }
 

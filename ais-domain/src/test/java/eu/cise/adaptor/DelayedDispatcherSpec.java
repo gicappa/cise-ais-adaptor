@@ -2,37 +2,42 @@ package eu.cise.adaptor;
 
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.dispatch.DelayedProcessor;
-import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.servicemodel.v1.message.Push;
-import org.junit.Ignore;
+import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.eucise.helpers.PushBuilder.newPush;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(Spectrum.class)
-@Ignore
 public class DelayedDispatcherSpec {
     {
         describe("aggregates a stream of messages", () -> {
 
-            Dispatcher dispatcher = mock(Dispatcher.class);
-            Push push = newPush().build();
-            DelayedProcessor delayedDispatcher = new DelayedProcessor(dispatcher);
+            Vessel vessel = new Vessel();
+            vessel.setMMSI(12345L);
+
+            MessageGrouper delayedDispatcher = new MessageGrouper();
+
+            it("does't dispatch a single message ", () -> {
+                assertThat(delayedDispatcher.translate(vessel), is(Optional.empty()));
+            });
 
             it("accumulate two messages and it dispatches the third", () -> {
-                delayedDispatcher.send(push, "address");
-                delayedDispatcher.send(push, "address");
-                delayedDispatcher.send(push, "address");
+                delayedDispatcher.translate(vessel);
+                delayedDispatcher.translate(vessel);
+                assertThat(delayedDispatcher.translate(vessel).get(), instanceOf(List.class));
 
-                verify(dispatcher, times(1)).send(any(), eq("address"));
+            });
+
+            it("the last message is actually a list with three entity", () -> {
+                delayedDispatcher.translate(vessel);
+                delayedDispatcher.translate(vessel);
+                assertThat(delayedDispatcher.translate(vessel).get(), hasSize(3));
             });
         });
     }

@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.process.AISProcessor;
+import eu.cise.adaptor.process.UseCaseMapAISToCISE;
 import eu.cise.adaptor.process.DefaultAISProcessor;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.*;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
 
 @RunWith(Spectrum.class)
@@ -30,7 +31,7 @@ public class ProcessorSpec {
             Vessel translatedVessel = new Vessel();
             Push translatedPush = new Push();
 
-            AISProcessor processor = new DefaultAISProcessor(modelTranslator, serviceTranslator, dispatcher, config);
+            UseCaseMapAISToCISE processor = new DefaultAISProcessor(modelTranslator, serviceTranslator, dispatcher, config);
 
             final AISMsg aisMessage = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
@@ -48,11 +49,10 @@ public class ProcessorSpec {
                 when(config.isOverridingTimestamps()).thenReturn(true);
                 when(config.isDemoEnvironment()).thenReturn(true);
                 when(modelTranslator.translate(aisMessage)).thenReturn(Optional.of(translatedVessel));
-                when(serviceTranslator.translate(translatedVessel)).thenReturn(translatedPush);
+                when(serviceTranslator.translate(singletonList(translatedVessel))).thenReturn(translatedPush);
                 when(config.getGatewayAddress()).thenReturn("http://gateway.addr.gov/messages");
 
                 processor.process(aisMessage);
-
             });
 
             afterEach(() -> {
@@ -67,7 +67,7 @@ public class ProcessorSpec {
             });
 
             it("translates an AIS message into a CISE one", () -> {
-                verify(serviceTranslator).translate(translatedVessel);
+                verify(serviceTranslator).translate(singletonList(translatedVessel));
             });
 
             it("dispatches the translated CISE message", () -> {

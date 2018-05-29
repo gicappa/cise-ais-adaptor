@@ -7,6 +7,7 @@ import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
+import eu.eucise.servicemodel.v1.message.Push;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
-public class DefaultAISProcessor implements AISProcessor {
+public class DefaultAISProcessor implements UseCaseMapAISToCISE {
 
     private final ModelTranslator modelTranslator;
     private final ServiceTranslator serviceTranslator;
@@ -38,14 +39,18 @@ public class DefaultAISProcessor implements AISProcessor {
     }
 
     @Override
+    public Push map(AISMsg msg) {
+        return null;
+    }
+
+    @Override
     public DispatchResult process(AISMsg message) {
         try {
-
-            DispatchResult result = supplyAsync(() -> modelTranslator.translate(message)
+            DispatchResult result = supplyAsync(() ->
+                    modelTranslator.translate(message)
                             .map(e -> serviceTranslator.translate(e))
-                            .map(m -> dispatcher.send(m, config.getGatewayAddress()))
-                            .orElse(DispatchResult.success())
-                    , pool).get();
+                            .map(v -> dispatcher.send(v, config.getGatewayAddress()))
+                            .orElse(DispatchResult.success()), pool).get();
 
             if (!result.isOK())
                 System.out.println(result.getResult());
