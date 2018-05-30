@@ -14,14 +14,16 @@ public class MainApp implements Runnable {
     public MainApp(CertificateConfig config) {
         ctx = new DefaultAppContext(config);
         banner = new Banner();
-        aisApp = new AISApp(ctx.makeSource(), ctx.makeNormalizer(), ctx.makeDispatcher());
+        aisApp = new AISApp(ctx.makeSource(),
+                ctx.makeStreamProcessor(),
+                ctx.makeDispatcher(),
+                config);
     }
 
     public static void main(String[] args) {
         try {
-            CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
 
-            new MainApp(config).run();
+            new MainApp(createConfig()).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -31,14 +33,18 @@ public class MainApp implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        banner.print();
-        aisApp.run();
+    private static CertificateConfig createConfig() {
+        return ConfigFactory.create(CertificateConfig.class);
     }
 
     private static boolean optionDebug(String[] args) {
         return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
+    }
+
+    @Override
+    public void run() {
+        banner.print();
+        aisApp.run();
     }
 
 }

@@ -1,10 +1,11 @@
-package eu.cise.adaptor.tbs;
+package eu.cise.adaptor.reactor;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.normalize.NavigationStatus;
+import eu.cise.adaptor.tbs.Eta;
 import eu.cise.adaptor.translate.Translator;
 import eu.cise.datamodel.v1.entity.Entity;
 
@@ -25,15 +26,15 @@ import static java.lang.Boolean.FALSE;
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
  */
-public class TBSAISNormalizer implements Translator<AISMessage, AISMsg> {
+public class AISMessageToAISMsg implements Translator<AISMessage, AISMsg> {
 
     private final Eta eta;
 
-    public TBSAISNormalizer() {
+    public AISMessageToAISMsg() {
         this(Clock.systemUTC());
     }
 
-    public TBSAISNormalizer(Clock clock) {
+    public AISMessageToAISMsg(Clock clock) {
         this.eta = new Eta(clock);
     }
 

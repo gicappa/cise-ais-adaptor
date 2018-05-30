@@ -1,47 +1,55 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.process.DefaultAISProcessor;
-import eu.cise.adaptor.process.UseCaseMapAISToCISE;
-import eu.cise.adaptor.translate.ModelTranslator;
-import eu.cise.adaptor.translate.ServiceTranslator;
-import org.aeonbits.owner.ConfigFactory;
+import eu.cise.servicemodel.v1.message.Message;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
+
+import java.util.stream.Stream;
 
 public class AISApp implements Runnable {
 
     private final AISAdaptorConfig config;
     private final AISSource aisSource;
-    private final AISNormalizer aisNormalizer;
+
     private final Dispatcher dispatcher;
+    private final StreamProcessor streamProcessor;
 
-    public AISApp(AISSource aisSource, AISNormalizer aisNormalizer, Dispatcher dispatcher) {
-        this.config = ConfigFactory.create(AISAdaptorConfig.class);
+    public AISApp(AISSource aisSource,
+                  StreamProcessor streamProcessor,
+                  Dispatcher dispatcher,
+                  AISAdaptorConfig config) {
         this.aisSource = aisSource;
-        this.aisNormalizer = aisNormalizer;
         this.dispatcher = dispatcher;
-
-        System.out.println("config = " + config); //TODO
+        this.streamProcessor = streamProcessor;
+        this.config = config;
     }
 
     @Override
     public void run() {
+        System.out.println("config = " + config); //TODO
 
-//        Flux<String>
-
-
-        UseCaseMapAISToCISE p = createProcessor();
-
-        aisSource.open()
-                .map(aisNormalizer::translate)
-                .map(aisMsg -> aisMsg.map(x -> p.process(x)))
-
-                .filter(d -> d.map(a -> a.isOK()).orElse(true))
-                .forEach(a -> System.out.println("a = " + a));
+        dispatchMessages(toCiseMessages(toFluxString(openAisSource())));
     }
 
-    private DefaultAISProcessor createProcessor() {
-        return new DefaultAISProcessor(new ModelTranslator(config), new ServiceTranslator(config), dispatcher, config);
+    private Message dispatchMessages(Flux<Message> messageStream) {
+        return messageStream
+                .publishOn(Schedulers.elastic())
+                .doOnNext(msg -> dispatcher.send(msg, config.getGatewayAddress()))
+                .doOnError(System.err::println)
+                .blockLast();
+    }
+
+    private Flux<Message> toCiseMessages(Flux<String> aisStringFlux) {
+        return streamProcessor.process(aisStringFlux);
+    }
+
+    private Stream<String> openAisSource() {
+        return aisSource.open();
+    }
+
+    private Flux<String> toFluxString(Stream<String> source) {
+        return Flux.fromStream(source);
     }
 
 }

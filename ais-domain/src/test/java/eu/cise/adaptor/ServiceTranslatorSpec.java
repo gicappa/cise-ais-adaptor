@@ -1,13 +1,12 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.ServiceTranslator;
+import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public class ServiceTranslatorSpec {
         describe("the cise service model added to the entity", () -> {
 
                     AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-                    ServiceTranslator translator = new ServiceTranslator(config);
+                    CiseModelToCiseMessage translator = new CiseModelToCiseMessage(config);
                     Vessel vessel = new Vessel();
 
                     it("returns an optional with a push message", () ->

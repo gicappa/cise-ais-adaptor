@@ -22,7 +22,7 @@ public class Eta {
         this.clock = clock;
     }
 
-    Instant computeETA(String etaString) {
+    public Instant computeETA(String etaString) {
         if (etaString == null) return null;
 
         Instant eta = Instant.parse(getDateTime(etaString));

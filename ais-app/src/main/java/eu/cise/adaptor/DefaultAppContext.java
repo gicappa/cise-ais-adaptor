@@ -1,11 +1,13 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.normalize.AISNormalizer;
+import eu.cise.adaptor.reactor.StringFluxToAISMsgFlux;
 import eu.cise.adaptor.signature.DefaultCertificateRegistry;
 import eu.cise.adaptor.signature.DefaultSignatureService;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.tbs.*;
+import eu.cise.adaptor.translate.AisMsgToCiseModel;
+import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 
 public class DefaultAppContext implements AppContext {
 
@@ -21,9 +23,14 @@ public class DefaultAppContext implements AppContext {
     }
 
     @Override
-    public AISNormalizer makeNormalizer() {
-        return new DefaultAISMsgNormalizer(new NMEAMessageTranslator(), new SimpleNMEAWhatever("SRC"), new TBSAISNormalizer());
+    public StreamProcessor makeStreamProcessor() {
+        return new StreamProcessor(new StringFluxToAISMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config));
     }
+
+//    @Override
+//    public AISNormalizer makeNormalizer() {
+//        return new StringFluxToAISMsgFlux();
+//    }
 
     @Override
     public Dispatcher makeDispatcher() {

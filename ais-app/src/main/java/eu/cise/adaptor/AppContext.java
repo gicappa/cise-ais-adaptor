@@ -22,16 +22,16 @@
 
 package eu.cise.adaptor;
 
-import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.translate.Translator;
 
 public interface AppContext {
 
     Dispatcher makeDispatcher();
 
-    AISNormalizer makeNormalizer();
+//    AISNormalizer makeNormalizer();
 
     AISSource makeSource();
+
+    StreamProcessor makeStreamProcessor();
 }

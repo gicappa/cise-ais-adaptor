@@ -1,17 +1,15 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.process.UseCaseMapAISToCISE;
-import eu.cise.adaptor.process.DefaultAISProcessor;
-import eu.cise.adaptor.translate.ModelTranslator;
-import eu.cise.adaptor.translate.ServiceTranslator;
+import eu.cise.adaptor.normalize.AISNormalizer;
+import eu.cise.adaptor.translate.AisMsgToCiseModel;
+import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import org.junit.runner.RunWith;
+import reactor.core.publisher.Flux;
 
 import java.time.Instant;
-import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.*;
 import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
@@ -19,19 +17,20 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
 
 @RunWith(Spectrum.class)
-public class ProcessorSpec {
+public class StreamProcessorSpec {
     {
         describe("process the AISMsg message", () -> {
 
             AISAdaptorConfig config = mock(AISAdaptorConfig.class);
-            ModelTranslator modelTranslator = mock(ModelTranslator.class);
-            ServiceTranslator serviceTranslator = mock(ServiceTranslator.class);
-            Dispatcher dispatcher = mock(Dispatcher.class);
+            AISNormalizer aisNormalizer = mock(AISNormalizer.class);
+            AisMsgToCiseModel aisMsgToCiseModel = mock(AisMsgToCiseModel.class);
+            CiseModelToCiseMessage ciseModelToCiseMessage = mock(CiseModelToCiseMessage.class);
 
             Vessel translatedVessel = new Vessel();
             Push translatedPush = new Push();
 
-            UseCaseMapAISToCISE processor = new DefaultAISProcessor(modelTranslator, serviceTranslator, dispatcher, config);
+            StreamProcessor processor = new StreamProcessor(
+                    aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage);
 
             final AISMsg aisMessage = new AISMsg.Builder(1)
                     .withLatitude(47.443634F)
@@ -48,31 +47,27 @@ public class ProcessorSpec {
             beforeEach(() -> {
                 when(config.isOverridingTimestamps()).thenReturn(true);
                 when(config.isDemoEnvironment()).thenReturn(true);
-                when(modelTranslator.translate(aisMessage)).thenReturn(Optional.of(translatedVessel));
-                when(serviceTranslator.translate(singletonList(translatedVessel))).thenReturn(translatedPush);
+                when(aisMsgToCiseModel.translate(aisMessage)).thenReturn(translatedVessel);
+                when(ciseModelToCiseMessage.translate(singletonList(translatedVessel))).thenReturn(translatedPush);
                 when(config.getGatewayAddress()).thenReturn("http://gateway.addr.gov/messages");
 
-                processor.process(aisMessage);
+                processor.toCiseMessageFlux(Flux.just(aisMessage));
             });
 
             afterEach(() -> {
-                reset(modelTranslator);
-                reset(serviceTranslator);
-                reset(dispatcher);
+                reset(aisMsgToCiseModel);
+                reset(ciseModelToCiseMessage);
                 reset(config);
             });
 
             it("translates an AIS message into a CISE one", () -> {
-                verify(modelTranslator).translate(aisMessage);
+                verify(aisMsgToCiseModel).translate(aisMessage);
             });
 
             it("translates an AIS message into a CISE one", () -> {
-                verify(serviceTranslator).translate(singletonList(translatedVessel));
+                verify(ciseModelToCiseMessage).translate(singletonList(translatedVessel));
             });
 
-            it("dispatches the translated CISE message", () -> {
-                verify(dispatcher).send(eq(translatedPush), eq("http://gateway.addr.gov/messages"));
-            });
         });
     }
 }

@@ -15,10 +15,10 @@ import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
-public class ServiceTranslator implements Translator<List<Entity>, Push> {
+public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
     private final AISAdaptorConfig config;
 
-    public ServiceTranslator(AISAdaptorConfig config) {
+    public CiseModelToCiseMessage(AISAdaptorConfig config) {
         this.config = config;
     }
 

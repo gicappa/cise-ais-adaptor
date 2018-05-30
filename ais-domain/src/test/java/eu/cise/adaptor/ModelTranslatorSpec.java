@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.ModelTranslator;
+import eu.cise.adaptor.translate.AisMsgToCiseModel;
 import eu.cise.datamodel.v1.entity.Entity;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import org.aeonbits.owner.ConfigFactory;
@@ -21,7 +21,7 @@ public class ModelTranslatorSpec {
         describe("an AIS to CISE model translator", () -> {
 
             AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-            ModelTranslator translator = new ModelTranslator(config);
+            AisMsgToCiseModel translator = new AisMsgToCiseModel(config);
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11).forEach((n) ->
@@ -42,7 +42,7 @@ public class ModelTranslatorSpec {
                                     assertThat(translator.translate(m), is(not(Optional.empty()))));
 
                             it("returns an Optional<Vessel>", () -> {
-                                Entity entity = translator.translate(m).get();
+                                Entity entity = translator.translate(m);
 
                                 assertThat("The element in the payload must be a Vessel",
                                         entity, instanceOf(Vessel.class));
