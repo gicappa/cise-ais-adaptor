@@ -7,7 +7,7 @@ import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
-import eu.eucise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.message.Push;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class DefaultAISProcessor implements UseCaseMapAISToCISE {
@@ -48,7 +49,7 @@ public class DefaultAISProcessor implements UseCaseMapAISToCISE {
         try {
             DispatchResult result = supplyAsync(() ->
                     modelTranslator.translate(message)
-                            .map(e -> serviceTranslator.translate(e))
+                            .map(e -> serviceTranslator.translate(singletonList(e)))
                             .map(v -> dispatcher.send(v, config.getGatewayAddress()))
                             .orElse(DispatchResult.success()), pool).get();
 

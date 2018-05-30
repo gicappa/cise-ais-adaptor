@@ -21,24 +21,24 @@ public class DelayedDispatcherSpec {
             Vessel vessel = new Vessel();
             vessel.setMMSI(12345L);
 
-            MessageGrouper delayedDispatcher = new MessageGrouper();
-
-            it("does't dispatch a single message ", () -> {
-                assertThat(delayedDispatcher.translate(vessel), is(Optional.empty()));
-            });
-
-            it("accumulate two messages and it dispatches the third", () -> {
-                delayedDispatcher.translate(vessel);
-                delayedDispatcher.translate(vessel);
-                assertThat(delayedDispatcher.translate(vessel).get(), instanceOf(List.class));
-
-            });
-
-            it("the last message is actually a list with three entity", () -> {
-                delayedDispatcher.translate(vessel);
-                delayedDispatcher.translate(vessel);
-                assertThat(delayedDispatcher.translate(vessel).get(), hasSize(3));
-            });
+//            MessageGrouper delayedDispatcher = new MessageGrouper();
+//
+//            it("does't dispatch a single message ", () -> {
+//                assertThat(delayedDispatcher.translate(vessel), is(Optional.empty()));
+//            });
+//
+//            it("accumulate two messages and it dispatches the third", () -> {
+//                delayedDispatcher.translate(vessel);
+//                delayedDispatcher.translate(vessel);
+//                assertThat(delayedDispatcher.translate(vessel).get(), instanceOf(List.class));
+//
+//            });
+//
+//            it("the last message is actually a list with three entity", () -> {
+//                delayedDispatcher.translate(vessel);
+//                delayedDispatcher.translate(vessel);
+//                assertThat(delayedDispatcher.translate(vessel).get(), hasSize(3));
+//            });
         });
     }
 }

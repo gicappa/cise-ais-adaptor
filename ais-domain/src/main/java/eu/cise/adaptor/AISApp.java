@@ -2,8 +2,8 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.adaptor.process.UseCaseMapAISToCISE;
 import eu.cise.adaptor.process.DefaultAISProcessor;
+import eu.cise.adaptor.process.UseCaseMapAISToCISE;
 import eu.cise.adaptor.translate.ModelTranslator;
 import eu.cise.adaptor.translate.ServiceTranslator;
 import org.aeonbits.owner.ConfigFactory;
@@ -26,6 +26,10 @@ public class AISApp implements Runnable {
 
     @Override
     public void run() {
+
+//        Flux<String>
+
+
         UseCaseMapAISToCISE p = createProcessor();
 
         aisSource.open()
