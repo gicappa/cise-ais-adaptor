@@ -30,6 +30,10 @@
                 <transformer
                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>eu.cise.adaptor.MainApp</mainClass>
+                  <manifestEntries>
+                    <Class-Path>./conf ../conf</Class-Path>
+                    <Version>${project.version}</Version>
+                  </manifestEntries>
                 </transformer>
               </transformers>
               <finalName>cise-ais-adaptor</finalName>
@@ -61,18 +65,17 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-ais-tbs-source-adapter</artifactId>
-    </dependency>
-
-    <!-- external dependencies -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
+      <artifactId>cise-ais-source-adapter</artifactId>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <artifactId>cise-ais-signature</artifactId>
     </dependency>
   </dependencies>
 

@@ -17,6 +17,14 @@ public class DispatchResult implements Serializable {
         this.result = result;
     }
 
+    public static DispatchResult success() {
+        return new DispatchResult(true, "SUCCESS");
+    }
+
+    public static DispatchResult failure() {
+        return new DispatchResult(false, "FAILURE");
+    }
+
     public boolean isOK() {
         return ok;
     }
@@ -49,13 +57,6 @@ public class DispatchResult implements Serializable {
                 "ok=" + ok +
                 ", result='" + result + '\'' +
                 '}';
-    }
-
-    public static DispatchResult success() {
-        return new DispatchResult(true, "SUCCESS");
-    }
-    public static DispatchResult failure() {
-        return new DispatchResult(false, "FAILURE");
     }
 
 }

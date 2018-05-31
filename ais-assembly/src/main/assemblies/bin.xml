@@ -8,6 +8,12 @@
   <formats>
     <format>tar.gz</format>
   </formats>
+  <files>
+    <file>
+      <source>${project.parent.basedir}/ais-app/src/test/resources/example.ais.stream.txt</source>
+      <outputDirectory>/conf</outputDirectory>
+    </file>
+  </files>
   <fileSets>
     <fileSet>
       <directory>${project.parent.basedir}</directory>
@@ -32,13 +38,13 @@
     </fileSet>
     <fileSet>
       <directory>${project.parent.basedir}/ais-assembly/src/main/scripts</directory>
-      <outputDirectory>/bin</outputDirectory>
+      <outputDirectory>/</outputDirectory>
       <includes>
         <include>*</include>
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.parent.basedir}/ais-assembly/src/main/conf</directory>
+      <directory>${project.parent.basedir}/ais-domain/src/main/resources</directory>
       <outputDirectory>/conf</outputDirectory>
       <includes>
         <include>*</include>

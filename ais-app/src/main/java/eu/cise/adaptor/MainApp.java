@@ -1,35 +1,29 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.normalize.AISNormalizer;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.aeonbits.owner.ConfigFactory;
 
 /**
- * Application entry point
+ * The MainApp class is the application entry point. It accepts the
  */
-public class MainApp {
+public class MainApp implements Runnable {
 
     private final Banner banner;
-    private final MainAISApp aisApp;
+    private final AISApp aisApp;
+    private final AppContext ctx;
 
-    private final ClassPathXmlApplicationContext appContext;
-    private final Dispatcher dispatcher;
-    private final AISNormalizer aisNormalizer;
-    private final AISSource aisSource;
-
-    public MainApp() {
+    public MainApp(CertificateConfig config) {
+        ctx = new DefaultAppContext(config);
         banner = new Banner();
-        appContext = new ClassPathXmlApplicationContext("context-ais.xml");
-        dispatcher = appContext.getBean("signingDispatcher", Dispatcher.class);
-        aisNormalizer = appContext.getBean(AISNormalizer.class);
-        aisSource = appContext.getBean(AISSource.class);
-
-        aisApp = new MainAISApp(aisSource, aisNormalizer, dispatcher);
+        aisApp = new AISApp(ctx.makeSource(),
+                ctx.makeStreamProcessor(),
+                ctx.makeDispatcher(),
+                config);
     }
 
     public static void main(String[] args) {
         try {
-            new MainApp().run();
+
+            new MainApp(createConfig()).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -39,10 +33,15 @@ public class MainApp {
         }
     }
 
+    private static CertificateConfig createConfig() {
+        return ConfigFactory.create(CertificateConfig.class);
+    }
+
     private static boolean optionDebug(String[] args) {
         return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
     }
 
+    @Override
     public void run() {
         banner.print();
         aisApp.run();

@@ -1,7 +1,6 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.dispatch.DispatchResult;
-import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;

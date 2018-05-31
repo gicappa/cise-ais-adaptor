@@ -13,10 +13,12 @@
   <modules>
     <module>ais-app</module>
     <module>ais-domain</module>
-    <module>ais-tbs-source-adapter</module>
+    <module>ais-signature</module>
+    <module>ais-source-adapter</module>
     <module>ais-server-example</module>
     <module>ais-transport</module>
     <module>ais-assembly</module>
+    <module>ais-docs</module>
   </modules>
 
   <build>
@@ -188,7 +190,7 @@
 
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-tbs-source-adapter</artifactId>
+        <artifactId>cise-ais-source-adapter</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
 
@@ -209,17 +211,18 @@
         <artifactId>cise-ais-app</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
-      <!-- EUCISE dependencies -->
+
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>eucise-com-signature-lib</artifactId>
-        <version>1.0.2</version>
+        <artifactId>cise-ais-signature</artifactId>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
 
+      <!-- EUCISE dependencies -->
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.5.3.6-SNAPSHOT</version>
+        <version>1.5.3.8-SNAPSHOT</version>
       </dependency>
 
       <dependency>
@@ -260,6 +263,12 @@
 
       <dependency>
         <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.25</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
         <artifactId>log4j-over-slf4j</artifactId>
         <version>1.7.25</version>
       </dependency>
@@ -283,15 +292,17 @@
       </dependency>
 
       <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>5.0.4.RELEASE</version>
-      </dependency>
-
-      <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-client</artifactId>
         <version>2.19</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.projectreactor</groupId>
+        <artifactId>reactor-bom</artifactId>
+        <version>Bismuth-RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
 
       <!-- Test Libraries -->
@@ -384,7 +395,9 @@
         <groupId>com.github.npathai</groupId>
         <artifactId>hamcrest-optional</artifactId>
         <version>2.0.0</version>
+        <scope>test</scope>
       </dependency>
+
     </dependencies>
 
   </dependencyManagement>

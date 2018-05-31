@@ -35,11 +35,11 @@ public class Utils {
         return v.getLocationRels().get(0).getLocation().getGeometries().get(0);
     }
 
-    public static Vessel extractVessel(Optional<Push> translate) {
+    public static Vessel extractVessel(Push translate) {
         return (Vessel) extractPayload(translate).getAnies().get(0);
     }
 
-    public static XmlEntityPayload extractPayload(Optional<Push> m) {
-        return (XmlEntityPayload) m.get().getPayload();
+    public static XmlEntityPayload extractPayload(Push m) {
+        return (XmlEntityPayload) m.getPayload();
     }
 }

@@ -22,7 +22,7 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -77,7 +77,7 @@ public class JerseyRestClient implements RestClient {
         try {
             return function.apply(address);
         } catch (Throwable t) {
-            throw new AISAdaptorException("Error while contacting address=" + address + "|");
+            throw new AdaptorException("Error while contacting address|" + address, t);
         }
     }
 

@@ -22,20 +22,13 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.normalize.AISNormalizer;
+public interface AppContext {
 
-public class AppContext {
+    Dispatcher makeDispatcher();
 
-    public Dispatcher makeDispatcher() {
-        return null;
-    }
+//    AISNormalizer makeNormalizer();
 
-    public AISNormalizer makeNormilizer() {
-        return null;
-    }
+    AisSource makeSource();
 
-    public AISSource makeSource() {
-        return null;
-    }
+    StreamProcessor makeStreamProcessor();
 }
