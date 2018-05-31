@@ -119,3 +119,8 @@ our implementation only support four of them.
 * Create a support for environments (dev, test, prod)
 * Adding a logger class in the domain
 * Explaining in the documentation why there are messages of two types (AISMsg and AISMessage)
+
+
+# TODO
+
+When an option is not specified in the property file it fails with a null pointer exception.

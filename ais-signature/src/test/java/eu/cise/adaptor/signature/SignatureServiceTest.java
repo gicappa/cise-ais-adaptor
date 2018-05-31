@@ -3,7 +3,7 @@ package eu.cise.adaptor.signature;
 import eu.cise.adaptor.KeyStoreInfo;
 import eu.cise.adaptor.PrivateKeyInfo;
 import eu.cise.adaptor.SignatureService;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
@@ -77,7 +77,7 @@ public class SignatureServiceTest {
     }
 
 
-    @Test(expected = AISAdaptorException.class)
+    @Test(expected = AdaptorException.class)
     public void test_verification_fails_if_message_was_tampered_with() {
         long time_1 = System.currentTimeMillis();
         Message signedMsg = signature.sign(message);
@@ -87,7 +87,7 @@ public class SignatureServiceTest {
         System.out.println("Operation took " + (time_2 - time_1) + "ms");
     }
 
-    @Test(expected = AISAdaptorException.class)
+    @Test(expected = AdaptorException.class)
     public void test_verification_fails_if_payload_was_tampered_with() {
         long time_1 = System.currentTimeMillis();
         Message msg = buildMessage();

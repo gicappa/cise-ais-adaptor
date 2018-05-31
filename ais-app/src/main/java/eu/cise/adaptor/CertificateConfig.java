@@ -1,14 +1,12 @@
 package eu.cise.adaptor;
 
 
-import org.aeonbits.owner.Config;
-
 import static org.aeonbits.owner.Config.Sources;
 
 @SuppressWarnings("unused")
 @Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
-public interface CertificateConfig extends AISAdaptorConfig {
+public interface CertificateConfig extends AdaptorConfig {
 
     @DefaultValue("eu.cise.es.gc-ls01")
     String getGatewayId();

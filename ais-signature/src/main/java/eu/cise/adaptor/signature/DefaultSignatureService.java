@@ -3,7 +3,7 @@ package eu.cise.adaptor.signature;
 import eu.cise.adaptor.CertificateRegistry;
 import eu.cise.adaptor.PrivateKeyInfo;
 import eu.cise.adaptor.SignatureService;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
 import org.w3c.dom.Element;
 import sun.security.x509.X500Name;
@@ -74,7 +74,7 @@ public class DefaultSignatureService implements SignatureService {
 
         } catch (XPathExpressionException | IOException | CertificateException | NoSuchAlgorithmException |
                 SignatureException | NoSuchProviderException | InvalidKeyException e) {
-            throw new AISAdaptorException("Exception at certificate verification for message with ID {" + message.getMessageID() + "}", e);
+            throw new AdaptorException("Exception at certificate verification for message with ID {" + message.getMessageID() + "}", e);
         }
     }
 
