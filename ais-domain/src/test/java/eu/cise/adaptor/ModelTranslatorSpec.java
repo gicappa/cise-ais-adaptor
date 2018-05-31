@@ -42,10 +42,10 @@ public class ModelTranslatorSpec {
                                     assertThat(translator.translate(m), is(not(Optional.empty()))));
 
                             it("returns an Optional<Vessel>", () -> {
-                                Entity entity = translator.translate(m);
+                                Optional<Entity> entity = translator.translate(m);
 
                                 assertThat("The element in the payload must be a Vessel",
-                                        entity, instanceOf(Vessel.class));
+                                        entity.get(), instanceOf(Vessel.class));
                             });
                         }
                 );

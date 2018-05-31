@@ -2,10 +2,11 @@ package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AISAdaptorConfig;
 import eu.cise.adaptor.AISMsg;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
 import eu.cise.datamodel.v1.entity.Entity;
 
-public class AisMsgToCiseModel implements Translator<AISMsg, Entity> {
+import java.util.Optional;
+
+public class AisMsgToCiseModel implements Translator<AISMsg, Optional<Entity>> {
 
     private final Message5Translator message5Translator;
     private final Message123Translator message123Translator;
@@ -16,13 +17,13 @@ public class AisMsgToCiseModel implements Translator<AISMsg, Entity> {
     }
 
     @Override
-    public Entity translate(AISMsg message) {
+    public Optional<Entity> translate(AISMsg message) {
         if (isMessageOfType123(message))
-            return message123Translator.translate(message);
+            return Optional.of(message123Translator.translate(message));
         else if (isMessageOfType5(message))
-            return message5Translator.translate(message);
+            return Optional.of(message5Translator.translate(message));
 
-        throw new AISAdaptorException("ais message not supported");
+        return Optional.empty();
     }
 
     private boolean isMessageOfType5(AISMsg message) {
