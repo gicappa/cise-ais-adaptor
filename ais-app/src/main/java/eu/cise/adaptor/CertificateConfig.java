@@ -3,6 +3,10 @@ package eu.cise.adaptor;
 
 import static org.aeonbits.owner.Config.Sources;
 
+/**
+ * Extending the {AdaptorConfig} configuration object adding properties
+ * specific to the Certificate and Signature
+ */
 @SuppressWarnings("unused")
 @Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
