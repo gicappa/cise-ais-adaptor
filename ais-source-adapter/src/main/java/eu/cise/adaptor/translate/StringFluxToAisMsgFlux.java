@@ -7,7 +7,6 @@ import reactor.core.publisher.Flux;
 @SuppressWarnings("ununsed")
 public class StringFluxToAisMsgFlux implements AisNormalizer {
 
-
     private final StringToNmea stringToNmea;
     private final NmeaToAISMessage nmeaToAISMessage;
     private final AisMessageToAisMsg aisMessageToAisMsg;
@@ -22,7 +21,6 @@ public class StringFluxToAisMsgFlux implements AisNormalizer {
     public StringFluxToAisMsgFlux(StringToNmea stringToNmea,
                                   NmeaToAISMessage nmeaToAISMessage,
                                   AisMessageToAisMsg aisMessageToAISMsg) {
-
         this.stringToNmea = stringToNmea;
         this.nmeaToAISMessage = nmeaToAISMessage;
         this.aisMessageToAisMsg = aisMessageToAISMsg;

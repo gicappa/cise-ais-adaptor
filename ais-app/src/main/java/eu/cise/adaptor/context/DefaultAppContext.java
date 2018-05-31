@@ -1,5 +1,6 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.context;
 
+import eu.cise.adaptor.*;
 import eu.cise.adaptor.sources.FileAisSource;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.signature.DefaultCertificateRegistry;
@@ -8,6 +9,9 @@ import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.translate.AisMsgToCiseModel;
 import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 
+/**
+ *
+ */
 public class DefaultAppContext implements AppContext {
 
     private final CertificateConfig config;
@@ -23,7 +27,11 @@ public class DefaultAppContext implements AppContext {
 
     @Override
     public StreamProcessor makeStreamProcessor() {
-        return new StreamProcessor(new StringFluxToAisMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config), config);
+        return new StreamProcessor(
+                new StringFluxToAisMsgFlux(),
+                new AisMsgToCiseModel(config),
+                new CiseModelToCiseMessage(config),
+                config);
     }
 
     @Override

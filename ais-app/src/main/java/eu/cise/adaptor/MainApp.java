@@ -1,5 +1,6 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.context.DefaultAppContext;
 import org.aeonbits.owner.ConfigFactory;
 
 /**
