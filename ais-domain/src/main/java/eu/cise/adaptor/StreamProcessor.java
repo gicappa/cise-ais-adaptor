@@ -12,15 +12,18 @@ public class StreamProcessor {
 
     private final AisMsgToCiseModel aisMsgToCiseModel;
     private final CiseModelToCiseMessage ciseModelToCiseMessage;
+    private final AISAdaptorConfig config;
     private final AISNormalizer aisNormalizer;
 
     public StreamProcessor(AISNormalizer aisNormalizer,
                            AisMsgToCiseModel aisMsgToCiseModel,
-                           CiseModelToCiseMessage ciseModelToCiseMessage) {
+                           CiseModelToCiseMessage ciseModelToCiseMessage,
+                           AISAdaptorConfig config) {
 
         this.aisNormalizer = aisNormalizer;
         this.aisMsgToCiseModel = aisMsgToCiseModel;
         this.ciseModelToCiseMessage = ciseModelToCiseMessage;
+        this.config = config;
     }
 
     public Flux<Message> process(Flux<String> aisStringFlux) {
@@ -32,7 +35,7 @@ public class StreamProcessor {
                 .map(aisMsgToCiseModel::translate)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .buffer(1)
+                .buffer(config.getNumberOfEntitiesPerMessage())
                 .map(ciseModelToCiseMessage::translate);
     }
 }

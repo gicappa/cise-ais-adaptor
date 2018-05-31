@@ -43,7 +43,7 @@ public class StreamProcessorIntegrationTest {
         aisNormalizer = mock(AISNormalizer.class);
         aisMsgToCiseModel = new AisMsgToCiseModel(config);
         ciseModelToCiseMessage = new CiseModelToCiseMessage(config);
-        processor = new StreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage);
+        processor = new StreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class StreamProcessorIntegrationTest {
 
     // private helpers
     private Vessel vessel(Object push) {
-        return (Vessel) ((XmlEntityPayload)((Push) push).getPayload()).getAnies().get(0);
+        return (Vessel) ((XmlEntityPayload) ((Push) push).getPayload()).getAnies().get(0);
     }
 
     public void translateAisMessage(Predicate predicate) {

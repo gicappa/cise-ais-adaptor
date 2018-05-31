@@ -51,4 +51,7 @@ public interface AISAdaptorConfig extends Config {
 
     @Key("processing.idle.time")
     long getProcessingIdleTime();
+
+    @Key("processing.entities-per-message")
+    int getNumberOfEntitiesPerMessage();
 }

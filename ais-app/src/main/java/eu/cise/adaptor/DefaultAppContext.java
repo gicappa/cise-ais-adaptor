@@ -24,13 +24,8 @@ public class DefaultAppContext implements AppContext {
 
     @Override
     public StreamProcessor makeStreamProcessor() {
-        return new StreamProcessor(new StringFluxToAISMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config));
+        return new StreamProcessor(new StringFluxToAISMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config), config);
     }
-
-//    @Override
-//    public AISNormalizer makeNormalizer() {
-//        return new StringFluxToAISMsgFlux();
-//    }
 
     @Override
     public Dispatcher makeDispatcher() {
