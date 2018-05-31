@@ -6,7 +6,6 @@ import java.time.Instant;
 
 public class AisMsg {
 
-
     private final Integer imoNumber;
     // POSITION
     private int messageType;
@@ -22,7 +21,7 @@ public class AisMsg {
     // VOYAGE
     private String destination;
     private Instant eta;
-    private String callsign;
+    private String callSign;
     private float draught;
     private Integer dimensionC;
     private Integer dimensionD;
@@ -46,7 +45,7 @@ public class AisMsg {
         destination = builder.destination;
         eta = builder.eta;
         imoNumber = builder.imoNumber;
-        callsign = builder.callSign;
+        callSign = builder.callSign;
         draught = builder.draught;
         dimensionC = builder.dimensionC;
         dimensionD = builder.dimensionD;
@@ -109,7 +108,7 @@ public class AisMsg {
     }
 
     public String getCallSign() {
-        return callsign;
+        return callSign;
     }
 
     public Float getDraught() {
