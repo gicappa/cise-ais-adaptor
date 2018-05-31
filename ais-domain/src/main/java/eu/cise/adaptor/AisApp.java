@@ -6,7 +6,10 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.stream.Stream;
 
-public class AISApp implements Runnable {
+/**
+ * Main class in the domain
+ */
+public class AisApp implements Runnable {
 
     private final AdaptorConfig config;
     private final AisSource aisSource;
@@ -14,7 +17,7 @@ public class AISApp implements Runnable {
     private final Dispatcher dispatcher;
     private final StreamProcessor streamProcessor;
 
-    public AISApp(AisSource aisSource,
+    public AisApp(AisSource aisSource,
                   StreamProcessor streamProcessor,
                   Dispatcher dispatcher,
                   AdaptorConfig config) {
@@ -26,16 +29,14 @@ public class AISApp implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("config = " + config); //TODO
-
         dispatchMessages(toCiseMessages(toFluxString(openAisSource())));
     }
 
-    private Message dispatchMessages(Flux<Message> messageStream) {
-        return messageStream
+    private void dispatchMessages(Flux<Message> messageStream) {
+        messageStream
                 .publishOn(Schedulers.elastic())
                 .doOnNext(msg -> dispatcher.send(msg, config.getGatewayAddress()))
-                .doOnError(System.err::println)
+                .doOnError(e -> e.printStackTrace())
                 .blockLast();
     }
 

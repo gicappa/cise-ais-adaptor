@@ -1,6 +1,7 @@
 package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
+import eu.cise.adaptor.dispatch.CatchingDispatcher;
 import eu.cise.adaptor.sources.FileAisSource;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.signature.DefaultCertificateRegistry;
@@ -57,8 +58,8 @@ public class DefaultAppContext implements AppContext {
                         config.getPublicJKSPassword()));
     }
 
-    private RestDispatcher makeRestDispatcher() {
-        return new RestDispatcher();
+    private Dispatcher makeRestDispatcher() {
+        return new CatchingDispatcher(new RestDispatcher());
     }
 
 }

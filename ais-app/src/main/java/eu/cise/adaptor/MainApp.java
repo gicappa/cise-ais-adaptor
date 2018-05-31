@@ -3,19 +3,23 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.context.DefaultAppContext;
 import org.aeonbits.owner.ConfigFactory;
 
+import static java.util.stream.Collectors.toMap;
+
 /**
  * The MainApp class is the application entry point. It accepts the
  */
 public class MainApp implements Runnable {
 
+    private final ConfigPrinter configPrinter;
     private final Banner banner;
-    private final AISApp aisApp;
+    private final AisApp aisApp;
     private final AppContext ctx;
 
     public MainApp(CertificateConfig config) {
         ctx = new DefaultAppContext(config);
         banner = new Banner();
-        aisApp = new AISApp(ctx.makeSource(),
+        configPrinter = new ConfigPrinter(config);
+        aisApp = new AisApp(ctx.makeSource(),
                 ctx.makeStreamProcessor(),
                 ctx.makeDispatcher(),
                 config);
@@ -24,7 +28,9 @@ public class MainApp implements Runnable {
     public static void main(String[] args) {
         try {
 
-            new MainApp(createConfig()).run();
+            CertificateConfig config = createConfig();
+
+            new MainApp(config).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -45,6 +51,7 @@ public class MainApp implements Runnable {
     @Override
     public void run() {
         banner.print();
+        configPrinter.print();
         aisApp.run();
     }
 
