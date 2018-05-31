@@ -1,6 +1,5 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.translate.AisMsgToCiseModel;
 import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 import eu.cise.servicemodel.v1.message.Message;
@@ -12,13 +11,13 @@ public class StreamProcessor {
 
     private final AisMsgToCiseModel aisMsgToCiseModel;
     private final CiseModelToCiseMessage ciseModelToCiseMessage;
-    private final AISAdaptorConfig config;
-    private final AISNormalizer aisNormalizer;
+    private final AdaptorConfig config;
+    private final AisNormalizer aisNormalizer;
 
-    public StreamProcessor(AISNormalizer aisNormalizer,
+    public StreamProcessor(AisNormalizer aisNormalizer,
                            AisMsgToCiseModel aisMsgToCiseModel,
                            CiseModelToCiseMessage ciseModelToCiseMessage,
-                           AISAdaptorConfig config) {
+                           AdaptorConfig config) {
 
         this.aisNormalizer = aisNormalizer;
         this.aisMsgToCiseModel = aisMsgToCiseModel;
@@ -30,7 +29,7 @@ public class StreamProcessor {
         return toCiseMessageFlux(aisNormalizer.translate(aisStringFlux));
     }
 
-    public Flux<Message> toCiseMessageFlux(Flux<AISMsg> aisMsgFlux) {
+    public Flux<Message> toCiseMessageFlux(Flux<AisMsg> aisMsgFlux) {
         return aisMsgFlux
                 .map(aisMsgToCiseModel::translate)
                 .filter(Optional::isPresent)

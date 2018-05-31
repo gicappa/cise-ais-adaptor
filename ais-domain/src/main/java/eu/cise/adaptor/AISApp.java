@@ -1,6 +1,5 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.dispatch.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -9,16 +8,16 @@ import java.util.stream.Stream;
 
 public class AISApp implements Runnable {
 
-    private final AISAdaptorConfig config;
-    private final AISSource aisSource;
+    private final AdaptorConfig config;
+    private final AisSource aisSource;
 
     private final Dispatcher dispatcher;
     private final StreamProcessor streamProcessor;
 
-    public AISApp(AISSource aisSource,
+    public AISApp(AisSource aisSource,
                   StreamProcessor streamProcessor,
                   Dispatcher dispatcher,
-                  AISAdaptorConfig config) {
+                  AdaptorConfig config) {
         this.aisSource = aisSource;
         this.dispatcher = dispatcher;
         this.streamProcessor = streamProcessor;

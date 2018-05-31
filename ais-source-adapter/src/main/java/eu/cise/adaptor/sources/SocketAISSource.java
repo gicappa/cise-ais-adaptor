@@ -1,12 +1,12 @@
-package eu.cise.adaptor.tbs;
+package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AISSource;
-import eu.cise.adaptor.InputStreamToStream;
+import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.translate.utils.InputStreamToStream;
 
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public class SocketAISSource implements AISSource {
+public class SocketAISSource implements AisSource {
 
     private final String host;
     private final int port;

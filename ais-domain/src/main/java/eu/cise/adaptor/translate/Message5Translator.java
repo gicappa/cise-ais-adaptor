@@ -1,7 +1,6 @@
 package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AISMsg;
-import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.adaptor.AisMsg;
 import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
@@ -16,7 +15,7 @@ import java.util.Set;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
-public class Message5Translator implements Translator<AISMsg, Vessel> {
+public class Message5Translator implements Translator<AisMsg, Vessel> {
 
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
@@ -29,7 +28,7 @@ public class Message5Translator implements Translator<AISMsg, Vessel> {
     }
 
     @Override
-    public Vessel translate(AISMsg message) {
+    public Vessel translate(AisMsg message) {
         Vessel vessel = new Vessel();
 
         Long imoNumber = getImoNumber(message);
@@ -49,26 +48,26 @@ public class Message5Translator implements Translator<AISMsg, Vessel> {
         return vessel;
     }
 
-    private Objet.InvolvedEventRel getInvolvedEventRel(AISMsg message) {
+    private Objet.InvolvedEventRel getInvolvedEventRel(AisMsg message) {
         Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();
         involvedEventRel.setEvent(getMovement(message));
         return involvedEventRel;
     }
 
-    private Movement getMovement(AISMsg message) {
+    private Movement getMovement(AisMsg message) {
         Movement movement = new Movement();
         movement.setMovementType(VOYAGE);
         movement.getLocationRels().add(getLocationRel(message));
         return movement;
     }
 
-    private Event.LocationRel getLocationRel(AISMsg message) {
+    private Event.LocationRel getLocationRel(AisMsg message) {
         Event.LocationRel locationRel = new Event.LocationRel();
         locationRel.setLocation(getPortLocation(message));
         return locationRel;
     }
 
-    private PortLocation getPortLocation(AISMsg message) {
+    private PortLocation getPortLocation(AisMsg message) {
         PortLocation location = new PortLocation();
 
         String locationCode = message.getDestination();
@@ -98,18 +97,18 @@ public class Message5Translator implements Translator<AISMsg, Vessel> {
         return Double.valueOf(fValue.toString());
     }
 
-    private Long getImoNumber(AISMsg aisMsg) {
+    private Long getImoNumber(AisMsg aisMsg) {
         return aisMsg.getImoNumber() == null ? null : Long.valueOf(aisMsg.getImoNumber());
     }
 
-    private Double getLength(AISMsg aisMsg) {
+    private Double getLength(AisMsg aisMsg) {
         if (aisMsg.getDimensionA() == null || aisMsg.getDimensionB() == null)
             return null;
 
         return Double.valueOf(aisMsg.getDimensionA() + aisMsg.getDimensionB());
     }
 
-    private Integer getBeam(AISMsg aisMsg) {
+    private Integer getBeam(AisMsg aisMsg) {
         if (aisMsg.getDimensionC() == null || aisMsg.getDimensionD() == null)
             return null;
 

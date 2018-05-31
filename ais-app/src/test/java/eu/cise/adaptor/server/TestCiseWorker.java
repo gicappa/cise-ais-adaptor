@@ -1,6 +1,6 @@
 package eu.cise.adaptor.server;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.servicemodel.v1.message.AcknowledgementType;
 import eu.cise.servicemodel.v1.message.PurposeType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
@@ -46,7 +46,7 @@ public class TestCiseWorker implements Runnable {
             socket.shutdownInput();
             socket.shutdownOutput();
         } catch (IOException e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
     }
 
@@ -89,14 +89,14 @@ public class TestCiseWorker implements Runnable {
             }
 
             if (contentLength == -1) {
-                throw new AISAdaptorException("No HTTP Header 'Content-Length' specified while it's mandatory");
+                throw new AdaptorException("No HTTP Header 'Content-Length' specified while it's mandatory");
             }
 
             char[] body = new char[contentLength];
             reader.read(body, 0, contentLength);
             return new String(body);
         } catch (IOException e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
     }
 

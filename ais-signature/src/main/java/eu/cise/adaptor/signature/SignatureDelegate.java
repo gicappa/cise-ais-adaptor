@@ -1,6 +1,6 @@
 package eu.cise.adaptor.signature;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
 import eu.eucise.xml.DefaultXmlMapper;
 import org.w3c.dom.Document;
@@ -44,7 +44,7 @@ public class SignatureDelegate {
         try {
             return XMLSignatureFactory.getInstance("DOM", "XMLDSig");
         } catch (NoSuchProviderException e) {
-            throw new AISAdaptorException("No such security provider", e);
+            throw new AdaptorException("No such security provider", e);
         }
     }
 
@@ -67,14 +67,14 @@ public class SignatureDelegate {
             DOMValidateContext valCtx = new DOMValidateContext(keySelector, sigEl);
             XMLSignature sig = signatureFactory.unmarshalXMLSignature(valCtx);
             if (!sig.validate(valCtx)) {
-                throw new AISAdaptorException("Signature verification failed for message with ID {"
+                throw new AdaptorException("Signature verification failed for message with ID {"
                         + messageID + "}");
             }
         } catch (MarshalException e) {
-            throw new AISAdaptorException("Signature element was not found for message with ID {"
+            throw new AdaptorException("Signature element was not found for message with ID {"
                     + messageID + "}", e);
         } catch (XMLSignatureException e) {
-            throw new AISAdaptorException("Unexpected XMLSignatureException for message with ID {"
+            throw new AdaptorException("Unexpected XMLSignatureException for message with ID {"
                     + messageID + "}", e);
         }
     }
@@ -84,7 +84,7 @@ public class SignatureDelegate {
         if (nl.getLength() > 0) {
             return (Element) nl.item(0);
         } else {
-            throw new AISAdaptorException("Signature element was not found for message with ID {"
+            throw new AdaptorException("Signature element was not found for message with ID {"
                     + messageID + "}");
         }
     }
@@ -107,7 +107,7 @@ public class SignatureDelegate {
             signature.sign(dsc);
             return doc;
         } catch (MarshalException | XMLSignatureException | InvalidAlgorithmParameterException | NoSuchAlgorithmException e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
     }
 

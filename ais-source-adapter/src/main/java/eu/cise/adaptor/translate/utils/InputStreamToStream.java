@@ -1,4 +1,4 @@
-package eu.cise.adaptor;
+package eu.cise.adaptor.translate.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

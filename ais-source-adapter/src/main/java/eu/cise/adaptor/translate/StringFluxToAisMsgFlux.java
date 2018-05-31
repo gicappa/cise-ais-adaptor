@@ -1,26 +1,27 @@
-package eu.cise.adaptor.reactor;
+package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AISMsg;
-import eu.cise.adaptor.normalize.AISNormalizer;
-import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.adaptor.AisMsg;
+import eu.cise.adaptor.AisNormalizer;
 import reactor.core.publisher.Flux;
 
-public class StringFluxToAISMsgFlux implements AISNormalizer {
+@SuppressWarnings("ununsed")
+public class StringFluxToAisMsgFlux implements AisNormalizer {
 
 
     private final StringToNmea stringToNmea;
     private final NmeaToAISMessage nmeaToAISMessage;
-    private final AISMessageToAISMsg aisMessageToAisMsg;
+    private final AisMessageToAisMsg aisMessageToAisMsg;
 
-    public StringFluxToAISMsgFlux() {
+    public StringFluxToAisMsgFlux() {
         this.stringToNmea = new StringToNmea();
         this.nmeaToAISMessage = new NmeaToAISMessage("SRC");
-        this.aisMessageToAisMsg = new AISMessageToAISMsg();
+        this.aisMessageToAisMsg = new AisMessageToAisMsg();
     }
 
-    public StringFluxToAISMsgFlux(StringToNmea stringToNmea,
+    @SuppressWarnings("ununsed")
+    public StringFluxToAisMsgFlux(StringToNmea stringToNmea,
                                   NmeaToAISMessage nmeaToAISMessage,
-                                  AISMessageToAISMsg aisMessageToAISMsg) {
+                                  AisMessageToAisMsg aisMessageToAISMsg) {
 
         this.stringToNmea = stringToNmea;
         this.nmeaToAISMessage = nmeaToAISMessage;
@@ -28,7 +29,7 @@ public class StringFluxToAISMsgFlux implements AISNormalizer {
     }
 
     @Override
-    public Flux<AISMsg> translate(Flux<String> stringFlux) {
+    public Flux<AisMsg> translate(Flux<String> stringFlux) {
         return stringFlux
                 .map(stringToNmea::translate)
                 .map(nmeaToAISMessage::translate)

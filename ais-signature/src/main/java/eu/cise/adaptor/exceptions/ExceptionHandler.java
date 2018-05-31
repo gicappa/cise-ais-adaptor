@@ -6,7 +6,7 @@ public class ExceptionHandler {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
     }
 

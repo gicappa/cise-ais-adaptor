@@ -1,6 +1,5 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.normalize.AISNormalizer;
 import eu.cise.adaptor.translate.AisMsgToCiseModel;
 import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
@@ -15,12 +14,12 @@ import reactor.test.StepVerifier;
 import java.time.Instant;
 import java.util.function.Predicate;
 
-import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
 import static org.mockito.Mockito.mock;
 
 public class StreamProcessorIntegrationTest {
 
-    final AISMsg aisMessage = new AISMsg.Builder(1)
+    final AisMsg aisMessage = new AisMsg.Builder(1)
             .withLatitude(47.443634F)
             .withLongitude(-6.9895167F)
             .withPositionAccuracy(1)
@@ -31,7 +30,7 @@ public class StreamProcessorIntegrationTest {
             .withUserId(538005989)
             .withNavigationStatus(UnderwayUsingEngine)
             .build();
-    private AISNormalizer aisNormalizer;
+    private AisNormalizer aisNormalizer;
     private AisMsgToCiseModel aisMsgToCiseModel;
     private CiseModelToCiseMessage ciseModelToCiseMessage;
     private StreamProcessor processor;
@@ -39,8 +38,8 @@ public class StreamProcessorIntegrationTest {
     @Before
     public void before() {
 
-        AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
-        aisNormalizer = mock(AISNormalizer.class);
+        AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
+        aisNormalizer = mock(AisNormalizer.class);
         aisMsgToCiseModel = new AisMsgToCiseModel(config);
         ciseModelToCiseMessage = new CiseModelToCiseMessage(config);
         processor = new StreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);

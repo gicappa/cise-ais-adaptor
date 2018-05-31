@@ -4,20 +4,20 @@ package eu.cise.adaptor.exceptions;
  * Generic unchecked exception to manage error handling in the application
  */
 @SuppressWarnings("unused")
-public class AISAdaptorException extends RuntimeException {
-    public AISAdaptorException() {
+public class AdaptorException extends RuntimeException {
+    public AdaptorException() {
         super();
     }
 
-    public AISAdaptorException(String message) {
+    public AdaptorException(String message) {
         super("\n\n" + message);
     }
 
-    public AISAdaptorException(String message, Throwable cause) {
+    public AdaptorException(String message, Throwable cause) {
         super("\n\n" + message, cause);
     }
 
-    public AISAdaptorException(Throwable cause) {
+    public AdaptorException(Throwable cause) {
         super(cause);
     }
 

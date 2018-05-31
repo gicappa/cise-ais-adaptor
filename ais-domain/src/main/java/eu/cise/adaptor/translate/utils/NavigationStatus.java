@@ -1,5 +1,6 @@
-package eu.cise.adaptor.normalize;
+package eu.cise.adaptor.translate.utils;
 
+@SuppressWarnings("unused")
 public enum NavigationStatus {
 
     UnderwayUsingEngine(0),

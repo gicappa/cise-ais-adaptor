@@ -1,5 +1,6 @@
-package eu.cise.adaptor.dispatch;
+package eu.cise.adaptor;
 
+import eu.cise.adaptor.dispatch.DispatchResult;
 import eu.cise.servicemodel.v1.message.Message;
 
 /**

@@ -1,18 +1,18 @@
-package eu.cise.adaptor.tbs;
+package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AISSource;
-import eu.cise.adaptor.InputStreamToStream;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.translate.utils.InputStreamToStream;
+import eu.cise.adaptor.exceptions.AdaptorException;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.stream.Stream;
 
-public class AISSocketSource implements AISSource {
+public class AisSocketSource implements AisSource {
 
     private final SocketAddress socketAddress;
 
-    public AISSocketSource(String host, Integer port) throws UnknownHostException {
+    public AisSocketSource(String host, Integer port) throws UnknownHostException {
         this.socketAddress = new InetSocketAddress(InetAddress.getByName(host), port);
     }
 
@@ -28,7 +28,7 @@ public class AISSocketSource implements AISSource {
             socket.connect(socketAddress);
             return new InputStreamToStream().stream(socket.getInputStream());
         } catch (IOException e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
     }
 }

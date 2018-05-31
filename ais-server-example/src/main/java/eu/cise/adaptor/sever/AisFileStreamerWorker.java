@@ -11,12 +11,12 @@ import java.net.Socket;
  * data from the classpath and that will stream on the TCP/IP socket connection
  * passed from the server the data coming from the file.
  */
-public class AISFileStreamerWorker extends Thread {
+public class AisFileStreamerWorker extends Thread {
 
     private final Socket socket;
     private final BufferedReader inputReader;
 
-    public AISFileStreamerWorker(String filename, Socket socket) {
+    public AisFileStreamerWorker(String filename, Socket socket) {
         this.socket = socket;
         this.inputReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
     }

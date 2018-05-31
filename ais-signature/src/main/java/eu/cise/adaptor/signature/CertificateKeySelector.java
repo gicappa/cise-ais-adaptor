@@ -1,6 +1,6 @@
 package eu.cise.adaptor.signature;
 
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.exceptions.AdaptorException;
 
 import javax.xml.crypto.AlgorithmMethod;
 import javax.xml.crypto.KeySelector;
@@ -27,7 +27,7 @@ public class CertificateKeySelector extends KeySelector {
         try {
             cert.get().checkValidity();
         } catch (CertificateException e) {
-            throw new AISAdaptorException(e);
+            throw new AdaptorException(e);
         }
 
         return cert.get()::getPublicKey;

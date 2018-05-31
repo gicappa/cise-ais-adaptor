@@ -1,11 +1,10 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.dispatch.Dispatcher;
-import eu.cise.adaptor.reactor.StringFluxToAISMsgFlux;
+import eu.cise.adaptor.sources.FileAisSource;
+import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.signature.DefaultCertificateRegistry;
 import eu.cise.adaptor.signature.DefaultSignatureService;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
-import eu.cise.adaptor.tbs.*;
 import eu.cise.adaptor.translate.AisMsgToCiseModel;
 import eu.cise.adaptor.translate.CiseModelToCiseMessage;
 
@@ -18,13 +17,13 @@ public class DefaultAppContext implements AppContext {
     }
 
     @Override
-    public AISSource makeSource() {
-        return new FileAISSource();
+    public AisSource makeSource() {
+        return new FileAisSource();
     }
 
     @Override
     public StreamProcessor makeStreamProcessor() {
-        return new StreamProcessor(new StringFluxToAISMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config), config);
+        return new StreamProcessor(new StringFluxToAisMsgFlux(), new AisMsgToCiseModel(config), new CiseModelToCiseMessage(config), config);
     }
 
     @Override

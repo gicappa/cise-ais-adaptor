@@ -14,7 +14,7 @@ import java.time.Instant;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.helpers.Utils.*;
-import static eu.cise.adaptor.normalize.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -24,10 +24,10 @@ public class AIS_1_2_3_TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 
-            AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
+            AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
             Message123Translator translator = new Message123Translator(config);
 
-            final AISMsg m = new AISMsg.Builder(1)
+            final AisMsg m = new AisMsg.Builder(1)
                     .withLatitude(47.443634F)
                     .withLongitude(-6.9895167F)
                     .withPositionAccuracy(1)
@@ -69,7 +69,7 @@ public class AIS_1_2_3_TranslatorSpec {
                 });
 
                 it("returns a Vessel with cog (null for cog=3600)", () -> {
-                    AISMsg mc = new AISMsg.Builder(1)
+                    AisMsg mc = new AisMsg.Builder(1)
                             .withCOG(3600f)
                             .build();
 
@@ -83,7 +83,7 @@ public class AIS_1_2_3_TranslatorSpec {
                 });
 
                 it("returns a Vessel with heading (null for trueHeading=511)", () -> {
-                    AISMsg mh = new AISMsg.Builder(1)
+                    AisMsg mh = new AisMsg.Builder(1)
                             .withTrueHeading(511)
                             .build();
 
@@ -105,7 +105,7 @@ public class AIS_1_2_3_TranslatorSpec {
                 });
 
                 it("returns a Vessel with sog (null for SOG=1023)", () -> {
-                    AISMsg ms = new AISMsg.Builder(1)
+                    AisMsg ms = new AisMsg.Builder(1)
                             .withSOG(1023f)
                             .build();
 

@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toMap;
 
-public class AISTrackFilter {
+public class AisTrackFilter {
 
     private final InputStream inputStream;
     private final Map<String, Integer> mmsis;
@@ -24,7 +24,7 @@ public class AISTrackFilter {
             619015000, 367111320, 251850240, 338169566, 367649230);
     private int n;
 
-    public AISTrackFilter() throws FileNotFoundException {
+    public AisTrackFilter() throws FileNotFoundException {
         n = 0;
         inputStream = getClass().getResourceAsStream("/aistest.stream.txt");
         mmsis = new HashMap<>();
@@ -32,7 +32,7 @@ public class AISTrackFilter {
     }
 
     public static void main(String[] args) throws IOException {
-        new AISTrackFilter().run();
+        new AisTrackFilter().run();
     }
 
     public void run() throws IOException {

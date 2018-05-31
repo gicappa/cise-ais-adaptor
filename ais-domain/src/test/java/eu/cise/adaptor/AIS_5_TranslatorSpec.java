@@ -6,13 +6,11 @@ import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
-import static eu.cise.adaptor.helpers.Utils.extractVessel;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -24,7 +22,7 @@ public class AIS_5_TranslatorSpec {
 
             Message5Translator translator = new Message5Translator();
 
-            final AISMsg m = new AISMsg.Builder(5)
+            final AisMsg m = new AisMsg.Builder(5)
                     .withUserId(12345678)
                     .withShipName("QUEEN MARY III")
                     .withDimensionA(100)
@@ -93,7 +91,7 @@ public class AIS_5_TranslatorSpec {
 
                 });
                 context("Involved Event with a port name", () -> {
-                    final AISMsg m1 = new AISMsg.Builder(5)
+                    final AisMsg m1 = new AisMsg.Builder(5)
                             .withUserId(12345678)
                             .withShipName("QUEEN MARY III")
                             .withDimensionA(100)

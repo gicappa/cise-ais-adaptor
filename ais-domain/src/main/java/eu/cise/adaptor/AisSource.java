@@ -4,6 +4,6 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 @FunctionalInterface
-public interface AISSource {
+public interface AisSource {
     Stream<String> open();
 }

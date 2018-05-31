@@ -5,7 +5,7 @@ import org.aeonbits.owner.Config.Sources;
 
 @Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
-public interface AISAdaptorConfig extends Config {
+public interface AdaptorConfig extends Config {
 
     @Key("demo-environment")
     boolean isDemoEnvironment();

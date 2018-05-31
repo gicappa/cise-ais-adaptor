@@ -22,7 +22,7 @@ public class ServiceTranslatorSpec {
     {
         describe("the cise service model added to the entity", () -> {
 
-                    AISAdaptorConfig config = ConfigFactory.create(AISAdaptorConfig.class);
+                    AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
                     CiseModelToCiseMessage translator = new CiseModelToCiseMessage(config);
                     Vessel vessel = new Vessel();
 

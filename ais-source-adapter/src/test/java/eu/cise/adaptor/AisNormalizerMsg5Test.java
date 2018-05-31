@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
-import eu.cise.adaptor.tbs.TBSAISNormalizer;
+import eu.cise.adaptor.translate.AisMessageToAisMsg;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,13 +45,11 @@ import static org.junit.Assert.assertThat;
  *  }]
  * }
  * </pre>
- * TODO It seems that ETA values can be not specified and default val is 0
  * for all month, day, hours, minutes.
- * TODO Check if the ETA values are always padded with a prefixing 0
  */
-public class AISNormalizerMsg5Test {
+public class AisNormalizerMsg5Test {
 
-    private TBSAISNormalizer n;
+    private AisMessageToAisMsg n;
 
     AISMessage voyageMsg() {
         return AISMessage.create(
@@ -73,7 +71,7 @@ public class AISNormalizerMsg5Test {
 
     @Before
     public void before() {
-        n = new TBSAISNormalizer();
+        n = new AisMessageToAisMsg();
     }
 
     @Test
@@ -98,7 +96,7 @@ public class AISNormalizerMsg5Test {
     public void it_maps_voyage_message_ETA_on_the_next_year() {
         Clock beforeJuly2018 = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.systemDefault());
 
-        n = new TBSAISNormalizer(beforeJuly2018);
+        n = new AisMessageToAisMsg(beforeJuly2018);
 
         assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
     }
@@ -108,7 +106,7 @@ public class AISNormalizerMsg5Test {
     public void it_maps_voyage_message_ETA_on_the_current_year() {
         Clock afterJuly2018 = Clock.fixed(Instant.parse("2018-10-18T17:00:00.00Z"), ZoneId.systemDefault());
 
-        n = new TBSAISNormalizer(afterJuly2018);
+        n = new AisMessageToAisMsg(afterJuly2018);
 
         assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
     }

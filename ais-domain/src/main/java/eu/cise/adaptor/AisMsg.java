@@ -1,10 +1,10 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.normalize.NavigationStatus;
+import eu.cise.adaptor.translate.utils.NavigationStatus;
 
 import java.time.Instant;
 
-public class AISMsg {
+public class AisMsg {
 
 
     private final Integer imoNumber;
@@ -31,7 +31,7 @@ public class AISMsg {
     private Integer shipType;
     private String shipName;
 
-    private AISMsg(AISMsg.Builder builder) {
+    private AisMsg(AisMsg.Builder builder) {
         messageType = builder.messageType;
         latitude = builder.latitude;
         longitude = builder.longitude;
@@ -171,47 +171,47 @@ public class AISMsg {
             this.messageType = messageType;
         }
 
-        public AISMsg.Builder withLatitude(float l) {
+        public AisMsg.Builder withLatitude(float l) {
             this.latitude = l;
             return this;
         }
 
-        public AISMsg.Builder withLongitude(float l) {
+        public AisMsg.Builder withLongitude(float l) {
             this.longitude = l;
             return this;
         }
 
-        public AISMsg.Builder withPositionAccuracy(int la) {
+        public AisMsg.Builder withPositionAccuracy(int la) {
             this.positionAccuracy = la;
             return this;
         }
 
-        public AISMsg.Builder withUserId(int m) {
+        public AisMsg.Builder withUserId(int m) {
             this.userId = m;
             return this;
         }
 
-        public AISMsg.Builder withCOG(float c) {
+        public AisMsg.Builder withCOG(float c) {
             this.cog = c;
             return this;
         }
 
-        public AISMsg.Builder withTrueHeading(int t) {
+        public AisMsg.Builder withTrueHeading(int t) {
             this.trueHeading = t;
             return this;
         }
 
-        public AISMsg.Builder withTimestamp(Instant received) {
+        public AisMsg.Builder withTimestamp(Instant received) {
             this.timestamp = received;
             return this;
         }
 
-        public AISMsg.Builder withSOG(float s) {
+        public AisMsg.Builder withSOG(float s) {
             this.sog = s;
             return this;
         }
 
-        public AISMsg.Builder withNavigationStatus(NavigationStatus n) {
+        public AisMsg.Builder withNavigationStatus(NavigationStatus n) {
             this.navigationStatus = n;
             return this;
         }
@@ -237,8 +237,8 @@ public class AISMsg {
             return this;
         }
 
-        public AISMsg build() {
-            return new AISMsg(this);
+        public AisMsg build() {
+            return new AisMsg(this);
         }
 
         public Builder withDraught(Float draught) {

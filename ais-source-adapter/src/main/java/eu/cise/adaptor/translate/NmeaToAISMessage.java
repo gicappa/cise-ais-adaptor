@@ -1,11 +1,9 @@
-package eu.cise.adaptor.reactor;
+package eu.cise.adaptor.translate;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
-import eu.cise.adaptor.translate.Translator;
-import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.adaptor.exceptions.AdaptorException;
 
 import java.util.ArrayList;
 
@@ -22,7 +20,7 @@ public class NmeaToAISMessage implements Translator<NMEAMessage, AISMessage> {
     @Override
     public AISMessage translate(NMEAMessage nmeaMessage) {
         if (!nmeaMessage.isValid()) {
-            throw new AISAdaptorException("NMEA to AISMessage transformation error");
+            throw new AdaptorException("NMEA to AISMessage transformation error");
         }
 
         int numberOfFragments = nmeaMessage.getNumberOfFragments();

@@ -1,8 +1,8 @@
-package eu.cise.adaptor.tbs;
+package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AISSource;
-import eu.cise.adaptor.InputStreamToStream;
-import eu.cise.adaptor.exceptions.AISAdaptorException;
+import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.translate.utils.InputStreamToStream;
+import eu.cise.adaptor.exceptions.AdaptorException;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.io.FileInputStream;
@@ -10,15 +10,15 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-public class FileAISSource implements AISSource {
+public class FileAisSource implements AisSource {
 
-    private final FileAISSourceConfig config;
+    private final FileAisSourceConfig config;
 
-    public FileAISSource() {
-        config = ConfigFactory.create(FileAISSourceConfig.class);
+    public FileAisSource() {
+        config = ConfigFactory.create(FileAisSourceConfig.class);
 
         if (config.getAISSourceFilename() == null)
-            throw new AISAdaptorException("The 'ais-source.file.name' property is not " +
+            throw new AdaptorException("The 'ais-source.file.name' property is not " +
                     "set in the ais-adaptor.properties file");
         }
 
@@ -32,7 +32,7 @@ public class FileAISSource implements AISSource {
     }
 
     public InputStream openFile(String filename) {
-        return FileAISSource.class.getClassLoader().getResourceAsStream(filename);
+        return FileAisSource.class.getClassLoader().getResourceAsStream(filename);
     }
 
     public InputStream openResource(String filename) {
@@ -48,7 +48,7 @@ public class FileAISSource implements AISSource {
         InputStream inputStream = open(config.getAISSourceFilename());
 
         if (inputStream == null) {
-            throw new AISAdaptorException("The file '" + config.getAISSourceFilename() +
+            throw new AdaptorException("The file '" + config.getAISSourceFilename() +
                     "' does not exists neither in the /conf/ directory nor in the classpath");
         }
 

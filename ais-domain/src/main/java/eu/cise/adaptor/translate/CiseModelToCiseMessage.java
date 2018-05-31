@@ -1,6 +1,6 @@
 package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AISAdaptorConfig;
+import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.datamodel.v1.entity.Entity;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
 import eu.cise.servicemodel.v1.message.*;
@@ -16,9 +16,9 @@ import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
 public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
-    private final AISAdaptorConfig config;
+    private final AdaptorConfig config;
 
-    public CiseModelToCiseMessage(AISAdaptorConfig config) {
+    public CiseModelToCiseMessage(AdaptorConfig config) {
         this.config = config;
     }
 

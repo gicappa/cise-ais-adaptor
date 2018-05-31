@@ -1,13 +1,11 @@
-package eu.cise.adaptor.reactor;
+package eu.cise.adaptor.translate;
 
 import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.ais.messages.types.ShipType;
-import eu.cise.adaptor.AISMsg;
-import eu.cise.adaptor.normalize.NavigationStatus;
-import eu.cise.adaptor.tbs.Eta;
-import eu.cise.adaptor.translate.Translator;
-import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.adaptor.AisMsg;
+import eu.cise.adaptor.translate.utils.NavigationStatus;
+import eu.cise.adaptor.translate.utils.Eta;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -26,22 +24,22 @@ import static java.lang.Boolean.FALSE;
  * The timestamp sometimes is not filled in the source AISMessage object and in
  * this case the timestamp field is filled with Instant.MIN value.
  */
-public class AISMessageToAISMsg implements Translator<AISMessage, AISMsg> {
+public class AisMessageToAisMsg implements Translator<AISMessage, AisMsg> {
 
     private final Eta eta;
 
-    public AISMessageToAISMsg() {
+    public AisMessageToAisMsg() {
         this(Clock.systemUTC());
     }
 
-    public AISMessageToAISMsg(Clock clock) {
+    public AisMessageToAisMsg(Clock clock) {
         this.eta = new Eta(clock);
     }
 
     @Override
-    public AISMsg translate(AISMessage m) {
+    public AisMsg translate(AISMessage m) {
         Integer type = m.getMessageType().getCode();
-        AISMsg.Builder b = new AISMsg.Builder(type);
+        AisMsg.Builder b = new AisMsg.Builder(type);
 
         // TODO the remaining fields are not supported by other type of messages
         // than message type 1,2,3

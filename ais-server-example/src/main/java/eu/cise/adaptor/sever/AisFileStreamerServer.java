@@ -12,14 +12,14 @@ import java.util.concurrent.Executors;
  * - the opened port;
  * - the name of the file used to fetch the AIS data from.
  */
-public class AISFileStreamerServer {
+public class AisFileStreamerServer {
 
     public static final int PORT = 60000;
     public static final String AIS_FILE_NAME = "/aistest.stream.txt";
     public static final int N_THREADS = 10;
 
     public static void main(String[] args) {
-        new AISFileStreamerServer().run();
+        new AisFileStreamerServer().run();
     }
 
     public void run() {
@@ -30,7 +30,7 @@ public class AISFileStreamerServer {
             System.out.println("* Listening for new client on port: " + PORT);
 
             while (true) {
-                executors.execute(new AISFileStreamerWorker(AIS_FILE_NAME, listener.accept()));
+                executors.execute(new AisFileStreamerWorker(AIS_FILE_NAME, listener.accept()));
             }
         } catch (IOException /*| InterruptedException*/ e) {
             e.printStackTrace();

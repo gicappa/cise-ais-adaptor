@@ -1,12 +1,12 @@
-package eu.cise.adaptor.tbs;
+package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AISAdaptorConfig;
+import eu.cise.adaptor.AdaptorConfig;
 import org.aeonbits.owner.Config;
 
 @SuppressWarnings("unused")
 @Config.Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
-public interface FileAISSourceConfig extends AISAdaptorConfig {
+public interface FileAisSourceConfig extends AdaptorConfig {
 
     @Key("ais-source.file.name")
     String getAISSourceFilename();

@@ -1,6 +1,5 @@
-package eu.cise.adaptor.normalize;
+package eu.cise.adaptor;
 
-import eu.cise.adaptor.AISMsg;
 import eu.cise.adaptor.translate.Translator;
 import reactor.core.publisher.Flux;
 
@@ -9,9 +8,9 @@ import reactor.core.publisher.Flux;
  * the AIS streams.
  * <p>
  * The normalizer will take as an input a structure defined in a library that
- * represent an AIS message coming will normalize it to a {@link AISMsg}
+ * represent an AIS message coming will normalize it to a {@link AisMsg}
  * that is a domain object.
  */
 @FunctionalInterface
-public interface AISNormalizer extends Translator<Flux<String>, Flux<AISMsg>> {
+public interface AisNormalizer extends Translator<Flux<String>, Flux<AisMsg>> {
 }
