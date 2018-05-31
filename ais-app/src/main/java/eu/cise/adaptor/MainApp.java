@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * The MainApp class is the application entry point. It accepts the
+ * -d parameter to be more verbose when reporting errors.
  */
 public class MainApp implements Runnable {
 
@@ -25,12 +26,15 @@ public class MainApp implements Runnable {
                 config);
     }
 
+    /**
+     * Application starts here
+     *
+     * @param args possible application parameters. The only one accepted is -d
+     */
     public static void main(String[] args) {
         try {
 
-            CertificateConfig config = createConfig();
-
-            new MainApp(config).run();
+            new MainApp(createConfig()).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -40,19 +44,34 @@ public class MainApp implements Runnable {
         }
     }
 
-    private static CertificateConfig createConfig() {
-        return ConfigFactory.create(CertificateConfig.class);
-    }
-
-    private static boolean optionDebug(String[] args) {
-        return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
-    }
-
+    /**
+     * The when invoked, display a banner, dump the configuration and
+     * starts the application.
+     */
     @Override
     public void run() {
         banner.print();
         configPrinter.print();
         aisApp.run();
+    }
+
+    /**
+     * Retrieve the configuration object.
+     *
+     * @return a CertificateConfig object.
+     */
+    private static CertificateConfig createConfig() {
+        return ConfigFactory.create(CertificateConfig.class);
+    }
+
+    /**
+     * Support extended '--debug' and brief '-d' format
+     *
+     * @param args the argument
+     * @return true or false if the debug is enabled or not.
+     */
+    private static boolean optionDebug(String[] args) {
+        return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
     }
 
 }
