@@ -6,7 +6,6 @@ import java.time.Instant;
 
 public class AisMsg {
 
-
     private final Integer imoNumber;
     // POSITION
     private int messageType;
