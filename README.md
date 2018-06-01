@@ -111,7 +111,6 @@ our implementation only support four of them.
 * README
 * ASCIIDOC
 * CONTRIBUTING
-* DEPENDENCIES <<<
 * DISTRIBUTION
 * ERROR CODE on EXCEPTIONS with LEGENDA
 * Document how to handle certificates and where to put them.

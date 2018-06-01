@@ -196,12 +196,6 @@
 
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-gateway-transport</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
         <artifactId>cise-ais-transport</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
@@ -362,26 +356,6 @@
         <artifactId>spectrum</artifactId>
         <version>1.1.0</version>
         <scope>test</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>com.github.tomakehurst</groupId>
-        <artifactId>wiremock-standalone</artifactId>
-        <version>2.6.0</version>
-        <scope>test</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.mock-server</groupId>
-        <artifactId>mockserver-netty</artifactId>
-        <version>3.10.7</version>
-        <scope>test</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <dependency>
