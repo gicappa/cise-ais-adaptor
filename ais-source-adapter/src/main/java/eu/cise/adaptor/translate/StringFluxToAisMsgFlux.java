@@ -4,6 +4,8 @@ import eu.cise.adaptor.AisMsg;
 import eu.cise.adaptor.AisNormalizer;
 import reactor.core.publisher.Flux;
 
+import java.util.Optional;
+
 @SuppressWarnings("ununsed")
 public class StringFluxToAisMsgFlux implements AisNormalizer {
 
@@ -31,6 +33,8 @@ public class StringFluxToAisMsgFlux implements AisNormalizer {
         return stringFlux
                 .map(stringToNmea::translate)
                 .map(nmeaToAISMessage::translate)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(aisMessageToAisMsg::translate);
     }
 }
