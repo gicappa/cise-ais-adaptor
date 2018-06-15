@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * gateway.
  * <p>
  * Three phases are composing the transformation:
- * - toFluxString: open the source and feed the flux stream of ais messages in
+ * - toFluxString: generate the source and feed the flux stream of ais messages in
  * string format
  * - toCiseMessages: transform the string in {NMEAMessage}, then in {AISMessage}
  * and finally in {AisMsg}
@@ -23,18 +23,17 @@ import java.util.stream.Stream;
 public class AisApp implements Runnable {
 
     private final AdaptorConfig config;
-    private final AisSource aisSource;
-
+    private final AisStreamGenerator aisStreamGenerator;
+    private final AisStreamProcessor aisStreamProcessor;
     private final Dispatcher dispatcher;
-    private final StreamProcessor streamProcessor;
 
-    public AisApp(AisSource aisSource,
-                  StreamProcessor streamProcessor,
+    public AisApp(AisStreamGenerator aisStreamGenerator,
+                  AisStreamProcessor aisStreamProcessor,
                   Dispatcher dispatcher,
                   AdaptorConfig config) {
-        this.aisSource = aisSource;
+        this.aisStreamGenerator = aisStreamGenerator;
         this.dispatcher = dispatcher;
-        this.streamProcessor = streamProcessor;
+        this.aisStreamProcessor = aisStreamProcessor;
         this.config = config;
     }
 
@@ -57,11 +56,11 @@ public class AisApp implements Runnable {
     }
 
     private Flux<Message> toCiseMessages(Flux<String> aisStringFlux) {
-        return streamProcessor.process(aisStringFlux);
+        return aisStreamProcessor.process(aisStringFlux);
     }
 
     private Stream<String> openAisSource() {
-        return aisSource.open();
+        return aisStreamGenerator.generate();
     }
 
     private Flux<String> toFluxString(Stream<String> source) {

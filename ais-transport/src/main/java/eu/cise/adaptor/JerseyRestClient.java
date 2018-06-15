@@ -33,8 +33,9 @@ import javax.ws.rs.core.Response;
 import java.util.function.Function;
 
 /**
- * This class is meant to perform RESTful request to nodes or legacy systems.
- * The current implementation is just sending CISE Messages
+ * The implementation of a the RESTful client using the Jersey interface.
+ * The implementation uses the {@link javax.ws.rs.client.Client} class and is
+ * bound to send an XML payload (application/xml media type).
  */
 public class JerseyRestClient implements RestClient {
 
@@ -48,22 +49,41 @@ public class JerseyRestClient implements RestClient {
         this.client = client;
     }
 
+    /**
+     * Concrete implementation of a post request using Jersey.
+     *
+     * @param address the address to contact to deliver the request
+     * @param payload the payload to be delivered
+     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     */
     @Override
     public RestResult post(String address, String payload) {
         return vestException(address, (a) -> translateResult(targetXml(a).post(Entity.xml(payload))));
     }
 
+    /**
+     * Concrete implementation of a GET request using Jersey.
+     *
+     * @param address the address to contact to deliver the request
+     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     */
     @Override
     public RestResult get(String address) {
         return vestException(address, (a) -> translateResult(targetXml(a).get()));
-
     }
 
+    /**
+     * Concrete implementation of a DELETE request using Jersey.
+     *
+     * @param address the address to contact to deliver the request
+     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     */
     @Override
     public RestResult delete(String address) {
         return vestException(address, (a) -> translateResult(targetXml(a).delete()));
     }
 
+    // PRIVATE //
     private Invocation.Builder targetXml(String address) {
         return client.target(address).request(MediaType.APPLICATION_XML);
     }
@@ -77,7 +97,7 @@ public class JerseyRestClient implements RestClient {
         try {
             return function.apply(address);
         } catch (Throwable t) {
-            throw new AdaptorException("Error while contacting address|" + address, t);
+            throw new AdaptorException("Error while connecting to address|" + address, t);
         }
     }
 

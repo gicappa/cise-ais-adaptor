@@ -1,12 +1,12 @@
 package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.AisStreamGenerator;
 import eu.cise.adaptor.translate.utils.InputStreamToStream;
 
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public class SocketAISSource implements AisSource {
+public class SocketAISSource implements AisStreamGenerator {
 
     private final String host;
     private final int port;
@@ -16,20 +16,8 @@ public class SocketAISSource implements AisSource {
         this.port = port;
     }
 
-//    public <AISMessage> void startConsuming(AISMessageConsumer<AISMessage> consumer) {
-//        try {
-//            NMEAMessageSocketClient nmeaMessageHandler = new NMEAMessageSocketClient(
-//                    host, port, new NMEAMessageHandler("AISAdaptor", (Consumer) consumer)
-//            );
-//
-//            nmeaMessageHandler.run();
-//        } catch (IOException e) {
-//            throw new AISAdaptorException(e);
-//        }
-//    }
-
     @Override
-    public Stream open() {
+    public Stream generate() {
         return new InputStreamToStream().stream(null);
     }
 }

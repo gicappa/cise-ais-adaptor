@@ -1,6 +1,6 @@
 package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.AisStreamGenerator;
 import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import eu.cise.adaptor.exceptions.AdaptorException;
 import org.aeonbits.owner.ConfigFactory;
@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-public class FileAisSource implements AisSource {
+public class FileAisSource implements AisStreamGenerator {
 
     private final FileAisSourceConfig config;
 
@@ -44,7 +44,7 @@ public class FileAisSource implements AisSource {
     }
 
     @Override
-    public Stream<String> open() {
+    public Stream<String> generate() {
         InputStream inputStream = open(config.getAISSourceFilename());
 
         if (inputStream == null) {

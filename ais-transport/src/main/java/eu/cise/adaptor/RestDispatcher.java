@@ -6,7 +6,7 @@ import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.XmlMapper;
 
 /**
- * This class is meant to perform RESTful request to nodes or legacy systems.
+ * The RestDispatcher performs RESTful request to nodes or legacy systems.
  * The current implementation is just sending CISE Messages
  */
 @SuppressWarnings({"WeakerAccess", "Unused"})
@@ -28,6 +28,15 @@ public class RestDispatcher implements Dispatcher {
         this.xmlMapper = xmlMapper;
     }
 
+    /**
+     * The main responsibility of the class is to send messages by using a
+     * RESTful client.
+     *
+     * @param message message to be sent.
+     * @param address gateway address to send the message to
+     * @return a {@link eu.cise.adaptor.dispatch.DispatchResult} containing the
+     * dispatching results
+     */
     @Override
     public DispatchResult send(Message message, String address) {
         String payload = xmlMapper.toXML(message);

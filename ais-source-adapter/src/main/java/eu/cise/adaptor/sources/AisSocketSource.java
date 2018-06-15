@@ -1,6 +1,6 @@
 package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.AisSource;
+import eu.cise.adaptor.AisStreamGenerator;
 import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import eu.cise.adaptor.exceptions.AdaptorException;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.*;
 import java.util.stream.Stream;
 
-public class AisSocketSource implements AisSource {
+public class AisSocketSource implements AisStreamGenerator {
 
     private final SocketAddress socketAddress;
 
@@ -21,7 +21,7 @@ public class AisSocketSource implements AisSource {
      *
      * @return the input stream
      */
-    public Stream<String> open() {
+    public Stream<String> generate() {
         try {
             Socket socket = new Socket();
             socket.connect(socketAddress);

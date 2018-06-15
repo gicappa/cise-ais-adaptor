@@ -33,7 +33,7 @@ public class StreamProcessorIntegrationTest {
     private AisNormalizer aisNormalizer;
     private AisMsgToCiseModel aisMsgToCiseModel;
     private CiseModelToCiseMessage ciseModelToCiseMessage;
-    private StreamProcessor processor;
+    private AisStreamProcessor processor;
 
     @Before
     public void before() {
@@ -42,7 +42,7 @@ public class StreamProcessorIntegrationTest {
         aisNormalizer = mock(AisNormalizer.class);
         aisMsgToCiseModel = new AisMsgToCiseModel(config);
         ciseModelToCiseMessage = new CiseModelToCiseMessage(config);
-        processor = new StreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);
+        processor = new AisStreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);
     }
 
     @Test

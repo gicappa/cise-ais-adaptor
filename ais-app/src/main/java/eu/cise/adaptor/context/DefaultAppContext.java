@@ -22,13 +22,13 @@ public class DefaultAppContext implements AppContext {
     }
 
     @Override
-    public AisSource makeSource() {
+    public AisStreamGenerator makeSource() {
         return new FileAisSource();
     }
 
     @Override
-    public StreamProcessor makeStreamProcessor() {
-        return new StreamProcessor(
+    public AisStreamProcessor makeStreamProcessor() {
+        return new AisStreamProcessor(
                 new StringFluxToAisMsgFlux(),
                 new AisMsgToCiseModel(config),
                 new CiseModelToCiseMessage(config),
