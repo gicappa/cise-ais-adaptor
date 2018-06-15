@@ -1,8 +1,8 @@
 package eu.cise.adaptor.sources;
 
 import eu.cise.adaptor.AisStreamGenerator;
-import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import eu.cise.adaptor.exceptions.AdaptorException;
+import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
      * @return a Stream of Strings each of them containing an AIS message
      */
     public Stream<String> generate() {
-        try(Socket socket = new Socket()) {
+        try (Socket socket = new Socket()) {
             socket.connect(socketAddress);
             return new InputStreamToStream().stream(socket.getInputStream());
         } catch (IOException e) {
