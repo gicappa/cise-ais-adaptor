@@ -7,17 +7,17 @@ import reactor.core.publisher.Flux;
 
 import java.util.Optional;
 
-public class StreamProcessor {
+public class AisStreamProcessor {
 
     private final AisMsgToCiseModel aisMsgToCiseModel;
     private final CiseModelToCiseMessage ciseModelToCiseMessage;
     private final AdaptorConfig config;
     private final AisNormalizer aisNormalizer;
 
-    public StreamProcessor(AisNormalizer aisNormalizer,
-                           AisMsgToCiseModel aisMsgToCiseModel,
-                           CiseModelToCiseMessage ciseModelToCiseMessage,
-                           AdaptorConfig config) {
+    public AisStreamProcessor(AisNormalizer aisNormalizer,
+                              AisMsgToCiseModel aisMsgToCiseModel,
+                              CiseModelToCiseMessage ciseModelToCiseMessage,
+                              AdaptorConfig config) {
 
         this.aisNormalizer = aisNormalizer;
         this.aisMsgToCiseModel = aisMsgToCiseModel;

@@ -2,7 +2,7 @@ package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
 import eu.cise.adaptor.dispatch.CatchingDispatcher;
-import eu.cise.adaptor.sources.FileAisSource;
+import eu.cise.adaptor.sources.AisFileStreamGenerator;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.signature.DefaultCertificateRegistry;
 import eu.cise.adaptor.signature.DefaultSignatureService;
@@ -22,13 +22,13 @@ public class DefaultAppContext implements AppContext {
     }
 
     @Override
-    public AisSource makeSource() {
-        return new FileAisSource();
+    public AisStreamGenerator makeSource() {
+        return new AisFileStreamGenerator();
     }
 
     @Override
-    public StreamProcessor makeStreamProcessor() {
-        return new StreamProcessor(
+    public AisStreamProcessor makeStreamProcessor() {
+        return new AisStreamProcessor(
                 new StringFluxToAisMsgFlux(),
                 new AisMsgToCiseModel(config),
                 new CiseModelToCiseMessage(config),
