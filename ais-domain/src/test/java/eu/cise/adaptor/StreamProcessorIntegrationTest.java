@@ -30,7 +30,7 @@ public class StreamProcessorIntegrationTest {
             .withUserId(538005989)
             .withNavigationStatus(UnderwayUsingEngine)
             .build();
-    private AisNormalizer aisNormalizer;
+    private StringToAisMsg aisNormalizer;
     private AisMsgToCiseModel aisMsgToCiseModel;
     private CiseModelToCiseMessage ciseModelToCiseMessage;
     private AisStreamProcessor processor;
@@ -39,7 +39,7 @@ public class StreamProcessorIntegrationTest {
     public void before() {
 
         AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-        aisNormalizer = mock(AisNormalizer.class);
+        aisNormalizer = mock(StringToAisMsg.class);
         aisMsgToCiseModel = new AisMsgToCiseModel(config);
         ciseModelToCiseMessage = new CiseModelToCiseMessage(config);
         processor = new AisStreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);

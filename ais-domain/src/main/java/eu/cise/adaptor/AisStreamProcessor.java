@@ -8,16 +8,16 @@ import reactor.core.publisher.Flux;
 import java.util.Optional;
 
 /**
- * 
+ *
  */
 public class AisStreamProcessor {
 
     private final AisMsgToCiseModel aisMsgToCiseModel;
     private final CiseModelToCiseMessage ciseModelToCiseMessage;
     private final AdaptorConfig config;
-    private final AisNormalizer aisNormalizer;
+    private final StringToAisMsg aisNormalizer;
 
-    public AisStreamProcessor(AisNormalizer aisNormalizer,
+    public AisStreamProcessor(StringToAisMsg aisNormalizer,
                               AisMsgToCiseModel aisMsgToCiseModel,
                               CiseModelToCiseMessage ciseModelToCiseMessage,
                               AdaptorConfig config) {
@@ -28,11 +28,11 @@ public class AisStreamProcessor {
         this.config = config;
     }
 
-    public Flux<Message> process(Flux<String> aisStringFlux) {
+    Flux<Message> process(Flux<String> aisStringFlux) {
         return toCiseMessageFlux(aisNormalizer.translate(aisStringFlux));
     }
 
-    public Flux<Message> toCiseMessageFlux(Flux<AisMsg> aisMsgFlux) {
+    Flux<Message> toCiseMessageFlux(Flux<AisMsg> aisMsgFlux) {
         return aisMsgFlux
                 .map(aisMsgToCiseModel::translate)
                 .filter(Optional::isPresent)

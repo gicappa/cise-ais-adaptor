@@ -1,13 +1,13 @@
 package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AisMsg;
-import eu.cise.adaptor.AisNormalizer;
+import eu.cise.adaptor.StringToAisMsg;
 import reactor.core.publisher.Flux;
 
 import java.util.Optional;
 
 @SuppressWarnings("ununsed")
-public class StringFluxToAisMsgFlux implements AisNormalizer {
+public class StringFluxToAisMsgFlux implements StringToAisMsg {
 
     private final StringToNmea stringToNmea;
     private final NmeaToAISMessage nmeaToAISMessage;

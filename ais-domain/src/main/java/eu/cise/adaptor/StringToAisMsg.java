@@ -12,5 +12,5 @@ import reactor.core.publisher.Flux;
  * that is a domain object.
  */
 @FunctionalInterface
-public interface AisNormalizer extends Translator<Flux<String>, Flux<AisMsg>> {
+public interface StringToAisMsg extends Translator<Flux<String>, Flux<AisMsg>> {
 }
