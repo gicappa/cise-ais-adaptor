@@ -52,6 +52,9 @@ public class Banner {
      * and the version number in the standard log.
      *
      * <p>If the file is not present doesn't display anything.
+     *
+     * @param bannerFilePath path for the banner both for filesystem or classpath
+     * @return the path od the opened file.
      */
     public Path printBanner(Path bannerFilePath) {
         try {

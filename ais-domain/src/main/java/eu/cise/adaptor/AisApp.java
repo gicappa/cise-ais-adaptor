@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * reading from the selected AisSource, translate the ais info into cise
  * messages and dispatch the cise messages through a rest protocol to the
  * gateway.
- * <p></p>
+ * <p>
  * Three phases are composing the transformation:
  * - toFluxString: open the source and feed the flux stream of ais messages in
  * string format
@@ -46,7 +46,7 @@ public class AisApp implements Runnable {
     /**
      * The publishOn allows to be flexible.
      *
-     * @param messageStream
+     * @param messageStream is a stream of CISE messages
      */
     private void dispatchMessages(Flux<Message> messageStream) {
         messageStream

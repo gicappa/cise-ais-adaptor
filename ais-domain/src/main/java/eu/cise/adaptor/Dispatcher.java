@@ -15,6 +15,9 @@ public interface Dispatcher {
      *
      * @return a response object with the status and body returned by the
      * counterpart
+     *
+     * @param message message to be sent
+     * @param address gateway address to send the message to
      */
     DispatchResult send(Message message, String address);
 

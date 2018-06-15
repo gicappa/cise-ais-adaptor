@@ -20,7 +20,6 @@ public class AisSocketSource implements AisSource {
      * TODO close socket
      *
      * @return the input stream
-     * @throws IOException the exception for a socket not connected
      */
     public Stream<String> open() {
         try {
