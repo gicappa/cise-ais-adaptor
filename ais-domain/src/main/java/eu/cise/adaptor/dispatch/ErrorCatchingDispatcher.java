@@ -3,11 +3,11 @@ package eu.cise.adaptor.dispatch;
 import eu.cise.adaptor.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;
 
-public class CatchingDispatcher implements Dispatcher {
+public class ErrorCatchingDispatcher implements Dispatcher {
 
     private final Dispatcher proxy;
 
-    public CatchingDispatcher(Dispatcher proxy) {
+    public ErrorCatchingDispatcher(Dispatcher proxy) {
         this.proxy = proxy;
     }
 

@@ -7,6 +7,9 @@ import reactor.core.publisher.Flux;
 
 import java.util.Optional;
 
+/**
+ * 
+ */
 public class AisStreamProcessor {
 
     private final AisMsgToCiseModel aisMsgToCiseModel;
