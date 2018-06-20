@@ -11,8 +11,8 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 /**
- * This stream generator open a file and it reads line by line the AIS message
- * information in a textual format. Each message is separated by the
+ * This stream generator opens a file and reads it line by line interpreting the
+ * AIS message information in a textual format. Each message is separated by the
  * others through a line feed (LF) character and as soon as is read is sent to
  * the {@link java.util.stream.Stream} of {@link String}.
  */

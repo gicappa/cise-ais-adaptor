@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Result of the dispatching of a message
  */
+@SuppressWarnings("unused")
 public class DispatchResult implements Serializable {
 
     private static final long serialVersionUID = 42L;

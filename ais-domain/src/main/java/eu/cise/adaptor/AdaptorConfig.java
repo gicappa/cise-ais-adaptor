@@ -3,13 +3,32 @@ package eu.cise.adaptor;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 
+/**
+ * This file is containing the adaptor application configuration with different
+ * details about the senders and receivers services.
+ */
 @Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
 public interface AdaptorConfig extends Config {
 
+    /**
+     * In the CISE demo environment of the JRC is needed that all the vessels
+     * have an IMO number (PK in a database). To avoid breaking the demo when
+     * this flag is set to true the MMSI number will be copied over to the IMO
+     * number.
+     *
+     * @return true if is a cise demo internal to JRC false otherwise
+     */
     @Key("demo-environment")
     boolean isDemoEnvironment();
 
+    /**
+     * Setting this property to true will override the timestamp coming from the
+     * AIS message with the current processing time. This could be necessary for
+     * systems with strict policies or filtering of messaging non belonging
+     *
+     * @return true if the timestamp should be regenerated false otherwise
+     */
     @Key("override-timestamps")
     boolean isOverridingTimestamps();
 

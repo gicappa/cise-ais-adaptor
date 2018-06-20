@@ -15,15 +15,33 @@ import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
+/**
+ * This transformer will map a vessel entity into a cise message ready to be
+ * sent out in a HTTP request
+ */
 public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
+
     private final AdaptorConfig config;
 
+    /**
+     * The config is the collaborator of this class.
+     *
+     * @param config the AdaptorConfig object
+     */
     public CiseModelToCiseMessage(AdaptorConfig config) {
         this.config = config;
     }
 
+    /**
+     * The method will translate the list of vessel entities into a cise message
+     * adding the service model around the payload. Being in a List form the
+     * payload can be
+     *
+     * @param entities a list of vessel entities objects
+     * @return a new cise message with the list of entities as a payload
+     */
     @Override
-    public Push translate(List<Entity> entity) {
+    public Push translate(List<Entity> entities) {
         return newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())
@@ -45,7 +63,7 @@ public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
                 .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntities(entity)
+                .addEntities(entities)
                 .build();
     }
 
