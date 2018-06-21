@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.CiseModelToCiseMessage;
+import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import org.aeonbits.owner.ConfigFactory;
@@ -23,7 +23,7 @@ public class ServiceTranslatorSpec {
         describe("the cise service model added to the entity", () -> {
 
                     AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-                    CiseModelToCiseMessage translator = new CiseModelToCiseMessage(config);
+                    VesselToPushMessage translator = new VesselToPushMessage(config);
                     Vessel vessel = new Vessel();
 
                     it("returns an optional with a push message", () ->

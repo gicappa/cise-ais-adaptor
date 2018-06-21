@@ -12,7 +12,7 @@ import java.util.Optional;
  * the chain of transformations to translate a flow of AIS strings into a
  * corresponding number of HTTP requests containing all the vessels information.
  */
-public class AisMsgToCiseModel implements Translator<AisMsg, Optional<Entity>> {
+public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
 
     private final Message5Translator message5Translator;
     private final Message123Translator message123Translator;
@@ -26,7 +26,7 @@ public class AisMsgToCiseModel implements Translator<AisMsg, Optional<Entity>> {
      * it could be through a chain of responsibility.
      * @param config the adaptor config collaborator
      */
-    public AisMsgToCiseModel(AdaptorConfig config) {
+    public AisMsgToVessel(AdaptorConfig config) {
         message123Translator = new Message123Translator(config);
         message5Translator = new Message5Translator();
     }

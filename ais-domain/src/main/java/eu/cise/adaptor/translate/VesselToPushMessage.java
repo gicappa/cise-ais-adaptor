@@ -19,7 +19,7 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
  * This transformer will map a vessel entity into a cise message ready to be
  * sent out in a HTTP request
  */
-public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
+public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
     private final AdaptorConfig config;
 
@@ -28,7 +28,7 @@ public class CiseModelToCiseMessage implements Translator<List<Entity>, Push> {
      *
      * @param config the AdaptorConfig object
      */
-    public CiseModelToCiseMessage(AdaptorConfig config) {
+    public VesselToPushMessage(AdaptorConfig config) {
         this.config = config;
     }
 

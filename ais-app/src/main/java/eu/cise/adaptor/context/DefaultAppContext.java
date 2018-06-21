@@ -6,9 +6,9 @@ import eu.cise.adaptor.signature.DefaultCertificateRegistry;
 import eu.cise.adaptor.signature.DefaultSignatureService;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.sources.AisFileStreamGenerator;
-import eu.cise.adaptor.translate.AisMsgToCiseModel;
-import eu.cise.adaptor.translate.CiseModelToCiseMessage;
+import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
+import eu.cise.adaptor.translate.VesselToPushMessage;
 
 /**
  *
@@ -30,8 +30,8 @@ public class DefaultAppContext implements AppContext {
     public AisStreamProcessor makeStreamProcessor() {
         return new AisStreamProcessor(
                 new StringFluxToAisMsgFlux(),
-                new AisMsgToCiseModel(config),
-                new CiseModelToCiseMessage(config),
+                new AisMsgToVessel(config),
+                new VesselToPushMessage(config),
                 config);
     }
 
