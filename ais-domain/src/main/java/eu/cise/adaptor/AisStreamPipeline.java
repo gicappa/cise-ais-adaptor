@@ -16,7 +16,7 @@ import java.util.Optional;
  * (how to handle a congestion of messages coming from the source of information)
  * and so on.
  */
-public class AisStreamProcessor {
+public class AisStreamPipeline implements Pipeline<String, Message> {
 
     private final StringToAisMsg stringToAisMsg;
     private final AisMsgToVessel aisMsgToVessel;
@@ -27,15 +27,15 @@ public class AisStreamProcessor {
      * The constructor will use these collaborators to streamline the
      * transformation from NMEA to CISE messages.
      *
-     * @param stringToAisMsg
-     * @param aisMsgToVessel
-     * @param vesselToPushMessage
-     * @param config
+     * @param stringToAisMsg      transformer from string to ais
+     * @param aisMsgToVessel      transformer from ais to vessel
+     * @param vesselToPushMessage transformer from vessel to push
+     * @param config              configuration object
      */
-    public AisStreamProcessor(StringToAisMsg stringToAisMsg,
-                              AisMsgToVessel aisMsgToVessel,
-                              VesselToPushMessage vesselToPushMessage,
-                              AdaptorConfig config) {
+    public AisStreamPipeline(StringToAisMsg stringToAisMsg,
+                             AisMsgToVessel aisMsgToVessel,
+                             VesselToPushMessage vesselToPushMessage,
+                             AdaptorConfig config) {
 
         this.stringToAisMsg = stringToAisMsg;
         this.aisMsgToVessel = aisMsgToVessel;
@@ -43,8 +43,16 @@ public class AisStreamProcessor {
         this.config = config;
     }
 
-    Flux<Message> process(Flux<String> aisStringFlux) {
-        return toPushMessageFlux(stringToAisMsg.translate(aisStringFlux));
+    /**
+     * The pipeline will process NMEA message strings into a number of CISE push
+     * messages.
+     *
+     * @param nmeaStringFlux the flux of NMEA strings
+     * @return a flux of CISE push message objects.
+     */
+    @Override
+    public Flux<Message> process(Flux<String> nmeaStringFlux) {
+        return toPushMessageFlux(stringToAisMsg.translate(nmeaStringFlux));
     }
 
     Flux<Message> toPushMessageFlux(Flux<AisMsg> aisMsgFlux) {

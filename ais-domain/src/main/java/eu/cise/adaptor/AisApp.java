@@ -22,7 +22,7 @@ public class AisApp implements Runnable {
 
     private final AdaptorConfig config;
     private final AisStreamGenerator aisStreamGenerator;
-    private final AisStreamProcessor aisStreamProcessor;
+    private final AisStreamPipeline aisStreamProcessor;
     private final Dispatcher dispatcher;
 
     /**
@@ -50,7 +50,7 @@ public class AisApp implements Runnable {
      * @param config application configuration object
      */
     public AisApp(AisStreamGenerator aisStreamGenerator,
-                  AisStreamProcessor aisStreamProcessor,
+                  AisStreamPipeline aisStreamProcessor,
                   Dispatcher dispatcher,
                   AdaptorConfig config) {
         this.aisStreamGenerator = aisStreamGenerator;
