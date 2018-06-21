@@ -34,7 +34,7 @@ public class StreamProcessorIntegrationTest {
     private StringToAisMsg stringToAisMsg;
     private AisMsgToVessel aisMsgToVessel;
     private VesselToPushMessage vesselToPushMessage;
-    private AisStreamPipeline processor;
+    private TranslatorsPipeline processor;
 
     @Before
     public void before() {
@@ -43,7 +43,7 @@ public class StreamProcessorIntegrationTest {
         stringToAisMsg = mock(StringToAisMsg.class);
         aisMsgToVessel = new AisMsgToVessel(config);
         vesselToPushMessage = new VesselToPushMessage(config);
-        processor = new AisStreamPipeline(stringToAisMsg, aisMsgToVessel, vesselToPushMessage, config);
+        processor = new TranslatorsPipeline(stringToAisMsg, aisMsgToVessel, vesselToPushMessage, config);
     }
 
     @Test

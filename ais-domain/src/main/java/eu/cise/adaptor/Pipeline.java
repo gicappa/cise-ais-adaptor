@@ -2,6 +2,13 @@ package eu.cise.adaptor;
 
 import reactor.core.publisher.Flux;
 
+/**
+ * The pipeline is an object meant to describe a series of
+ * translations of data.
+ *
+ * @param <A> the starting data type
+ * @param <B> the final data type
+ */
 @FunctionalInterface
 public interface Pipeline<A, B> {
 

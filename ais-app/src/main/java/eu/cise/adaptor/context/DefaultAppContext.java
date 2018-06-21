@@ -27,8 +27,8 @@ public class DefaultAppContext implements AppContext {
     }
 
     @Override
-    public AisStreamPipeline makeStreamProcessor() {
-        return new AisStreamPipeline(
+    public TranslatorsPipeline makeStreamProcessor() {
+        return new TranslatorsPipeline(
                 new StringFluxToAisMsgFlux(),
                 new AisMsgToVessel(config),
                 new VesselToPushMessage(config),
