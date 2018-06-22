@@ -19,11 +19,12 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
 
     /**
      * Constructor accepting the config as a collaborator.
-     *
+     * <p>
      * todo the constructor is creating objects and it should be done in the
      * main partition. A better design would foresee a factory object using
      * the correct implementation of the given message. Another way to implement
      * it could be through a chain of responsibility.
+     *
      * @param config the adaptor config collaborator
      */
     public AisMsgToVessel(AdaptorConfig config) {

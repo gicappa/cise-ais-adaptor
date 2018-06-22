@@ -24,7 +24,7 @@ public class DispatchResult implements Serializable {
      * the status (success or failure) using a boolean and a string containing
      * a message
      *
-     * @param ok a boolean indicating if it's successful or not
+     * @param ok     a boolean indicating if it's successful or not
      * @param result a result message describing the status
      */
     public DispatchResult(boolean ok, String result) {

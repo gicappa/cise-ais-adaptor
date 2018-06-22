@@ -29,7 +29,7 @@ public class AdaptorException extends RuntimeException {
      * Accepting the description and the object causing the exception
      *
      * @param description what error occurred
-     * @param cause root cause of the exception
+     * @param cause       root cause of the exception
      */
     public AdaptorException(String description, Throwable cause) {
         super("\n\n" + description, cause);

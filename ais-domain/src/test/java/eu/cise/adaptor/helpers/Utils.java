@@ -9,7 +9,6 @@ import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Optional;
 
 public class Utils {
 

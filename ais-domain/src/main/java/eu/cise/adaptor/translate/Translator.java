@@ -16,6 +16,7 @@ public interface Translator<A, B> {
     /**
      * Self descriptive. The method translate the type of the input from A
      * to B
+     *
      * @param type of the value in input (A)
      * @return translated value in output type (B)
      */

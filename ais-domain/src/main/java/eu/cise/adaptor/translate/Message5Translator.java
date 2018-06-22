@@ -24,6 +24,10 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
 
+    public static boolean isValidISOCountry(String s) {
+        return ISO_COUNTRIES.contains(s);
+    }
+
     /**
      * Main method to translate an AIS message into a CISE Vessel object.
      * Each and every field is translated in the corresponding vessel field
@@ -55,10 +59,6 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
         vessel.getShipTypes().add(fromAISShipType(message.getShipType()));
 
         return vessel;
-    }
-
-    public static boolean isValidISOCountry(String s) {
-        return ISO_COUNTRIES.contains(s);
     }
 
     // PRIVATE HELPERS /////////////////////////////////////////////////////////
