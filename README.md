@@ -2,7 +2,7 @@
 
 ## Overview 
 
-The CISE AIS Adaptor is a software meant to read/consume AIS Tracks, 
+The CISE AIS Adaptor is a software meant to read/consume NMEA AIS Tracks, 
 process them translating them into a CISE Data Model complian message 
 and to send PUSH messages to a pre-configured number of consumers.
 
