@@ -16,5 +16,5 @@ public interface AppContext {
 
     AisStreamGenerator makeSource();
 
-    TranslatorsPipeline makeStreamProcessor();
+    DefaultPipeline makeStreamProcessor();
 }

@@ -28,18 +28,19 @@ import java.io.Serializable;
  * The class is a value object containing the information coming back from a
  * RESTful request.
  * <ul>
- *     <li>The code will contain the HTTP code of the response.</li>
- *     <li>The isOK() method is a shortcut to understand if the request has ended
- *     with an error or a successful response</li>
- *     <li>The body will contain the full body of the response coming from
- *     the server.</li>
- *     <li>The message will contain a specific text message coming from the
- *     response if any</li>
+ * <li>The code will contain the HTTP code of the response.</li>
+ * <li>The isOK() method is a shortcut to understand if the request has ended
+ * with an error or a successful response</li>
+ * <li>The body will contain the full body of the response coming from
+ * the server.</li>
+ * <li>The message will contain a specific text message coming from the
+ * response if any</li>
  * </ul>
  */
 @SuppressWarnings("unused")
 public class RestResult implements Serializable {
 
+    // life, the universe and the everything.
     private static final long serialVersionUID = 42L;
 
     private final Integer code;
@@ -51,8 +52,8 @@ public class RestResult implements Serializable {
      * Creates a new value object with some specific information about the
      * response.
      *
-     * @param code HTTP response code
-     * @param body HTTP response body
+     * @param code    HTTP response code
+     * @param body    HTTP response body
      * @param message HTTP response text message
      */
     public RestResult(Integer code, String body, String message) {

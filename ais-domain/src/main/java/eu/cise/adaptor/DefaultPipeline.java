@@ -16,7 +16,7 @@ import java.util.Optional;
  * (how to handle a congestion of messages coming from the source of information)
  * and so on.
  */
-public class TranslatorsPipeline implements Pipeline<String, Message> {
+public class DefaultPipeline implements Pipeline<String, Message> {
 
     private final StringToAisMsg stringToAisMsg;
     private final AisMsgToVessel aisMsgToVessel;
@@ -32,10 +32,10 @@ public class TranslatorsPipeline implements Pipeline<String, Message> {
      * @param vesselToPushMessage transformer from vessel to push
      * @param config              configuration object
      */
-    public TranslatorsPipeline(StringToAisMsg stringToAisMsg,
-                               AisMsgToVessel aisMsgToVessel,
-                               VesselToPushMessage vesselToPushMessage,
-                               AdaptorConfig config) {
+    public DefaultPipeline(StringToAisMsg stringToAisMsg,
+                           AisMsgToVessel aisMsgToVessel,
+                           VesselToPushMessage vesselToPushMessage,
+                           AdaptorConfig config) {
 
         this.stringToAisMsg = stringToAisMsg;
         this.aisMsgToVessel = aisMsgToVessel;

@@ -1,5 +1,12 @@
 package eu.cise.adaptor.translate.utils;
 
+/**
+ * The NavigationStatus is an enum describing the navigation status parameter
+ * in an AIS message.
+ * <br/>
+ * The number associated in the navigation status is the one expressed in the
+ * AIS encoding itself.
+ */
 @SuppressWarnings("unused")
 public enum NavigationStatus {
 
@@ -22,10 +29,24 @@ public enum NavigationStatus {
 
     private final Integer code;
 
+    /**
+     * The code is the numeric code of the navigation status as it's encoded in
+     * the AIS message encoding.
+     *
+     * @param code the encoded status number
+     */
     NavigationStatus(Integer code) {
         this.code = code;
     }
 
+    /**
+     * Parse an integer as a navigation status code and returns the
+     * corresponding enum value.
+     *
+     * @param integer the code to be interpreted.
+     * @return the navigation status enum item or null in case the code does
+     * not correspond to any item.
+     */
     public static NavigationStatus fromInteger(Integer integer) {
         if (integer != null) {
             for (NavigationStatus b : NavigationStatus.values()) {
@@ -37,10 +58,16 @@ public enum NavigationStatus {
         return null;
     }
 
+    /**
+     * @return the AIS navigation status code
+     */
     public Integer getCode() {
         return code;
     }
 
+    /**
+     * @return teh navigation status description
+     */
     public String getValue() {
         return toString();
     }
