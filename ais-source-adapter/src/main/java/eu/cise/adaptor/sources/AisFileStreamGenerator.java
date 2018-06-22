@@ -41,15 +41,17 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
      * AIS message in every string.
      *
      * @return the Stream with the messages
-     * @thorws an {@link AdaptorException} if the file does not exists
+     * @throws AdaptorException if the file does not exists
      */
     @Override
     public Stream<String> generate() {
         InputStream inputStream = open(config.getAISSourceFilename());
 
         if (inputStream == null) {
-            throw new AdaptorException("The file '" + config.getAISSourceFilename() +
-                    "' does not exists neither in the /conf/ directory nor in the classpath");
+            throw new AdaptorException(
+                    "The file '" + config.getAISSourceFilename() +
+                            "' does not exists neither in the /conf/" +
+                            " directory nor in the classpath");
         }
 
         return new InputStreamToStream().stream(inputStream);
@@ -57,12 +59,12 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
 
     /**
      * It checks if there is a resource matching the file name and returns the
-     * {@link InputStream} with the data.
+     * {@link java.io.InputStream} with the data.
      * Otherwise it checks for a file in the filesystem with that name and
-     * returns the {@link InputStream) with the data.
+     * returns the {@link java.io.InputStream} with the data.
      *
      * @param filename is the filename to be opened
-     * @return the {@link InputStream} or null if it does not find the file.
+     * @return the {@link java.io.InputStream} or null if it does not find the file.
      */
     public InputStream open(String filename) {
         InputStream is = openResource(filename);
@@ -75,7 +77,7 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
 
     /**
      * @param filename file name to be opened from the classpath.
-     * @return the {@link InputStream} from the resource on null otherwise.
+     * @return the {@link java.io.InputStream} from the resource on null otherwise.
      */
     public InputStream openResource(String filename) {
         return AisFileStreamGenerator.class.getClassLoader().getResourceAsStream(filename);
@@ -83,7 +85,7 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
 
     /**
      * @param filename file name to be opened from the file system.
-     * @return the {@link InputStream} from the resource on null otherwise.
+     * @return the {@link java.io.InputStream} from the resource on null otherwise.
      */
     public InputStream openFile(String filename) {
         try {

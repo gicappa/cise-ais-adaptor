@@ -31,23 +31,24 @@ public class AisApp implements Runnable {
      * <p>
      * The generator will produce a stream of strings reading them from
      * different possible sources:
-     *   - plain text files
-     *   - tcp sockets
-     *   - whatever other AIS information producer
+     * - plain text files
+     * - tcp sockets
+     * - whatever other AIS information producer
      * <p>
      * The processor will transform the incoming stream of ais strings into a
      * sequence of CISE push messages objects. The transformation will be
      * performed in multiple stages.
-     *   - String -> AisMsg: where the latter is a decoded representation of the
-     *   message in an domain object
-     *   - AisMsg -> Optional<Entity>: the ais message is translated into a cise
-     *   vessel if is of type 1,2,3 or 5, otherwise it will be an empty optional.
-     *   - List<Entity> -> Push:
+     * - String -&gt; AisMsg: where the latter is a decoded representation
+     * of the message in an domain object
+     * - AisMsg -&gt; {@code Optional<Entity>}: the ais message is translated
+     * into a cise
+     * vessel if is of type 1,2,3 or 5, otherwise it will be an empty optional.
+     * - {@code List<Entity>} -&gt; Push:
      *
      * @param aisStreamGenerator stream generator of ais strings
      * @param aisStreamProcessor stream processor of ais strings into cise messages
-     * @param dispatcher dispatcher of cise messages
-     * @param config application configuration object
+     * @param dispatcher         dispatcher of cise messages
+     * @param config             application configuration object
      */
     public AisApp(AisStreamGenerator aisStreamGenerator,
                   DefaultPipeline aisStreamProcessor,

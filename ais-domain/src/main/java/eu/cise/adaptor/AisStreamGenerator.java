@@ -6,7 +6,7 @@ import java.util.stream.Stream;
  * This abstraction models the case of object generating a Stream of Strings
  * from a generic data source that could be a file, a socket or whatever
  * datasource is producing AIS data.
- * <br/>
+ * <br>
  * In the domain of the current module the expected strings are NMEA messages,
  * but this constraint is not described into the interface.
  */

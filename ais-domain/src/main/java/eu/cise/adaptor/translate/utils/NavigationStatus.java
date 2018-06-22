@@ -3,7 +3,7 @@ package eu.cise.adaptor.translate.utils;
 /**
  * The NavigationStatus is an enum describing the navigation status parameter
  * in an AIS message.
- * <br/>
+ * <br>
  * The number associated in the navigation status is the one expressed in the
  * AIS encoding itself.
  */

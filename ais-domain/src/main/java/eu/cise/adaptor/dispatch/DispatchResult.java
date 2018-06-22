@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Dispatching a message will produce a result (success or failure) with a
  * related message.
- * <br/>
+ * <br>
  * This class is mostly an immutable  value object that holds the resulting
  * status.
  */

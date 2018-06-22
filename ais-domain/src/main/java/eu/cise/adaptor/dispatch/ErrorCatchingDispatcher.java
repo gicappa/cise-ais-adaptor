@@ -4,8 +4,8 @@ import eu.cise.adaptor.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;
 
 /**
- * The is a decorator to the generic dispatcher that wraps the runtime exceptions
- * not to have exit the processing flow in case of errors.
+ * The is a decorator to the generic dispatcher that wraps the runtime
+ * exceptions not to have exit the processing flow in case of errors.
  */
 public class ErrorCatchingDispatcher implements Dispatcher {
 
@@ -13,7 +13,9 @@ public class ErrorCatchingDispatcher implements Dispatcher {
 
     /**
      * Decorator constructor accepting the base class as a collaborator
-     * @param proxy
+     *
+     * @param proxy is the proxy object that will be invoked while decorating
+     *              its behavior
      */
     public ErrorCatchingDispatcher(Dispatcher proxy) {
         this.proxy = proxy;
@@ -25,7 +27,7 @@ public class ErrorCatchingDispatcher implements Dispatcher {
      *
      * @param message message to be sent
      * @param address gateway address to send the message to
-     * @return
+     * @return a dispatcher result
      */
     @Override
     public DispatchResult send(Message message, String address) {
