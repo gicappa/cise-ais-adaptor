@@ -1,6 +1,1 @@
-[[index]]
-= CISE AIS Adaptor Documentation
-:ext-relative: {outfilesuffix}
-:toc!:
-
-Welcome to the CISE AIS Adaptor Documentation.
+include::../../../../README.adoc[]
