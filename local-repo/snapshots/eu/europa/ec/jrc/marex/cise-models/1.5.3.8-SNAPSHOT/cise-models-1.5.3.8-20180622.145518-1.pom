@@ -1,0 +1,287 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>cise-models</artifactId>
+  <groupId>eu.europa.ec.jrc.marex</groupId>
+  <version>1.5.3.8-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>cise-models</name>
+
+  <scm>
+    <connection>
+      scm:git:https://pacegia@webgate.ec.europa.eu/CITnet/stash/scm/marex/cise-model-generator-java.git
+    </connection>
+    <developerConnection>
+      scm:git:https://pacegia@webgate.ec.europa.eu/CITnet/stash/scm/marex/cise-model-generator-java.git
+    </developerConnection>
+    <url>
+      https://webgate.ec.europa.eu/CITnet/stash/projects/MAREX/repos/cise-model-generator-java/browse
+    </url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <modules>
+    <module>data-model</module>
+    <module>registry-model</module>
+    <module>eucise-model-helpers</module>
+    <module>eucise-service-model</module>
+  </modules>
+
+  <build>
+    <plugins>
+
+      <!-- tester plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+        <configuration>
+          <useFile>${useFileTestOutput}</useFile>
+          <excludedGroups>${testcase.excludedGroups}</excludedGroups>
+          <includes>
+            <include>**/*Spec.java</include>
+            <include>**/*Test*.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <!-- compiler plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- create an appropriate javadoc -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <reportOutputDirectory>${basedir}/docs</reportOutputDirectory>
+          <docfilessubdirs>true</docfilessubdirs>
+          <aggregate>true</aggregate>
+          <show>private</show>
+          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+          <docletArtifact>
+            <groupId>org.umlgraph</groupId>
+            <artifactId>umlgraph</artifactId>
+            <version>5.6.6</version>
+          </docletArtifact>
+          <additionalparam>
+            -inferrel
+            -attributes
+            -types
+            -visibility
+            -quiet
+            -hide java.*
+            -collpackages java.util.*
+            -qualify
+            -postfixpackage
+            -bgcolor white
+            -edgecolor "#A0A0A4"
+            -edgefontname "Helvetica"
+            -nodefontname "Helvetica"
+            -nodefontabstractname "Helvetica"
+            -nodefontclassabstractname "Helvetica"
+            -nodefontclassname "Helvetica"
+            -nodefontpackagename "Helvetica"
+            -nodefonttagname "Helvetica"
+            -edgefontcolor "#404041"
+            -nodefontcolor "#404041"
+            -edgefontsize 9
+            -nodefontclasssize 9
+            -nodefontpackagesize 9
+            -nodefontsize 9
+            -nodefonttagsize 9
+            -nodefillcolor "white"
+          </additionalparam>
+        </configuration>
+      </plugin>
+
+      <!-- allows to use src dirs outside the std layout -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.9.1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb22-plugin</artifactId>
+        <version>0.13.1</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
+          <schemaIncludes>
+            <include>**/*.xsd</include>
+          </schemaIncludes>
+          <schemaExcludes>
+            <exclude>**/MessageSchema.xsd</exclude>
+            <exclude>**/ServiceSchema.xsd</exclude>
+            <exclude>**/EntitySchema.xsd</exclude>
+          </schemaExcludes>
+          <bindingDirectory>${basedir}/src/main/resources</bindingDirectory>
+          <bindingIncludes>
+            <include>global.xjb</include>
+          </bindingIncludes>
+          <generateDirectory>${basedir}/src/main/generated-sources
+          </generateDirectory>
+          <packageLevelAnnotations>false</packageLevelAnnotations>
+          <extension>true</extension>
+          <episode>false</episode>
+          <args>
+            <arg>-XtoString</arg>
+            <arg>
+              -XtoString-toStringStrategyClass=eu.cise.xjc.CISEToStringStrategy
+            </arg>
+            <arg>-Xequals</arg>
+            <arg>-XhashCode</arg>
+            <arg>-Xcopyable</arg>
+            <arg>-no-header</arg>
+            <arg>-Xxew</arg>
+            <arg>-Xxew:instantiate lazy</arg>
+            <arg>-Xannotate</arg>
+          </args>
+          <plugins>
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics</artifactId>
+              <version>0.9.5</version>
+            </plugin>
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics-annotate</artifactId>
+              <version>1.0.2</version>
+            </plugin>
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-commons-lang</artifactId>
+              <version>2.4</version>
+            </plugin>
+            <plugin>
+              <groupId>com.github.jaxb-xew-plugin</groupId>
+              <artifactId>jaxb-xew-plugin</artifactId>
+              <version>1.9</version>
+            </plugin>
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics-tools</artifactId>
+              <version>0.9.5</version>
+            </plugin>
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics-runtime</artifactId>
+              <version>0.9.5</version>
+            </plugin>
+            <dependency>
+              <groupId>org.glassfish.jaxb</groupId>
+              <artifactId>jaxb-xjc</artifactId>
+              <version>2.2.11</version>
+            </dependency>
+            <dependency>
+              <groupId>org.glassfish.jaxb</groupId>
+              <artifactId>jaxb-runtime</artifactId>
+              <version>2.2.11</version>
+            </dependency>
+          </plugins>
+          <specVersion>2.2</specVersion>
+          <extension>true</extension>
+          <strict>false</strict>
+          <verbose>false</verbose>
+          <addCompileSourceRoot>true</addCompileSourceRoot>
+          <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    -->
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <distributionManagement>
+
+    <!-- Publish versioned releases here -->
+    <repository>
+      <id>local-repo-r</id>
+      <name>my releases</name>
+      <url>file:///home/gicappa/Projects/cise-ais-adaptor/local-repo/releases</url>
+    </repository>
+
+    <!-- Publish snapshots here -->
+    <snapshotRepository>
+      <id>local-repo</id>
+      <name>my snapshots</name>
+      <url>file:///home/gicappa/Projects/cise-ais-adaptor/local-repo/snapshots</url>
+    </snapshotRepository>
+
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <dropwizard.version>0.8.2</dropwizard.version>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>ciBuild</id>
+      <properties>
+        <useFileTestOutput>true</useFileTestOutput>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <testcase.excludedGroups />
+        <useFileTestOutput>true</useFileTestOutput>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>
