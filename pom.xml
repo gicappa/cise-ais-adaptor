@@ -379,7 +379,7 @@
   <repositories>
     <repository>
       <id>local-repo</id>
-      <url>file://${main.basedir}/local-repo/snapshots</url>
+      <url>file://${main.basedir}/ais-mvn-repo/snapshots</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -390,7 +390,7 @@
 
     <repository>
       <id>local-repo-r</id>
-      <url>file://${main.basedir}/local-repo/releases</url>
+      <url>file://${main.basedir}/ais-mvn-repo/releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
