@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.*;
+import eu.cise.adaptor.translate.Message123Translator;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;

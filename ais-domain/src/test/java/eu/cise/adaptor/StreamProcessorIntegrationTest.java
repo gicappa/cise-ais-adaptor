@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.translate.AisMsgToCiseModel;
-import eu.cise.adaptor.translate.CiseModelToCiseMessage;
+import eu.cise.adaptor.translate.AisMsgToVessel;
+import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -30,19 +30,20 @@ public class StreamProcessorIntegrationTest {
             .withUserId(538005989)
             .withNavigationStatus(UnderwayUsingEngine)
             .build();
-    private AisNormalizer aisNormalizer;
-    private AisMsgToCiseModel aisMsgToCiseModel;
-    private CiseModelToCiseMessage ciseModelToCiseMessage;
-    private StreamProcessor processor;
+
+    private StringToAisMsg stringToAisMsg;
+    private AisMsgToVessel aisMsgToVessel;
+    private VesselToPushMessage vesselToPushMessage;
+    private DefaultPipeline processor;
 
     @Before
     public void before() {
-
         AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-        aisNormalizer = mock(AisNormalizer.class);
-        aisMsgToCiseModel = new AisMsgToCiseModel(config);
-        ciseModelToCiseMessage = new CiseModelToCiseMessage(config);
-        processor = new StreamProcessor(aisNormalizer, aisMsgToCiseModel, ciseModelToCiseMessage, config);
+
+        stringToAisMsg = mock(StringToAisMsg.class);
+        aisMsgToVessel = new AisMsgToVessel(config);
+        vesselToPushMessage = new VesselToPushMessage(config);
+        processor = new DefaultPipeline(stringToAisMsg, aisMsgToVessel, vesselToPushMessage, config);
     }
 
     @Test
@@ -61,17 +62,17 @@ public class StreamProcessorIntegrationTest {
     }
 
     // private helpers
-    private Vessel vessel(Object push) {
-        return (Vessel) ((XmlEntityPayload) ((Push) push).getPayload()).getAnies().get(0);
-    }
-
     public void translateAisMessage(Predicate predicate) {
         Flux flux = Flux.just(aisMessage);
 
         StepVerifier.create(
-                processor.toCiseMessageFlux(flux))
+                processor.toPushMessageFlux(flux))
                 .expectNextMatches(predicate)
                 .verifyComplete();
+    }
+
+    private Vessel vessel(Object push) {
+        return (Vessel) ((XmlEntityPayload) ((Push) push).getPayload()).getAnies().get(0);
     }
 }
 

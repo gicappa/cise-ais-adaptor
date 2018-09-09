@@ -23,20 +23,38 @@ import java.time.ZoneId;
 
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
 
+/**
+ * This object translate messages of type 5 into CISE Vessel objects.
+ */
 public class Message123Translator implements Translator<AisMsg, Vessel> {
 
+    // internal attributes
     private final AdaptorConfig config;
 
+    /**
+     * The configuration is needed to adjust the behavior at runtime.
+     *
+     * @param config the adaptor config
+     */
     public Message123Translator(AdaptorConfig config) {
         this.config = config;
     }
 
+    /**
+     * Main method to translate an AIS message into a CISE Vessel object.
+     * Each and every field is translated in the corresponding vessel field
+     * respecting corner cases, special encoding and different base scale
+     * of the data.
+     *
+     * @param message the AIS message
+     * @return a translated CISE vessel
+     */
     @Override
-    public Vessel translate(AisMsg aisMsg) {
+    public Vessel translate(AisMsg message) {
 
         // casting float to double
         // casting float to double
-        Long mmsi = Long.valueOf(aisMsg.getUserId());
+        Long mmsi = Long.valueOf(message.getUserId());
 
         Vessel vessel = new Vessel();
 
@@ -46,10 +64,20 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             vessel.setIMONumber(mmsi);
 
         vessel.setMMSI(mmsi);
-        vessel.getLocationRels().add(getLocationRel(latitude(aisMsg), longitude(aisMsg), fromPositionAccuracy(aisMsg), fromCourseOverGround(aisMsg.getCOG()), fromTrueHeading(aisMsg.getTrueHeading()), aisMsg.getTimestamp(), fromSpeedOverGround(aisMsg.getSOG())));
-        vessel.setNavigationalStatus(fromNavigationStatus(aisMsg.getNavigationStatus()));
+        vessel.getLocationRels().add(getLocationRel(latitude(message),
+                longitude(message),
+                fromPositionAccuracy(message),
+                fromCourseOverGround(message.getCOG()),
+                fromTrueHeading(message.getTrueHeading()),
+                message.getTimestamp(),
+                fromSpeedOverGround(message.getSOG())));
+        vessel.setNavigationalStatus(
+                fromNavigationStatus(message.getNavigationStatus()));
+
         return vessel;
     }
+
+    // PRIVATE HELPERS /////////////////////////////////////////////////////////
 
     private LocationQualitativeAccuracyType fromPositionAccuracy(AisMsg aisMsg) {
         return aisMsg.getPositionAccuracy() == 1 ?

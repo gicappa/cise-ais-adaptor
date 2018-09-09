@@ -376,21 +376,29 @@
 
   </dependencyManagement>
 
-  <distributionManagement>
+  <repositories>
     <repository>
-      <id>digit releases</id>
-      <name>DG DIGIT Repository</name>
-      <url>https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc
-      </url>
+      <id>local-repo</id>
+      <url>file://${main.basedir}/ais-mvn-repo/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </repository>
-    <snapshotRepository>
-      <id>digit snapshots</id>
-      <name>DG DIGIT Snapshot Repository</name>
-      <url>
-        https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc-snapshots
-      </url>
-    </snapshotRepository>
-  </distributionManagement>
+
+    <repository>
+      <id>local-repo-r</id>
+      <url>file://${main.basedir}/ais-mvn-repo/releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
   <properties>
     <dropwizard.version>1.2.3</dropwizard.version>

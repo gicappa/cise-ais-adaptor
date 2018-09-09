@@ -5,20 +5,34 @@ package eu.cise.adaptor.exceptions;
  */
 @SuppressWarnings("unused")
 public class AdaptorException extends RuntimeException {
-    public AdaptorException() {
-        super();
+
+    /**
+     * Accepting the description of the exception occurred
+     *
+     * @param description what error occurred
+     */
+    public AdaptorException(String description) {
+        super("\n\n" + description);
     }
 
-    public AdaptorException(String message) {
-        super("\n\n" + message);
-    }
-
-    public AdaptorException(String message, Throwable cause) {
-        super("\n\n" + message, cause);
-    }
-
+    /**
+     * Accepting the object causing the exception
+     *
+     * @param cause root cause of the exception
+     */
     public AdaptorException(Throwable cause) {
         super(cause);
+    }
+
+
+    /**
+     * Accepting the description and the object causing the exception
+     *
+     * @param description what error occurred
+     * @param cause       root cause of the exception
+     */
+    public AdaptorException(String description, Throwable cause) {
+        super("\n\n" + description, cause);
     }
 
 }

@@ -15,23 +15,36 @@ import java.util.Set;
 
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
+/**
+ * This object translate messages of type 5 into CISE Vessel objects.
+ */
 public class Message5Translator implements Translator<AisMsg, Vessel> {
 
+    // internal attributes
     private static final Set<String> ISO_COUNTRIES = new HashSet<>
             (Arrays.asList(Locale.getISOCountries()));
-
-    public Message5Translator() {
-    }
 
     public static boolean isValidISOCountry(String s) {
         return ISO_COUNTRIES.contains(s);
     }
 
+    /**
+     * Main method to translate an AIS message into a CISE Vessel object.
+     * Each and every field is translated in the corresponding vessel field
+     * respecting corner cases, special encoding and different base scale
+     * of the data.
+     *
+     * @param message the AIS message of type 5
+     * @return a translated CISE vessel
+     */
     @Override
     public Vessel translate(AisMsg message) {
         Vessel vessel = new Vessel();
 
         Long imoNumber = getImoNumber(message);
+
+        // todo check if it should be added the check on the config
+        // to override the MMSI
         if (imoNumber != null)
             vessel.setIMONumber(imoNumber);
 
@@ -47,6 +60,8 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
 
         return vessel;
     }
+
+    // PRIVATE HELPERS /////////////////////////////////////////////////////////
 
     private Objet.InvolvedEventRel getInvolvedEventRel(AisMsg message) {
         Objet.InvolvedEventRel involvedEventRel = new Objet.InvolvedEventRel();

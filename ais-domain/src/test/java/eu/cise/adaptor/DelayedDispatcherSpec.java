@@ -5,13 +5,7 @@ import com.greghaskins.spectrum.Spectrum;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-import java.util.Optional;
-
 import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.it;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 @RunWith(Spectrum.class)
 public class DelayedDispatcherSpec {

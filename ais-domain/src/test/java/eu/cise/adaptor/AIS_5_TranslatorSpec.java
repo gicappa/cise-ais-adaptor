@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.*;
+import eu.cise.adaptor.translate.Message5Translator;
 import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;

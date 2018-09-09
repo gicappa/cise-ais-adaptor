@@ -14,7 +14,7 @@ public interface AppContext {
 
     Dispatcher makeDispatcher();
 
-    AisSource makeSource();
+    AisStreamGenerator makeSource();
 
-    StreamProcessor makeStreamProcessor();
+    DefaultPipeline makeStreamProcessor();
 }
