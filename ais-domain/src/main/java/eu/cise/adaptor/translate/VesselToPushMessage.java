@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
@@ -49,6 +50,7 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .creationDateTime(new Date())
                 .sender(newService()
                         .id(config.getServiceId())
+                        .type(VESSEL_SERVICE)
                         .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
                         .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
                         .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
