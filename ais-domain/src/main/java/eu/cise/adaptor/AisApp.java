@@ -79,8 +79,10 @@ public class AisApp implements Runnable {
     private void dispatchMessages(Flux<Message> messageStream) {
         messageStream
                 .publishOn(Schedulers.elastic())
-                .doOnNext(msg -> dispatcher.send(msg, config.getGatewayAddress()))
-                .doOnError(e -> e.printStackTrace())
+                .map(msg -> dispatcher.send(msg, config.getGatewayAddress()))
+                .doOnNext(e -> System.out.println(e.getResult()))
+                // TODO use a domain logger to log results
+                .doOnError(Throwable::printStackTrace)
                 .blockLast();
     }
 

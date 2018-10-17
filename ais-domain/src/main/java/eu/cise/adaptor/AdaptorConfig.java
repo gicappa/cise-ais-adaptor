@@ -2,6 +2,9 @@ package eu.cise.adaptor;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
+import org.aeonbits.owner.converters.DurationConverter;
+
+import java.time.Duration;
 
 /**
  * This file is containing the adaptor application configuration with different
@@ -152,8 +155,21 @@ public interface AdaptorConfig extends Config {
      * A parameter indicating the number of entities that will be sent to the
      * sender in a single CISE message.
      *
-     * @return the string with the idle time
+     * @return the number of entities
      */
     @Key("processing.entities-per-message")
     int getNumberOfEntitiesPerMessage();
+
+    /**
+     * A parameter indicating the number of milliseconds to wait before sending a message when the
+     * processing.entities-per-message has not been reached and the buffer of entities is not full.
+     * It is needed to avoid to wait indefinitely if the processing.entities-per-message is not
+     * reached.
+     *
+     * @return the timeout to wait before sending a message
+     */
+    @ConverterClass(DurationConverter.class)
+    @Key("processing.sending.timeout")
+    Duration getEntityBufferTimeout();
+
 }

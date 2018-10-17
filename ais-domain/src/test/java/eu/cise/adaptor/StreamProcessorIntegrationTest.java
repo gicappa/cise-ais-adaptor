@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 
 public class StreamProcessorIntegrationTest {
 
-    final AisMsg aisMessage = new AisMsg.Builder(1)
+    private final AisMsg aisMessage = new AisMsg.Builder(1)
             .withLatitude(47.443634F)
             .withLongitude(-6.9895167F)
             .withPositionAccuracy(1)
@@ -31,18 +31,15 @@ public class StreamProcessorIntegrationTest {
             .withNavigationStatus(UnderwayUsingEngine)
             .build();
 
-    private StringToAisMsg stringToAisMsg;
-    private AisMsgToVessel aisMsgToVessel;
-    private VesselToPushMessage vesselToPushMessage;
     private DefaultPipeline processor;
 
     @Before
     public void before() {
         AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
 
-        stringToAisMsg = mock(StringToAisMsg.class);
-        aisMsgToVessel = new AisMsgToVessel(config);
-        vesselToPushMessage = new VesselToPushMessage(config);
+        StringToAisMsg stringToAisMsg = mock(StringToAisMsg.class);
+        AisMsgToVessel aisMsgToVessel = new AisMsgToVessel(config);
+        VesselToPushMessage vesselToPushMessage = new VesselToPushMessage(config);
         processor = new DefaultPipeline(stringToAisMsg, aisMsgToVessel, vesselToPushMessage, config);
     }
 
@@ -62,8 +59,8 @@ public class StreamProcessorIntegrationTest {
     }
 
     // private helpers
-    public void translateAisMessage(Predicate predicate) {
-        Flux flux = Flux.just(aisMessage);
+    private void translateAisMessage(Predicate predicate) {
+        Flux<AisMsg> flux = Flux.just(aisMessage);
 
         StepVerifier.create(
                 processor.toPushMessageFlux(flux))

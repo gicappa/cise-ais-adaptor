@@ -59,8 +59,8 @@ public class DefaultPipeline implements Pipeline<String, Message> {
         return aisMsgFlux.map(aisMsgToVessel::translate)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .buffer(config.getNumberOfEntitiesPerMessage())
+                .bufferTimeout(config.getNumberOfEntitiesPerMessage(),
+                               config.getEntityBufferTimeout())
                 .map(vesselToPushMessage::translate);
-
     }
 }
