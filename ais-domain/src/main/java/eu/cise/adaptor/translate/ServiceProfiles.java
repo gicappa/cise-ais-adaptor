@@ -3,6 +3,7 @@ package eu.cise.adaptor.translate;
 import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.servicemodel.v1.authority.CommunityType;
 import eu.cise.servicemodel.v1.authority.CountryType;
+import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceProfile;
 import org.aeonbits.owner.ConfigFactory;
 
@@ -45,6 +46,7 @@ public class ServiceProfiles {
                 profile.setServiceID(config.getProfileServiceId());
                 profile.setCommunity(CommunityType.fromValue(config.getProfileCommunity()));
                 profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
+                profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
 
                 profiles.add(profile);
             }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import static eu.cise.servicemodel.v1.authority.CommunityType.CUSTOMS;
 import static eu.cise.servicemodel.v1.authority.CountryType.ES;
+import static eu.cise.servicemodel.v1.service.DataFreshnessType.NEARLY_REAL_TIME;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -53,6 +54,11 @@ public class ServiceProfilesTest {
     @Test
     public void it_reads_a_country() {
         assertThat(actual.get(0).getCountry(), is(ES));
+    }
+
+    @Test
+    public void it_reads_data_freshness() {
+        assertThat(actual.get(0).getDataFreshness(), is(NEARLY_REAL_TIME));
     }
 
 }
