@@ -1,6 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.translate.ServiceProfiles;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -16,6 +17,7 @@ import static eu.cise.adaptor.helpers.Utils.extractPayload;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 @RunWith(Spectrum.class)
 public class ServiceTranslatorSpec {
@@ -23,7 +25,9 @@ public class ServiceTranslatorSpec {
         describe("the cise service model added to the entity", () -> {
 
                      AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-                     VesselToPushMessage translator = new VesselToPushMessage(config);
+                     VesselToPushMessage translator =
+                             new VesselToPushMessage(config, mock(ServiceProfiles.class));
+
                      Vessel vessel = new Vessel();
 
                      it("returns an optional with a push message", () ->

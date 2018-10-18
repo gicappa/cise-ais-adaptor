@@ -1,0 +1,52 @@
+package eu.cise.adaptor;
+
+import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.servicemodel.v1.service.ServiceProfile;
+import org.aeonbits.owner.ConfigFactory;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static eu.cise.servicemodel.v1.authority.CommunityType.CUSTOMS;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+/**
+ * profile.0.service_id=id1
+ * profile.0.community=Customs
+ * profile.0.country=ES
+ * profile.0.data_freshness=NearlyRealTime
+ * profile.0.function=CustomsMonitoring
+ * profile.0.sea_basin=ArcticOcean
+ */
+public class ServiceProfilesTest {
+
+    private AdaptorConfig config;
+    private ServiceProfiles profiles;
+    private List<ServiceProfile> actual;
+
+    @Before
+    public void before() {
+        config = ConfigFactory.create(AdaptorConfig.class);
+        profiles = new ServiceProfiles(config);
+        actual = profiles.list();
+    }
+
+    @Test
+    public void it_reads_a_service_profile_from_property_file() {
+        assertThat(actual, hasSize(2));
+    }
+
+    @Test
+    public void it_reads_a_service_id() {
+        assertThat(actual.get(0).getServiceID(), is("id1"));
+    }
+
+    @Test
+    public void it_reads_a_community() {
+        assertThat(actual.get(0).getCommunity(), is(CUSTOMS));
+    }
+
+}

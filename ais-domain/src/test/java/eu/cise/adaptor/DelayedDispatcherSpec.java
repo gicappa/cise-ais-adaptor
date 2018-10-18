@@ -3,6 +3,7 @@ package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AisMsgToVessel;
+import eu.cise.adaptor.translate.ServiceProfiles;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Message;
@@ -35,7 +36,8 @@ public class DelayedDispatcherSpec {
             StringToAisMsg stringToAisMsg = mock(StringToAisMsg.class);
             AisMsgToVessel aisMsgToVessel = mock(AisMsgToVessel.class);
             AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-            VesselToPushMessage vesselToPushMessage = new VesselToPushMessage(config);
+            VesselToPushMessage vesselToPushMessage =
+                    new VesselToPushMessage(config, mock(ServiceProfiles.class));
 
             when(aisMsgToVessel.translate(any())).thenReturn(Optional.of(vessel));
 

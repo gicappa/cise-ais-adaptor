@@ -172,4 +172,22 @@ public interface AdaptorConfig extends Config {
     @Key("processing.sending.timeout")
     Duration getEntityBufferTimeout();
 
+    @Key("profile.${profile.number}.service_id")
+    String getProfileServiceId();
+
+    @Key("profile.${profile.number}.community")
+    String getProfileCommunity();
+
+    @Key("profile.${profile.number}.country")
+    String getProfileCountry();
+
+    @Key("profile.${profile.number}.data_freshness")
+    String getProfileDataFreshness();
+
+    @Key("profile.${profile.number}.function")
+    String getProfileFunction();
+
+    @Key("profile.${profile.number}.sea_basin")
+    String getProfileSeaBasin();
+
 }

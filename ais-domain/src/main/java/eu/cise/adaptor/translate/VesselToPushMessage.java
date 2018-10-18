@@ -23,14 +23,16 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
 public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
     private final AdaptorConfig config;
+    private final ServiceProfiles profiles;
 
     /**
      * The config is the collaborator of this class.
      *
      * @param config the AdaptorConfig object
      */
-    public VesselToPushMessage(AdaptorConfig config) {
+    public VesselToPushMessage(AdaptorConfig config, ServiceProfiles profiles) {
         this.config = config;
+        this.profiles = profiles;
     }
 
     /**
@@ -49,16 +51,17 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .correlationId(UUID.randomUUID().toString())
                 .creationDateTime(new Date())
                 .sender(newService()
-                        .id(config.getServiceId())
-                        .type(VESSEL_SERVICE)
-                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
-                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
-                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-                .recipient(newService()
-                        .id(config.getRecipientServiceId())
-                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-                )
+                                .id(config.getServiceId())
+                                .type(VESSEL_SERVICE)
+                                .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
+                                .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
+                                .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
+                                .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
+//                .recipient(newService()
+//                                   .id(config.getRecipientServiceId())
+//                                   .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
+//                                   .type(VESSEL_SERVICE)
+//                          )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
                 .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
@@ -66,7 +69,7 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
                 .addEntities(entities)
+                .addProfiles(profiles.list())
                 .build();
     }
-
 }
