@@ -36,14 +36,9 @@ public class ServiceProfiles {
 
     public List<ServiceProfile> list() {
         List<ServiceProfile> profiles = new ArrayList<>();
+        AdaptorConfig config;
 
-        for (int i = 0; i < 1000000; i++) {
-            AdaptorConfig config = createConfigNumber(i);
-
-            if (!isProfileNumberDefined(config)) {
-                break;
-            }
-
+        for (int i=0; isProfileNumberDefined(config = createConfigNumber(i)); i++) {
             profiles.add(writeProfileFrom(config));
         }
 
