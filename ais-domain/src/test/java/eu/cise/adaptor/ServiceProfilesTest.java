@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static eu.cise.servicemodel.v1.authority.CommunityType.CUSTOMS;
+import static eu.cise.servicemodel.v1.authority.CountryType.ES;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -47,6 +48,11 @@ public class ServiceProfilesTest {
     @Test
     public void it_reads_a_community() {
         assertThat(actual.get(0).getCommunity(), is(CUSTOMS));
+    }
+
+    @Test
+    public void it_reads_a_country() {
+        assertThat(actual.get(0).getCountry(), is(ES));
     }
 
 }
