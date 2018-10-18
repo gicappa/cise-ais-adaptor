@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -32,6 +33,8 @@ public class EndToEndConversionTest {
             threadMainApp.start();
             testRestServer.checkRequest(r-> xmlMapper.fromXML(r));
             threadMainApp.join(30000);
+
+            sleep(5);
 
             assertEquals(96, testRestServer.countInvocations());
         } catch (InterruptedException e) {

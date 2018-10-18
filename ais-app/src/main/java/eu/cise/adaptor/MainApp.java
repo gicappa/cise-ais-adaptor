@@ -3,8 +3,6 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.context.DefaultAppContext;
 import org.aeonbits.owner.ConfigFactory;
 
-import static java.util.stream.Collectors.toMap;
-
 /**
  * The MainApp class is the application entry point. It accepts the
  * -d parameter to be more verbose when reporting errors.
@@ -21,9 +19,10 @@ public class MainApp implements Runnable {
         banner = new Banner();
         configPrinter = new ConfigPrinter(config);
         aisApp = new AisApp(ctx.makeSource(),
-                ctx.makeStreamProcessor(),
-                ctx.makeDispatcher(),
-                config);
+                            ctx.makeStreamProcessor(),
+                            ctx.makeDispatcher(),
+                            new AdaptorLogger.Slf4j(),
+                            config);
     }
 
     /**
@@ -45,17 +44,6 @@ public class MainApp implements Runnable {
     }
 
     /**
-     * The when invoked, display a banner, dump the configuration and
-     * starts the application.
-     */
-    @Override
-    public void run() {
-        banner.print();
-        configPrinter.print();
-        aisApp.run();
-    }
-
-    /**
      * Retrieve the configuration object.
      *
      * @return a CertificateConfig object.
@@ -72,6 +60,17 @@ public class MainApp implements Runnable {
      */
     private static boolean optionDebug(String[] args) {
         return args.length > 0 && (args[0].equals("--debug") || args[0].equals("-d"));
+    }
+
+    /**
+     * The when invoked, display a banner, dump the configuration and
+     * starts the application.
+     */
+    @Override
+    public void run() {
+        banner.print();
+        configPrinter.print();
+        aisApp.run();
     }
 
 }

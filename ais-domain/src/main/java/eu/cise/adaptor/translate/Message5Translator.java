@@ -21,8 +21,8 @@ import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 public class Message5Translator implements Translator<AisMsg, Vessel> {
 
     // internal attributes
-    private static final Set<String> ISO_COUNTRIES = new HashSet<>
-            (Arrays.asList(Locale.getISOCountries()));
+    private static final Set<String> ISO_COUNTRIES
+            = new HashSet<>(Arrays.asList(Locale.getISOCountries()));
 
     public static boolean isValidISOCountry(String s) {
         return ISO_COUNTRIES.contains(s);

@@ -20,6 +20,7 @@ import reactor.core.scheduler.Schedulers;
  */
 public class AisApp implements Runnable {
 
+    private final AdaptorLogger logger;
     private final AdaptorConfig config;
     private final AisStreamGenerator aisStreamGenerator;
     private final DefaultPipeline aisStreamProcessor;
@@ -53,10 +54,12 @@ public class AisApp implements Runnable {
     public AisApp(AisStreamGenerator aisStreamGenerator,
                   DefaultPipeline aisStreamProcessor,
                   Dispatcher dispatcher,
+                  AdaptorLogger logger,
                   AdaptorConfig config) {
         this.aisStreamGenerator = aisStreamGenerator;
         this.aisStreamProcessor = aisStreamProcessor;
         this.dispatcher = dispatcher;
+        this.logger = logger;
         this.config = config;
     }
 
@@ -80,9 +83,8 @@ public class AisApp implements Runnable {
         messageStream
                 .publishOn(Schedulers.elastic())
                 .map(msg -> dispatcher.send(msg, config.getGatewayAddress()))
-                .doOnNext(e -> System.out.println(e.getResult()))
-                // TODO use a domain logger to log results
-                .doOnError(Throwable::printStackTrace)
+                .doOnNext(logger::logDispatchResponses)
+                .doOnError(logger::logDispatchError)
                 .blockLast();
     }
 

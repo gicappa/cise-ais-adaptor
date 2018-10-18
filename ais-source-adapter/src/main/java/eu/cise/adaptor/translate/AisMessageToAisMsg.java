@@ -4,8 +4,8 @@ import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AisMsg;
-import eu.cise.adaptor.translate.utils.NavigationStatus;
 import eu.cise.adaptor.translate.utils.Eta;
+import eu.cise.adaptor.translate.utils.NavigationStatus;
 
 import java.time.Clock;
 import java.time.Instant;

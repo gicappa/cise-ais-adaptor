@@ -4,6 +4,7 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 import org.aeonbits.owner.converters.DurationConverter;
 
+import java.io.PrintStream;
 import java.time.Duration;
 
 /**
@@ -43,24 +44,6 @@ public interface AdaptorConfig extends Config {
      */
     @Key("gateway.address")
     String getGatewayAddress();
-
-    /**
-     * Service Id of the recipient that should receive the messages.
-     *
-     * @return the string with the service id
-     */
-    @Key("recipient.service.id")
-    String getRecipientServiceId();
-
-    /**
-     * Service operation of the recipient that should receive the messages.
-     * It can be 'PullRequest', 'PullResponse', 'Push'.
-     * If unsure use 'Push'
-     *
-     * @return the string with the service operation
-     */
-    @Key("recipient.service.operation")
-    String getRecipientServiceOperation();
 
     /**
      * Service Id of the sender public authority that is sending the messages.
@@ -172,30 +155,82 @@ public interface AdaptorConfig extends Config {
     @Key("processing.sending.timeout")
     Duration getEntityBufferTimeout();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service id
+     */
     @Key("profile.${profile.number}.service_id")
     String getProfileServiceId();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile community
+     */
     @Key("profile.${profile.number}.community")
     String getProfileCommunity();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile country
+     */
     @Key("profile.${profile.number}.country")
     String getProfileCountry();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile data freshness
+     */
     @Key("profile.${profile.number}.data_freshness")
     String getProfileDataFreshness();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile function
+     */
     @Key("profile.${profile.number}.function")
     String getProfileFunction();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile sea basin
+     */
     @Key("profile.${profile.number}.sea_basin")
     String getProfileSeaBasin();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service operation
+     */
     @Key("profile.${profile.number}.service_operation")
     String getProfileServiceOperation();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service role
+     */
     @Key("profile.${profile.number}.service_role")
     String getProfileServiceRole();
 
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service type
+     */
     @Key("profile.${profile.number}.service_type")
     String getProfileServiceType();
+
+    /**
+     * A convenience method to print all the properties
+     *
+     * @param out an out stream where to print the properties.
+     */
+    void list(PrintStream out);
 }
