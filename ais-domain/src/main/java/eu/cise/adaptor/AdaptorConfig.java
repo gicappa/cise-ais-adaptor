@@ -190,4 +190,12 @@ public interface AdaptorConfig extends Config {
     @Key("profile.${profile.number}.sea_basin")
     String getProfileSeaBasin();
 
+    @Key("profile.${profile.number}.service_operation")
+    String getProfileServiceOperation();
+
+    @Key("profile.${profile.number}.service_role")
+    String getProfileServiceRole();
+
+    @Key("profile.${profile.number}.service_type")
+    String getProfileServiceType();
 }

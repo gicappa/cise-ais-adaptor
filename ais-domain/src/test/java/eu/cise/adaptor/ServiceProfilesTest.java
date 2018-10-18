@@ -12,6 +12,12 @@ import static eu.cise.servicemodel.v1.authority.CountryType.ES;
 import static eu.cise.servicemodel.v1.authority.FunctionType.CUSTOMS_MONITORING;
 import static eu.cise.servicemodel.v1.authority.SeaBasinType.ARCTIC_OCEAN;
 import static eu.cise.servicemodel.v1.service.DataFreshnessType.NEARLY_REAL_TIME;
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.PULL;
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
+import static eu.cise.servicemodel.v1.service.ServiceRoleType.CONSUMER;
+import static eu.cise.servicemodel.v1.service.ServiceRoleType.PROVIDER;
+import static eu.cise.servicemodel.v1.service.ServiceType.CARGO_SERVICE;
+import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -68,4 +74,35 @@ public class ServiceProfilesTest {
     public void it_reads_sea_basin() {
         assertThat(actual.get(0).getSeaBasin(), is(ARCTIC_OCEAN));
     }
+
+    @Test
+    public void it_reads_default_service_operation() {
+        assertThat(actual.get(0).getServiceOperation(), is(PUSH));
+    }
+
+    @Test
+    public void it_reads_default_service_role() {
+        assertThat(actual.get(0).getServiceRole(), is(CONSUMER));
+    }
+
+    @Test
+    public void it_reads_default_service_type() {
+        assertThat(actual.get(0).getServiceType(), is(VESSEL_SERVICE));
+    }
+
+    @Test
+    public void it_reads_service_operation() {
+        assertThat(actual.get(1).getServiceOperation(), is(PULL));
+    }
+
+    @Test
+    public void it_reads_service_role() {
+        assertThat(actual.get(1).getServiceRole(), is(PROVIDER));
+    }
+
+    @Test
+    public void it_reads_service_type() {
+        assertThat(actual.get(1).getServiceType(), is(CARGO_SERVICE));
+    }
+
 }

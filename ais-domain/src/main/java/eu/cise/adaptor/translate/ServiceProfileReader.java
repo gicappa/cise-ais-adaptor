@@ -5,14 +5,16 @@ import eu.cise.servicemodel.v1.authority.CommunityType;
 import eu.cise.servicemodel.v1.authority.CountryType;
 import eu.cise.servicemodel.v1.authority.FunctionType;
 import eu.cise.servicemodel.v1.authority.SeaBasinType;
-import eu.cise.servicemodel.v1.service.DataFreshnessType;
-import eu.cise.servicemodel.v1.service.ServiceProfile;
+import eu.cise.servicemodel.v1.service.*;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.PUSH;
+import static eu.cise.servicemodel.v1.service.ServiceRoleType.CONSUMER;
+import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static java.util.Collections.singletonMap;
 
 public class ServiceProfileReader {
@@ -58,6 +60,21 @@ public class ServiceProfileReader {
 
         if (config.getProfileSeaBasin() != null)
             profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
+
+        if (config.getProfileServiceOperation() == null)
+            profile.setServiceOperation(PUSH);
+        else
+            profile.setServiceOperation(ServiceOperationType.fromValue(config.getProfileServiceOperation()));
+
+        if (config.getProfileServiceRole() == null)
+            profile.setServiceRole(CONSUMER);
+        else
+            profile.setServiceRole(ServiceRoleType.fromValue(config.getProfileServiceRole()));
+
+        if (config.getProfileServiceType() == null)
+            profile.setServiceType(VESSEL_SERVICE);
+        else
+            profile.setServiceType(ServiceType.fromValue(config.getProfileServiceType()));
 
         return profile;
     }
