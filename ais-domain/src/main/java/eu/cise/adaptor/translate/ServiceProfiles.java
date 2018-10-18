@@ -31,35 +31,37 @@ public class ServiceProfiles {
 //    profile.0.service_role=Consumer
 //    profile.0.service_type=VesselService
 
-    private AdaptorConfig config;
-
-    public ServiceProfiles(AdaptorConfig config) {
-        this.config = config;
+    public ServiceProfiles() {
     }
 
     public List<ServiceProfile> list() {
         List<ServiceProfile> profiles = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
-            config = createConfigNumber(i);
+        for (int i = 0; i < 1000000; i++) {
+            AdaptorConfig config = createConfigNumber(i);
 
-            if (isProfileNumberDefined()) {
-                ServiceProfile profile = new ServiceProfile();
-                profile.setServiceID(config.getProfileServiceId());
-                profile.setCommunity(CommunityType.fromValue(config.getProfileCommunity()));
-                profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
-                profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
-                profile.setFunction(FunctionType.fromValue(config.getProfileFunction()));
-                profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
-
-                profiles.add(profile);
+            if (!isProfileNumberDefined(config)) {
+                break;
             }
+
+            profiles.add(writeProfileFrom(config));
         }
 
         return profiles;
     }
 
-    private boolean isProfileNumberDefined() {
+    private ServiceProfile writeProfileFrom(AdaptorConfig config) {
+        ServiceProfile profile = new ServiceProfile();
+        profile.setServiceID(config.getProfileServiceId());
+        profile.setCommunity(CommunityType.fromValue(config.getProfileCommunity()));
+        profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
+        profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
+        profile.setFunction(FunctionType.fromValue(config.getProfileFunction()));
+        profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
+        return profile;
+    }
+
+    private boolean isProfileNumberDefined(AdaptorConfig config) {
         return config.getProfileServiceId() != null ||
                 config.getProfileCommunity() != null ||
                 config.getProfileCountry() != null ||

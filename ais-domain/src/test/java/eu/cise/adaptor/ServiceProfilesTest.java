@@ -2,7 +2,6 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.translate.ServiceProfiles;
 import eu.cise.servicemodel.v1.service.ServiceProfile;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +26,11 @@ import static org.junit.Assert.assertThat;
  */
 public class ServiceProfilesTest {
 
-    private AdaptorConfig config;
-    private ServiceProfiles profiles;
     private List<ServiceProfile> actual;
 
     @Before
     public void before() {
-        config = ConfigFactory.create(AdaptorConfig.class);
-        profiles = new ServiceProfiles(config);
+        ServiceProfiles profiles = new ServiceProfiles();
         actual = profiles.list();
     }
 
