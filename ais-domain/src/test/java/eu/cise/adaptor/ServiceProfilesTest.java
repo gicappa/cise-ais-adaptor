@@ -11,6 +11,7 @@ import java.util.List;
 import static eu.cise.servicemodel.v1.authority.CommunityType.CUSTOMS;
 import static eu.cise.servicemodel.v1.authority.CountryType.ES;
 import static eu.cise.servicemodel.v1.authority.FunctionType.CUSTOMS_MONITORING;
+import static eu.cise.servicemodel.v1.authority.SeaBasinType.ARCTIC_OCEAN;
 import static eu.cise.servicemodel.v1.service.DataFreshnessType.NEARLY_REAL_TIME;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -61,10 +62,14 @@ public class ServiceProfilesTest {
     public void it_reads_data_freshness() {
         assertThat(actual.get(0).getDataFreshness(), is(NEARLY_REAL_TIME));
     }
-    //profile.0.function=CustomsMonitoring
 
     @Test
     public void it_reads_data_functions() {
         assertThat(actual.get(0).getFunction(), is(CUSTOMS_MONITORING));
+    }
+
+    @Test
+    public void it_reads_sea_basin() {
+        assertThat(actual.get(0).getSeaBasin(), is(ARCTIC_OCEAN));
     }
 }

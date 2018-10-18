@@ -4,6 +4,7 @@ import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.servicemodel.v1.authority.CommunityType;
 import eu.cise.servicemodel.v1.authority.CountryType;
 import eu.cise.servicemodel.v1.authority.FunctionType;
+import eu.cise.servicemodel.v1.authority.SeaBasinType;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceProfile;
 import org.aeonbits.owner.ConfigFactory;
@@ -49,6 +50,7 @@ public class ServiceProfiles {
                 profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
                 profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
                 profile.setFunction(FunctionType.fromValue(config.getProfileFunction()));
+                profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
 
                 profiles.add(profile);
             }
