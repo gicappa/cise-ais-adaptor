@@ -69,11 +69,6 @@
     </dependency>
 
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-ais-signature</artifactId>
     </dependency>
