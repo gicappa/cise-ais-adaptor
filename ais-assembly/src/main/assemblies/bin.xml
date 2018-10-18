@@ -13,10 +13,6 @@
       <source>${project.parent.basedir}/ais-app/src/test/resources/example.ais.stream.txt</source>
       <outputDirectory>/conf</outputDirectory>
     </file>
-    <file>
-      <source>${project.parent.basedir}/ais-app/src/test/resources/sim-ais-adaptor.properties</source>
-      <outputDirectory>/conf</outputDirectory>
-    </file>
   </files>
   <fileSets>
     <fileSet>

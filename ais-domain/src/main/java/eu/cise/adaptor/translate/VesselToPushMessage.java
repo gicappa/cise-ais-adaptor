@@ -23,14 +23,14 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
 public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
     private final AdaptorConfig config;
-    private final ServiceProfiles profiles;
+    private final ServiceProfileReader profiles;
 
     /**
      * The config is the collaborator of this class.
      *
      * @param config the AdaptorConfig object
      */
-    public VesselToPushMessage(AdaptorConfig config, ServiceProfiles profiles) {
+    public VesselToPushMessage(AdaptorConfig config, ServiceProfileReader profiles) {
         this.config = config;
         this.profiles = profiles;
     }

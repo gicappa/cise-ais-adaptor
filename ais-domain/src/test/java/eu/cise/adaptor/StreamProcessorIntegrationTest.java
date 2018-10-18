@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.translate.AisMsgToVessel;
-import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
@@ -41,7 +41,7 @@ public class StreamProcessorIntegrationTest {
         StringToAisMsg stringToAisMsg = mock(StringToAisMsg.class);
         AisMsgToVessel aisMsgToVessel = new AisMsgToVessel(config);
         VesselToPushMessage vesselToPushMessage =
-                new VesselToPushMessage(config, mock(ServiceProfiles.class));
+                new VesselToPushMessage(config, mock(ServiceProfileReader.class));
         processor
                 = new DefaultPipeline(stringToAisMsg, aisMsgToVessel, vesselToPushMessage, config);
     }

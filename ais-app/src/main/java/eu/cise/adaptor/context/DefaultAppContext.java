@@ -7,7 +7,7 @@ import eu.cise.adaptor.signature.DefaultSignatureService;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.sources.AisFileStreamGenerator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
-import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 
@@ -32,7 +32,7 @@ public class DefaultAppContext implements AppContext {
         return new DefaultPipeline(
                 new StringFluxToAisMsgFlux(),
                 new AisMsgToVessel(config),
-                new VesselToPushMessage(config, new ServiceProfiles()),
+                new VesselToPushMessage(config, new ServiceProfileReader()),
                 config);
     }
 

@@ -1,6 +1,6 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
@@ -19,12 +19,12 @@ import static org.mockito.Mockito.when;
 public class VesselToPushMessageTest {
 
     private VesselToPushMessage vesselToPush;
-    private ServiceProfiles profiles;
+    private ServiceProfileReader profiles;
 
     @Before
     public void before() {
         AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-        profiles = mock(ServiceProfiles.class);
+        profiles = mock(ServiceProfileReader.class);
 
         vesselToPush = new VesselToPushMessage(config, profiles);
     }

@@ -1,6 +1,6 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.servicemodel.v1.service.ServiceProfile;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,13 +30,13 @@ public class ServiceProfilesTest {
 
     @Before
     public void before() {
-        ServiceProfiles profiles = new ServiceProfiles();
+        ServiceProfileReader profiles = new ServiceProfileReader();
         actual = profiles.list();
     }
 
     @Test
     public void it_reads_a_service_profile_from_property_file() {
-        assertThat(actual, hasSize(2));
+        assertThat(actual, hasSize(3));
     }
 
     @Test

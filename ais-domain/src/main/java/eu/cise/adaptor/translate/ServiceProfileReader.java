@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
-public class ServiceProfiles {
+public class ServiceProfileReader {
 
 //    profile.0.service_id=
 //    profile.0.community=Customs
@@ -27,36 +27,42 @@ public class ServiceProfiles {
 //    profile.0.service_role=Consumer
 //    profile.0.service_type=VesselService
 
-//    profile.0.service_operation=Push
-//    profile.0.service_role=Consumer
-//    profile.0.service_type=VesselService
-
-    public ServiceProfiles() {
-    }
-
     public List<ServiceProfile> list() {
         List<ServiceProfile> profiles = new ArrayList<>();
+
         AdaptorConfig config;
 
-        for (int i=0; isProfileNumberDefined(config = createConfigNumber(i)); i++) {
-            profiles.add(writeProfileFrom(config));
+        for (int i = 0; isProfileNumDefined(config = createConfigNum(i)); i++) {
+            profiles.add(readProfileFrom(config));
         }
 
         return profiles;
     }
 
-    private ServiceProfile writeProfileFrom(AdaptorConfig config) {
+    private ServiceProfile readProfileFrom(AdaptorConfig config) {
         ServiceProfile profile = new ServiceProfile();
+
         profile.setServiceID(config.getProfileServiceId());
-        profile.setCommunity(CommunityType.fromValue(config.getProfileCommunity()));
-        profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
-        profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
-        profile.setFunction(FunctionType.fromValue(config.getProfileFunction()));
-        profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
+
+        if (config.getProfileCommunity() != null)
+            profile.setCommunity(CommunityType.fromValue(config.getProfileCommunity()));
+
+        if (config.getProfileCountry() != null)
+            profile.setCountry(CountryType.fromValue(config.getProfileCountry()));
+
+        if (config.getProfileDataFreshness() != null)
+            profile.setDataFreshness(DataFreshnessType.fromValue(config.getProfileDataFreshness()));
+
+        if (config.getProfileFunction() != null)
+            profile.setFunction(FunctionType.fromValue(config.getProfileFunction()));
+
+        if (config.getProfileSeaBasin() != null)
+            profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
+
         return profile;
     }
 
-    private boolean isProfileNumberDefined(AdaptorConfig config) {
+    private boolean isProfileNumDefined(AdaptorConfig config) {
         return config.getProfileServiceId() != null ||
                 config.getProfileCommunity() != null ||
                 config.getProfileCountry() != null ||
@@ -65,7 +71,7 @@ public class ServiceProfiles {
                 config.getProfileSeaBasin() != null;
     }
 
-    private AdaptorConfig createConfigNumber(int i) {
+    private AdaptorConfig createConfigNum(int i) {
         return ConfigFactory.create(AdaptorConfig.class, profileNumberKey(i));
     }
 

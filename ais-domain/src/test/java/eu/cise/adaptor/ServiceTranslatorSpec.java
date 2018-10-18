@@ -1,7 +1,7 @@
 package eu.cise.adaptor;
 
 import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.ServiceProfiles;
+import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
@@ -26,7 +26,7 @@ public class ServiceTranslatorSpec {
 
                      AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
                      VesselToPushMessage translator =
-                             new VesselToPushMessage(config, mock(ServiceProfiles.class));
+                             new VesselToPushMessage(config, mock(ServiceProfileReader.class));
 
                      Vessel vessel = new Vessel();
 
