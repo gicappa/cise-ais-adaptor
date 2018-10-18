@@ -61,20 +61,20 @@ public class ServiceProfileReader {
         if (config.getProfileSeaBasin() != null)
             profile.setSeaBasin(SeaBasinType.fromValue(config.getProfileSeaBasin()));
 
-        if (config.getProfileServiceOperation() == null)
-            profile.setServiceOperation(PUSH);
-        else
+        if (config.getProfileServiceOperation() != null)
             profile.setServiceOperation(ServiceOperationType.fromValue(config.getProfileServiceOperation()));
-
-        if (config.getProfileServiceRole() == null)
-            profile.setServiceRole(CONSUMER);
         else
+            profile.setServiceOperation(PUSH);
+
+        if (config.getProfileServiceRole() != null)
             profile.setServiceRole(ServiceRoleType.fromValue(config.getProfileServiceRole()));
-
-        if (config.getProfileServiceType() == null)
-            profile.setServiceType(VESSEL_SERVICE);
         else
+            profile.setServiceRole(CONSUMER);
+
+        if (config.getProfileServiceType() != null)
             profile.setServiceType(ServiceType.fromValue(config.getProfileServiceType()));
+        else
+            profile.setServiceType(VESSEL_SERVICE);
 
         return profile;
     }
