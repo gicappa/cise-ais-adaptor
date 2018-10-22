@@ -44,13 +44,11 @@ public class SignatureServiceTest {
         xmlMapper = new DefaultXmlMapper();
         xmlValidator = new DefaultXmlValidator();
         message = buildMessage();
-        signature
-                = new DefaultSignatureService(new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
-                                              new DefaultCertificateRegistry(
-                                                      new KeyStoreInfo("cisePrivate.jks",
-                                                                       "cisecise"),
-                                                      new KeyStoreInfo("cisePublic.jks",
-                                                                       "cisecise")));
+        signature = new DefaultSignatureService(
+                new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
+                new DefaultCertificateRegistry(
+                        new KeyStoreInfo("cisePrivate.jks", "cisecise"),
+                        new KeyStoreInfo("cisePublic.jks", "cisecise")));
     }
 
     @Test
