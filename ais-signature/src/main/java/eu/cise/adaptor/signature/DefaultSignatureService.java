@@ -26,11 +26,11 @@ import static eu.cise.adaptor.exceptions.ExceptionHandler.safe;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.xml.xpath.XPathConstants.NODE;
 
-s
-
 public class DefaultSignatureService implements SignatureService {
 
-    public static final String X_PATH_TO_CERTIFICATE = "//*[local-name() = 'KeyInfo']/*[local-name() = 'X509Data']/*[local-name() = 'X509Certificate']";
+    public static final String X_PATH_TO_CERTIFICATE
+            = "//*[local-name() = 'KeyInfo']/*[local-name() = 'X509Data']/*[local-name() = " +
+            "'X509Certificate']";
     private final CertificateRegistry registry;
     private final SignatureDelegate signature;
     private XPathExpression certXPath;
@@ -77,7 +77,8 @@ public class DefaultSignatureService implements SignatureService {
 
         } catch (XPathExpressionException | IOException | CertificateException | NoSuchAlgorithmException |
                 SignatureException | NoSuchProviderException | InvalidKeyException e) {
-            throw new AdaptorException("Exception at certificate verification for message with ID {" + message.getMessageID() + "}", e);
+            throw new AdaptorException("Exception at certificate verification for message with ID" +
+                                               " {" + message.getMessageID() + "}", e);
         }
     }
 
@@ -88,7 +89,8 @@ public class DefaultSignatureService implements SignatureService {
                 .toLowerCase() + ".cert";
     }
 
-    private X509Certificate parseBase64Certificate(String certText) throws CertificateException, UnsupportedEncodingException {
+    private X509Certificate parseBase64Certificate(String certText) throws CertificateException,
+                                                                           UnsupportedEncodingException {
         return (X509Certificate) CertificateFactory.getInstance("X.509")
                 .generateCertificate(new ByteArrayInputStream(certText.getBytes(UTF_8)));
     }

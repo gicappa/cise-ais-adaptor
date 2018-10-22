@@ -44,7 +44,7 @@ public class DefaultAppContext implements AppContext {
     private SignatureService makeSignatureService() {
         return new DefaultSignatureService(
                 new PrivateKeyInfo(
-                        config.getGatewayId(),
+                        config.getAdaptorId(),
                         config.getPrivateKeyPassword()),
                 makeCertificateRegistry());
     }

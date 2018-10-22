@@ -13,20 +13,26 @@ import static org.aeonbits.owner.Config.Sources;
 public interface CertificateConfig extends AdaptorConfig {
 
     @DefaultValue("eu.cise.es.gc-ls01")
-    String getGatewayId();
+    @Key("adaptor.id")
+    String getAdaptorId();
 
     @DefaultValue("cisePrivate.jks")
+    @Key("signature.private.jks.filename")
     String getPrivateJKSName();
 
     @DefaultValue("cisecise")
+    @Key("signature.private.jks.password")
     String getPrivateJKSPassword();
 
     @DefaultValue("cisecise")
+    @Key("signature.private.key.password")
     String getPrivateKeyPassword();
 
     @DefaultValue("cisePublic.jks")
+    @Key("signature.public.jks.filename")
     String getPublicJKSName();
 
     @DefaultValue("cisecise")
+    @Key("signature.public.jks.password")
     String getPublicJKSPassword();
 }
