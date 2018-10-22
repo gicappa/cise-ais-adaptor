@@ -30,14 +30,16 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
 
     @Override
     public X509Certificate findPrivateCertificate(String keyAlias) {
-        return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0]);
+        return safe(() -> (X509Certificate) ksPrivate.findCertificateChain(keyAlias)[0],
+                    "The keyAlias [" + keyAlias + "] was not found in the keystore.");
     }
 
     @Override
     public X509Certificate findPublicCertificate(String certificateAlias) {
         return safe(() -> {
             if (!publicCertMap.containsKey(certificateAlias)) {
-                publicCertMap.put(certificateAlias, ksPublic.findPublicCertificate(certificateAlias));
+                publicCertMap.put(certificateAlias,
+                                  ksPublic.findPublicCertificate(certificateAlias));
             }
 
             return publicCertMap.get(certificateAlias);
