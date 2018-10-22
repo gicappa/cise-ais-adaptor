@@ -1,5 +1,8 @@
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.signature.ResourceFile;
+
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -38,7 +41,8 @@ public class KeyStoreInfo {
     private KeyStore loadKeyStore(String name, String password) {
         return safe(() -> {
             KeyStore jks = KeyStore.getInstance("JKS");
-            jks.load(this.getClass().getResourceAsStream("/" + name), password.toCharArray());
+            InputStream jksFileStream = new ResourceFile(name).getStream();
+            jks.load(jksFileStream, password.toCharArray());
             return jks;
         });
     }

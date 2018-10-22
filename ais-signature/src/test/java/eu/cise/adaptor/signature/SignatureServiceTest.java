@@ -29,6 +29,7 @@ import static eu.cise.servicemodel.v1.message.ResponseCodeType.SUCCESS;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.PULL;
 import static eu.eucise.helpers.PullResponseBuilder.newPullResponse;
 import static eu.eucise.helpers.ServiceBuilder.newService;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 public class SignatureServiceTest {
@@ -43,14 +44,17 @@ public class SignatureServiceTest {
         xmlMapper = new DefaultXmlMapper();
         xmlValidator = new DefaultXmlValidator();
         message = buildMessage();
-        signature = new DefaultSignatureService(new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
-                new DefaultCertificateRegistry(
-                        new KeyStoreInfo("cisePrivate.jks", "cisecise"),
-                        new KeyStoreInfo("cisePublic.jks", "cisecise")));
+        signature
+                = new DefaultSignatureService(new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
+                                              new DefaultCertificateRegistry(
+                                                      new KeyStoreInfo("cisePrivate.jks",
+                                                                       "cisecise"),
+                                                      new KeyStoreInfo("cisePublic.jks",
+                                                                       "cisecise")));
     }
 
     @Test
-    public void when_aaa() {
+    public void sign_and_verify() {
         Message signedMsg = signature.sign(message);
         String messageXML = xmlMapper.toXML(signedMsg);
 
@@ -71,7 +75,9 @@ public class SignatureServiceTest {
 
     @Test
     public void test_verification_of_signature_on_LC_Message() throws Exception {
-        String messageXML = new String(Files.readAllBytes(Paths.get(getClass().getResource("/SignedPushVessels.xml").toURI())), "UTF-8");
+        String messageXML
+                = new String(Files.readAllBytes(Paths.get(getClass().getResource(
+                "/SignedPushVessels.xml").toURI())), UTF_8);
         Message signedMsg = new DefaultXmlMapper.PrettyNotValidating().fromXML(messageXML);
         signature.verify(signedMsg);
     }
@@ -90,11 +96,17 @@ public class SignatureServiceTest {
     @Test(expected = AdaptorException.class)
     public void test_verification_fails_if_payload_was_tampered_with() {
         long time_1 = System.currentTimeMillis();
+
         Message msg = buildMessage();
+
         Message signedMsg = signature.sign(msg);
+
         ((Vessel) ((XmlEntityPayload) signedMsg.getPayload()).getAnies().get(0)).setDeadweight(88);
+
         signature.verify(signedMsg);
+
         long time_2 = System.currentTimeMillis();
+
         System.out.println("Operation took " + (time_2 - time_1) + "ms");
     }
 
@@ -109,10 +121,10 @@ public class SignatureServiceTest {
                 .priority(HIGH)
                 .isRequiresAck(false)
                 .sender(newService().id("es.gc-ls01.maritimesafetyincident.pullresponse.gcs04")
-                        .operation(PULL))
+                                .operation(PULL))
                 .resultCode(SUCCESS)
                 .recipient(newService().id("myService2")
-                        .operation(PULL))
+                                   .operation(PULL))
                 .addEntity(buildVessel())
                 .informationSecurityLevel(NON_CLASSIFIED)
                 .informationSensitivity(AMBER)
