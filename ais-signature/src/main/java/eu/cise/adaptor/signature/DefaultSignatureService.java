@@ -23,7 +23,10 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import static eu.cise.adaptor.exceptions.ExceptionHandler.safe;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.xml.xpath.XPathConstants.NODE;
+
+s
 
 public class DefaultSignatureService implements SignatureService {
 
@@ -87,7 +90,7 @@ public class DefaultSignatureService implements SignatureService {
 
     private X509Certificate parseBase64Certificate(String certText) throws CertificateException, UnsupportedEncodingException {
         return (X509Certificate) CertificateFactory.getInstance("X.509")
-                .generateCertificate(new ByteArrayInputStream(certText.getBytes("UTF-8")));
+                .generateCertificate(new ByteArrayInputStream(certText.getBytes(UTF_8)));
     }
 
     private String removeCarriageReturn(String text) {
