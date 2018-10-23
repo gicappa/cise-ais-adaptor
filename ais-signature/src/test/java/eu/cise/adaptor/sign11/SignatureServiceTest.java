@@ -1,4 +1,4 @@
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor.sign11;
 
 import eu.cise.adaptor.KeyStoreInfo;
 import eu.cise.adaptor.PrivateKeyInfo;

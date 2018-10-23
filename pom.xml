@@ -111,6 +111,7 @@
     </pluginManagement>
 
     <plugins>
+<!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -131,6 +132,7 @@
           </execution>
         </executions>
       </plugin>
+-->
 
       <!-- create an appropriate javadoc -->
       <plugin>

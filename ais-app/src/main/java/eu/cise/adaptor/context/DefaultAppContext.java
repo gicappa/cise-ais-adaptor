@@ -2,9 +2,9 @@ package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
 import eu.cise.adaptor.dispatch.ErrorCatchingDispatcher;
-import eu.cise.adaptor.signature.DefaultCertificateRegistry;
-import eu.cise.adaptor.signature.DefaultSignatureService;
-import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
+import eu.cise.adaptor.sign11.DefaultCertificateRegistry;
+import eu.cise.adaptor.sign11.DefaultSignatureService;
+import eu.cise.adaptor.sign11.SignatureDispatcherDecorator;
 import eu.cise.adaptor.sources.AisFileStreamGenerator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.ServiceProfileReader;

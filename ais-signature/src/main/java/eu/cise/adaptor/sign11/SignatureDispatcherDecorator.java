@@ -1,8 +1,8 @@
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor.sign11;
 
+import eu.cise.adaptor.Dispatcher;
 import eu.cise.adaptor.SignatureService;
 import eu.cise.adaptor.dispatch.DispatchResult;
-import eu.cise.adaptor.Dispatcher;
 import eu.cise.servicemodel.v1.message.Message;
 
 public class SignatureDispatcherDecorator implements Dispatcher {
