@@ -1,4 +1,4 @@
-CISE AIS Adaptor (c) 2018, EUropean Union
+CISE AIS Adaptor (c) 2018, European Union
 
 CISE AIS Adaptor has been developed by the Joint Research Centre of the European Union. It is released as open source software under the 3-Clause BSD License.
 
