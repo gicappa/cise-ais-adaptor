@@ -208,8 +208,8 @@ public class SignatureDelegate {
         }
     }
 
-    private String uriStringOf(String XSLT_PATH) throws URISyntaxException {
-        return getClass().getResource(XSLT_PATH).toURI().toString();
+    private String uriStringOf(String xsltPath) throws URISyntaxException {
+        return getClass().getResource(xsltPath).toURI().toString();
     }
 
     private DigestMethod newDigestSHA1() throws NoSuchAlgorithmException,
