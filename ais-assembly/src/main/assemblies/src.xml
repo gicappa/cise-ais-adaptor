@@ -40,20 +40,13 @@
       <includes>
         <include>**/*</include>
         <include>.gitignore</include>
-<!--
-        <include>*.txt</include>
-        <include>*.xml</include>
-        <include>*.md</include>
-        <include>*.adoc</include>
-        <include>.gitignore</include>
--->
       </includes>
       <excludes>
         <exclude>.git/**</exclude>
         <exclude>.idea/**</exclude>
         <exclude>target/**</exclude>
         <exclude>local-repo/**</exclude>
-        <exclude>*.iml</exclude>
+        <exclude>**/*.iml</exclude>
       </excludes>
     </fileSet>
   </fileSets>
