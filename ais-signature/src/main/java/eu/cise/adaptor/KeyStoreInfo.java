@@ -1,6 +1,6 @@
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.sign11.ResourceFile;
+import eu.cise.adaptor.signature.ResourceFile;
 
 import java.io.InputStream;
 import java.security.KeyStore;

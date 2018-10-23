@@ -1,4 +1,4 @@
-package eu.cise.adaptor.sign11;
+package eu.cise.adaptor.signature;
 
 import eu.cise.adaptor.Dispatcher;
 import eu.cise.adaptor.SignatureService;

@@ -1,4 +1,4 @@
-package eu.cise.adaptor.sign11;
+package eu.cise.adaptor.signature;
 
 import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.servicemodel.v1.message.Message;
@@ -103,17 +103,6 @@ public class SignatureDelegate {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             consumer.accept(nodeList.item(i));
-        }
-    }
-
-    private Element getSignatureElement(String messageID, Document doc) {
-        NodeList nodeList = doc.getElementsByTagName("Signature");
-
-        if (nodeList.getLength() > 0) {
-            return (Element) nodeList.item(0);
-        } else {
-            throw new AdaptorException("Signature element was not found for message with ID {"
-                                               + messageID + "}");
         }
     }
 
