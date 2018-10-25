@@ -29,14 +29,15 @@ package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
 import eu.cise.adaptor.dispatch.ErrorCatchingDispatcher;
-import eu.cise.adaptor.signature.DefaultCertificateRegistry;
-import eu.cise.adaptor.signature.DefaultSignatureService;
-import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
+import eu.cise.adaptor.signature.*;
 import eu.cise.adaptor.sources.AisFileStreamGenerator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.translate.VesselToPushMessage;
+
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
 
 /**
  *
@@ -69,11 +70,15 @@ public class DefaultAppContext implements AppContext {
     }
 
     private SignatureService makeSignatureService() {
-        return new DefaultSignatureService(
-                new PrivateKeyInfo(
-                        config.getAdaptorId(),
-                        config.getPrivateKeyPassword()),
-                makeCertificateRegistry());
+        DefaultCertificateRegistry registry = makeCertificateRegistry();
+        PrivateKeyInfo myPrivateKey = new PrivateKeyInfo(config.getAdaptorId(), config.getPrivateKeyPassword());
+        X509Certificate privateCertificate = registry.findPrivateCertificate(myPrivateKey.keyAlias());
+        PrivateKey privateKey = registry.findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
+
+        DomSigner signer = new DefaultDomSigner(privateCertificate, privateKey);
+        DomVerifier verifier = new DefaultDomVerifier(registry);
+
+        return new DefaultSignatureService(signer, verifier);
     }
 
     private DefaultCertificateRegistry makeCertificateRegistry() {

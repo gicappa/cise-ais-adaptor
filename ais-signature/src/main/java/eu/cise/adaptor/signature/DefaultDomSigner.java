@@ -27,21 +27,17 @@
 
 package eu.cise.adaptor.signature;
 
+import eu.cise.adaptor.DomSigner;
 import eu.cise.adaptor.exceptions.AdaptorException;
-import eu.cise.servicemodel.v1.message.Message;
-import eu.eucise.xml.DefaultXmlMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.MarshalException;
 import javax.xml.crypto.XMLStructure;
 import javax.xml.crypto.dom.DOMStructure;
 import javax.xml.crypto.dsig.*;
 import javax.xml.crypto.dsig.dom.DOMSignContext;
-import javax.xml.crypto.dsig.dom.DOMValidateContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
@@ -57,7 +53,6 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -66,71 +61,22 @@ import static javax.xml.crypto.dsig.SignatureMethod.RSA_SHA1;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
 import static javax.xml.crypto.dsig.Transform.XSLT;
 
-public class SignatureDelegate {
+public class DefaultDomSigner implements DomSigner {
 
-    private final DefaultXmlMapper.NotValidating noValidationMapper
-            = new DefaultXmlMapper.NotValidating();
+    private final XMLSignatureFactory sigFactory;
     private final X509Certificate certificate;
     private final PrivateKey privateKey;
-    private final XMLSignatureFactory sigFactory;
-    private final KeySelector keySelector = new CertificateKeySelector();
 
-    public SignatureDelegate(X509Certificate certificate, PrivateKey privateKey) {
+    public DefaultDomSigner(X509Certificate certificate, PrivateKey privateKey) {
+        this.sigFactory = buildXMLSignatureFactory();
         this.certificate = certificate;
         this.privateKey = privateKey;
-        this.sigFactory = buildXMLSignatureFactory();
     }
 
-    private XMLSignatureFactory buildXMLSignatureFactory() {
-        try {
-            return XMLSignatureFactory.getInstance("DOM", "XMLDSig");
-        } catch (NoSuchProviderException e) {
-            throw new AdaptorException("No such security provider", e);
-        }
-    }
-
-    public void verifySignatureWithMessageCertificate(Message message) {
-        Document doc = noValidationMapper.toDOM(message);
-        verifySignature(doc);
-    }
-
-    public Message signMessageWithDelegatesPrivateKey(Message message) {
-        Document unsignedDoc = noValidationMapper.toDOM(message);
-        removeSignatureElementIfAny(unsignedDoc);
-        Document signedDoc = signDoc(unsignedDoc);
-        return noValidationMapper.fromDOM(signedDoc);
-    }
-
-    private void verifySignature(Document doc) {
-        applyToSignature(doc, (node) -> {
-            try {
-
-                DOMValidateContext valCtx = new DOMValidateContext(keySelector, node);
-
-                XMLSignature sig = sigFactory.unmarshalXMLSignature(valCtx);
-
-                if (!sig.validate(valCtx)) {
-                    throw new AdaptorException("Signature verification failed.");
-                }
-            } catch (MarshalException e) {
-                throw new AdaptorException("Marshalling error", e);
-            } catch (XMLSignatureException e) {
-                throw new AdaptorException("Signature verification error", e);
-            }
-
-        });
-    }
-
-    private void applyToSignature(Document doc, Consumer<Node> consumer) {
-        NodeList nodeList = doc.getElementsByTagName("Signature");
-
-        if (nodeList.getLength() <= 0) {
-            throw new AdaptorException("Signature element was not found.");
-        }
-
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            consumer.accept(nodeList.item(i));
-        }
+    @Override
+    public Document sign(Document document) {
+        removeSignatureElementIfAny(document);
+        return signDoc(document);
     }
 
     private void removeSignatureElementIfAny(Document doc) {
@@ -217,5 +163,11 @@ public class SignatureDelegate {
         return sigFactory.newDigestMethod(DigestMethod.SHA1, null);
     }
 
-
+    private XMLSignatureFactory buildXMLSignatureFactory() {
+        try {
+            return XMLSignatureFactory.getInstance("DOM", "XMLDSig");
+        } catch (NoSuchProviderException e) {
+            throw new AdaptorException("No such security provider", e);
+        }
+    }
 }

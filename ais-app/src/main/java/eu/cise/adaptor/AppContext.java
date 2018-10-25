@@ -32,13 +32,16 @@ package eu.cise.adaptor;
  * built and created using the specific adaptors.
  *
  * The idea of the hexagonal architecture is that the inner domain module
- * where the business logic is not depending on any detail of the implementation
- * and of the connection of the outside world.
- *
- *
+ * with the business logic is not depending on any detail of the implementation
+ * and of the connection of the outside world following the Dependency Inversion Principle.
  */
 public interface AppContext {
 
+    /**
+     * Create a Dispatcher object
+     *
+     * @return
+     */
     Dispatcher makeDispatcher();
 
     AisStreamGenerator makeSource();

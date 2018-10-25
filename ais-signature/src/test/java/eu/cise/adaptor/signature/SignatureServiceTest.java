@@ -27,9 +27,7 @@
 
 package eu.cise.adaptor.signature;
 
-import eu.cise.adaptor.KeyStoreInfo;
-import eu.cise.adaptor.PrivateKeyInfo;
-import eu.cise.adaptor.SignatureService;
+import eu.cise.adaptor.*;
 import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
@@ -45,6 +43,8 @@ import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -65,17 +65,30 @@ public class SignatureServiceTest {
     private XmlMapper xmlMapper;
     private XmlValidator xmlValidator;
     private Message message;
+    private DomSigner signer;
+    private DomVerifier verifier;
 
     @Before
     public void before() {
         xmlMapper = new DefaultXmlMapper();
         xmlValidator = new DefaultXmlValidator();
         message = buildMessage();
-        signature = new DefaultSignatureService(
-                new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise"),
-                new DefaultCertificateRegistry(
-                        new KeyStoreInfo("cisePrivate.jks", "cisecise"),
-                        new KeyStoreInfo("cisePublic.jks", "cisecise")));
+
+
+        CertificateRegistry registry = new DefaultCertificateRegistry(
+                new KeyStoreInfo("cisePrivate.jks", "cisecise"),
+                new KeyStoreInfo("cisePublic.jks", "cisecise"));
+
+        PrivateKeyInfo pk = new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise");
+
+        X509Certificate
+                privateCertificate = registry.findPrivateCertificate(pk.keyAlias());
+        PrivateKey
+                privateKey = registry.findPrivateKey(pk.keyAlias(), pk.password());
+
+        signer = new DefaultDomSigner(privateCertificate, privateKey);
+        verifier = new DefaultDomVerifier(registry);
+        signature = new DefaultSignatureService(signer, verifier);
     }
 
     @Test

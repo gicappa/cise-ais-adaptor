@@ -25,33 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor.signature;
+package eu.cise.adaptor;
 
-import eu.cise.adaptor.DomSigner;
-import eu.cise.adaptor.DomVerifier;
-import eu.cise.adaptor.SignatureService;
-import eu.cise.servicemodel.v1.message.Message;
-import eu.eucise.xml.DefaultXmlMapper;
-import eu.eucise.xml.XmlMapper;
+import org.w3c.dom.Document;
 
-public class DefaultSignatureService implements SignatureService {
-
-    private final XmlMapper xmlMapper = new DefaultXmlMapper.NotValidating();
-    private final DomSigner signer;
-    private final DomVerifier verifier;
-
-    public DefaultSignatureService(DomSigner signer, DomVerifier verifier) {
-        this.signer = signer;
-        this.verifier = verifier;
-    }
-
-    @Override
-    public Message sign(Message message) {
-        return xmlMapper.fromDOM(signer.sign(xmlMapper.toDOM(message)));
-    }
-
-    @Override
-    public void verify(Message message) {
-        verifier.verify(xmlMapper.toDOM(message));
-    }
+public interface DomVerifier {
+    void verify(Document message);
 }
