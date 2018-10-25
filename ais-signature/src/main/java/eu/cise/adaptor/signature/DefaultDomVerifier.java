@@ -30,9 +30,6 @@ package eu.cise.adaptor.signature;
 import eu.cise.adaptor.CertificateRegistry;
 import eu.cise.adaptor.DomVerifier;
 import eu.cise.adaptor.exceptions.AdaptorException;
-import eu.cise.servicemodel.v1.message.Message;
-import eu.eucise.xml.DefaultXmlMapper;
-import eu.eucise.xml.XmlMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,7 +62,7 @@ public class DefaultDomVerifier implements DomVerifier {
     private static final String X_PATH_TO_CERTIFICATE
             = "//*[local-name() = 'KeyInfo']/*[local-name() = 'X509Data']/*[local-name() = " +
             "'X509Certificate']";
-    private final XmlMapper xmlMapper = new DefaultXmlMapper.NotValidating();
+
     private final XMLSignatureFactory sigFactory;
     private final KeySelector keySelector;
     private final XPathExpression certXPath;
@@ -80,9 +77,8 @@ public class DefaultDomVerifier implements DomVerifier {
 
     @Override
     public void verify(Document document) {
-//        Document doc = xmlMapper.toDOM(message);
         verifySignature(document);
-//        verifyCertificateAgainstCACert(message);
+        verifyCertificateAgainstCACert(document);
     }
 
     private XPathExpression compileXPath(String xPathCertificate) {
@@ -122,14 +118,14 @@ public class DefaultDomVerifier implements DomVerifier {
         }
     }
 
-    private void verifyCertificateAgainstCACert(Message message) {
+    private void verifyCertificateAgainstCACert(Document document) {
         try {
             X509Certificate certificate =
                     parseBase64Certificate(
                             addBeginEndToCertificate(
                                     removeCarriageReturn(
                                             extractCertificateText(
-                                                    getCertificateElement(message)))));
+                                                    getCertificateElement(document)))));
 
             String issuerCertNameInJKS = extractIssuerNameFrom(certificate);
 
@@ -138,8 +134,7 @@ public class DefaultDomVerifier implements DomVerifier {
             certificate.verify(caCert.getPublicKey());
 
         } catch (Exception e) {
-            throw new AdaptorException("Exception at certificate verification for message with ID" +
-                                               " {" + message.getMessageID() + "}", e);
+            throw new AdaptorException("Exception at certificate verification", e);
         }
     }
 
@@ -163,8 +158,9 @@ public class DefaultDomVerifier implements DomVerifier {
         return certificateElement.getFirstChild().getNodeValue();
     }
 
-    private Element getCertificateElement(Message message) throws XPathExpressionException {
-        return (Element) certXPath.evaluate(message.getAny(), NODE);
+    private Element getCertificateElement(Document document) throws XPathExpressionException {
+        return (Element) certXPath.evaluate(document, NODE);
+
     }
 
     private String addBeginEndToCertificate(String certBase64) {

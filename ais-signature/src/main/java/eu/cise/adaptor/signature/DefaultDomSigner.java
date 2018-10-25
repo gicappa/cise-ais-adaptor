@@ -33,7 +33,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.xml.crypto.MarshalException;
 import javax.xml.crypto.XMLStructure;
 import javax.xml.crypto.dom.DOMStructure;
 import javax.xml.crypto.dsig.*;
@@ -97,10 +96,7 @@ public class DefaultDomSigner implements DomSigner {
             XMLSignature signature = sigFactory.newXMLSignature(signedInfo, keyInfo);
             signature.sign(dsc);
             return doc;
-        } catch (XMLSignatureException |
-                MarshalException |
-                NoSuchAlgorithmException |
-                InvalidAlgorithmParameterException e) {
+        } catch (Exception e) {
             throw new AdaptorException(e);
         }
     }

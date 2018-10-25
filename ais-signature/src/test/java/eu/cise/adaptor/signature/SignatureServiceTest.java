@@ -65,8 +65,6 @@ public class SignatureServiceTest {
     private XmlMapper xmlMapper;
     private XmlValidator xmlValidator;
     private Message message;
-    private DomSigner signer;
-    private DomVerifier verifier;
 
     @Before
     public void before() {
@@ -81,13 +79,12 @@ public class SignatureServiceTest {
 
         PrivateKeyInfo pk = new PrivateKeyInfo("eu.cise.es.gc-ls01", "cisecise");
 
-        X509Certificate
-                privateCertificate = registry.findPrivateCertificate(pk.keyAlias());
-        PrivateKey
-                privateKey = registry.findPrivateKey(pk.keyAlias(), pk.password());
+        X509Certificate certificate = registry.findPrivateCertificate(pk.keyAlias());
+        PrivateKey privateKey = registry.findPrivateKey(pk.keyAlias(), pk.password());
 
-        signer = new DefaultDomSigner(privateCertificate, privateKey);
-        verifier = new DefaultDomVerifier(registry);
+        DomSigner signer = new DefaultDomSigner(certificate, privateKey);
+        DomVerifier verifier = new RtiDomVerifier();
+
         signature = new DefaultSignatureService(signer, verifier);
     }
 

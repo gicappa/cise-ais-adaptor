@@ -71,12 +71,14 @@ public class DefaultAppContext implements AppContext {
 
     private SignatureService makeSignatureService() {
         DefaultCertificateRegistry registry = makeCertificateRegistry();
-        PrivateKeyInfo myPrivateKey = new PrivateKeyInfo(config.getAdaptorId(), config.getPrivateKeyPassword());
-        X509Certificate privateCertificate = registry.findPrivateCertificate(myPrivateKey.keyAlias());
-        PrivateKey privateKey = registry.findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
-
+        PrivateKeyInfo myPrivateKey
+                = new PrivateKeyInfo(config.getAdaptorId(), config.getPrivateKeyPassword());
+        X509Certificate privateCertificate
+                = registry.findPrivateCertificate(myPrivateKey.keyAlias());
+        PrivateKey privateKey
+                = registry.findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
         DomSigner signer = new DefaultDomSigner(privateCertificate, privateKey);
-        DomVerifier verifier = new DefaultDomVerifier(registry);
+        DomVerifier verifier = new RtiDomVerifier();
 
         return new DefaultSignatureService(signer, verifier);
     }

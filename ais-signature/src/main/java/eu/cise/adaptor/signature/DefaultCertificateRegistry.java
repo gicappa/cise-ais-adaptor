@@ -44,7 +44,6 @@ public class DefaultCertificateRegistry implements CertificateRegistry {
     private final KeyStoreInfo ksPublic;
     private Map<String, X509Certificate> publicCertMap = new ConcurrentHashMap<>();
 
-
     public DefaultCertificateRegistry(KeyStoreInfo ksPrivate, KeyStoreInfo ksPublic) {
         this.ksPrivate = ksPrivate;
         this.ksPublic = ksPublic;
