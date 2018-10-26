@@ -1,7 +1,38 @@
+/*
+ * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package eu.cise.adaptor;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
+import org.aeonbits.owner.converters.DurationConverter;
+
+import java.io.PrintStream;
+import java.time.Duration;
 
 /**
  * This file is containing the adaptor application configuration with different
@@ -40,24 +71,6 @@ public interface AdaptorConfig extends Config {
      */
     @Key("gateway.address")
     String getGatewayAddress();
-
-    /**
-     * Service Id of the recipient that should receive the messages.
-     *
-     * @return the string with the service id
-     */
-    @Key("recipient.service.id")
-    String getRecipientServiceId();
-
-    /**
-     * Service operation of the recipient that should receive the messages.
-     * It can be 'PullRequest', 'PullResponse', 'Push'.
-     * If unsure use 'Push'
-     *
-     * @return the string with the service operation
-     */
-    @Key("recipient.service.operation")
-    String getRecipientServiceOperation();
 
     /**
      * Service Id of the sender public authority that is sending the messages.
@@ -152,8 +165,99 @@ public interface AdaptorConfig extends Config {
      * A parameter indicating the number of entities that will be sent to the
      * sender in a single CISE message.
      *
-     * @return the string with the idle time
+     * @return the number of entities
      */
     @Key("processing.entities-per-message")
     int getNumberOfEntitiesPerMessage();
+
+    /**
+     * A parameter indicating the number of milliseconds to wait before sending a message when the
+     * processing.entities-per-message has not been reached and the buffer of entities is not full.
+     * It is needed to avoid to wait indefinitely if the processing.entities-per-message is not
+     * reached.
+     *
+     * @return the timeout to wait before sending a message
+     */
+    @ConverterClass(DurationConverter.class)
+    @Key("processing.sending.timeout")
+    Duration getEntityBufferTimeout();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service id
+     */
+    @Key("profile.${profile.number}.service_id")
+    String getProfileServiceId();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile community
+     */
+    @Key("profile.${profile.number}.community")
+    String getProfileCommunity();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile country
+     */
+    @Key("profile.${profile.number}.country")
+    String getProfileCountry();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile data freshness
+     */
+    @Key("profile.${profile.number}.data_freshness")
+    String getProfileDataFreshness();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile function
+     */
+    @Key("profile.${profile.number}.function")
+    String getProfileFunction();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile sea basin
+     */
+    @Key("profile.${profile.number}.sea_basin")
+    String getProfileSeaBasin();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service operation
+     */
+    @Key("profile.${profile.number}.service_operation")
+    String getProfileServiceOperation();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service role
+     */
+    @Key("profile.${profile.number}.service_role")
+    String getProfileServiceRole();
+
+    /**
+     * Specifies the Nth service profile parameter
+     *
+     * @return the service profile service type
+     */
+    @Key("profile.${profile.number}.service_type")
+    String getProfileServiceType();
+
+    /**
+     * A convenience method to print all the properties
+     *
+     * @param out an out stream where to print the properties.
+     */
+    void list(PrintStream out);
 }

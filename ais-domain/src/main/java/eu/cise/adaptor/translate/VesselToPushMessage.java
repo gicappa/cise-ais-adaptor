@@ -1,3 +1,30 @@
+/*
+ * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package eu.cise.adaptor.translate;
 
 import eu.cise.adaptor.AdaptorConfig;
@@ -11,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
@@ -22,14 +50,16 @@ import static eu.eucise.helpers.ServiceBuilder.newService;
 public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
     private final AdaptorConfig config;
+    private final ServiceProfileReader profiles;
 
     /**
      * The config is the collaborator of this class.
      *
      * @param config the AdaptorConfig object
      */
-    public VesselToPushMessage(AdaptorConfig config) {
+    public VesselToPushMessage(AdaptorConfig config, ServiceProfileReader profiles) {
         this.config = config;
+        this.profiles = profiles;
     }
 
     /**
@@ -48,15 +78,17 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .correlationId(UUID.randomUUID().toString())
                 .creationDateTime(new Date())
                 .sender(newService()
-                        .id(config.getServiceId())
-                        .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
-                        .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
-                        .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                        .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-                .recipient(newService()
-                        .id(config.getRecipientServiceId())
-                        .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-                )
+                                .id(config.getServiceId())
+                                .type(VESSEL_SERVICE)
+                                .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
+                                .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
+                                .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
+                                .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
+//                .recipient(newService()
+//                                   .id(config.getRecipientServiceId())
+//                                   .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
+//                                   .type(VESSEL_SERVICE)
+//                          )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
                 .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
@@ -64,7 +96,7 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
                 .addEntities(entities)
+                .addProfiles(profiles.list())
                 .build();
     }
-
 }
