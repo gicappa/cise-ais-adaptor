@@ -7,6 +7,13 @@ ifndef::env-site[]
 :idprefix:
 :idseparator: -
 endif::[]
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 == Overview
 
 The CISE Adaptor for AIS data is an application to read AIS tracks encoded with NMEA messages, translate them into a stream of CISE Data Model compliant objects and to dispatch CISE Push messages to a connected CISE Gateway.
