@@ -45,7 +45,7 @@ Clone the git repository:
 ```
 After cloning the git repository is possible to compile the project using maven.
 
-IMPORTANT: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the projecr directory* and proceed with the following steps. 
+WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the projecr directory* and proceed with the following steps. 
 
 ```shell
 ...$ cd cise-ais-adaptor
