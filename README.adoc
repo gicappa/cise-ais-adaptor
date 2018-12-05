@@ -32,6 +32,8 @@ The server should be installed with:
 == Quick Start
 
 === Compilation
+IMPORTANT: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received the ais-mvn-repo.tgz please extract the content in the ais-mvn-repo directory and proceed with the following steps. 
+
 After the clone of the git repository is possible to compile the project using maven:
 ```shell
 ...$ cd cise-ais-adaptor
