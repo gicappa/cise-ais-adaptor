@@ -30,3 +30,4 @@ target/
 .gradle/
 build/
 out/
+ais-mvn-repo/
