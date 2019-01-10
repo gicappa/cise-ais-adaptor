@@ -117,6 +117,16 @@ public interface AdaptorConfig extends Config {
     String getServiceOperation();
 
     /**
+     * This field will be used when creating the Push message for a
+     * subscription. The NODE needs a recipient even if the message won't
+     * be sent to it but to the list of subscribers for validity reasons.
+     *
+     * @return the string with the subscription recipient service id
+     */
+    @Key("subscription.service.id")
+    String getSubscribeServiceId();
+
+    /**
      * A parameter indicating the priority of the message.
      * Please refer to the entity data model to know the possible values.
      *

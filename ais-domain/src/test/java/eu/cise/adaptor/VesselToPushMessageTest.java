@@ -43,9 +43,11 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.SUBSCRIBE;
+import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -82,12 +84,49 @@ public class VesselToPushMessageTest {
     }
 
     @Test
-    public void it_doesnt_use_discoveryprofiles_in_a_push_subscribe() {
+    public void it_doesnt_use_DiscoveryProfile_in_a_push_subscribe() {
         vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
 
         Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
         assertThat(actual.getDiscoveryProfiles(), hasSize(0));
+    }
+
+    @Test
+    public void it_specifies_a_recipient_in_a_push_subscribe() {
+        vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+        Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+        assertThat(actual.getRecipient(), is(notNullValue()));
+    }
+
+    @Test
+    public void it_specifies_a_recipient_id_in_a_push_subscribe() {
+        vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+        Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+        assertThat(actual.getRecipient().getServiceID(),
+                   is(configUsingSubscribe().getSubscribeServiceId()));
+    }
+
+    @Test
+    public void it_specifies_a_recipient_operation_in_a_push_subscribe() {
+        vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+        Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+        assertThat(actual.getRecipient().getServiceOperation(), is(SUBSCRIBE));
+    }
+
+    @Test
+    public void it_specifies_a_recipient_type_in_a_push_subscribe() {
+        vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+        Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+        assertThat(actual.getRecipient().getServiceType(), is(VESSEL_SERVICE));
     }
 
     private AdaptorConfig configUsingPush() {

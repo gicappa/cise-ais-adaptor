@@ -34,6 +34,7 @@ import eu.cise.servicemodel.v1.message.*;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
 import eu.eucise.helpers.PushBuilder;
+import eu.eucise.helpers.ServiceBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -67,7 +68,7 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
     /**
      * The method will translate the list of vessel entities into a cise message
      * adding the service model around the payload.
-     *
+     * <p>
      * If the config.getServiceOperation() is equals to Subscribe the message will
      * be sent without recipient nor DiscoveryProfile according to the document
      * "EUCISE2020 Interface Control Document x National Adaptors.pdf".
@@ -80,12 +81,36 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
     @Override
     public Push translate(List<Entity> entities) {
         PushBuilder message = translateCommon(entities);
-        if (ServiceOperationType.fromValue(config.getServiceOperation()).equals(SUBSCRIBE)) {
-            return message.build();
+
+        if (isSubscribeMessage()) {
+            return message.recipient(createSubscriptionRecipient()).build();
+        } else {
+            return message.addProfiles(profiles.list()).build();
         }
-        return message.addProfiles(profiles.list()).build();
+
     }
 
+    /**
+     * Create a recipient for the case of a Subscription Push message
+     * that is required (even if it's useless) by the parsing and
+     * verification of the node.
+     *
+     * @return a ServiceBuilder with the subscriber id the service type and operation
+     */
+    private ServiceBuilder createSubscriptionRecipient() {
+        return newService()
+                .id(config.getSubscribeServiceId())
+                .operation(SUBSCRIBE)
+                .type(VESSEL_SERVICE);
+    }
+
+    /**
+     * Actually create the message with all the details specified by the configuration
+     * file.
+     *
+     * @param entities a list of vessel entities objects
+     * @return a new cise message with the list of entities as a payload
+     */
     private PushBuilder translateCommon(List<Entity> entities) {
         return newPush()
                 .id(UUID.randomUUID().toString())
@@ -106,5 +131,14 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
                 .addEntities(entities);
+    }
+
+    /**
+     * True if  the service operation of the sender is 'Subscribe'
+     *
+     * @return true for subscription protocol
+     */
+    private boolean isSubscribeMessage() {
+        return ServiceOperationType.fromValue(config.getServiceOperation()).equals(SUBSCRIBE);
     }
 }
