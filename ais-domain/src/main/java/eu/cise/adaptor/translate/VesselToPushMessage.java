@@ -33,11 +33,13 @@ import eu.cise.servicemodel.v1.authority.SeaBasinType;
 import eu.cise.servicemodel.v1.message.*;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
+import eu.eucise.helpers.PushBuilder;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.SUBSCRIBE;
 import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
@@ -64,14 +66,27 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
     /**
      * The method will translate the list of vessel entities into a cise message
-     * adding the service model around the payload. Being in a List form the
-     * payload can be
+     * adding the service model around the payload.
+     *
+     * If the config.getServiceOperation() is equals to Subscribe the message will
+     * be sent without recipient nor DiscoveryProfile according to the document
+     * "EUCISE2020 Interface Control Document x National Adaptors.pdf".
+     * Otherwise the adaptor will assume that the message must be sent as a normal
+     * Push and the profile list will be parsed and added to the message.
      *
      * @param entities a list of vessel entities objects
      * @return a new cise message with the list of entities as a payload
      */
     @Override
     public Push translate(List<Entity> entities) {
+        PushBuilder message = translateCommon(entities);
+        if (ServiceOperationType.fromValue(config.getServiceOperation()).equals(SUBSCRIBE)) {
+            return message.build();
+        }
+        return message.addProfiles(profiles.list()).build();
+    }
+
+    private PushBuilder translateCommon(List<Entity> entities) {
         return newPush()
                 .id(UUID.randomUUID().toString())
                 .contextId(UUID.randomUUID().toString())
@@ -84,19 +99,12 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
                                 .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
                                 .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
                                 .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-//                .recipient(newService()
-//                                   .id(config.getRecipientServiceId())
-//                                   .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-//                                   .type(VESSEL_SERVICE)
-//                          )
                 .priority(PriorityType.fromValue(config.getMessagePriority()))
                 .isRequiresAck(false)
                 .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
                 .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
                 .isPersonalData(false)
                 .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntities(entities)
-                .addProfiles(profiles.list())
-                .build();
+                .addEntities(entities);
     }
 }
