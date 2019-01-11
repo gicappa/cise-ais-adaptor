@@ -59,9 +59,7 @@ public class EndToEndConversionTest {
         try {
             threadMainApp.start();
             testRestServer.checkRequest(r-> xmlMapper.fromXML(r));
-            threadMainApp.join(30000);
-
-            sleep(5);
+            threadMainApp.join(180000);
 
             assertEquals(96, testRestServer.countInvocations());
         } catch (InterruptedException e) {
