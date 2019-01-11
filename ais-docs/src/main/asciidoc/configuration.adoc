@@ -1,0 +1,4 @@
+[source,properties]
+----
+include::../../../../ais-domain/src/main/resources/ais-adaptor.properties[]
+----
