@@ -11,4 +11,4 @@
 - added the support for multiple service profile to be added to the message.
 
 ## 2018-07-04 Beta release
-First publicly available release
+- First publicly available release

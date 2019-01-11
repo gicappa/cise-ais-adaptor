@@ -88,7 +88,8 @@ Will start the script in foreground. While to run it in background is possible t
 ...$ ./adaptor start command
 ----
 
-== Configuring the AIS Adaptor
-A very important part should be the configuration of the adaptor done through the file `ais-adaptor.properties`.
+.Next steps
+INFO: Please refer to the <<configuration.adoc>> to configure the adaptor with the
+parameters specific to the public administration where the ais-adaptor will be
+installed.
 
-Please open it an put the relevant value to connect to the gateway, to declare your service id and operation and the service profile of the services your AIS tracks should be sent to.
