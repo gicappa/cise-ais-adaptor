@@ -1,11 +1,16 @@
 = CISE Adaptor for AIS data
-Gian Carlo Pace <giancarlo.pace@ec.europa.eu>
-v1.0, 2018-06-22
+Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
+v1.1, 2019-01-11
 :page-layout: docs
+:imagesdir: assets/images
+:homepage: https://github.com/ec-jrc/cise-ais-adaptor
+:numbered:
+:source-highlighter: Coderay coderay
 ifndef::env-site[]
-:toc: left
+:toc: right
 :idprefix:
 :idseparator: -
+//:icons: font
 endif::[]
 ifdef::env-github[]
 :tip-caption: :bulb:
@@ -14,8 +19,10 @@ ifdef::env-github[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
-== Overview
+:source-language: bash
 
+
+== Overview
 The CISE Adaptor for AIS data is an application to read AIS tracks encoded with NMEA messages, translate them into a stream of CISE Data Model compliant objects and to dispatch CISE Push messages to a connected CISE Gateway.
 
 The INPUT is an AIS NMEA transcription and the OUTPUT is a corresponding number of HTTP request each of them containing a CISE PUSH message.
@@ -27,8 +34,7 @@ The AIS NMEA message type supported are two:
 
 The application allows to configure the number of vessels to collect and send in each Push message and a timeout after which the Push message will be sent whatever number of Vessel (>0) will be collected.
 
-== Pre requirements
-
+== Requirements
 The application should preferably installed on a linux machine. Theoretically should work also in any Operative System supporting Java and having a bash shell support but it has only been tested in a GNU/Linux server.
 
 The server should be installed with:
@@ -36,92 +42,53 @@ The server should be installed with:
 - Java 1.8
 - Maven 3.5+
 
-== Quick Start
-
-=== Compilation
+== Compilation
 Clone the git repository: 
-```shell
+[source,bash]
+----
 ...$ git clone git@github.com:ec-jrc/cise-ais-adaptor.git
-```
+----
+
 After cloning the git repository is possible to compile the project using maven.
 
 WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps. 
 
-```shell
+[source,bash]
+----
 ...$ cd cise-ais-adaptor
 ...$ tar xvfz cise-mvn-repo.tgz 
 ...$ mvn clean install
-```
+----
 
-=== Preparing the software
+== Preparing the software
 When the compilation will finished (it should be written a BUILD SUCCESSFUL in the output) it will be created also a distribution package that can be used to run the software.
 
-```shell
+[source,bash]
+----
 ...$ cd target
 ...$ mv cise-ais-adaptor.tar.gz /my/installation/path
 ...$ cd /my/installation/path
 ...$ tar xvfz cise-ais-adaptor.tar.gz
 ...$ cd cise-ais-adaptor
-```
-=== Running the AIS Adaptor
+----
 
+== Running the AIS Adaptor
 To facilitate the starting of the application has been created a script called *adaptor* in the distribution root path.
 
 The command:
-```shell
+[source,bash]
+----
 ...$ ./adaptor run
-```
+----
+
 Will start the script in foreground. While to run it in background is possible to launch it with:
 
-```shell
+[source,bash]
+----
 ...$ ./adaptor start command
-```
+----
 
-=== Configuring the AIS Adaptor
-A very important part should be the configuration of the adaptor done throug the file ais-adaptor.properties.
+== Configuring the AIS Adaptor
+A very important part should be the configuration of the adaptor done through the file `ais-adaptor.properties`.
+
 Please open it an put the relevant value to connect to the gateway, to declare your service id and operation and the service profile of the services your AIS tracks should be sent to.
-
-== General architecture
-The architecture chosen is an onion architecture with a DDD approach where the domain module, that contains the business logic, is at the center of the onion and is connected through the outside world using some module adapters.
-
-The software is composed by eight modules:
-
-* ais-app
-* ais-assembly
-* ais-docs
-* ais-server-example
-* ais-signature
-* ais-source-adapter
-* ais-transport
-
-In the following section we'll enter in the detail of each of them.
-
-=== ais-app
-
-This module is the entry point that triggers the message processing and it focus in wiring all the modules needed for the functioning of the application.
-
-=== ais-domain
-
-Is the module that translates the NMEA strings into a CISE Message and
-that delivers the message to the CISE Gateway. In the domain no I/O operations are performed and it does not depend on any other module but more likely all the modules will depend on it.
-
-The idea is to decouple completely the business logic from the particular source where the data are coming from and from the particular protocol that will be used to transmit the data to the CISE gateway.
-
-=== ais-source-adapter
-This module will provide a mean to access the data from a data source. The two implemented method of getting the NMEA messages are connecting to a TCP/IP socket and opening a file, but it's easy to extend just implementing a AisStreamGenerator interface.
-
-=== ais-transport
-This module is meant to give a way to dispatch messages to the gateway implementing a Dispatcher class. The selected method is using the REST protocol.
-
-=== ais-signature
-Every message entering in a gateway must be signed. This module will sign the messages using specific keystores included in the distribution.
-Is important to provide the correct keystores with private and public keys of the EUCISE2020 Consortium before going to production.
-
-=== ais-assembly
-This module will provide a runnable distribution of the application that will ve generated in the *cise-ais-adaptor/target* directory as a tar.gz file.
-
-=== ais-docs
-An html documentation is generated in this module during the build.
-
-=== ais-server-example
-This running the main class of this module will provide a TCP/IP server that to test the Ais Socket Stream Generator implementation
