@@ -89,5 +89,5 @@ it will be possible to start ais-adaptor in foreground. While to run it in backg
 ----
 
 .Next steps
-NOTE: Please refer to the link:configuration.html[configuration chapter] to configure the adaptor with the parameters specific to the public administration where the ais-adaptor will be installed.
+NOTE: Please refer to the link:ais-docs/src/main/asciidoc/configuration.adoc[configuration chapter] to configure the adaptor with the parameters specific to the public administration where the ais-adaptor will be installed.
 
