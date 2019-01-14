@@ -20,8 +20,8 @@ NOTE: The current implementation of the adaptor doesn't support any message (lik
 |===
 |Property Name|Description
 |#gateway.address# | #is the url where to contact the node/gateway#
-|ais-source.file.name | the default implementation of this adaptor is using a file to load the ais tracks. This properties specifies the absolute file path where to find it.
-|demo-environment| this property must be disregarded and must be set to false
+|#ais-source.file.name# |the provided implementation of this adaptor is using a file to load the ais tracks. This properties specifies the absolute file path where to find it. *The provided implementation that loads the ais tracks from a file is just an example and it should be customized by the public authority developer to load the ais information using the interfaces provided by the PA's legacy systems. In order to do that is necessary to implement the interface `AisStreamGenerator` in the `ais-source-adapter` module. This property in this case could not be needed anymore*
+|demo-environment| this property must be disregarded and must be set to *`false`*
 |override-timestamps| setting this property to true will overwrite the timestamp arrived from the AIS transponder with the current instant in which the message is processed in the adaptor.
 |processing.idle.time| is the time that will be waited between the processing of two messages. Has been introduced to avoid to stress the server running the adaptor with a to tight reading loop.
 |#processing.entities-per-message#|#A CISE Message can contain a list of entities (Vessel in this case). This property wait to have at least the specified number of entities before composing and sending the message#
@@ -41,29 +41,86 @@ NOTE: The current implementation of the adaptor doesn't support any message (lik
   20s
 |===
 
+=== Sender Configuration
+Every message departing from the adaptor must specify some of the sender information
+necessary to the CISE network to identify the public authority sending the messages.
+
 .Sender configuration
 |===
 |Property Name |Description
-|sender.service.id |
-|sender.service.data-freshness-type |
-|sender.service.sea-basin-type|
-|sender.service.participant.url|
-|sender.service.operation|
+|#sender.service.id# |#it is the service id configured and registered inside the node that define the adaptor as a connected legacy system#
+|sender.service.participant.url|it must be specified but *it's not necessary to be a real url*. This would be the url use by the node to contact the adaptor but, as it was already said, the adaptor is not able to accept any incoming message. This parameter can be defaulted with `http://localhost:8080/api/messages`
+|sender.service.operation|Can be set to `Push` or `Subscribe`. You may read the details in the following sub-chapters.
+|sender.service.sea-basin-type|Sea Basin possible values: Atlantic, ArcticOcean, NonSpecified, BalticSea, OutermostRegions, NorthSea, Mediterranean, BlackSea.
+|sender.service.data-freshness-type |Data Freshness possible values: RealTime,
+NearlyRealTime, Unknown, Historic
 |===
 
-.Message configuration
 
 === Push or Subscribe messages
 The adaptor can send two different kind of messages:
 
 - Push Unknown
-- Publish (Push Subscribe)
+- Push Subscribe (Publish)
 
 ==== Push Unknown
-TBD
+Using the push unknown it is possible to send the ais tracks using normal Push unknown messages. The recipient(s) of these messages may be defined by configuring one or more discovery profiles in the `ais-adaptor.properties` file.
+
+IMPORTANT: to send Push unknown messages it's just necessary to specify #`sender.service.operation=Push`# in the `ais-adaptor.property` file.
+
+NOTE: The normal Push messages can't be received/detected/displayed by the Light Client
+
+The profiles are configured with properties similar to the following one:
+
+`profile.` _N_ `.` _property_name_
+
+where:
+
+- *_N_* is a progressive number starting from *0* that identifies the number of DiscoveryProfile. *The number MUST be consecutive to be all processed*.
+- *_property_name_* is a property of the DiscoveryProfile.
+
+The properties that can be specified are:
+
+-  service_id
+-  community
+-  country
+-  data_freshness
+-  function
+-  sea_basin
+-  _service_operation_
+-  _service_role_
+-  _service_type_
+
+The last three, if omitted will be set to three default values that cope
+with the sending of messages to VesselService push consumer services.
+
+NOTE: With this sending mode the `subscription.service.id` property of the `ais-adaptor.properties` can be disregarded.
+
+===== Examples
+Specifying a profile like:
+
+`profile.0.service_id=eu.cise.greek.push.consumer.id2`
+
+The messages will be just sent to a single service with the id `eu.cise.greek.push.consumer.id2`.
+
+---
+
+`profile.1.community=FisheriesControl`
+`profile.1.country=IT`
+
+The messages will be sent to all the Italian participants belonging to the Fisheries Control community.
 
 ==== Push Subscribe
-TBD
+This mode is used to send Push messages with Subscribe service operation in order to use the Light Client to see the tracks.
+
+IMPORTANT: to send Push unknown messages it's just necessary to specify #`sender.service.operation=Subscribe`# in the `ais-adaptor.property` file.
+
+In this mode it is important to set the `subscription.service.id` to the value of a consumer subscription vessel service created in the node.
+
+Even if in the documentation for the national procurement is clearly stated that a recipient shall not be set when sending a publishing message, the SIMulator doesn't accept a message without a valid recipient (nor a DiscoveryProfile that shouldn't be used here). So this subscription.service.id will be the serviceId of a service of type VesselService with role Consumer defined in the same
+Public Authority that is sending the Publish message.
+
+NOTE: With this sending mode the `profile.N.field` properties of the `ais-adaptor.properties` can be disregarded.
 
 === Property file template
 [source,properties]
