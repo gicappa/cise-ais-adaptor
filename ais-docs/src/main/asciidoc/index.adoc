@@ -1,5 +1,6 @@
 :basedir: ../../../..
 include::{basedir}/README.adoc[]
+
 include::configuration.adoc[]
 
 include::architecture.adoc[]
