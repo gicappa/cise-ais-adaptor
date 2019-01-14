@@ -1,18 +1,30 @@
 == Configuring the AIS Adaptor
-A very important part should be the configuration of the adaptor done through the file `ais-adaptor.properties`.
+In the following lines it will be explained how to configure the adaptor in order to:
 
-Please open it an put the relevant value to connect to the gateway, to declare your service id and operation and the service profile of the services your AIS tracks should be sent to.
+ - Specify the information about the node where to send the CISE messages
+ - Specify the information about the source where
+ - Select to use *Push* or *Subscribe* service operation type
+ - Accordingly to the operation type define who should receive the messages
+ - Configure the certificates files and path for the signatures
 
+TIP: the configuration of the adaptor is achieved by editing the file `ais-adaptor.properties`.
 
+=== Gateway/Node and general configuration
+
+The most important configuration of the adaptor is the gateway/node address that the adaptor must be able to connect to when sending messages.
+
+NOTE: The current implementation of the adaptor doesn't support any message (like Acknowledges or other kind of CISE messages) from the node but will only be able to send out messages to the node.
 
 .General configurations
+[%header,cols=2*]
 |===
-|Property Name |Description
-|gateway.address | is the url where to contact the node/gateway
+|Property Name|Description
+|#gateway.address# | #is the url where to contact the node/gateway#
 |ais-source.file.name | the default implementation of this adaptor is using a file to load the ais tracks. This properties specifies the absolute file path where to find it.
 |demo-environment| this property must be disregarded and must be set to false
-|override-timestamps| settint this property to true will overwrite the timestamp arrived from the AIS transponder with the current instant in which the message is processed in the adaptor.
+|override-timestamps| setting this property to true will overwrite the timestamp arrived from the AIS transponder with the current instant in which the message is processed in the adaptor.
 |processing.idle.time| is the time that will be waited between the processing of two messages. Has been introduced to avoid to stress the server running the adaptor with a to tight reading loop.
+|#processing.entities-per-message#|#A CISE Message can contain a list of entities (Vessel in this case). This property wait to have at least the specified number of entities before composing and sending the message#
 |processing.sending.timeout|If the processing.entities-per-message is > 1 it means that messages will be sent only when the number of entities will reach that number. The timeout property is needed to avoid that a message stays in a buffer  without being sent because is waiting to reach the number of entities to complete the buffer. The unit of measure is specified with the following convention in time units:
 
   ns, nano, nanos, nanosecond, nanoseconds
@@ -27,7 +39,6 @@ Please open it an put the relevant value to connect to the gateway, to declare y
   3 m
   1 hour
   20s
-|processing.entities-per-message|A CISE Message can contain a list of entities (Vessel in this case). This property wait to have at least the specified number of entities before composing and sending the message
 |===
 
 .Sender configuration

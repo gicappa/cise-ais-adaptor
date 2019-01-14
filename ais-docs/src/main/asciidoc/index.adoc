@@ -1,5 +1,5 @@
-:basedir: ../../../..
-include::{basedir}/README.adoc[]
+include::readme.adoc[]
+
 include::configuration.adoc[]
 
 include::architecture.adoc[]
