@@ -43,7 +43,7 @@ The server should be installed with:
 - Maven 3.5+
 
 == Compilation
-Clone the git repository: 
+Clone the git repository:
 [source,bash]
 ----
 ...$ git clone git@github.com:ec-jrc/cise-ais-adaptor.git
@@ -51,29 +51,29 @@ Clone the git repository:
 
 After cloning the git repository is possible to compile the project using maven.
 
-WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps. 
+WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps.
 
 [source,bash]
 ----
 ...$ cd cise-ais-adaptor
-...$ tar xvfz cise-mvn-repo.tgz 
+...$ tar xvfz cise-mvn-repo.tgz
 ...$ mvn clean install
 ----
 
 == Preparing the software
-When the compilation will finished (it should be written a BUILD SUCCESSFUL in the output) it will be created also a distribution package that can be used to run the software.
+When the compilation will be finished (with a BUILD SUCCESSFUL in the standard output) it will be created a distribution package that can be used to run the software.
 
 [source,bash]
 ----
 ...$ cd target
-...$ mv cise-ais-adaptor.tar.gz /my/installation/path
+...$ mv cise-ais-adaptor-bin.tar.gz /my/installation/path
 ...$ cd /my/installation/path
 ...$ tar xvfz cise-ais-adaptor.tar.gz
-...$ cd cise-ais-adaptor
+...$ cd cise-ais-adaptor-bin
 ----
 
 == Running the AIS Adaptor
-To facilitate the starting of the application has been created a script called *adaptor* in the distribution root path.
+The ais-adaptor application can be started by using a script `adaptor` in the distribution root path. Using the command:
 
 The command:
 [source,bash]
@@ -81,14 +81,13 @@ The command:
 ...$ ./adaptor run
 ----
 
-Will start the script in foreground. While to run it in background is possible to launch it with:
+it will be possible to start ais-adaptor in foreground. While to run it in background is possible to launch it with:
 
 [source,bash]
 ----
-...$ ./adaptor start command
+...$ ./adaptor start
 ----
 
-== Configuring the AIS Adaptor
-A very important part should be the configuration of the adaptor done through the file `ais-adaptor.properties`.
+.Next steps
+NOTE: Please refer to the link:ais-docs/src/main/asciidoc/configuration.adoc[configuration chapter] to configure the adaptor with the parameters specific to the public administration where the ais-adaptor will be installed.
 
-Please open it an put the relevant value to connect to the gateway, to declare your service id and operation and the service profile of the services your AIS tracks should be sent to.
