@@ -1,0 +1,155 @@
+== Configuring the AIS Adaptor
+The current document describes how to configure the adaptor prototype in order to:
+
+ - Connect to a Node and send CISE messages
+ - Specify the information source of the CISE services (AIS tracks)
+ - Push information to other partners using the Node (Push Unknown communication pattern) 
+ - Provide information (publish) to other partners under subscription (Publish/Subscribe communication pattern)
+ - Set up security for information exchange: configure the certificates files and path for the signatures
+
+NOTE: The current version of the adaptor prototype does not support the complete interaction with the Node according to the CISE Service model. It is capable of sending information to other Nodes/Participants but does not process their requests or feedback (e.g., Acknowledgments or other kind of CISE messages) from the node but will only be able to send out messages to the node. 
+
+=== Gateway/Node and general configuration
+
+The configuration settings of the adaptor are stored in the file ais-adaptor.properties, which contains a list of configuration properties, such as the gateway/node address for the adaptor. The following table describes the main properties that should be set up before running the AIS adaptor.
+
+.General configurations
+[%header,cols="d,v"]
+|===
+|Property Name
+|Description
+
+|#gateway.address# 
+|#The URL of the the node/gateway (Common Services endpoint)# +
+Examples: `http://localhost:18080/sim-EGN/rest/CISEMessageServiceREST` 
+
+|#ais-source.file.name# 
+|Absolute path to the file with the AIS tracks. +
+The current version of the prototype loads the AIS tracks from a file as an example. *The source of information can be customized by each public authority according to the requirements of their legacy systems. In order to customize the information source, please check the interface `AisStreamGenerator` in the `ais-source-adapter` module*. +
+If a custom information source is used, this property is not needed.
+
+|demo-environment
+|Deprecated. +
+This property must be set to *`false`*.
+
+|override-timestamps
+|Boolean. +
+True to overwrite the timestamp arrived from the AIS transponder with the timestamp in which the AIS message is processed in the adaptor.
+
+
+|processing.idle.time
+|Delay (in ms) between the processing of two AIS messages. It can lower the stress of the server running the adaptor.
+
+|#processing.entities-per-message#
+|Number of entities in each CISE Message (Vessel entities in this case). +
+The adaptor will send a CISE message only after processing the specified number of entities from the information source.
+Please check `processing.sending.timeout`.
+
+
+|processing.sending.timeout
+|Timeout to send a CISE message. +
+The unit of measure is specified with the following convention in time units: ns, nano, nanos, nanosecond, nanoseconds us, µs, micro, micros, microsecond, microseconds ms, milli, millis, millisecond, milliseconds s, second, seconds m, minute, minutes h, hour, hours d, day, days. +
+When `processing.entities-per-message` > 1, this property defines the maximum period in which a CISE message can stay in the buffer before being sent (e.g., because it is incomplete). +
+ *Example of valid expressions:* +
+ 
+100ns +
+1 hour +
+20s +
+ 
+|===
+
+=== Sender Configuration
+Every CISE message departing from the adaptor contains the information described in the following table to identify the sender of the message. 
+
+.Sender configuration
+[%header,cols=2*]
+|===
+|Property Name |Description
+|#sender.service.id# 
+|#Service ID (consumer) of the sender (configured and registered in the Node)#
+
+|sender.service.participant.url
+|URL (endpoint) of the adaptor.  Example: `http://localhost:8080/api/messages` +
+Required but not used in this version. The adaptor is not able to accept any incoming messages from the node.  
+
+|sender.service.operation
+|Can be set to `Push` or `Subscribe`. +
+Please check the following sections for more information.
+
+|sender.service.sea-basin-type
+|Possible values: `ArcticOcean`, `Atlantic`, `BalticSea`, `BlackSea`, `Mediterranean`, `NorthSea`, `OutermostRegions`,   `NonSpecified`.
+
+|sender.service.data-freshness-type 
+|Possible values: `RealTime`, `NearlyRealTime`, `Historic`, `Unknown`.
+|===
+
+
+=== Supported Communication Patterns
+
+The adaptor supports two CISE communication patterns:
+
+- Push Unknown
+- Publish/Subscribe (only Publish)
+
+==== Push Unknown
+
+The adaptor can send AIS information to other partners using Push messages and dynamic discovery (from the service registry in the Node). 
+
+NOTE: The Light Client in the Node cannot manage information from Push services.
+
+To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
+
+.	Set `sender.service.operation` = `Push`
+.	Define the discovery profiles (discovery metadata) for the recipient(s) of these messages. It is possible to define one or many profiles using the following syntax (property-like): +
+`profile .` *_N_* `.` *_property_name_* = *_value_* + 
+where: 
+
+* *_N_* - profile identifier, integer starting from 0. The IDs *MUST* be consecutive (otherwise none of profiles will be loaded).
+* *_property_name_* is a property of the DiscoveryProfile. The valid properties are:
+
+**  service_id
+**  community
+**  country
+**  data_freshness
+**  function
+**  sea_basin
+**  _service_operation_ (optional, default: Push)
+**  _service_role_ (optional, default: consumer)
+**  _service_type_ (optional, default: VesselService)
+
+* *value* is the value of the property.
+
+NOTE: The `subscription.service.id` property is not used in the `Push Unknown` pattern. 
+
+===== Examples
+
+`profile.0.service_id=eu.cise.greek.push.consumer.id2`
+
+The CISE messages will be sent to a single service with the id `eu.cise.greek.push.consumer.id2` (if exists). This profile can be used to simulate the behavior of the Push communication pattern.
+
+---
+
+`profile.1.community=FisheriesControl`
+`profile.1.country=IT`
+
+The CISE messages will be sent to all the Italian participants belonging to the Fisheries Control community.
+
+====  Publish/Subscribe (only Publish)
+
+The adaptor can also send AIS information to other partners, which had previously subscribed to the service in the Node. For this type of interaction, the adaptor uses Push messages in conformance to the CISE Service model.
+
+To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
+
+.	Set `sender.service.operation` = `Subscribe`
+.	Set the `subscription.service.id` to the identifier of the VesselService subscription service (consumer), which should have been defined in the Node. +
+For each Subscribe service defined in the Node, the Node will provide a consumer Subscribe service to the adaptor(s) to handle the information to be published.
+
+The adaptor will deliver a set of `Push` messages with service operation = `Subscribe` to the service `subscription.service.id`  in the Node. The Node will handle the information published by the adaptor and will deliver it to all the subscribers in the network. 
+
+NOTE: The discovery profiles are ignored for this communication pattern.
+
+=== Property file template
+[source,properties]
+----
+include::../../../../ais-domain/src/main/resources/ais-adaptor.properties[]
+----
