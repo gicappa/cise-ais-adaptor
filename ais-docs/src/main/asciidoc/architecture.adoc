@@ -1,0 +1,44 @@
+== General architecture
+The architecture chosen is an onion architecture with a DDD approach where the domain module, that contains the business logic, is at the center of the onion and is connected through the outside world using some module adapters.
+
+The software is composed by eight modules:
+
+* ais-app
+* ais-assembly
+* ais-docs
+* ais-server-example
+* ais-signature
+* ais-source-adapter
+* ais-transport
+
+In the following section we'll enter in the detail of each of them.
+
+=== ais-app
+
+This module is the entry point that triggers the message processing and it focus in wiring all the modules needed for the functioning of the application.
+
+=== ais-domain
+
+Is the module that translates the NMEA strings into a CISE Message and
+that delivers the message to the CISE Gateway. In the domain no I/O operations are performed and it does not depend on any other module but more likely all the modules will depend on it.
+
+The idea is to decouple completely the business logic from the particular source where the data are coming from and from the particular protocol that will be used to transmit the data to the CISE gateway.
+
+=== ais-source-adapter
+This module will provide a mean to access the data from a data source. The two implemented method of getting the NMEA messages are connecting to a TCP/IP socket and opening a file, but it's easy to extend just implementing a AisStreamGenerator interface.
+
+=== ais-transport
+This module is meant to give a way to dispatch messages to the gateway implementing a Dispatcher class. The selected method is using the REST protocol.
+
+=== ais-signature
+Every message entering in a gateway must be signed. This module will sign the messages using specific keystores included in the distribution.
+Is important to provide the correct keystores with private and public keys of the EUCISE2020 Consortium before going to production.
+
+=== ais-assembly
+This module will provide a runnable distribution of the application that will ve generated in the *cise-ais-adaptor/target* directory as a tar.gz file.
+
+=== ais-docs
+An html documentation is generated in this module during the build.
+
+=== ais-server-example
+This running the main class of this module will provide a TCP/IP server that to test the Ais Socket Stream Generator implementation
