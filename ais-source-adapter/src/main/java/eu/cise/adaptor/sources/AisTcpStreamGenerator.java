@@ -47,15 +47,23 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
 
     private final SocketAddress socketAddress;
     private final AisTcpAdaptorConfig config = ConfigFactory.create(AisTcpAdaptorConfig.class);
+    private final Socket socket;
 
     /**
      * Constructing the class reading host and port from the configuration.
      *
-     * @throws UnknownHostException when the hostname is not recognised.
+     * @throws AdaptorException when the hostname is not recognised or connection can't be established
      */
-    public AisTcpStreamGenerator() throws UnknownHostException {
-        AisTcpAdaptorConfig config = ConfigFactory.create(AisTcpAdaptorConfig.class);
-        this.socketAddress = new InetSocketAddress(InetAddress.getByName(config.getAISSourceSocketHost()), config.getAISSourceSocketPort());
+    public AisTcpStreamGenerator() {
+        try {
+            AisTcpAdaptorConfig config = ConfigFactory.create(AisTcpAdaptorConfig.class);
+            this.socketAddress = new InetSocketAddress(InetAddress.getByName(config.getAISSourceSocketHost()), config.getAISSourceSocketPort());
+            this.socket = new Socket();
+            this.socket.connect(socketAddress);
+        } catch (IOException e) {
+            throw new AdaptorException(e);
+        }
+
     }
 
     /**
@@ -63,18 +71,23 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
      *
      * @param host hostname or ip address where the TCP socket should be opened.
      * @param port port to open to get the AIS messages information.
-     * @throws UnknownHostException when the hostname is not recognised.
+     * @throws AdaptorException when the hostname is not recognised or connection can't be established.
      */
-    public AisTcpStreamGenerator(String host, Integer port) throws UnknownHostException {
-        this.socketAddress = new InetSocketAddress(InetAddress.getByName(host), port);
+    public AisTcpStreamGenerator(String host, Integer port, Socket socket) {
+        try {
+            this.socketAddress = new InetSocketAddress(InetAddress.getByName(host), port);
+            this.socket = socket;
+            this.socket.connect(socketAddress);
+        } catch (IOException e) {
+            throw new AdaptorException(e);
+        }
     }
 
     /**
      * @return a Stream of Strings each of them containing an AIS message
      */
     public Stream<String> generate() {
-        try (Socket socket = new Socket()) {
-            socket.connect(socketAddress);
+        try {
             return new InputStreamToStream().stream(socket.getInputStream());
         } catch (IOException e) {
             throw new AdaptorException(e);

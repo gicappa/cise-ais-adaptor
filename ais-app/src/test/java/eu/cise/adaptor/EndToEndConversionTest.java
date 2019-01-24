@@ -27,14 +27,15 @@
 
 package eu.cise.adaptor;
 
+import eu.cise.adaptor.context.FileAppContext;
 import eu.cise.adaptor.server.TestRestServer;
 import eu.eucise.xml.DefaultXmlMapper;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -50,7 +51,7 @@ public class EndToEndConversionTest {
         config = ConfigFactory.create(CertificateConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
-        threadMainApp = new Thread(new MainApp(config));
+        threadMainApp = new Thread(new MainApp(config, new FileAppContext(config)));
         xmlMapper = new DefaultXmlMapper();
     }
 
@@ -58,10 +59,8 @@ public class EndToEndConversionTest {
     public void it_deserialize_a_message_from_a_file() {
         try {
             threadMainApp.start();
-            testRestServer.checkRequest(r-> xmlMapper.fromXML(r));
-            threadMainApp.join(30000);
-
-            sleep(5);
+            testRestServer.checkRequest(r -> xmlMapper.fromXML(r));
+            threadMainApp.join(180000);
 
             assertEquals(96, testRestServer.countInvocations());
         } catch (InterruptedException e) {

@@ -25,17 +25,21 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor;
+package eu.cise.adaptor.sources;
 
-import eu.cise.adaptor.context.FileAppContext;
-import org.aeonbits.owner.ConfigFactory;
-import org.junit.Test;
+import org.aeonbits.owner.Config;
 
-public class MainAppIdeLauncher {
+/**
+ * Configuration file for the tcp stream generator
+ */
+@SuppressWarnings("unused")
+@Config.Sources({"file:${conf.dir}ais-adaptor.properties",
+        "classpath:ais-adaptor.properties"})
+public interface IsairTcpAdaptorConfig extends AisTcpAdaptorConfig {
 
-    @Test
-    public void run() {
-        CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
-        new MainApp(config, new FileAppContext(config)).run();
-    }
+    @Key("isair.login.username")
+    String getIsairUsername();
+
+    @Key("isair.login.password")
+    String getIsairPassword();
 }

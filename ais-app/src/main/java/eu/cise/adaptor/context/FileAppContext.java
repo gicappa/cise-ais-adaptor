@@ -25,17 +25,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor;
+package eu.cise.adaptor.context;
 
-import eu.cise.adaptor.context.FileAppContext;
-import org.aeonbits.owner.ConfigFactory;
-import org.junit.Test;
+import eu.cise.adaptor.AisStreamGenerator;
+import eu.cise.adaptor.CertificateConfig;
+import eu.cise.adaptor.sources.AisFileStreamGenerator;
 
-public class MainAppIdeLauncher {
+/**
+ *
+ */
+@SuppressWarnings("unused")
+public class FileAppContext extends AbstractAppContext {
 
-    @Test
-    public void run() {
-        CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
-        new MainApp(config, new FileAppContext(config)).run();
+    public FileAppContext(CertificateConfig config) {
+        super(config);
     }
+
+    @Override
+    public AisStreamGenerator makeSource() {
+        return new AisFileStreamGenerator();
+    }
+
 }
