@@ -27,7 +27,7 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.context.DefaultAppContext;
+import eu.cise.adaptor.context.IsairAppContext;
 import org.aeonbits.owner.ConfigFactory;
 
 /**
@@ -39,10 +39,13 @@ public class MainApp implements Runnable {
     private final ConfigPrinter configPrinter;
     private final Banner banner;
     private final AisApp aisApp;
-    private final AppContext ctx;
 
-    public MainApp(CertificateConfig config) {
-        ctx = new DefaultAppContext(config);
+    /**
+     * The entry point of the whole application
+     *
+     * @param config the configuration to be used
+     */
+    public MainApp(CertificateConfig config, AppContext ctx) {
         banner = new Banner();
         configPrinter = new ConfigPrinter(config);
         aisApp = new AisApp(ctx.makeSource(),
@@ -59,8 +62,9 @@ public class MainApp implements Runnable {
      */
     public static void main(String[] args) {
         try {
+            CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
 
-            new MainApp(createConfig()).run();
+            new MainApp(config, new IsairAppContext(config)).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -68,15 +72,6 @@ public class MainApp implements Runnable {
             if (optionDebug(args))
                 e.printStackTrace();
         }
-    }
-
-    /**
-     * Retrieve the configuration object.
-     *
-     * @return a CertificateConfig object.
-     */
-    private static CertificateConfig createConfig() {
-        return ConfigFactory.create(CertificateConfig.class);
     }
 
     /**

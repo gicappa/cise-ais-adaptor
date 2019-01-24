@@ -118,7 +118,7 @@ public class Eta {
         if (getDay(etaStr).equals("00") || getMonth(etaStr).equals("00"))
             return 1970;
 
-        return LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).getYear();
+        return LocalDateTime.ofInstant(Instant.now(clock), ZoneOffset.UTC).getYear();
     }
 
 }

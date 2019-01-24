@@ -30,7 +30,7 @@ package eu.cise.adaptor.context;
 import eu.cise.adaptor.*;
 import eu.cise.adaptor.dispatch.ErrorCatchingDispatcher;
 import eu.cise.adaptor.signature.*;
-import eu.cise.adaptor.sources.AisFileStreamGenerator;
+import eu.cise.adaptor.sources.AisTcpStreamGenerator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
@@ -42,17 +42,17 @@ import java.security.cert.X509Certificate;
 /**
  *
  */
-public class DefaultAppContext implements AppContext {
+public class AbstractAppContext implements AppContext {
 
     private final CertificateConfig config;
 
-    public DefaultAppContext(CertificateConfig config) {
+    public AbstractAppContext(CertificateConfig config) {
         this.config = config;
     }
 
     @Override
     public AisStreamGenerator makeSource() {
-        return new AisFileStreamGenerator();
+        return new AisTcpStreamGenerator();
     }
 
     @Override
