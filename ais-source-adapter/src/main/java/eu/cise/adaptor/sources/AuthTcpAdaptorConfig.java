@@ -35,11 +35,17 @@ import org.aeonbits.owner.Config;
 @SuppressWarnings("unused")
 @Config.Sources({"file:${conf.dir}ais-adaptor.properties",
         "classpath:ais-adaptor.properties"})
-public interface IsairTcpAdaptorConfig extends AisTcpAdaptorConfig {
+public interface AuthTcpAdaptorConfig extends AisTcpAdaptorConfig {
 
-    @Key("isair.login.username")
-    String getIsairUsername();
+    @Key("ais-source.login.request.template")
+    String getTcpLoginRequestTemplate();
 
-    @Key("isair.login.password")
-    String getIsairPassword();
+    @Key("ais-source.login.success.template")
+    String getTcpLoginSuccessTemplate();
+
+    @Key("ais-source.login.username")
+    String getTcpLoginUsername();
+
+    @Key("ais-source.login.password")
+    String getTcpLoginPassword();
 }
