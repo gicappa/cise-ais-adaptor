@@ -67,10 +67,13 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
             writer.println(
                     loginCommand(config.getTcpLoginUsername(), config.getTcpLoginPassword()));
 
-            String input = reader.readLine();
+            String input = "";
+            while (input.isEmpty()) {
+                input = reader.readLine();
+            }
 
-            if (input == null || !input.equalsIgnoreCase(config.getTcpLoginSuccessTemplate()))
-                throw new AdaptorException("AIS Source: Authentication error: " + input);
+            if (!input.equalsIgnoreCase(config.getTcpLoginSuccessTemplate()))
+                throw new AdaptorException("ais-source-adapter|auth_error|received[" + input + "]");
 
             return decorated.generate();
         } catch (IOException e) {
