@@ -25,16 +25,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor.translate.utils;
+package eu.cise.adaptor;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.stream.Stream;
 
-public class InputStreamToStream {
-    public Stream<String> stream(InputStream is) {
-        return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
-    }
+import static org.aeonbits.owner.Config.Sources;
+
+/**
+ * Extending the {AdaptorConfig} configuration object adding properties
+ * specific to the Certificate and Signature
+ */
+@SuppressWarnings("unused")
+@Sources({"file:${conf.dir}ais-adaptor.properties",
+        "classpath:ais-adaptor.properties"})
+public interface AdaptorExtConfig extends AdaptorConfig {
+
+    @DefaultValue("eu.cise.es.gc-ls01")
+    @Key("adaptor.id")
+    String getAdaptorId();
+
+    @DefaultValue("cisePrivate.jks")
+    @Key("signature.private.jks.filename")
+    String getPrivateJKSName();
+
+    @DefaultValue("cisecise")
+    @Key("signature.private.jks.password")
+    String getPrivateJKSPassword();
+
+    @DefaultValue("cisecise")
+    @Key("signature.private.key.password")
+    String getPrivateKeyPassword();
+
+    @DefaultValue("cisePublic.jks")
+    @Key("signature.public.jks.filename")
+    String getPublicJKSName();
+
+    @DefaultValue("cisecise")
+    @Key("signature.public.jks.password")
+    String getPublicJKSPassword();
 }

@@ -34,6 +34,8 @@ public class MainAppIdeLauncher {
 
     @Test
     public void run() {
-        new MainApp(ConfigFactory.create(CertificateConfig.class)).run();
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
+
+        new MainApp(config).run();
     }
 }

@@ -27,7 +27,7 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.context.DefaultAppContext;
+import eu.cise.adaptor.context.AppContextFactory;
 import org.aeonbits.owner.ConfigFactory;
 
 /**
@@ -39,16 +39,20 @@ public class MainApp implements Runnable {
     private final ConfigPrinter configPrinter;
     private final Banner banner;
     private final AisApp aisApp;
-    private final AppContext ctx;
 
-    public MainApp(CertificateConfig config) {
-        ctx = new DefaultAppContext(config);
-        banner = new Banner();
+    /**
+     * The entry point of the whole application
+     *
+     * @param config the configuration to be used
+     */
+    public MainApp(AdaptorExtConfig config) {
+        AppContext ctx = new AppContextFactory(config).create();
         configPrinter = new ConfigPrinter(config);
+        banner = new Banner();
         aisApp = new AisApp(ctx.makeSource(),
                             ctx.makeStreamProcessor(),
                             ctx.makeDispatcher(),
-                            new AdaptorLogger.Slf4j(),
+                            ctx.makeLogger(),
                             config);
     }
 
@@ -59,8 +63,9 @@ public class MainApp implements Runnable {
      */
     public static void main(String[] args) {
         try {
+            AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
 
-            new MainApp(createConfig()).run();
+            new MainApp(config).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
@@ -68,15 +73,6 @@ public class MainApp implements Runnable {
             if (optionDebug(args))
                 e.printStackTrace();
         }
-    }
-
-    /**
-     * Retrieve the configuration object.
-     *
-     * @return a CertificateConfig object.
-     */
-    private static CertificateConfig createConfig() {
-        return ConfigFactory.create(CertificateConfig.class);
     }
 
     /**

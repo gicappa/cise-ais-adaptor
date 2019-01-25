@@ -34,20 +34,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class EndToEndConversionTest {
 
-    private CertificateConfig config;
     private Thread threadMainApp;
     private TestRestServer testRestServer;
     private DefaultXmlMapper xmlMapper;
 
     @Before
     public void before() {
-        config = ConfigFactory.create(CertificateConfig.class);
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
         threadMainApp = new Thread(new MainApp(config));
@@ -58,7 +56,7 @@ public class EndToEndConversionTest {
     public void it_deserialize_a_message_from_a_file() {
         try {
             threadMainApp.start();
-            testRestServer.checkRequest(r-> xmlMapper.fromXML(r));
+            testRestServer.checkRequest(r -> xmlMapper.fromXML(r));
             threadMainApp.join(180000);
 
             assertEquals(96, testRestServer.countInvocations());

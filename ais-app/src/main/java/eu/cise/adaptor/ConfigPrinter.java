@@ -27,21 +27,54 @@
 
 package eu.cise.adaptor;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.util.stream.Stream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Pretty printing configuration
  */
 public class ConfigPrinter {
 
-    private AdaptorConfig config;
+    private final AdaptorConfig config;
+    private final PrintStream outStream;
 
     public ConfigPrinter(AdaptorConfig config) {
+        this(config, System.out);
+    }
+
+    public ConfigPrinter(AdaptorConfig config, PrintStream out) {
         this.config = config;
+        this.outStream = out;
     }
 
     public void print() {
-        System.out.println("### Printing Configuration ###");
-        config.list(System.out);
-        System.out.println("##############################");
+        outStream.println("### Printing Configuration ###");
+
+        stringToStream(configToString(config))
+                .map(this::replacePassword)
+                .forEach(outStream::println);
+
+        outStream.println("##############################");
+    }
+
+    private String replacePassword(String s) {
+        return s.replaceAll("(.*password.*)=(.*)", "$1=********");
+    }
+
+    private Stream<String> stringToStream(String output) {
+        return new BufferedReader(new StringReader(output)).lines();
+    }
+
+    private String configToString(AdaptorConfig config) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream buffered = new PrintStream(baos);
+        config.list(buffered);
+        return new String(baos.toByteArray(), UTF_8);
     }
 
 }

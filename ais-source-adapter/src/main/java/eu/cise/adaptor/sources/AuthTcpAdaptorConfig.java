@@ -25,16 +25,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor.translate.utils;
+package eu.cise.adaptor.sources;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.stream.Stream;
+import org.aeonbits.owner.Config;
 
-public class InputStreamToStream {
-    public Stream<String> stream(InputStream is) {
-        return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
-    }
+/**
+ * Configuration file for the tcp stream generator
+ */
+@SuppressWarnings("unused")
+@Config.Sources({"file:${conf.dir}ais-adaptor.properties",
+        "classpath:ais-adaptor.properties"})
+public interface AuthTcpAdaptorConfig extends AisTcpAdaptorConfig {
+
+    @Key("ais-source.login.request.template")
+    String getTcpLoginRequestTemplate(String username, String password);
+
+    @Key("ais-source.login.success.template")
+    String getTcpLoginSuccessTemplate();
+
+    @Key("ais-source.login.username")
+    String getTcpLoginUsername();
+
+    @Key("ais-source.login.password")
+    String getTcpLoginPassword();
 }

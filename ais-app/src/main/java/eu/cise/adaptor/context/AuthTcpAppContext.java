@@ -25,41 +25,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor;
+package eu.cise.adaptor.context;
 
-
-import static org.aeonbits.owner.Config.Sources;
+import eu.cise.adaptor.AdaptorExtConfig;
+import eu.cise.adaptor.AisStreamGenerator;
+import eu.cise.adaptor.sources.AuthTcpStreamGenerator;
 
 /**
- * Extending the {AdaptorConfig} configuration object adding properties
- * specific to the Certificate and Signature
+ * App Context using the AuthTcpStreamGenerator
  */
-@SuppressWarnings("unused")
-@Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
-public interface CertificateConfig extends AdaptorConfig {
+public class AuthTcpAppContext extends AbstractAppContext {
 
-    @DefaultValue("eu.cise.es.gc-ls01")
-    @Key("adaptor.id")
-    String getAdaptorId();
+    public AuthTcpAppContext(AdaptorExtConfig config) {
+        super(config);
+    }
 
-    @DefaultValue("cisePrivate.jks")
-    @Key("signature.private.jks.filename")
-    String getPrivateJKSName();
+    @Override
+    public AisStreamGenerator makeSource() {
+        return new AuthTcpStreamGenerator();
+    }
 
-    @DefaultValue("cisecise")
-    @Key("signature.private.jks.password")
-    String getPrivateJKSPassword();
-
-    @DefaultValue("cisecise")
-    @Key("signature.private.key.password")
-    String getPrivateKeyPassword();
-
-    @DefaultValue("cisePublic.jks")
-    @Key("signature.public.jks.filename")
-    String getPublicJKSName();
-
-    @DefaultValue("cisecise")
-    @Key("signature.public.jks.password")
-    String getPublicJKSPassword();
 }
