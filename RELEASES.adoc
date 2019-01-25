@@ -2,7 +2,10 @@
 
 ## 2019-01-11 v1.1
 - added the support to messages of type 'Push' and ServiceOperation 'Subscribe'. This features allows to interact directly with the light client.
+- Reviewed the selection of the AppContext from the MainApp (this impacts on how
+  to select for instance the generator implementation).
 - Fixed an error on the datetime passed to the translation of the eta ais field.
+- The print of the configuration now shades the properties named `password`.
 - Improved the documentation
 
 ## 2018-10-17 v1.0
