@@ -38,7 +38,7 @@ import org.aeonbits.owner.Config;
 public interface AuthTcpAdaptorConfig extends AisTcpAdaptorConfig {
 
     @Key("ais-source.login.request.template")
-    String getTcpLoginRequestTemplate();
+    String getTcpLoginRequestTemplate(String username, String password);
 
     @Key("ais-source.login.success.template")
     String getTcpLoginSuccessTemplate();

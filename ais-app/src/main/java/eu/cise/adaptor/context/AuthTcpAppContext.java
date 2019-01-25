@@ -32,11 +32,11 @@ import eu.cise.adaptor.CertificateConfig;
 import eu.cise.adaptor.sources.AisTcpStreamGenerator;
 
 /**
- * App Context using the Isair Source generator
+ * App Context using the AuthTcpStreamGenerator
  */
-public class IsairAppContext extends AbstractAppContext {
+public class AuthTcpAppContext extends AbstractAppContext {
 
-    public IsairAppContext(CertificateConfig config) {
+    public AuthTcpAppContext(CertificateConfig config) {
         super(config);
     }
 

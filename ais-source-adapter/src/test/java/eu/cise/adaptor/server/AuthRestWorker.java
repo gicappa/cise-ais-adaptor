@@ -10,7 +10,7 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
-public class IsairRestWorker implements RestWorker {
+public class AuthRestWorker implements RestWorker {
 
     private final BufferedReader reader;
     private final PrintWriter writer;
@@ -22,7 +22,7 @@ public class IsairRestWorker implements RestWorker {
 
     private volatile boolean alive = true;
 
-    public IsairRestWorker(Socket socket) {
+    public AuthRestWorker(Socket socket) {
         this.reader = getReader(socket);
         this.writer = getWriter(socket);
     }
@@ -45,17 +45,17 @@ public class IsairRestWorker implements RestWorker {
     public void handleRequest() throws IOException, InterruptedException {
         String input = readSocket();
 
-        if (input != null && !input.isEmpty() && input.startsWith("[TYPE=LOGIN")) {
-            Thread.sleep(1000);
-            writeSocket("[TYPE=LOGIN_OK]");
+        if (input != null && !input.isEmpty() && input.equalsIgnoreCase("AUTH=admin:secret")) {
+            sleep(1000);
+            writeSocket("AUTH-OK");
 
             for (String aisMessage : aisMessages) {
-                sleep(1000);
+                sleep(400);
                 writeSocket(aisMessage);
             }
         } else {
-            Thread.sleep(1000);
-            writeSocket("[TYPE=LOGIN_KO]");
+            sleep(1000);
+            writeSocket("AUTH-KO");
         }
 
         alive = false;

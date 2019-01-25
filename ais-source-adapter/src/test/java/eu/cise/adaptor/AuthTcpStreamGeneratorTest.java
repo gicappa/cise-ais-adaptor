@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 public class AuthTcpStreamGeneratorTest {
 
     private TestRestServer testRestServer;
-    private AisStreamGenerator isairGenerator;
+    private AisStreamGenerator streamGenerator;
     private Thread serverT;
 
     @Before
@@ -30,12 +30,12 @@ public class AuthTcpStreamGeneratorTest {
     }
 
     @Test
-    public void it_waits_for_the_first_ais_message_in_the_stream() throws InterruptedException {
+    public void it_waits_for_the_first_ais_message_in_the_stream() {
         serverT.start();
 
         try {
-            isairGenerator = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
-            isairGenerator.generate().forEach(System.out::println);
+            streamGenerator = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
+            streamGenerator.generate().forEach(ais-> System.out.println("< OK"));
             testRestServer.shutdown();
         } catch (Exception e) {
             testRestServer.shutdown();

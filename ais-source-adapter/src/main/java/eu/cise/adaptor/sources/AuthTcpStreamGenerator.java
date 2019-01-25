@@ -8,8 +8,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.stream.Stream;
 
-import static java.lang.String.format;
-
 /**
  * This class is used in a simple case of an authentication protocol where the generator needs
  * to connect to a socket under a simple authentication protocol.
@@ -17,7 +15,7 @@ import static java.lang.String.format;
  * adaptor will send a single line on the TCP socket with the credentials (following a template
  * configurable by a property) and wil receive an answer with a single line expressing success
  * or failure of the authentication.
- *
+ * <p>
  * In case of success the AIS message stream will start flowing, while in case of failure an
  * exception will be thrown.
  */
@@ -40,8 +38,8 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
      * latter could expose more abstraction and specialization. Before starting generalizing, I'd
      * like to keep it simpler and add the generalization needed evaluating case by case.
      *
-     * @param host the host listening for connections
-     * @param port the port opened to receive connections
+     * @param host   the host listening for connections
+     * @param port   the port opened to receive connections
      * @param socket the socket object to use to open the connection
      */
     public AuthTcpStreamGenerator(String host, Integer port, Socket socket) {
@@ -66,7 +64,8 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
     @Override
     public Stream<String> generate() {
         try {
-            writer.println(loginCommand(config.getTcpLoginUsername(), config.getTcpLoginPassword()));
+            writer.println(
+                    loginCommand(config.getTcpLoginUsername(), config.getTcpLoginPassword()));
 
             String input = reader.readLine();
 
@@ -87,7 +86,7 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
      * @return the formatted command to login in the socket
      */
     private String loginCommand(String username, String password) {
-        return format(config.getTcpLoginRequestTemplate(), username, password);
+        return config.getTcpLoginRequestTemplate(username, password);
     }
 
     /**
