@@ -14,30 +14,19 @@ import static java.lang.String.format;
 public class IasirTcpStreamGenerator implements AisStreamGenerator {
 
     private static final String LOGIN_TEMPLATE = "[TYPE=LOGIN;username=%s;password=%s]";
+    private static final IsairTcpAdaptorConfig config
+            = ConfigFactory.create(IsairTcpAdaptorConfig.class);
     private final Socket socket;
     private final AisTcpStreamGenerator decorated;
     private final BufferedReader reader;
     private final PrintWriter writer;
-    private final IsairTcpAdaptorConfig config;
 
     public IasirTcpStreamGenerator() {
-        try {
-            this.config = ConfigFactory.create(IsairTcpAdaptorConfig.class);
-            this.socket = new Socket();
-            this.decorated = new AisTcpStreamGenerator(
-                    config.getAISSourceSocketHost(),
-                    config.getAISSourceSocketPort(),
-                    socket);
-            this.reader = getReader(socket);
-            this.writer = getWriter(socket);
-        } catch (IOException e) {
-            throw new AdaptorException(e);
-        }
+        this(config.getAISSourceSocketHost(), config.getAISSourceSocketPort(), new Socket());
     }
 
     public IasirTcpStreamGenerator(String host, Integer port, Socket socket) {
         try {
-            this.config = ConfigFactory.create(IsairTcpAdaptorConfig.class);
             this.socket = socket;
             this.decorated = new AisTcpStreamGenerator(host, port, socket);
             this.reader = getReader(socket);
