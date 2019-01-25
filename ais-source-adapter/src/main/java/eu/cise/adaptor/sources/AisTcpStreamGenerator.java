@@ -33,7 +33,9 @@ import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import org.aeonbits.owner.ConfigFactory;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.stream.Stream;
 
 /**
@@ -45,25 +47,18 @@ import java.util.stream.Stream;
 @SuppressWarnings("unused")
 public class AisTcpStreamGenerator implements AisStreamGenerator {
 
-    private final SocketAddress socketAddress;
-    private final AisTcpAdaptorConfig config = ConfigFactory.create(AisTcpAdaptorConfig.class);
+    private static final AisTcpAdaptorConfig config
+            = ConfigFactory.create(AisTcpAdaptorConfig.class);
     private final Socket socket;
 
     /**
      * Constructing the class reading host and port from the configuration.
      *
-     * @throws AdaptorException when the hostname is not recognised or connection can't be established
+     * @throws AdaptorException when the hostname is not recognised or connection can't be
+     *                          established
      */
     public AisTcpStreamGenerator() {
-        try {
-            AisTcpAdaptorConfig config = ConfigFactory.create(AisTcpAdaptorConfig.class);
-            this.socketAddress = new InetSocketAddress(InetAddress.getByName(config.getAISSourceSocketHost()), config.getAISSourceSocketPort());
-            this.socket = new Socket();
-            this.socket.connect(socketAddress);
-        } catch (IOException e) {
-            throw new AdaptorException(e);
-        }
-
+        this(config.getAISSourceSocketHost(), config.getAISSourceSocketPort(), new Socket());
     }
 
     /**
@@ -71,13 +66,13 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
      *
      * @param host hostname or ip address where the TCP socket should be opened.
      * @param port port to open to get the AIS messages information.
-     * @throws AdaptorException when the hostname is not recognised or connection can't be established.
+     * @throws AdaptorException when the hostname is not recognised or connection can't be
+     *                          established.
      */
     public AisTcpStreamGenerator(String host, Integer port, Socket socket) {
         try {
-            this.socketAddress = new InetSocketAddress(InetAddress.getByName(host), port);
             this.socket = socket;
-            this.socket.connect(socketAddress);
+            this.socket.connect(new InetSocketAddress(InetAddress.getByName(host), port));
         } catch (IOException e) {
             throw new AdaptorException(e);
         }
