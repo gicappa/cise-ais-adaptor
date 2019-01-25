@@ -25,27 +25,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor.sources;
+package eu.cise.adaptor.context;
 
-import org.aeonbits.owner.Config;
+import eu.cise.adaptor.AisStreamGenerator;
+import eu.cise.adaptor.CertificateConfig;
+import eu.cise.adaptor.sources.AisTcpStreamGenerator;
 
 /**
- * Configuration file for the tcp stream generator
+ * App Context using the AuthTcpStreamGenerator
  */
-@SuppressWarnings("unused")
-@Config.Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
-public interface AuthTcpAdaptorConfig extends AisTcpAdaptorConfig {
+public class AuthTcpAppContext extends AbstractAppContext {
 
-    @Key("ais-source.login.request.template")
-    String getTcpLoginRequestTemplate(String username, String password);
+    public AuthTcpAppContext(CertificateConfig config) {
+        super(config);
+    }
 
-    @Key("ais-source.login.success.template")
-    String getTcpLoginSuccessTemplate();
+    @Override
+    public AisStreamGenerator makeSource() {
+        return new AisTcpStreamGenerator();
+    }
 
-    @Key("ais-source.login.username")
-    String getTcpLoginUsername();
-
-    @Key("ais-source.login.password")
-    String getTcpLoginPassword();
 }

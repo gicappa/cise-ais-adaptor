@@ -27,7 +27,7 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.context.IsairAppContext;
+import eu.cise.adaptor.context.AuthTcpAppContext;
 import org.aeonbits.owner.ConfigFactory;
 
 /**
@@ -64,7 +64,7 @@ public class MainApp implements Runnable {
         try {
             CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
 
-            new MainApp(config, new IsairAppContext(config)).run();
+            new MainApp(config, new AuthTcpAppContext(config)).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");
