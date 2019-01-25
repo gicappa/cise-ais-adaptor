@@ -54,19 +54,27 @@ public class ConfigPrinter {
 
     public void print() {
         outStream.println("### Printing Configuration ###");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream buffered = new PrintStream(baos);
 
-        config.list(buffered);
-
-        Stream<String> filtered
-                = new BufferedReader(new StringReader(new String(baos.toByteArray(), UTF_8)))
-                .lines()
-                .map(s-> s.replaceAll("(.*password.*)=(.*)", "$1=********"));
-
-        filtered.forEach(outStream::println);
+        stringToStream(configToString(config))
+                .map(this::replacePassword)
+                .forEach(outStream::println);
 
         outStream.println("##############################");
+    }
+
+    private String replacePassword(String s) {
+        return s.replaceAll("(.*password.*)=(.*)", "$1=********");
+    }
+
+    private Stream<String> stringToStream(String output) {
+        return new BufferedReader(new StringReader(output)).lines();
+    }
+
+    private String configToString(AdaptorConfig config) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream buffered = new PrintStream(baos);
+        config.list(buffered);
+        return new String(baos.toByteArray(), UTF_8);
     }
 
 }
