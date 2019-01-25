@@ -27,21 +27,46 @@
 
 package eu.cise.adaptor;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.util.stream.Stream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Pretty printing configuration
  */
 public class ConfigPrinter {
 
-    private AdaptorConfig config;
+    private final AdaptorConfig config;
+    private final PrintStream outStream;
 
     public ConfigPrinter(AdaptorConfig config) {
+        this(config, System.out);
+    }
+
+    public ConfigPrinter(AdaptorConfig config, PrintStream out) {
         this.config = config;
+        this.outStream = out;
     }
 
     public void print() {
-        System.out.println("### Printing Configuration ###");
-        config.list(System.out);
-        System.out.println("##############################");
+        outStream.println("### Printing Configuration ###");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream buffered = new PrintStream(baos);
+
+        config.list(buffered);
+
+        Stream<String> filtered
+                = new BufferedReader(new StringReader(new String(baos.toByteArray(), UTF_8)))
+                .lines()
+                .map(s-> s.replaceAll("(.*password.*)=(.*)", "$1=********"));
+
+        filtered.forEach(outStream::println);
+
+        outStream.println("##############################");
     }
 
 }

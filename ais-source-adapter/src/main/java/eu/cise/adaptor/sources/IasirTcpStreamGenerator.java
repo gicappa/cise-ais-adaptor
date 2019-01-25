@@ -10,7 +10,8 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 
-public class IasirAuthDecorator implements AisStreamGenerator {
+@SuppressWarnings("unused")
+public class IasirTcpStreamGenerator implements AisStreamGenerator {
 
     private static final String LOGIN_TEMPLATE = "[TYPE=LOGIN;username=%s;password=%s]";
     private final Socket socket;
@@ -19,14 +20,14 @@ public class IasirAuthDecorator implements AisStreamGenerator {
     private final PrintWriter writer;
     private final IsairTcpAdaptorConfig config;
 
-
-    public IasirAuthDecorator() {
+    public IasirTcpStreamGenerator() {
         try {
             this.config = ConfigFactory.create(IsairTcpAdaptorConfig.class);
             this.socket = new Socket();
-            this.decorated
-                    = new AisTcpStreamGenerator(config.getAISSourceSocketHost(),
-                                                config.getAISSourceSocketPort(), socket);
+            this.decorated = new AisTcpStreamGenerator(
+                    config.getAISSourceSocketHost(),
+                    config.getAISSourceSocketPort(),
+                    socket);
             this.reader = getReader(socket);
             this.writer = getWriter(socket);
         } catch (IOException e) {
@@ -34,7 +35,7 @@ public class IasirAuthDecorator implements AisStreamGenerator {
         }
     }
 
-    public IasirAuthDecorator(String host, Integer port, Socket socket) {
+    public IasirTcpStreamGenerator(String host, Integer port, Socket socket) {
         try {
             this.config = ConfigFactory.create(IsairTcpAdaptorConfig.class);
             this.socket = socket;

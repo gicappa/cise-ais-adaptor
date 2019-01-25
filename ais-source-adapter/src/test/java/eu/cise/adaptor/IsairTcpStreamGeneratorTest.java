@@ -2,7 +2,7 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.server.RestWorkerFactory;
 import eu.cise.adaptor.server.TestRestServer;
-import eu.cise.adaptor.sources.IasirAuthDecorator;
+import eu.cise.adaptor.sources.IasirTcpStreamGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,7 +34,7 @@ public class IsairTcpStreamGeneratorTest {
         serverT.start();
 
         try {
-            isairGenerator = new IasirAuthDecorator("localhost", 64738, new Socket());
+            isairGenerator = new IasirTcpStreamGenerator("localhost", 64738, new Socket());
             isairGenerator.generate().forEach(System.out::println);
             testRestServer.shutdown();
         } catch (Exception e) {
