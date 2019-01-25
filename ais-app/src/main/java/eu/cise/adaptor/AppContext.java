@@ -38,13 +38,22 @@ package eu.cise.adaptor;
 public interface AppContext {
 
     /**
-     * Create a Dispatcher object
-     *
-     * @return
+     * @return a dispatcher to dispatch messages
      */
     Dispatcher makeDispatcher();
 
+    /**
+     * @return generator to read AIS messages in string format from a source
+     */
     AisStreamGenerator makeSource();
 
+    /**
+     * @return a stream processor pipeline to transform the messages from string to cise xml
+     */
     DefaultPipeline makeStreamProcessor();
+
+    /**
+     * @return a logger to log events
+     */
+    AdaptorLogger makeLogger();
 }

@@ -28,7 +28,7 @@
 package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.AisStreamGenerator;
-import eu.cise.adaptor.CertificateConfig;
+import eu.cise.adaptor.AdaptorExtConfig;
 import eu.cise.adaptor.sources.AisTcpStreamGenerator;
 
 /**
@@ -37,7 +37,7 @@ import eu.cise.adaptor.sources.AisTcpStreamGenerator;
 @SuppressWarnings("unused")
 public class TcpAppContext extends AbstractAppContext {
 
-    public TcpAppContext(CertificateConfig config) {
+    public TcpAppContext(AdaptorExtConfig config) {
         super(config);
     }
 

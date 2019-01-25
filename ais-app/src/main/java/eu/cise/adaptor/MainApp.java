@@ -27,7 +27,7 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.context.AuthTcpAppContext;
+import eu.cise.adaptor.context.AppContextFactory;
 import org.aeonbits.owner.ConfigFactory;
 
 /**
@@ -45,13 +45,14 @@ public class MainApp implements Runnable {
      *
      * @param config the configuration to be used
      */
-    public MainApp(CertificateConfig config, AppContext ctx) {
-        banner = new Banner();
+    public MainApp(AdaptorExtConfig config) {
+        AppContext ctx = new AppContextFactory(config).create();
         configPrinter = new ConfigPrinter(config);
+        banner = new Banner();
         aisApp = new AisApp(ctx.makeSource(),
                             ctx.makeStreamProcessor(),
                             ctx.makeDispatcher(),
-                            new AdaptorLogger.Slf4j(),
+                            ctx.makeLogger(),
                             config);
     }
 
@@ -62,9 +63,9 @@ public class MainApp implements Runnable {
      */
     public static void main(String[] args) {
         try {
-            CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
+            AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
 
-            new MainApp(config, new AuthTcpAppContext(config)).run();
+            new MainApp(config).run();
 
         } catch (Throwable e) {
             System.err.println("An error occurred:\n\n" + e.getMessage() + "\n");

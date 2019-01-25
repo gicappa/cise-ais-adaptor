@@ -27,7 +27,6 @@
 
 package eu.cise.adaptor;
 
-import eu.cise.adaptor.context.FileAppContext;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.Test;
 
@@ -35,7 +34,8 @@ public class MainAppIdeLauncher {
 
     @Test
     public void run() {
-        CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
-        new MainApp(config, new FileAppContext(config)).run();
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
+
+        new MainApp(config).run();
     }
 }

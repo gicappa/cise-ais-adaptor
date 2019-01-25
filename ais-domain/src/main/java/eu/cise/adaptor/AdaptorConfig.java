@@ -264,6 +264,9 @@ public interface AdaptorConfig extends Config {
     @Key("profile.${profile.number}.service_type")
     String getProfileServiceType();
 
+    @Key("app-context.type")
+    String getAppContextType();
+
     /**
      * A convenience method to print all the properties
      *

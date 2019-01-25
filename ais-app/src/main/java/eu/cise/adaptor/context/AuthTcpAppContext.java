@@ -27,22 +27,22 @@
 
 package eu.cise.adaptor.context;
 
+import eu.cise.adaptor.AdaptorExtConfig;
 import eu.cise.adaptor.AisStreamGenerator;
-import eu.cise.adaptor.CertificateConfig;
-import eu.cise.adaptor.sources.AisTcpStreamGenerator;
+import eu.cise.adaptor.sources.AuthTcpStreamGenerator;
 
 /**
  * App Context using the AuthTcpStreamGenerator
  */
 public class AuthTcpAppContext extends AbstractAppContext {
 
-    public AuthTcpAppContext(CertificateConfig config) {
+    public AuthTcpAppContext(AdaptorExtConfig config) {
         super(config);
     }
 
     @Override
     public AisStreamGenerator makeSource() {
-        return new AisTcpStreamGenerator();
+        return new AuthTcpStreamGenerator();
     }
 
 }

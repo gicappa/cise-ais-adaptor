@@ -34,7 +34,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 /**
  * New server created to simulate a TCP/IP stream of AIS information
@@ -43,16 +42,16 @@ import java.util.function.Function;
  * - the opened port;
  * - the name of the file used to fetch the AIS data from.
  */
-public class TestRestServer implements Runnable {
+public class TcpServer implements Runnable {
 
-    private final RestWorkerFactory workerfactory;
+    private final TcpWorkerFactory workerFactory;
     private final int port;
     private final int workerThreadNum;
     private final AtomicBoolean shouldRun;
     private final AtomicInteger invocationNum;
 
-    public TestRestServer(RestWorkerFactory workerfactory, int port, int workerThreadNum) {
-        this.workerfactory = workerfactory;
+    public TcpServer(TcpWorkerFactory workerFactory, int port, int workerThreadNum) {
+        this.workerFactory = workerFactory;
         this.port = port;
         this.workerThreadNum = workerThreadNum;
         this.shouldRun = new AtomicBoolean(true);
@@ -73,7 +72,7 @@ public class TestRestServer implements Runnable {
             System.out.println("Listening for new client on port: " + port);
 
             while (shouldRun.get()) {
-                executors.execute(workerfactory.getWorker(listener.accept()));
+                executors.execute(workerFactory.getWorker(listener.accept()));
                 invocationNum.getAndIncrement();
             }
 
@@ -81,9 +80,8 @@ public class TestRestServer implements Runnable {
             executors.awaitTermination(10, TimeUnit.SECONDS);
 
         } catch (IOException | InterruptedException e) {
-            System.out.println("Interrupted thread [" + e.getMessage() + "]");
+            System.out.println("SERVER: Interrupted thread [" + e.getMessage() + "]");
             executors.shutdownNow();
-            Thread.currentThread().interrupt();
         }
     }
 

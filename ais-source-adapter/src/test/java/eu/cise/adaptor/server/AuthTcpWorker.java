@@ -10,10 +10,11 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
-public class AuthRestWorker implements RestWorker {
+public class AuthTcpWorker implements TcpWorker {
 
     private final BufferedReader reader;
     private final PrintWriter writer;
+    private String authString;
     private final String[] aisMessages = new String[]{
             "!AIVDM,1,1,,B,13P88o@02=OqlrHM6FATwCvf08=E,0*73",
             "!AIVDM,1,1,,A,13P88o@uB=Oqm2<M6EkTvkvp0@@b,0*44",
@@ -22,7 +23,8 @@ public class AuthRestWorker implements RestWorker {
 
     private volatile boolean alive = true;
 
-    public AuthRestWorker(Socket socket) {
+    public AuthTcpWorker(String authString, Socket socket) {
+        this.authString = authString;
         this.reader = getReader(socket);
         this.writer = getWriter(socket);
     }
@@ -37,7 +39,7 @@ public class AuthRestWorker implements RestWorker {
             reader.close();
             writer.close();
         } catch (InterruptedException | IOException e) {
-            throw new AdaptorException(e);
+            throw new AdaptorException("WORKER: exception", e);
         }
     }
 
@@ -45,7 +47,7 @@ public class AuthRestWorker implements RestWorker {
     public void handleRequest() throws IOException, InterruptedException {
         String input = readSocket();
 
-        if (input != null && !input.isEmpty() && input.equalsIgnoreCase("AUTH=admin:secret")) {
+        if (input != null && !input.isEmpty() && input.equalsIgnoreCase(authString)) {
             sleep(1000);
             writeSocket("AUTH-OK");
 
