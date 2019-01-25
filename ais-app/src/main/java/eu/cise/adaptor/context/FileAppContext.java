@@ -28,7 +28,7 @@
 package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.AisStreamGenerator;
-import eu.cise.adaptor.CertificateConfig;
+import eu.cise.adaptor.AdaptorExtConfig;
 import eu.cise.adaptor.sources.AisFileStreamGenerator;
 
 /**
@@ -37,7 +37,7 @@ import eu.cise.adaptor.sources.AisFileStreamGenerator;
 @SuppressWarnings("unused")
 public class FileAppContext extends AbstractAppContext {
 
-    public FileAppContext(CertificateConfig config) {
+    public FileAppContext(AdaptorExtConfig config) {
         super(config);
     }
 

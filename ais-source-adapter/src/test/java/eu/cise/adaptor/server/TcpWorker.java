@@ -1,5 +1,5 @@
 package eu.cise.adaptor.server;
 
-public interface RestWorker extends Runnable {
+public interface TcpWorker extends Runnable {
     void handleRequest() throws Exception;
 }

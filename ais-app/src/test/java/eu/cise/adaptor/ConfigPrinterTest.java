@@ -18,7 +18,7 @@ public class ConfigPrinterTest {
 
     @Before
     public void before() {
-        CertificateConfig config = ConfigFactory.create(CertificateConfig.class);
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream output = new PrintStream(baos);

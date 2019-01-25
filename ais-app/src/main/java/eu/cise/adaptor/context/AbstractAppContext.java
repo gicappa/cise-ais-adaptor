@@ -44,9 +44,9 @@ import java.security.cert.X509Certificate;
  */
 public class AbstractAppContext implements AppContext {
 
-    private final CertificateConfig config;
+    private final AdaptorExtConfig config;
 
-    public AbstractAppContext(CertificateConfig config) {
+    public AbstractAppContext(AdaptorExtConfig config) {
         this.config = config;
     }
 
@@ -62,6 +62,11 @@ public class AbstractAppContext implements AppContext {
                 new AisMsgToVessel(config),
                 new VesselToPushMessage(config, new ServiceProfileReader()),
                 config);
+    }
+
+    @Override
+    public AdaptorLogger makeLogger() {
+        return new AdaptorLogger.Slf4j();
     }
 
     @Override
