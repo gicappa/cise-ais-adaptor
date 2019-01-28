@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 
 import static co.unruly.matchers.StreamMatchers.contains;
+import static eu.cise.adaptor.DelimiterType.KEEP;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertThat;
 
@@ -17,18 +18,18 @@ public class InputStreamToStreamTest {
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_CR() {
-        InputStreamToStream toStream = new InputStreamToStream();
-        ByteArrayInputStream aisInputStream = getAisInputStream(getAisMessages("\n"));
+        ByteArrayInputStream is = getAisInputStream(getAisMessages("\n"));
+        InputStreamToStream toStream = new InputStreamToStream(is);
 
-        assertThat(toStream.stream(aisInputStream), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
     }
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_EXCLAMATION() {
-        InputStreamToStream toStream = new InputStreamToStream("!");
-        ByteArrayInputStream aisInputStream = getAisInputStream(getAisMessages(""));
+        ByteArrayInputStream is = getAisInputStream(getAisMessages(""));
+        InputStreamToStream toStream = new InputStreamToStream(is, "!", KEEP);
 
-        assertThat(toStream.stream(aisInputStream), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
     }
 
     private String getAisMessages(String delimiter) {

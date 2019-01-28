@@ -27,15 +27,16 @@
 
 package eu.cise.adaptor.translate.utils;
 
-import java.io.BufferedReader;
+import eu.cise.adaptor.DelimiterType;
+
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static eu.cise.adaptor.DelimiterType.KEEP;
+import static eu.cise.adaptor.DelimiterType.STRIP;
 import static java.lang.Long.MAX_VALUE;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.ORDERED;
@@ -43,24 +44,23 @@ import static java.util.Spliterators.spliterator;
 
 public class InputStreamToStream {
 
-    private static final String DEFAULT_DELIMITER = "\n";
-    private final String delimiter;
+    private static final String DELIMITER_DEFAULT = "\n";
+    private final String prefix;
+    private final Scanner scanner;
+    private final Spliterator<String> split;
 
-    public InputStreamToStream() {
-        this.delimiter = DEFAULT_DELIMITER;
+    public InputStreamToStream(InputStream is) {
+        this(is, DELIMITER_DEFAULT, STRIP);
     }
 
-    public InputStreamToStream(String delimiter) {
-        this.delimiter = delimiter;
+    public InputStreamToStream(InputStream is, String delimiter, DelimiterType type) {
+        this.scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
+        this.split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
+        this.prefix = type.equals(KEEP) ? delimiter : "";
+
     }
 
-    public Stream<String> stream(InputStream is) {
-        if (delimiter.equals(DEFAULT_DELIMITER)) {
-            return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
-        } else {
-            final Scanner scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
-            final Spliterator<String> split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
-            return StreamSupport.stream(split, false).onClose(scanner::close).map(m -> delimiter + m);
-        }
+    public Stream<String> stream() {
+        return StreamSupport.stream(split, false).onClose(scanner::close).map(m -> prefix + m);
     }
 }

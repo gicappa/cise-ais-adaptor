@@ -25,6 +25,7 @@ public class AuthTcpStreamGeneratorTest {
             streamGenerator.generate().forEach(ais -> System.out.println("< OK"));
 
         } catch (Exception e) {
+            e.printStackTrace();
             fail("something went wrong with the protocol");
         }
     }

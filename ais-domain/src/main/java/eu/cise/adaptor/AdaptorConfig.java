@@ -267,10 +267,19 @@ public interface AdaptorConfig extends Config {
     @Key("app-context.type")
     String getAppContextType();
 
+    @Key("ais-source.delimiter.char")
+    @DefaultValue("\n")
+    String getDelimiterChar();
+
+    @Key("ais-source.delimiter.type")
+    @DefaultValue("STRIP")
+    DelimiterType getDelimiterType();
+
     /**
      * A convenience method to print all the properties
      *
      * @param out an out stream where to print the properties.
      */
     void list(PrintStream out);
+
 }
