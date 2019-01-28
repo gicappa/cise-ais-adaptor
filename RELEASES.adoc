@@ -5,6 +5,7 @@
 - Reviewed the selection of the AppContext from the MainApp (this impacts on how
   to select for instance the generator implementation).
 - Fixed an error on the datetime passed to the translation of the eta ais field.
+- Added the capability to use a delimiter difrerent from \n specified in the property file.
 - The print of the configuration now shades the properties named `password`.
 - Improved the documentation
 
