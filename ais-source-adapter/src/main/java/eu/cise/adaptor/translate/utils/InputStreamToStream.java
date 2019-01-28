@@ -31,10 +31,36 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Scanner;
+import java.util.Spliterator;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static java.lang.Long.MAX_VALUE;
+import static java.util.Spliterator.NONNULL;
+import static java.util.Spliterator.ORDERED;
+import static java.util.Spliterators.spliterator;
 
 public class InputStreamToStream {
+
+    private static final String DEFAULT_DELIMITER = "\n";
+    private final String delimiter;
+
+    public InputStreamToStream() {
+        this.delimiter = DEFAULT_DELIMITER;
+    }
+
+    public InputStreamToStream(String delimiter) {
+        this.delimiter = delimiter;
+    }
+
     public Stream<String> stream(InputStream is) {
-        return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
+        if (delimiter.equals(DEFAULT_DELIMITER)) {
+            return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
+        } else {
+            final Scanner scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
+            final Spliterator<String> split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
+            return StreamSupport.stream(split, false).onClose(scanner::close).map(m -> delimiter + m);
+        }
     }
 }

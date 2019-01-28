@@ -50,6 +50,7 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
     private static final AisTcpAdaptorConfig config
             = ConfigFactory.create(AisTcpAdaptorConfig.class);
     private final Socket socket;
+    private InputStreamToStream inputStreamToStream = new InputStreamToStream();
 
     /**
      * Constructing the class reading host and port from the configuration.
@@ -83,7 +84,7 @@ public class AisTcpStreamGenerator implements AisStreamGenerator {
      */
     public Stream<String> generate() {
         try {
-            return new InputStreamToStream().stream(socket.getInputStream());
+            return inputStreamToStream.stream(socket.getInputStream());
         } catch (IOException e) {
             throw new AdaptorException(e);
         }

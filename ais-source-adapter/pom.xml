@@ -77,7 +77,11 @@
       <scope>test</scope>
     </dependency>
 
-  </dependencies>
+    <dependency>
+      <groupId>co.unruly</groupId>
+      <artifactId>java-8-matchers</artifactId>
+      <scope>test</scope>
+    </dependency>  </dependencies>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
