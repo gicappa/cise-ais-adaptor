@@ -28,17 +28,10 @@
 package eu.cise.adaptor.translate;
 
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
-import eu.cise.adaptor.AdaptorLogger;
 import eu.cise.adaptor.exceptions.AdaptorException;
 
 // TODO Add Logging
 public class StringToNmea implements Translator<String, NMEAMessage> {
-
-    private final AdaptorLogger logger;
-
-    public StringToNmea(AdaptorLogger logger) {
-        this.logger = logger;
-    }
 
     @Override
     public NMEAMessage translate(String nmeaString) {

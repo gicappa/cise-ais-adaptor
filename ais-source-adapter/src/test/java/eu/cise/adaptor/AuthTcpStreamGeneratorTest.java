@@ -22,7 +22,7 @@ public class AuthTcpStreamGeneratorTest {
             AisStreamGenerator streamGenerator
                     = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
 
-            streamGenerator.generate().forEach(ais -> System.out.println("< OK"));
+            streamGenerator.generate().forEach(ais -> System.out.println("RCVD[" + ais + "]"));
 
         } catch (Exception e) {
             e.printStackTrace();

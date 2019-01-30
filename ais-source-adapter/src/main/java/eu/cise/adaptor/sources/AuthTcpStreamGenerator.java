@@ -25,8 +25,8 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
     private static final AuthTcpAdaptorConfig config
             = ConfigFactory.create(AuthTcpAdaptorConfig.class);
     private final AisTcpStreamGenerator decorated;
-    private final BufferedReader reader;
     private final PrintWriter writer;
+    private final Socket socket;
 
     public AuthTcpStreamGenerator() {
         this(config.getAISSourceSocketHost(), config.getAISSourceSocketPort(), new Socket());
@@ -45,7 +45,7 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
     public AuthTcpStreamGenerator(String host, Integer port, Socket socket) {
         try {
             this.decorated = new AisTcpStreamGenerator(host, port, socket);
-            this.reader = getReader(socket);
+            this.socket = socket;
             this.writer = getWriter(socket);
         } catch (IOException e) {
             throw new AdaptorException(e);
@@ -67,10 +67,7 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
             writer.println(
                     loginCommand(config.getTcpLoginUsername(), config.getTcpLoginPassword()));
 
-            String input = "";
-            while (input.isEmpty()) {
-                input = reader.readLine();
-            }
+            String input = readAuthResponse(config.getTcpLoginSuccessTemplate().length());
 
             if (!input.equalsIgnoreCase(config.getTcpLoginSuccessTemplate()))
                 throw new AdaptorException("ais-source-adapter|auth_error|received[" + input + "]");
@@ -79,6 +76,23 @@ public class AuthTcpStreamGenerator implements AisStreamGenerator {
         } catch (IOException e) {
             throw new AdaptorException(e);
         }
+    }
+
+    /**
+     * A method to read a string coming directly fom the socket InputStream.
+     *
+     * @param numOfBytes the number of byte to be read
+     * @return the string with the content read in the socket
+     * @throws IOException is thrown in case of any I/O error with the socket
+     */
+    private String readAuthResponse(int numOfBytes) throws IOException {
+        InputStream is = socket.getInputStream();
+
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < numOfBytes; i++) {
+            buffer.append((char) is.read());
+        }
+        return buffer.toString();
     }
 
     /**

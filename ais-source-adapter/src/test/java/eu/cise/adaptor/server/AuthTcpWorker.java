@@ -52,7 +52,7 @@ public class AuthTcpWorker implements TcpWorker {
             writeSocket("AUTH-OK");
 
             for (String aisMessage : aisMessages) {
-                sleep(400);
+                sleep(1000);
                 writeSocket(aisMessage);
             }
         } else {
@@ -64,8 +64,9 @@ public class AuthTcpWorker implements TcpWorker {
     }
 
     private void writeSocket(String output) {
-        System.out.println("> " + output);
-        writer.println(output);
+        System.out.print(output);
+        writer.print(output);
+        writer.flush();
     }
 
     private String readSocket() throws IOException {
