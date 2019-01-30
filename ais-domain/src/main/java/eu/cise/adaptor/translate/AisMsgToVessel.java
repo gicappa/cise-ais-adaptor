@@ -68,12 +68,17 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
      */
     @Override
     public Optional<Entity> translate(AisMsg message) {
-        if (isMessageOfType123(message))
-            return Optional.of(message123Translator.translate(message));
-        else if (isMessageOfType5(message))
-            return Optional.of(message5Translator.translate(message));
+        try {
+            if (isMessageOfType123(message))
+                return Optional.of(message123Translator.translate(message));
+            else if (isMessageOfType5(message))
+                return Optional.of(message5Translator.translate(message));
 
-        return Optional.empty();
+            return Optional.empty();
+        } catch (Exception e) {
+            // if it's not able to translate the message just skip it
+            return Optional.empty();
+        }
     }
 
     private boolean isMessageOfType5(AisMsg message) {
