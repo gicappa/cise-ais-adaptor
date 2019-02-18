@@ -30,6 +30,9 @@ package eu.cise.adaptor.translate;
 import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.adaptor.AisMsg;
 import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.datamodel.v1.entity.organization.Organization;
+import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
+import eu.cise.datamodel.v1.entity.vessel.Vessel;
 
 import java.util.Optional;
 
@@ -69,16 +72,35 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
     @Override
     public Optional<Entity> translate(AisMsg message) {
         try {
-            if (isMessageOfType123(message))
-                return Optional.of(message123Translator.translate(message));
-            else if (isMessageOfType5(message))
-                return Optional.of(message5Translator.translate(message));
+            return selectMsgTranslator(message)
+                    .map(t -> t.translate(message))
+                    .map(this::addOrganization);
 
-            return Optional.empty();
         } catch (Exception e) {
             // if it's not able to translate the message just skip it
             return Optional.empty();
         }
+    }
+
+    private Vessel addOrganization(Vessel vessel) {
+        vessel.setIdentifier(getUniqueIdentifier());
+        return vessel;
+    }
+
+    private UniqueIdentifier getUniqueIdentifier() {
+        UniqueIdentifier uuid = new UniqueIdentifier();
+        Organization organization = new Organization();
+        uuid.setGeneratedBy(organization);
+        return uuid;
+    }
+
+    private Optional<Translator<AisMsg, Vessel>> selectMsgTranslator(AisMsg message) {
+        if (isMessageOfType123(message))
+            return Optional.of(message123Translator);
+        else if (isMessageOfType5(message))
+            return Optional.of(message5Translator);
+        else
+            return Optional.empty();
     }
 
     private boolean isMessageOfType5(AisMsg message) {

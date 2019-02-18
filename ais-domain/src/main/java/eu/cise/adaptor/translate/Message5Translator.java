@@ -32,6 +32,8 @@ import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.object.Objet;
+import eu.cise.datamodel.v1.entity.organization.Organization;
+import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
 
@@ -87,6 +89,7 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
 
         return vessel;
     }
+
 
     // PRIVATE HELPERS /////////////////////////////////////////////////////////
 
