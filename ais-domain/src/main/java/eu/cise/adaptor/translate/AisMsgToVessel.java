@@ -46,6 +46,7 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
 
     private final Message5Translator message5Translator;
     private final Message123Translator message123Translator;
+    private final AdaptorConfig config;
 
     /**
      * Constructor accepting the config as a collaborator.
@@ -58,6 +59,7 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
      * @param config the adaptor config collaborator
      */
     public AisMsgToVessel(AdaptorConfig config) {
+        this.config = config;
         message123Translator = new Message123Translator(config);
         message5Translator = new Message5Translator();
     }
@@ -74,7 +76,7 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
         try {
             return selectMsgTranslator(message)
                     .map(t -> t.translate(message))
-                    .map(this::addOrganization);
+                    .map(this::setNewIdentifier);
 
         } catch (Exception e) {
             // if it's not able to translate the message just skip it
@@ -82,16 +84,29 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
         }
     }
 
-    private Vessel addOrganization(Vessel vessel) {
+    /**
+     * Set a new identifier in the vessel entity with the organization
+     * field valued with the values legalName and AlternativeName taken from a config file.
+     *
+     * @param vessel the vessel that should receive the identifier
+     * @return the vessel with the identifier
+     */
+    private Vessel setNewIdentifier(Vessel vessel) {
         vessel.setIdentifier(getUniqueIdentifier());
         return vessel;
     }
 
     private UniqueIdentifier getUniqueIdentifier() {
         UniqueIdentifier uuid = new UniqueIdentifier();
-        Organization organization = new Organization();
-        uuid.setGeneratedBy(organization);
+        uuid.setGeneratedBy(getOrganization());
         return uuid;
+    }
+
+    private Organization getOrganization() {
+        Organization organization = new Organization();
+        organization.setLegalName(config.getOrgLegalName());
+        organization.setAlternativeName(config.getOrgAlternativeName());
+        return organization;
     }
 
     private Optional<Translator<AisMsg, Vessel>> selectMsgTranslator(AisMsg message) {

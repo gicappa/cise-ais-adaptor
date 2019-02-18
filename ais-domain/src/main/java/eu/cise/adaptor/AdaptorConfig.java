@@ -305,10 +305,21 @@ public interface AdaptorConfig extends Config {
     DelimiterType getDelimiterType();
 
     /**
+     * @return the legal name of the organization of the vessel
+     */
+    @Key("organization.legal-name")
+    String getOrgLegalName();
+
+    /**
+     * @return the alternative name of the organization of the vessel
+     */
+    @Key("organization.alternative-name")
+    String getOrgAlternativeName();
+
+    /**
      * A convenience method to print all the properties
      *
      * @param out an out stream where to print the properties.
      */
     void list(PrintStream out);
-
 }

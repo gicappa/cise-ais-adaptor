@@ -30,6 +30,7 @@ package eu.cise.adaptor;
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.datamodel.v1.entity.organization.Organization;
 import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import org.aeonbits.owner.ConfigFactory;
@@ -89,6 +90,28 @@ public class ModelTranslatorSpec {
                                 = ((Vessel) translator.translate(m).get()).getIdentifier();
 
                         assertThat("the org is not null", id.getGeneratedBy(), notNullValue());
+                    });
+
+                    it("returns a legalName in the org object / " + n, () -> {
+                        Organization org = ((Vessel) translator.translate(m).get())
+                                .getIdentifier().getGeneratedBy();
+
+                        assertThat("the legalName is not null",
+                                   org.getLegalName(), notNullValue());
+
+                        assertThat("the legalName is the one specified in the config",
+                                   org.getLegalName(), is(config.getOrgLegalName()));
+                    });
+
+                    it("returns a alternativeName in the org object / " + n, () -> {
+                        Organization org = ((Vessel) translator.translate(m).get())
+                                .getIdentifier().getGeneratedBy();
+
+                        assertThat("the legalName is not null",
+                                   org.getAlternativeName(), notNullValue());
+
+                        assertThat("the legalName is the one specified in the config",
+                                   org.getAlternativeName(), is(config.getOrgAlternativeName()));
                     });
                 });
             });
