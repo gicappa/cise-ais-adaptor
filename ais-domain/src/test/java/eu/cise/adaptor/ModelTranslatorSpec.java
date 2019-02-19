@@ -38,8 +38,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Optional;
 
-import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.it;
+import static com.greghaskins.spectrum.Spectrum.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -112,6 +111,12 @@ public class ModelTranslatorSpec {
 
                         assertThat("the legalName is the one specified in the config",
                                    org.getAlternativeName(), is(config.getOrgAlternativeName()));
+                    });
+                    fit("returns an uuid string not null / " + n, () -> {
+                        UniqueIdentifier uuid= ((Vessel) translator.translate(m).get()).getIdentifier();
+
+                        System.out.println(uuid.getUUID());
+                        assertThat("the uuid is not null", uuid.getUUID(), notNullValue());
                     });
                 });
             });

@@ -35,6 +35,7 @@ import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * This translator translate an AisMsg object into a optional Entity model.
@@ -76,7 +77,7 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
         try {
             return selectMsgTranslator(message)
                     .map(t -> t.translate(message))
-                    .map(this::setNewIdentifier);
+                    .map(v -> setNewIdentifier(v, message));
 
         } catch (Exception e) {
             // if it's not able to translate the message just skip it
@@ -88,18 +89,24 @@ public class AisMsgToVessel implements Translator<AisMsg, Optional<Entity>> {
      * Set a new identifier in the vessel entity with the organization
      * field valued with the values legalName and AlternativeName taken from a config file.
      *
-     * @param vessel the vessel that should receive the identifier
+     * @param vessel  the vessel that should receive the identifier
+     * @param message
      * @return the vessel with the identifier
      */
-    private Vessel setNewIdentifier(Vessel vessel) {
-        vessel.setIdentifier(getUniqueIdentifier());
+    private Vessel setNewIdentifier(Vessel vessel, AisMsg message) {
+        vessel.setIdentifier(getUniqueIdentifier(message));
         return vessel;
     }
 
-    private UniqueIdentifier getUniqueIdentifier() {
+    private UniqueIdentifier getUniqueIdentifier(AisMsg message) {
         UniqueIdentifier uuid = new UniqueIdentifier();
+        uuid.setUUID(ensureUUID(message));
         uuid.setGeneratedBy(getOrganization());
         return uuid;
+    }
+
+    private String ensureUUID(AisMsg message) {
+        return message.getUserId() != 0 ? String.valueOf(message.getUserId()) : UUID.randomUUID().toString();
     }
 
     private Organization getOrganization() {
