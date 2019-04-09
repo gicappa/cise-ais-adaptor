@@ -38,21 +38,21 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Pretty printing configuration
  */
-public class ConfigPrinter {
+class ConfigPrinter {
 
     private final AdaptorConfig config;
     private final PrintStream outStream;
 
-    public ConfigPrinter(AdaptorConfig config) {
+    ConfigPrinter(AdaptorConfig config) {
         this(config, System.out);
     }
 
-    public ConfigPrinter(AdaptorConfig config, PrintStream out) {
+    ConfigPrinter(AdaptorConfig config, PrintStream out) {
         this.config = config;
         this.outStream = out;
     }
 
-    public void print() {
+    void print() {
         outStream.println("### Printing Configuration ###");
 
         stringToStream(configToString(config))
