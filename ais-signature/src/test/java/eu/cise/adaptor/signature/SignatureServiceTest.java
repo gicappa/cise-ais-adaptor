@@ -39,6 +39,7 @@ import eu.eucise.xml.DefaultXmlValidator;
 import eu.eucise.xml.XmlMapper;
 import eu.eucise.xml.XmlValidator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -109,6 +110,7 @@ public class SignatureServiceTest {
     }
 
     @Test
+    @Ignore
     public void test_verification_of_signature_on_LC_Message() throws Exception {
         String messageXML
                 = new String(Files.readAllBytes(Paths.get(getClass().getResource(

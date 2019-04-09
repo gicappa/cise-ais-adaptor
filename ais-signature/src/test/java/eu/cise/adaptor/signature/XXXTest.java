@@ -27,6 +27,7 @@
 
 package eu.cise.adaptor.signature;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -36,6 +37,7 @@ import java.security.cert.X509Certificate;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Ignore
 public class XXXTest {
 
     String message

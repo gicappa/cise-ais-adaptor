@@ -38,7 +38,7 @@ public class PrivateKeyInfo {
     }
 
     public String keyAlias() {
-        return id;
+        return id + ".key";
     }
 
     public String password() {
