@@ -69,7 +69,7 @@ public class AIS_1_2_3_TranslatorSpec {
             describe("when a message type is 1,2,3", () -> {
                 final Vessel v = translator.translate(m);
 
-                it("returns a Vessel with with geometry", () -> {
+                it("returns a Vessel with a geometry", () -> {
                     assertThat(v.getLocationRels(), is(not(empty())));
 
                     assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
