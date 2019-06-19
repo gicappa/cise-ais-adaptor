@@ -253,19 +253,19 @@
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.5.3.8-SNAPSHOT</version>
+        <version>1.5.3.11</version>
       </dependency>
 
       <dependency>
         <artifactId>eucise-model-helpers</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.8</version>
       </dependency>
 
       <dependency>
         <artifactId>eucise-service-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
       </dependency>
 
       <dependency>
