@@ -41,6 +41,8 @@ import java.time.Instant;
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
+import static eu.cise.adaptor.heplers.Utils.xmlDate;
+import static eu.cise.adaptor.heplers.Utils.xmlTime;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -112,10 +114,12 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationRel", () -> {
                         assertThat(mo.getLocationRels(), is(not(empty())));
                     });
-                    it("returns a Vessel with a ETA", () -> {
-                        assertThat(toInstant(mo.getLocationRels().get(0).getDateTime().getStartDate()), is(Instant.parse("2019-06-19T00:00:00Z")));
+                    it("returns a Vessel with an ETA date", () -> {
+                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartDate(), is(xmlDate(Instant.parse("2019-06-19T00:00:00Z"))));
                     });
-
+                    it("returns a Vessel with an ETA time", () -> {
+                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartTime(), is(xmlTime(Instant.parse("1970-01-01T15:43:00Z"))));
+                    });
                     it("returns a Vessel with a Location", () -> {
                         assertThat(getLocation(mo), instanceOf(PortLocation.class));
                     });
@@ -154,10 +158,6 @@ public class AIS_5_TranslatorSpec {
 
             });
         });
-    }
-
-    public static Instant toInstant(XMLGregorianCalendar xgc) {
-        return xgc.toGregorianCalendar().toInstant();
     }
 
     private PortLocation getLocation(Movement m) {

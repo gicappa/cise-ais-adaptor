@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
+import static eu.cise.adaptor.heplers.Utils.xmlTime;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
 /**
@@ -118,8 +119,10 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
     private Period getETAPeriod(AisMsg message) {
         Period period = new Period();
 
-        if (message.getEta() != null)
+        if (message.getEta() != null) {
             period.setStartDate(xmlDate(message.getEta()));
+            period.setStartTime(xmlTime(message.getEta()));
+        }
 
         return period;
     }
