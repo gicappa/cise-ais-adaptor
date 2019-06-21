@@ -35,6 +35,9 @@ import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
 import org.junit.runner.RunWith;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Instant;
+
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
@@ -42,6 +45,7 @@ import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@SuppressWarnings("all")
 @RunWith(Spectrum.class)
 public class AIS_5_TranslatorSpec {
     {
@@ -61,6 +65,7 @@ public class AIS_5_TranslatorSpec {
                     .withIMONumber(123456)
                     .withShipType(84)
                     .withDestination("FRLEH")
+                    .withEta(Instant.parse("2019-06-19T15:43:00Z"))
                     .build();
 
             describe("when a message type is 5", () -> {
@@ -95,6 +100,7 @@ public class AIS_5_TranslatorSpec {
                 it("returns a Vessel with a InvolvedEventRel", () -> {
                     assertThat(v.getInvolvedEventRels(), is(not(empty())));
                 });
+
                 context("Involved Event with a location code", () -> {
                     final Movement mo = getMovement(translator.translate(m));
                     it("returns a Vessel with an Movement", () -> {
@@ -106,6 +112,10 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationRel", () -> {
                         assertThat(mo.getLocationRels(), is(not(empty())));
                     });
+                    it("returns a Vessel with a ETA", () -> {
+                        assertThat(toInstant(mo.getLocationRels().get(0).getDateTime().getStartDate()), is(Instant.parse("2019-06-19T00:00:00Z")));
+                    });
+
                     it("returns a Vessel with a Location", () -> {
                         assertThat(getLocation(mo), instanceOf(PortLocation.class));
                     });
@@ -115,7 +125,6 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a PortName", () -> {
                         assertThat(getLocation(mo).getPortName(), is("FRLEH"));
                     });
-
                 });
                 context("Involved Event with a port name", () -> {
                     final AisMsg m1 = new AisMsg.Builder(5)
@@ -145,6 +154,10 @@ public class AIS_5_TranslatorSpec {
 
             });
         });
+    }
+
+    public static Instant toInstant(XMLGregorianCalendar xgc) {
+        return xgc.toGregorianCalendar().toInstant();
     }
 
     private PortLocation getLocation(Movement m) {

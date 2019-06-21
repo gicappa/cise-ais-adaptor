@@ -25,8 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor.helpers;
+package eu.cise.adaptor.heplers;
 
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.datamodel.v1.entity.location.Geometry;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
@@ -36,21 +37,40 @@ import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class Utils {
 
-    public static XMLGregorianCalendar xmlDate(int year, int month, int day)
-            throws DatatypeConfigurationException {
-        return DatatypeFactory.newInstance()
-                .newXMLGregorianCalendar(year, month, day,
-                        0, 0, 0, 0, 0);
+    public static XMLGregorianCalendar xmlDate(Instant instant) {
+        ZonedDateTime zdt = instant.atZone(ZoneId.of("UTC"));
+        return xmlDate(zdt.getYear(), zdt.getMonthValue(), zdt.getDayOfMonth());
     }
 
-    public static XMLGregorianCalendar xmlTime(int hour, int minute, int second)
-            throws DatatypeConfigurationException {
-        return DatatypeFactory.newInstance()
-                .newXMLGregorianCalendar(1970, 1, 1,
-                        hour, minute, second, 0, 0);
+    public static XMLGregorianCalendar xmlDate(int year, int month, int day) {
+        try {
+            return DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(year, month, day,
+                                             0, 0, 0, 0, 0);
+        } catch (DatatypeConfigurationException e) {
+            throw new AdaptorException(e);
+        }
+    }
+
+    public static XMLGregorianCalendar xmlTime(Instant instant) {
+        ZonedDateTime zdt = instant.atZone(ZoneId.of("UTC"));
+        return xmlTime(zdt.getHour(), zdt.getMinute(), zdt.getSecond());
+    }
+
+    public static XMLGregorianCalendar xmlTime(int hour, int minute, int second) {
+        try {
+            return DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(1970, 1, 1,
+                                             hour, minute, second, 0, 0);
+        } catch (DatatypeConfigurationException e) {
+            throw new AdaptorException(e);
+        }
     }
 
     public static Objet.LocationRel extractLocationRel(Vessel v) {

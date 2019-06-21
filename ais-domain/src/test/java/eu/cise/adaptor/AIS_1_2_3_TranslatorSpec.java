@@ -40,12 +40,13 @@ import java.time.Instant;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.cise.adaptor.helpers.Utils.*;
+import static eu.cise.adaptor.heplers.Utils.*;
 import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@SuppressWarnings("all")
 @RunWith(Spectrum.class)
 public class AIS_1_2_3_TranslatorSpec {
     {
@@ -143,7 +144,7 @@ public class AIS_1_2_3_TranslatorSpec {
                 it("returns a Vessel with periodOfTime.startDate", () -> {
                     //"2018-02-19T14:43:16.550Z"
                     assertThat(extractLocationRel(v).getPeriodOfTime().getStartDate(),
-                            is(xmlDate(2018, 02, 19)));
+                            is(xmlDate(2018, 2, 19)));
                 });
 
                 it("returns a Vessel with periodOfTime.startTime", () -> {

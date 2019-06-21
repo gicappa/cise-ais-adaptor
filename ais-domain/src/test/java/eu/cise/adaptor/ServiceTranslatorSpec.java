@@ -40,15 +40,15 @@ import java.util.Optional;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.cise.adaptor.helpers.Utils.extractPayload;
+import static eu.cise.adaptor.heplers.Utils.extractPayload;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("ClassInitializerMayBeStatic")
 @RunWith(Spectrum.class)
-public class ServiceTranslatorSpec {
-    {
+public class ServiceTranslatorSpec {{
         describe("the cise service model added to the entity", () -> {
 
                      AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);

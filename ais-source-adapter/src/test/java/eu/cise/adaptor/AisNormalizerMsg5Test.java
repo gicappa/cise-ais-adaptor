@@ -78,22 +78,24 @@ public class AisNormalizerMsg5Test {
 
     private AisMessageToAisMsg n;
 
-    AISMessage voyageMsg() {
+    private AISMessage voyageMsg() {
         return AISMessage.create(
                 NMEAMessage.fromString(
-                        "!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;=qA0J11EmSP0000,0*36"),
+                        "!ABVDM,2,1,2,A,5DSFVl02=s8qK8E3H00h4pLDpE=<000000000017ApB>;" +
+                                "=qA0J11EmSP0000,0*36"),
                 NMEAMessage.fromString(
                         "!ABVDM,2,2,2,A,00000000000,2*2D")
-        );
+                                );
     }
 
-    AISMessage voyageMsgNoMonthDay() {
+    private AISMessage voyageMsgNoMonthDay() {
         return AISMessage.create(
                 NMEAMessage.fromString(
-                        "!AIVDM,2,1,8,B,56?cVR42>RBT5HAJ220<N3;3:22222222222220n5Hk7540Ht02CQ2@H8888,0*66"),
+                        "!AIVDM,2,1,8,B,56?cVR42>RBT5HAJ220<N3;" +
+                                "3:22222222222220n5Hk7540Ht02CQ2@H8888,0*66"),
                 NMEAMessage.fromString(
                         "!AIVDM,2,2,8,B,88888888880,2*2F")
-        );
+                                );
     }
 
     @Before
@@ -111,7 +113,6 @@ public class AisNormalizerMsg5Test {
         assertThat(n.translate(voyageMsg()).getDestination(), is("DEWVN"));
     }
 
-
     // ETA:
     //    Estimated time of arrival; MMDDHHMM UTC
     //    Bits 19-16: month; 1-12; 0 = not available = default
@@ -121,7 +122,8 @@ public class AisNormalizerMsg5Test {
     @Test
     // eta=18-07 17:00
     public void it_maps_voyage_message_ETA_on_the_next_year() {
-        Clock beforeJuly2018 = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.systemDefault());
+        Clock beforeJuly2018
+                = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.systemDefault());
 
         n = new AisMessageToAisMsg(beforeJuly2018);
 
@@ -131,7 +133,8 @@ public class AisNormalizerMsg5Test {
     @Test
     // eta=18-07 17:00
     public void it_maps_voyage_message_ETA_on_the_current_year() {
-        Clock afterJuly2018 = Clock.fixed(Instant.parse("2018-10-18T17:00:00.00Z"), ZoneId.systemDefault());
+        Clock afterJuly2018
+                = Clock.fixed(Instant.parse("2018-10-18T17:00:00.00Z"), ZoneId.systemDefault());
 
         n = new AisMessageToAisMsg(afterJuly2018);
 
@@ -141,7 +144,8 @@ public class AisNormalizerMsg5Test {
     //00-00 24:60
     @Test
     public void it_maps_voyage_message_ETA_on_1970_when_month_and_day_are_not_available() {
-        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(), is(Instant.parse("1970-01-01T00:00:00.00Z")));
+        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(),
+                   is(Instant.parse("1970-01-01T00:00:00.00Z")));
     }
 
     @Test

@@ -32,6 +32,7 @@ import eu.cise.datamodel.v1.entity.event.Event;
 import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.object.Objet;
+import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
 
@@ -40,6 +41,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import static eu.cise.adaptor.heplers.Utils.xmlDate;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 
 /**
@@ -51,7 +53,7 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
     private static final Set<String> ISO_COUNTRIES
             = new HashSet<>(Arrays.asList(Locale.getISOCountries()));
 
-    public static boolean isValidISOCountry(String s) {
+    private static boolean isValidISOCountry(String s) {
         return ISO_COUNTRIES.contains(s);
     }
 
@@ -75,6 +77,7 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
         if (imoNumber != null)
             vessel.setIMONumber(imoNumber);
 
+        //noinspection UnnecessaryBoxing
         vessel.setMMSI(Long.valueOf(message.getUserId()));
         vessel.getInvolvedEventRels().add(getInvolvedEventRel(message));
         vessel.getNames().add(message.getShipName());
@@ -82,6 +85,7 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
         vessel.setLength(getLength(message));
         vessel.setCallSign(message.getCallSign());
         vessel.setDraught(f2d(message.getDraught()));
+        //noinspection UnnecessaryBoxing
         vessel.setMMSI(Long.valueOf(message.getUserId()));
         vessel.getShipTypes().add(fromAISShipType(message.getShipType()));
 
@@ -106,6 +110,10 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
 
     private Event.LocationRel getLocationRel(AisMsg message) {
         Event.LocationRel locationRel = new Event.LocationRel();
+        Period period = new Period();
+        if (message.getEta() != null)
+            period.setStartDate(xmlDate(message.getEta()));
+        locationRel.setDateTime(period);
         locationRel.setLocation(getPortLocation(message));
         return locationRel;
     }
@@ -121,6 +129,7 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
         return location;
     }
 
+    @SuppressWarnings("all")
     private boolean isLocationCode(String locationCode) {
         if (locationCode == null)
             return false;
@@ -144,10 +153,12 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
         return aisMsg.getImoNumber() == null ? null : Long.valueOf(aisMsg.getImoNumber());
     }
 
+    @SuppressWarnings("boxing")
     private Double getLength(AisMsg aisMsg) {
         if (aisMsg.getDimensionA() == null || aisMsg.getDimensionB() == null)
             return null;
 
+        //noinspection UnnecessaryBoxing
         return Double.valueOf(aisMsg.getDimensionA() + aisMsg.getDimensionB());
     }
 
@@ -166,108 +177,61 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
             case 30:
                 return VesselType.FISHING_VESSEL;
             case 31:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
             case 32:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
             case 33:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
             case 34:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
             case 35:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 40:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 41:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 42:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 43:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 44:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 45:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 46:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 47:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 48:
-                return VesselType.HIGH_SPEED_CRAFT;
-            case 49:
-                return VesselType.HIGH_SPEED_CRAFT;
+            case 58:
+            case 55:
+            case 54:
+            case 53:
+            case 52:
+            case 51:
             case 50:
                 return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 51:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 52:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 53:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 54:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 55:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
-            case 58:
-                return VesselType.SPECIAL_PURPOSE_SHIP;
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 49:
+            case 48:
+            case 47:
+            case 46:
+                return VesselType.HIGH_SPEED_CRAFT;
             case 60:
-                return VesselType.PASSENGER_SHIP;
+            case 69:
+            case 68:
+            case 67:
+            case 66:
+            case 65:
+            case 64:
+            case 63:
+            case 62:
             case 61:
                 return VesselType.PASSENGER_SHIP;
-            case 62:
-                return VesselType.PASSENGER_SHIP;
-            case 63:
-                return VesselType.PASSENGER_SHIP;
-            case 64:
-                return VesselType.PASSENGER_SHIP;
-            case 65:
-                return VesselType.PASSENGER_SHIP;
-            case 66:
-                return VesselType.PASSENGER_SHIP;
-            case 67:
-                return VesselType.PASSENGER_SHIP;
-            case 68:
-                return VesselType.PASSENGER_SHIP;
-            case 69:
-                return VesselType.PASSENGER_SHIP;
             case 70:
-                return VesselType.GENERAL_CARGO_SHIP;
+            case 79:
+            case 78:
+            case 77:
+            case 76:
+            case 75:
+            case 74:
+            case 73:
+            case 72:
             case 71:
                 return VesselType.GENERAL_CARGO_SHIP;
-            case 72:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 73:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 74:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 75:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 76:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 77:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 78:
-                return VesselType.GENERAL_CARGO_SHIP;
-            case 79:
-                return VesselType.GENERAL_CARGO_SHIP;
             case 80:
-                return VesselType.OIL_TANKER;
-            case 81:
-                return VesselType.OIL_TANKER;
-            case 82:
-                return VesselType.OIL_TANKER;
-            case 83:
-                return VesselType.OIL_TANKER;
-            case 84:
-                return VesselType.OIL_TANKER;
-            case 85:
-                return VesselType.OIL_TANKER;
-            case 86:
-                return VesselType.OIL_TANKER;
-            case 87:
-                return VesselType.OIL_TANKER;
-            case 88:
-                return VesselType.OIL_TANKER;
             case 89:
+            case 88:
+            case 87:
+            case 86:
+            case 85:
+            case 84:
+            case 83:
+            case 82:
+            case 81:
                 return VesselType.OIL_TANKER;
             default:
                 return VesselType.OTHER;
