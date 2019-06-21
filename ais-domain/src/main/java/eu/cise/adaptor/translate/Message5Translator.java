@@ -110,12 +110,18 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
 
     private Event.LocationRel getLocationRel(AisMsg message) {
         Event.LocationRel locationRel = new Event.LocationRel();
-        Period period = new Period();
-        if (message.getEta() != null)
-            period.setStartDate(xmlDate(message.getEta()));
-        locationRel.setDateTime(period);
+        locationRel.setDateTime(getETAPeriod(message));
         locationRel.setLocation(getPortLocation(message));
         return locationRel;
+    }
+
+    private Period getETAPeriod(AisMsg message) {
+        Period period = new Period();
+
+        if (message.getEta() != null)
+            period.setStartDate(xmlDate(message.getEta()));
+
+        return period;
     }
 
     private PortLocation getPortLocation(AisMsg message) {
