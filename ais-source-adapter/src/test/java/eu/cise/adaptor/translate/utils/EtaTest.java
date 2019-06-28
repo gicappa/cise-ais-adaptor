@@ -32,68 +32,70 @@ import static org.junit.Assert.assertThat;
 public class EtaTest {
 
     private Eta eta;
-    private EtaParser parser;
+    private EtaDate etaDate;
+    private EtaTime etaTime;
 
     @Before
     public void before() {
-        parser = new EtaParser();
+        etaDate = new EtaDate();
+        etaTime = new EtaTime();
     }
 
     @Test
     public void ETA_is_null_when_the_day_is_unavailable() {
-        assertThat(parser.getMonthDayISOFormat("0-12 17:00"), is(nullValue()));
+        assertThat(etaDate.getMonthDayISOFormat("0-12 17:00"), is(nullValue()));
     }
 
     @Test
     public void ETA_is_null_when_the_month_is_unavailable() {
-        assertThat(parser.getMonthDayISOFormat("10-0 17:00"), is(nullValue()));
+        assertThat(etaDate.getMonthDayISOFormat("10-0 17:00"), is(nullValue()));
     }
 
     @Test
     public void compute_ETA_is_null_when_the_month_is_unavailable() {
-        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("0-12 17:00"), is(nullValue()));
     }
 
     @Test
     public void compute_ETA_is_null_when_the_day_is_unavailable() {
-        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("10-0 17:00"), is(nullValue()));
     }
 
     @Test
     public void compute_ETA_defaults_the_hour_when_unavailable() {
-        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("09-01 24:00"), is(Instant.parse("2019-01-09T00:00:00.00Z")));
     }
 
     @Test
     public void compute_ETA_defaults_the_minute_when_unavailable() {
-        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("09-01 15:60"), is(Instant.parse("2019-01-09T15:00:00.00Z")));
     }
 
     @Test
     public void compute_ETA_is_before_today_with_new_year_in_the_middle() {
-        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-01-08T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("10-12 17:00"), is(Instant.parse("2018-12-10T17:00:00.00Z")));
     }
 
     @Test
     public void compute_ETA_is_after_today_with_new_year_in_the_middle() {
-        eta = new Eta(clockAt("2018-12-10T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2018-12-10T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("08-01 17:00"), is(Instant.parse("2019-01-08T17:00:00.00Z")));
     }
 
     @Test
     public void compute_ETA_is_before_today_without_new_year_in_the_middle() {
-        eta = new Eta(clockAt("2019-07-06T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-07-06T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("07-04 17:00"), is(Instant.parse("2019-04-07T17:00:00.00Z")));
     }
 
     @Test
     public void compute_today_is_before_ETA_without_new_year_in_the_middle() {
-        eta = new Eta(clockAt("2019-07-04T17:00:00.00Z"), parser);
+        eta = new Eta(clockAt("2019-07-04T17:00:00.00Z"), etaDate, etaTime);
         assertThat(eta.computeETA("07-06 17:00"), is(Instant.parse("2019-06-07T17:00:00.00Z")));
     }
 

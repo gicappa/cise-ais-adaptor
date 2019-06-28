@@ -61,18 +61,20 @@ import static org.apache.commons.lang3.ObjectUtils.min;
  */
 public class Eta {
     private final Clock clock;
-    private final EtaParser parser;
+    private final EtaDate etaDate;
+    private final EtaTime etaTime;
 
-    public Eta(Clock clock, EtaParser parser) {
+    public Eta(Clock clock, EtaDate etaDate, EtaTime etaTime) {
         this.clock = clock;
-        this.parser = parser;
+        this.etaDate = etaDate;
+        this.etaTime = etaTime;
     }
 
     public Instant computeETA(String etaString) {
         if (etaString == null)
             return null;
 
-        if (parser.getMonthDayISOFormat(etaString) == null)
+        if (etaDate.getMonthDayISOFormat(etaString) == null)
             return null;
 
         // calculating three eta for the current year
@@ -98,7 +100,7 @@ public class Eta {
 
 
     private String getDateTime(int year, String eta) {
-        return year + "-" + parser.getMonthDayISOFormat(eta) + "T" + parser.getTime(eta);
+        return year + "-" + etaDate.getMonthDayISOFormat(eta) + "T" + etaTime.getTime(eta);
     }
 
     private int getCurrentYear() {

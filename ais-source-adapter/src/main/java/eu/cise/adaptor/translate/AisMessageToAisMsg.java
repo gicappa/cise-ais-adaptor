@@ -32,7 +32,8 @@ import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.ais.messages.types.ShipType;
 import eu.cise.adaptor.AisMsg;
 import eu.cise.adaptor.translate.utils.Eta;
-import eu.cise.adaptor.translate.utils.EtaParser;
+import eu.cise.adaptor.translate.utils.EtaDate;
+import eu.cise.adaptor.translate.utils.EtaTime;
 import eu.cise.adaptor.translate.utils.NavigationStatus;
 
 import java.time.Clock;
@@ -61,7 +62,7 @@ public class AisMessageToAisMsg implements Translator<AISMessage, AisMsg> {
     }
 
     public AisMessageToAisMsg(Clock clock) {
-        this.eta = new Eta(clock, new EtaParser());
+        this.eta = new Eta(clock, new EtaDate(), new EtaTime());
     }
 
     @Override
