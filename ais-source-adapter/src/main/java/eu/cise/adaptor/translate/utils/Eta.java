@@ -33,6 +33,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
+import static java.lang.Math.abs;
+import static org.apache.commons.lang3.ObjectUtils.min;
+
 /**
  * The string format of the eta is "18-07 17:00"
  * ETA:
@@ -66,28 +69,39 @@ public class Eta {
     }
 
     public Instant computeETA(String etaString) {
-        if (etaString == null) return null;
+        if (etaString == null)
+            return null;
 
-        Instant eta = Instant.parse(getDateTime(etaString));
+        if (parser.getMonthDayISOFormat(etaString) == null)
+            return null;
 
-        if (eta.isBefore(Instant.now(clock)) && eta.isAfter(Instant.parse("1971-01-01T00:00:00Z")))
-            eta = eta.plus(365, ChronoUnit.DAYS);
+        // calculating three eta for the current year
+        // previous and next: the closest to the time of
+        // today will be selected.
+        Instant etaThisYear = Instant.parse(getDateTime(getCurrentYear(), etaString));
+        Instant etaNextYear = Instant.parse(getDateTime(getCurrentYear() + 1, etaString));
+        Instant etaPrevYear = Instant.parse(getDateTime(getCurrentYear() - 1, etaString));
 
-        return eta;
+        long diffThisYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaThisYear));
+        long diffNextYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaNextYear));
+        long diffPrevYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaPrevYear));
+
+        long diffMin = min(diffThisYear, min(diffNextYear, diffPrevYear));
+
+        if (diffMin == diffThisYear)
+            return etaThisYear;
+        else if (diffMin == diffNextYear)
+            return etaNextYear;
+        else
+            return etaPrevYear;
     }
 
-    private String getDateTime(String eta) {
-        return getDate(eta) + "T" + parser.getTime(eta);
+
+    private String getDateTime(int year, String eta) {
+        return year + "-" + parser.getMonthDayISOFormat(eta) + "T" + parser.getTime(eta);
     }
 
-    private String getDate(String eta) {
-        return parser.getDate(getCurrentYear(eta), eta);
-    }
-
-    private int getCurrentYear(String etaStr) {
-        if (parser.getDay(etaStr).equals("00") || parser.getMonth(etaStr).equals("00"))
-            return 1970;
-
+    private int getCurrentYear() {
         return LocalDateTime.ofInstant(Instant.now(clock), ZoneOffset.UTC).getYear();
     }
 

@@ -1,12 +1,50 @@
 package eu.cise.adaptor.translate.utils;
 
 public class EtaParser {
-    String getDefaultMonth(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getMonth(eta);
+
+    /**
+     * Starting from an ETA in the format "17-09 14:30"
+     * it's needed to create a string in ISO format
+     * without the year like "09-07" for month and day.
+     *
+     * @param eta the estimates time of arrival.
+     * @return the iso format string
+     */
+    String getMonthDayISOFormat(String eta) {
+
+        if (monthsOrDaysAreUnavailable(eta))
+            return null;
+
+        return getMonth(eta) + "-" + getDay(eta);
     }
 
-    String getDefaultDay(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getDay(eta);
+    private boolean monthsOrDaysAreUnavailable(String eta) {
+        return Integer.valueOf(getDay(eta)).equals(0) ||
+                Integer.valueOf(getMonth(eta)).equals(0);
+    }
+
+    String getMonth(String eta) {
+        return getMonthDashDay(eta).split("-")[1];
+    }
+
+    String getDay(String eta) {
+        return getMonthDashDay(eta).split("-")[0];
+    }
+
+    String getMonthDashDay(String eta) {
+        return eta.split(" ")[0];
+    }
+
+    String getHours(String etaStr) {
+        return getHoursColumnMinutes(etaStr).split(":")[0];
+    }
+
+    String getMinutes(String etaStr) {
+        return getHoursColumnMinutes(etaStr).split(":")[1];
+    }
+
+    String getHoursColumnMinutes(String etaStr) {
+        return etaStr.split(" ")[1];
     }
 
     String getDefaultHours(String eta, String defaultValue) {
@@ -19,36 +57,6 @@ public class EtaParser {
 
     String getTime(String eta) {
         return getDefaultHours(eta, "00") + ":" + getDefaultMinutes(eta, "00") + ":00.000Z";
-    }
-
-    String getHoursColumnMinutes(String etaStr) {
-        return etaStr.split(" ")[1];
-    }
-
-    String getHours(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[0];
-    }
-
-    String getMinutes(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[1];
-    }
-
-     String getDate(int year, String eta) {
-        return year + "-" +
-                getDefaultMonth(eta, "01") + "-" +
-                getDefaultDay(eta, "01");
-    }
-
-    String getDay(String eta) {
-        return getMonthDashDay(eta).split("-")[0];
-    }
-
-    String getMonth(String eta) {
-        return getMonthDashDay(eta).split("-")[1];
-    }
-
-    String getMonthDashDay(String eta) {
-        return eta.split(" ")[0];
     }
 
 }
