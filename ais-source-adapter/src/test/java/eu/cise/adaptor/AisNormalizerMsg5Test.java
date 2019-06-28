@@ -38,6 +38,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -60,7 +61,7 @@ import static org.junit.Assert.assertThat;
  *      sourceMmsi.MMSI: 305506000,
  *      positionFixingDevice: 'CombinedGpsGlonass',
  *      valid: true,
- *      eta: '18-07 17: 00',
+ *      eta: '18-07 17:00',
  *      draught: 10.4,
  *      messageType: 'ShipAndVoyageRelatedData',
  *      toStarboard: 11,
@@ -121,31 +122,19 @@ public class AisNormalizerMsg5Test {
     //    Bits 5-0: minute; 0-59; 60 = not available = default
     @Test
     // eta=18-07 17:00
-    public void it_maps_voyage_message_ETA_on_the_next_year() {
+    public void it_maps_voyage_message_ETA_on_the_current_year() {
         Clock beforeJuly2018
-                = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.systemDefault());
+                = Clock.fixed(Instant.parse("2018-05-18T17:00:00.00Z"), ZoneId.of("UTC"));
 
         n = new AisMessageToAisMsg(beforeJuly2018);
 
         assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2018-07-18T17:00:00.00Z")));
     }
 
-    @Test
-    // eta=18-07 17:00
-    public void it_maps_voyage_message_ETA_on_the_current_year() {
-        Clock afterJuly2018
-                = Clock.fixed(Instant.parse("2018-10-18T17:00:00.00Z"), ZoneId.systemDefault());
-
-        n = new AisMessageToAisMsg(afterJuly2018);
-
-        assertThat(n.translate(voyageMsg()).getEta(), is(Instant.parse("2019-07-18T17:00:00.00Z")));
-    }
-
     //00-00 24:60
     @Test
-    public void it_maps_voyage_message_ETA_on_1970_when_month_and_day_are_not_available() {
-        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(),
-                   is(Instant.parse("1970-01-01T00:00:00.00Z")));
+    public void it_maps_voyage_message_ETA_on_null_when_month_and_day_are_not_available() {
+        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(), is(nullValue()));
     }
 
     @Test
