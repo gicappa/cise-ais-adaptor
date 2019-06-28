@@ -70,26 +70,38 @@ public class Eta {
         this.etaTime = etaTime;
     }
 
-    public Instant computeETA(String etaString) {
-        if (etaString == null)
+    /**
+     * Will translate the eta from AIS format to an ISO one.
+     * When in doubt will chose the ETA year with the minor time difference
+     * from today.
+     *
+     * @param etaStr the ETA string in the format "13-04 15:39"
+     * @return an Instant with the corresponding date time
+     */
+    public Instant computeETA(String etaStr) {
+        if (etaStr == null)
             return null;
 
-        if (etaDate.getMonthDayISOFormat(etaString) == null)
+        // returns null in case of unspecified month or day
+        if (etaDate.getMonthDayISOFormat(etaStr) == null)
             return null;
 
         // calculating three eta for the current year
         // previous and next: the closest to the time of
         // today will be selected.
-        Instant etaThisYear = Instant.parse(getDateTime(getCurrentYear(), etaString));
-        Instant etaNextYear = Instant.parse(getDateTime(getCurrentYear() + 1, etaString));
-        Instant etaPrevYear = Instant.parse(getDateTime(getCurrentYear() - 1, etaString));
+        Instant etaThisYear = Instant.parse(getDateTime(getCurrentYear(), etaStr));
+        Instant etaNextYear = Instant.parse(getDateTime(getCurrentYear() + 1, etaStr));
+        Instant etaPrevYear = Instant.parse(getDateTime(getCurrentYear() - 1, etaStr));
 
         long diffThisYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaThisYear));
         long diffNextYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaNextYear));
         long diffPrevYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaPrevYear));
 
+        // compute the minimum of the three time difference
         long diffMin = min(diffThisYear, min(diffNextYear, diffPrevYear));
 
+        // returns the ETA with the year of the minimum
+        // time difference from today
         if (diffMin == diffThisYear)
             return etaThisYear;
         else if (diffMin == diffNextYear)
