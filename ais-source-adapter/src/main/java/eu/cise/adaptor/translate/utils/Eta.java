@@ -41,12 +41,28 @@ import java.time.temporal.ChronoUnit;
  * Bits 15-11: day; 1-31; 0 = not available = default
  * Bits 10-6: hour; 0-23; 24 = not available = default
  * Bits 5-0: minute; 0-59; 60 = not available = default
+ * <p>
+ * To infer the YEAR of the ETA that is not specified the following
+ * algorithm will be implemented.
+ * Three dates will be created user ETA Month-Day and:
+ * - current year
+ * - next year
+ * - previous year
+ * The current date will be compared with each of these dates and
+ * the closest ETA (shortest period of time in absolute terms) will
+ * be selected.
+ * <p>
+ * Requirements:
+ * If the ETA Month or Day are not valid: the ETA should be null
+ * If the ETA Hour  or Minute are not valid: the only Date part should be taken into account
  */
 public class Eta {
     private final Clock clock;
+    private final EtaParser parser;
 
-    public Eta(Clock clock) {
+    public Eta(Clock clock, EtaParser parser) {
         this.clock = clock;
+        this.parser = parser;
     }
 
     public Instant computeETA(String etaString) {
@@ -60,62 +76,16 @@ public class Eta {
         return eta;
     }
 
-    private String getDefaultMonth(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getMonth(eta);
-    }
-
-    private String getDefaultDay(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getDay(eta);
-    }
-
-    private String getDefaultHours(String eta, String defaultValue) {
-        return getHours(eta).equals("24") ? defaultValue : getHours(eta);
-    }
-
-    private String getDefaultMinutes(String eta, String defaultValue) {
-        return getMinutes(eta).equals("60") ? defaultValue : getMinutes(eta);
-    }
-
     private String getDateTime(String eta) {
-        return getDate(eta) + "T" + getTime(eta);
-    }
-
-    private String getTime(String eta) {
-        return getDefaultHours(eta, "00") + ":" + getDefaultMinutes(eta, "00") + ":00.000Z";
-    }
-
-    private String getHoursColumnMinutes(String etaStr) {
-        return etaStr.split(" ")[1];
-    }
-
-    private String getHours(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[0];
-    }
-
-    private String getMinutes(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[1];
+        return getDate(eta) + "T" + parser.getTime(eta);
     }
 
     private String getDate(String eta) {
-        return getCurrentYear(eta) + "-" +
-                getDefaultMonth(eta, "01") + "-" +
-                getDefaultDay(eta, "01");
-    }
-
-    private String getDay(String eta) {
-        return getMonthDashDay(eta).split("-")[0];
-    }
-
-    private String getMonth(String eta) {
-        return getMonthDashDay(eta).split("-")[1];
-    }
-
-    private String getMonthDashDay(String eta) {
-        return eta.split(" ")[0];
+        return parser.getDate(getCurrentYear(eta), eta);
     }
 
     private int getCurrentYear(String etaStr) {
-        if (getDay(etaStr).equals("00") || getMonth(etaStr).equals("00"))
+        if (parser.getDay(etaStr).equals("00") || parser.getMonth(etaStr).equals("00"))
             return 1970;
 
         return LocalDateTime.ofInstant(Instant.now(clock), ZoneOffset.UTC).getYear();

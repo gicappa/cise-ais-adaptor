@@ -33,13 +33,13 @@ import eu.cise.datamodel.v1.entity.location.PortLocation;
 import eu.cise.datamodel.v1.entity.movement.Movement;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.datamodel.v1.entity.vessel.VesselType;
+import eu.eucise.xml.DefaultXmlMapper;
 import org.junit.runner.RunWith;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 
-import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.it;
+import static com.greghaskins.spectrum.Spectrum.*;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
 import static eu.cise.adaptor.heplers.Utils.xmlTime;
@@ -126,8 +126,10 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationCode", () -> {
                         assertThat(getLocation(mo).getLocationCode(), is("FRLEH"));
                     });
-                    it("returns a Vessel with a PortName", () -> {
+                    fit("returns a Vessel with a PortName", () -> {
+                        System.out.print(new DefaultXmlMapper.Pretty().toXML(v));
                         assertThat(getLocation(mo).getPortName(), is("FRLEH"));
+
                     });
                 });
                 context("Involved Event with a port name", () -> {
@@ -153,7 +155,6 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a PortName", () -> {
                         assertThat(getLocation(mo).getPortName(), is("Le Havre"));
                     });
-
                 });
 
             });
