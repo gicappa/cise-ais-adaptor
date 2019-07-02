@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>cise-signature</artifactId>
+  <name>cise-signature</name>
+  <groupId>eu.europa.ec.jrc.marex</groupId>
+  <version>1.0-SNAPSHOT</version>
+
+  <build>
+    <plugins>
+
+      <!-- tester plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit47</artifactId>
+            <version>2.20</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <!-- This conf avoid parallel execution on different JVM -->
+          <!-- Useful when spawning servers on junit rules -->
+          <forkCount>1</forkCount>
+          <reuseForks>false</reuseForks>
+          <!-- === -->
+          <includes>
+            <include>**/*Spec.java</include>
+            <include>**/*Test*.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <!-- compiler plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <compilerArgument>-Xlint:unchecked</compilerArgument>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>checkstyle.xml</configLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <failsOnError>true</failsOnError>
+            </configuration>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- create an appropriate javadoc -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <javadocDirectory>${main.basedir}/src/javadoc</javadocDirectory>
+          <docfilessubdirs>true</docfilessubdirs>
+          <aggregate>true</aggregate>
+          <show>private</show>
+          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+          <docletArtifact>
+            <groupId>org.umlgraph</groupId>
+            <artifactId>umlgraph</artifactId>
+            <version>5.6.6</version>
+          </docletArtifact>
+          <additionalparam>
+            -inferrel
+            -attributes
+            -types
+            -visibility
+            -quiet
+            -hide java.*
+            -collpackages java.util.*
+            -qualify
+            -postfixpackage
+            -bgcolor white
+            -edgecolor "#4D7A97"
+            -edgefontname "Arial"
+            -edgefontcolor "#4D7A97"
+            -edgefontsize 9
+
+            -nodefillcolor white
+            -nodefontname "Arial"
+            -nodefontcolor "#2e2e2e"
+            -nodefontsize 9
+            -nodefontclasssize 10
+            -nodefontpackagesize 8
+            -nodefontpackagename "Arial"
+            -nodefonttagsize 8
+          </additionalparam>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <id>unpack-doc-resources</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <includeGroupIds>io.spring.docresources</includeGroupIds>
+              <includeArtifactIds>spring-doc-resources</includeArtifactIds>
+              <includeTypes>zip</includeTypes>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${project.build.directory}/generated-docs/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>1.5.7.1</version>
+        <configuration>
+          <requires>
+            <require>asciidoctor-diagram</require>
+          </requires>
+        </configuration>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>package</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <backend>html5</backend>
+              <sourceHighlighter>highlight.js</sourceHighlighter>
+              <doctype>book</doctype>
+              <attributes>
+                <toc>left</toc>
+                <docinfo>shared</docinfo>
+                <imagesdir>./images</imagesdir>
+                <stylesdir>css/</stylesdir>
+                <stylesheet>spring.css</stylesheet>
+                <linkcss>true</linkcss>
+                <icons>font</icons>
+                <highlightjsdir>js/highlight</highlightjsdir>
+                <highlightjs-theme>atom-one-dark-reasonable</highlightjs-theme>
+              </attributes>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj-diagram</artifactId>
+            <version>1.5.16</version>
+          </dependency>
+          <dependency>
+            <groupId>io.spring.docresources</groupId>
+            <artifactId>spring-doc-resources</artifactId>
+            <version>0.1.2.RELEASE</version>
+            <type>zip</type>
+            <optional>true</optional>
+          </dependency>
+          <dependency>
+            <groupId>io.spring.asciidoctor</groupId>
+            <artifactId>spring-asciidoctor-extensions</artifactId>
+            <version>${docs.resources.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- Resource Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-asciidoc-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/generated-docs/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/asciidoc</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- EUCISE dependencies -->
+    <dependency>
+      <artifactId>cise-data-model</artifactId>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <version>1.5.3.11</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>eucise-model-helpers</artifactId>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <version>1.0.8</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>eucise-service-model</artifactId>
+      <groupId>eu.europa.ec.jrc.marex</groupId>
+      <version>1.0.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <distributionManagement>
+    <!-- Distribution management used to create ais-adaptor local repo -->
+   <repository>
+     <id>local-repo-r</id>
+     <name>my releases</name>
+     <url>file:///home/gicappa/Projects/fr-authority/cise-data-reader/local-repo/releases</url>
+   </repository>
+   <snapshotRepository>
+     <id>local-repo</id>
+     <name>my snapshots</name>
+     <url>file:///home/gicappa/Projects/fr-authority/cise-data-reader/local-repo/snapshots</url>
+   </snapshotRepository>
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <docs.resources.version>0.1.3.RELEASE</docs.resources.version>
+    <main.basedir>${project.basedir}</main.basedir>
+  </properties>
+</project>
