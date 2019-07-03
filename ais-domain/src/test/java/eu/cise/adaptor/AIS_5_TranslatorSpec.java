@@ -43,6 +43,7 @@ import static com.greghaskins.spectrum.Spectrum.*;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
 import static eu.cise.adaptor.heplers.Utils.xmlTime;
+import static eu.cise.datamodel.v1.entity.event.LocationRoleInEventType.END_PLACE;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -119,6 +120,9 @@ public class AIS_5_TranslatorSpec {
                     });
                     it("returns a Vessel with an ETA time", () -> {
                         assertThat(mo.getLocationRels().get(0).getDateTime().getStartTime(), is(xmlTime(Instant.parse("1970-01-01T15:43:00Z"))));
+                    });
+                    it("returns a Vessel with location role", () -> {
+                        assertThat(mo.getLocationRels().get(0).getLocationRole(), is(END_PLACE));
                     });
                     it("returns a Vessel with a Location", () -> {
                         assertThat(getLocation(mo), instanceOf(PortLocation.class));

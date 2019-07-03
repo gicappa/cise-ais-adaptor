@@ -79,7 +79,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.parent.basedir}/ais-app/src/main/resources</directory>
+      <directory>${project.parent.basedir}/ais-app/src/test/resources</directory>
       <outputDirectory>/conf</outputDirectory>
       <includes>
         <include>*.jks</include>

@@ -1,6 +1,10 @@
 # Releases
 
 ## 2019-01-11 v1.1
+- added the missing attribute locationRole.
+- computed the ETA for AIS message of type 5 in a different way. It is now setting
+  an ETA trying to guess the closest date to today. Note: the ais message don't
+  include the year of the ETA and that might create some ambiguities.
 - added the support to messages of type 'Push' and ServiceOperation 'Subscribe'. This features allows to interact directly with the light client.
 - Reviewed the selection of the AppContext from the MainApp (this impacts on how
   to select for instance the generator implementation).
