@@ -75,7 +75,7 @@ public abstract class AbstractAppContext implements AppContext {
         return newSignatureService()
                 .withKeyStoreName(config.getKeyStoreName())
                 .withKeyStorePassword(config.getKeyStorePassword())
-                .withPrivateKeyAlias(config.getAdaptorId())
+                .withPrivateKeyAlias(config.gePrivateKeyAlias())
                 .withPrivateKeyPassword(config.getPrivateKeyPassword())
                 .build();
     }

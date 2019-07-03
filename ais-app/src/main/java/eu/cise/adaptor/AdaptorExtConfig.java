@@ -39,27 +39,16 @@ import static org.aeonbits.owner.Config.Sources;
         "classpath:ais-adaptor.properties"})
 public interface AdaptorExtConfig extends AdaptorConfig {
 
-    @DefaultValue("eu.cise.es.gc-ls01")
-    @Key("adaptor.id")
-    String getAdaptorId();
+    @Key("signature.private-key.alias")
+    String gePrivateKeyAlias();
 
-    @DefaultValue("cisePrivate.jks")
-    @Key("signature.private.jks.filename")
-    String getKeyStoreName();
-
-    @DefaultValue("cisecise")
-    @Key("signature.private.jks.password")
-    String getPrivateJKSPassword();
-
-    @DefaultValue("cisecise")
-    @Key("signature.private.key.password")
+    @Key("signature.private-key.password")
     String getPrivateKeyPassword();
 
-    @DefaultValue("cisePublic.jks")
-    @Key("signature.public.jks.filename")
+    @Key("signature.keystore.name")
+    String getKeyStoreName();
+
+    @Key("signature.keystore.password")
     String getKeyStorePassword();
 
-    @DefaultValue("cisecise")
-    @Key("signature.public.jks.password")
-    String getPublicJKSPassword();
 }
