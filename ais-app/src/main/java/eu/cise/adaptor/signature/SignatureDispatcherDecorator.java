@@ -25,41 +25,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package eu.cise.adaptor;
+package eu.cise.adaptor.signature;
 
+import eu.cise.adaptor.Dispatcher;
+import eu.cise.adaptor.dispatch.DispatchResult;
+import eu.cise.servicemodel.v1.message.Message;
+import eu.cise.signature.SignatureService;
 
-import static org.aeonbits.owner.Config.Sources;
+public class SignatureDispatcherDecorator implements Dispatcher {
 
-/**
- * Extending the {AdaptorConfig} configuration object adding properties
- * specific to the Certificate and Signature
- */
-@SuppressWarnings("unused")
-@Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
-public interface AdaptorExtConfig extends AdaptorConfig {
+    private final Dispatcher dispatcher;
+    private final SignatureService signatureService;
 
-    @DefaultValue("eu.cise.es.gc-ls01")
-    @Key("adaptor.id")
-    String getAdaptorId();
+    public SignatureDispatcherDecorator(Dispatcher dispatcher, SignatureService signatureService) {
+        this.dispatcher = dispatcher;
+        this.signatureService = signatureService;
+    }
 
-    @DefaultValue("cisePrivate.jks")
-    @Key("signature.private.jks.filename")
-    String getKeyStoreName();
-
-    @DefaultValue("cisecise")
-    @Key("signature.private.jks.password")
-    String getPrivateJKSPassword();
-
-    @DefaultValue("cisecise")
-    @Key("signature.private.key.password")
-    String getPrivateKeyPassword();
-
-    @DefaultValue("cisePublic.jks")
-    @Key("signature.public.jks.filename")
-    String getKeyStorePassword();
-
-    @DefaultValue("cisecise")
-    @Key("signature.public.jks.password")
-    String getPublicJKSPassword();
+    @Override
+    public DispatchResult send(Message message, String address) {
+        return dispatcher.send(signatureService.sign(message), address);
+    }
 }

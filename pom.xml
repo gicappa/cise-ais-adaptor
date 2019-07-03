@@ -39,9 +39,9 @@
   <name>cise-ais-adaptor</name>
 
   <modules>
+    <module>cise-signature</module>
     <module>ais-app</module>
     <module>ais-domain</module>
-    <module>ais-signature</module>
     <module>ais-source-adapter</module>
     <module>ais-server-example</module>
     <module>ais-transport</module>
@@ -245,7 +245,7 @@
 
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-signature</artifactId>
+        <artifactId>cise-signature</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
 

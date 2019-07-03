@@ -112,7 +112,7 @@ public class ModelTranslatorSpec {
                         assertThat("the legalName is the one specified in the config",
                                    org.getAlternativeName(), is(config.getOrgAlternativeName()));
                     });
-                    fit("returns an uuid string not null / " + n, () -> {
+                    it("returns an uuid string not null / " + n, () -> {
                         UniqueIdentifier uuid= ((Vessel) translator.translate(m).get()).getIdentifier();
 
                         System.out.println(uuid.getUUID());

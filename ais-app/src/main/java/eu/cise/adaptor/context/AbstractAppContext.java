@@ -29,14 +29,14 @@ package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
 import eu.cise.adaptor.dispatch.ErrorCatchingDispatcher;
-import eu.cise.adaptor.signature.*;
+import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.StringFluxToAisMsgFlux;
 import eu.cise.adaptor.translate.VesselToPushMessage;
+import eu.cise.signature.SignatureService;
 
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
+import static eu.cise.signature.SignatureServiceBuilder.newSignatureService;
 
 /**
  *
@@ -72,27 +72,12 @@ public abstract class AbstractAppContext implements AppContext {
     }
 
     private SignatureService makeSignatureService() {
-        DefaultCertificateRegistry registry = makeCertificateRegistry();
-        PrivateKeyInfo myPrivateKey
-                = new PrivateKeyInfo(config.getAdaptorId(), config.getPrivateKeyPassword());
-        X509Certificate privateCertificate
-                = registry.findPrivateCertificate(myPrivateKey.keyAlias());
-        PrivateKey privateKey
-                = registry.findPrivateKey(myPrivateKey.keyAlias(), myPrivateKey.password());
-        DomSigner signer = new DefaultDomSigner(privateCertificate, privateKey);
-        DomVerifier verifier = new RtiDomVerifier();
-
-        return new DefaultSignatureService(signer, verifier);
-    }
-
-    private DefaultCertificateRegistry makeCertificateRegistry() {
-        return new DefaultCertificateRegistry(
-                new KeyStoreInfo(
-                        config.getPrivateJKSName(),
-                        config.getPrivateJKSPassword()),
-                new KeyStoreInfo(
-                        config.getPublicJKSName(),
-                        config.getPublicJKSPassword()));
+        return newSignatureService()
+                .withKeyStoreName(config.getKeyStoreName())
+                .withKeyStorePassword(config.getKeyStorePassword())
+                .withPrivateKeyAlias(config.getAdaptorId())
+                .withPrivateKeyPassword(config.getPrivateKeyPassword())
+                .build();
     }
 
     private Dispatcher makeRestDispatcher() {

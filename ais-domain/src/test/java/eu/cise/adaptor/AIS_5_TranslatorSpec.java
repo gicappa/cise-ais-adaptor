@@ -126,7 +126,7 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationCode", () -> {
                         assertThat(getLocation(mo).getLocationCode(), is("FRLEH"));
                     });
-                    fit("returns a Vessel with a PortName", () -> {
+                    it("returns a Vessel with a PortName", () -> {
                         System.out.print(new DefaultXmlMapper.Pretty().toXML(v));
                         assertThat(getLocation(mo).getPortName(), is("FRLEH"));
 
