@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>cise-signature</artifactId>
@@ -173,6 +173,8 @@
             <artifactId>asciidoctorj-diagram</artifactId>
             <version>1.5.16</version>
           </dependency>
+
+<!-- Still in the process of searching for a library to enhance the UI impact of the documentation
           <dependency>
             <groupId>io.spring.docresources</groupId>
             <artifactId>spring-doc-resources</artifactId>
@@ -185,6 +187,7 @@
             <artifactId>spring-asciidoctor-extensions</artifactId>
             <version>${docs.resources.version}</version>
           </dependency>
+-->
         </dependencies>
       </plugin>
 
@@ -262,25 +265,35 @@
     </dependency>
   </dependencies>
 
-  <distributionManagement>
-    <!-- Distribution management used to create ais-adaptor local repo -->
-   <repository>
-     <id>local-repo-r</id>
-     <name>my releases</name>
-     <url>file:///home/gicappa/Projects/fr-authority/cise-data-reader/local-repo/releases</url>
-   </repository>
-   <snapshotRepository>
-     <id>local-repo</id>
-     <name>my snapshots</name>
-     <url>file:///home/gicappa/Projects/fr-authority/cise-data-reader/local-repo/snapshots</url>
-   </snapshotRepository>
-  </distributionManagement>
+  <repositories>
+    <repository>
+      <id>local-repo</id>
+      <url>file://${main.basedir}/ais-mvn-repo/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+
+    <repository>
+      <id>local-repo-r</id>
+      <url>file://${main.basedir}/ais-mvn-repo/releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <docs.resources.version>0.1.3.RELEASE</docs.resources.version>
-    <main.basedir>${project.basedir}</main.basedir>
+    <main.basedir>${project.basedir}/..</main.basedir>
   </properties>
 </project>

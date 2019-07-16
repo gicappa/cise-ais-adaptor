@@ -120,29 +120,6 @@
 
   </dependencies>
 
-  <!--<repositories>-->
-    <!--<repository>-->
-      <!--<id>local-repo</id>-->
-      <!--<url>file://${main.basedir}/local-repo/snapshots</url>-->
-      <!--<snapshots>-->
-        <!--<enabled>true</enabled>-->
-      <!--</snapshots>-->
-      <!--<releases>-->
-        <!--<enabled>false</enabled>-->
-      <!--</releases>-->
-    <!--</repository>-->
-
-    <!--<repository>-->
-      <!--<id>local-repo-r</id>-->
-      <!--<url>file://${main.basedir}/local-repo/releases</url>-->
-      <!--<snapshots>-->
-        <!--<enabled>false</enabled>-->
-      <!--</snapshots>-->
-      <!--<releases>-->
-        <!--<enabled>true</enabled>-->
-      <!--</releases>-->
-    <!--</repository>-->
-  <!--</repositories>-->
   <properties>
     <main.basedir>${project.basedir}/..</main.basedir>
   </properties>
