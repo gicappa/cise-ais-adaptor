@@ -33,7 +33,6 @@ import eu.cise.datamodel.v1.entity.Entity;
 import eu.cise.datamodel.v1.entity.organization.Organization;
 import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-
 import java.util.Optional;
 import java.util.UUID;
 

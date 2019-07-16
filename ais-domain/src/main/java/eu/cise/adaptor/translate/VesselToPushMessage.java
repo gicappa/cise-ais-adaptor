@@ -82,12 +82,10 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
     public Push translate(List<Entity> entities) {
         PushBuilder message = translateCommon(entities);
 
-        if (isSubscribeMessage()) {
-            return message.recipient(createSubscriptionRecipient()).build();
-        } else {
-            return message.addProfiles(profiles.list()).build();
+        if (!isSubscribeMessage()) {
+            message.addProfiles(profiles.list());
         }
-
+        return message.build();
     }
 
     /**
