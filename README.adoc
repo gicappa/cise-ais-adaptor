@@ -57,7 +57,7 @@ WARNING: To compile the software it's mandatory to send an email to the JRC CISE
 ----
 ...$ cd cise-ais-adaptor
 ...$ tar xvfz cise-mvn-repo.tgz
-...$ mvn clean install
+...$ mvn clean install -U
 ----
 
 == Preparing the software
