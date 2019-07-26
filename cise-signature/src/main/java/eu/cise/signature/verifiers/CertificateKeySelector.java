@@ -28,16 +28,15 @@
 package eu.cise.signature.verifiers;
 
 import eu.cise.signature.exceptions.SignatureEx;
-
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Optional;
 import javax.xml.crypto.AlgorithmMethod;
 import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.KeySelectorResult;
 import javax.xml.crypto.XMLCryptoContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 public class CertificateKeySelector extends KeySelector {
@@ -53,6 +52,7 @@ public class CertificateKeySelector extends KeySelector {
                 .stream()
                 .flatMap(data -> ((X509Data) data).getContent().stream())
                 .filter(this::isX509)
+                .map(X509Certificate.class::cast)
                 .findFirst();
 
         isValid(cert.get());
