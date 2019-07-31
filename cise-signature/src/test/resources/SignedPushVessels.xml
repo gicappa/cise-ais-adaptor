@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
-  ~ Copyright CISE AIS Adaptor (c) 2018, European Union
+  ~ Copyright CISE AIS Adaptor (c) 2018-2019, European Union
   ~ All rights reserved.
   ~
   ~ Redistribution and use in source and binary forms, with or without
@@ -26,159 +26,90 @@
   ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<ns4:Push xmlns:ns4="http://www.cise.eu/servicemodel/v1/message/">
-    <ContextID>bc5f886f-e366-4754-bd0c-908b5604f38a</ContextID>
-    <CorrelationID/>
-    <CreationDateTime>2017-10-09T15:08:56.732+02:00</CreationDateTime>
-    <MessageID>33c22663-81c7-4fc6-bd5e-288cba24899f</MessageID>
-    <Priority>High</Priority>
-    <RequiresAck>false</RequiresAck>
+<ns4:Push xmlns:ns2="http://www.cise.eu/servicemodel/v1/authority/" xmlns:ns4="http://www.cise.eu/servicemodel/v1/message/" xmlns:ns3="http://www.cise.eu/servicemodel/v1/service/">
+    <CorrelationID>476d949d-5aa4-44cc-8e20-c1a2288fe098</CorrelationID>
+    <CreationDateTime>2019-07-26T17:23:07.002+02:00</CreationDateTime>
+    <MessageID>72c3ab7d-f160-40d2-9960-c9472c4d6df2</MessageID>
+    <Priority>Low</Priority>
     <Sender>
-        <ServiceID>es.gc-ls01.vessel.push.gcs07</ServiceID>
+        <SeaBasin>NorthSea</SeaBasin>
+        <ServiceID>de.sim1-node01.vessel.push.provider</ServiceID>
         <ServiceOperation>Push</ServiceOperation>
-        <Participant>
-            <Id>eu.cise.es.gc-ls01</Id>
-            <EndpointUrl>http://10.1.1.200:3000/api/messages</EndpointUrl>
-        </Participant>
+        <ServiceRole>Provider</ServiceRole>
+        <ServiceStatus>Online</ServiceStatus>
+        <ServiceType>VesselService</ServiceType>
     </Sender>
-    <Payload xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:XmlEntityPayload">
+    <Recipient>
+        <SeaBasin>NorthSea</SeaBasin>
+        <ServiceID>de.sim2-node01.vessel.push.consumer</ServiceID>
+        <ServiceOperation>Push</ServiceOperation>
+        <ServiceRole>Consumer</ServiceRole>
+        <ServiceStatus>Online</ServiceStatus>
+        <ServiceType>VesselService</ServiceType>
+    </Recipient>
+    <Payload xsi:type="ns4:XmlEntityPayload" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <InformationSecurityLevel>NonClassified</InformationSecurityLevel>
         <InformationSensitivity>Green</InformationSensitivity>
         <IsPersonalData>false</IsPersonalData>
-        <Purpose>BorderMonitoring</Purpose>
-        <RetentionPeriod>2017-10-09T15:08:56.732+02:00</RetentionPeriod>
+        <Purpose>NonSpecified</Purpose>
         <EnsureEncryption>false</EnsureEncryption>
         <Vessel>
-            <Metadata>
-                <CreationDate>2018-02-28T09:54:52.000Z</CreationDate>
-            </Metadata>
-            <LocationRel>
-                <Location>
-                    <Geometry>
-                        <Latitude>43.67138766173536</Latitude>
-                        <Longitude>8.171340733203124</Longitude>
-                    </Geometry>
-                </Location>
-                <Heading>203.0</Heading>
-            </LocationRel>
-            <IMONumber>5633167</IMONumber>
-            <ShipType>PassengerShip</ShipType>
+            <IMONumber>7710525</IMONumber>
         </Vessel>
-        <Vessel>
-            <Metadata>
-                <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-            </Metadata>
-            <LocationRel>
-                <Location>
-                    <Geometry>
-                        <Latitude>43.45046600608906</Latitude>
-                        <Longitude>7.924148350390624</Longitude>
-                    </Geometry>
-                </Location>
-                <Heading>190.0</Heading>
-            </LocationRel>
-            <InvolvedAgentRel>
-                <Agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns6:Person" xmlns:ns6="http://www.cise.eu/datamodel/v1/entity/person/">
-                    <Metadata>
-                        <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-                    </Metadata>
-                    <FamilyName>erere</FamilyName>
-                    <GivenName>rerere</GivenName>
-                    <PersonIdentifiers>
-                        <IdentifierType>IdentityCard</IdentifierType>
-                        <IdentifierValue>rere</IdentifierValue>
-                    </PersonIdentifiers>
-                </Agent>
-                <AgentRole>Passenger</AgentRole>
-            </InvolvedAgentRel>
-            <InvolvedAgentRel>
-                <Agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns6:Person" xmlns:ns6="http://www.cise.eu/datamodel/v1/entity/person/">
-                    <Metadata>
-                        <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-                    </Metadata>
-                    <FamilyName>rere</FamilyName>
-                    <GivenName>rerere</GivenName>
-                    <PersonIdentifiers>
-                        <IdentifierType>IdentityCard</IdentifierType>
-                        <IdentifierValue>rere</IdentifierValue>
-                    </PersonIdentifiers>
-                </Agent>
-                <AgentRole>Passenger</AgentRole>
-            </InvolvedAgentRel>
-            <CargoRel>
-                <Cargo>
-                    <ContainedCargoUnitRel>
-                        <CargoUnit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns6="http://www.cise.eu/datamodel/v1/entity/cargo/" xsi:type="ns6:ContainmentUnit">
-                            <Metadata>
-                                <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-                            </Metadata>
-                            <NetQuantity>1.0</NetQuantity>
-                            <UNDG>0282</UNDG>
-                            <UnitsOfMeasure>MetricTonne</UnitsOfMeasure>
-                        </CargoUnit>
-                    </ContainedCargoUnitRel>
-                    <ContainedCargoUnitRel>
-                        <CargoUnit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns6="http://www.cise.eu/datamodel/v1/entity/cargo/" xsi:type="ns6:ContainmentUnit">
-                            <Metadata>
-                                <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-                            </Metadata>
-                            <NetQuantity>2.0</NetQuantity>
-                            <UNDG>0282</UNDG>
-                            <UnitsOfMeasure>MetricTonne</UnitsOfMeasure>
-                        </CargoUnit>
-                    </ContainedCargoUnitRel>
-                    <ContainedCargoUnitRel>
-                        <CargoUnit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns6="http://www.cise.eu/datamodel/v1/entity/cargo/" xsi:type="ns6:ContainmentUnit">
-                            <Metadata>
-                                <CreationDate>2018-02-28T09:55:20.000Z</CreationDate>
-                            </Metadata>
-                            <NetQuantity>3.0</NetQuantity>
-                            <UNDG>1170</UNDG>
-                            <UnitsOfMeasure>MetricTonne</UnitsOfMeasure>
-                        </CargoUnit>
-                    </ContainedCargoUnitRel>
-                </Cargo>
-            </CargoRel>
-            <IMONumber>6388980</IMONumber>
-            <ShipType>BulkCarrier</ShipType>
-        </Vessel>
-    </Payload><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><DigestValue>uhSn/qOQsKcXU9PMciWvEkVf4ZM=</DigestValue></Reference></SignedInfo><SignatureValue>rDnyxgYx9rcpKNcJtDYcwFQJ8LEYvNEwO6zG22ZXIMf4Otjznr5ivepsty2p
-    /KCwyZb/mTM0XRyT19KqtMzAwuaJirZtmUOem9fed/lVW/aDuVBJcTGWmyeP
-    mZMuZjIckA5rAdgGvQx2pbIwUMp/mFjZrMHtBhesl3IhVL//ONGg+OjnH607
-    AaB7lEC9cb3spAtUTRuLei6LYwp+9ATDu4F5HKAhaGHKxBRyL1g/oTEFujHN
-    sjX+wOo8Mv+HlYkmtzV+85sjh0dF+A/rkdtYBVMMw+sE0dtgbWJXBpGgNSDB
-    HuxKU0HYAZRuwT+FD4Vngr+K67vDOp00XBfvX+hu4Q==
-</SignatureValue><KeyInfo><X509Data><X509SubjectName>CN=eu.cise.es.gc-ls01, OU=JRC TestBed, OU=legacy systems, O=gc-ls01, DC=cise, DC=eu, C=es</X509SubjectName><X509Certificate>MIIFPzCCBCegAwIBAgICEAEwDQYJKoZIhvcNAQELBQAwga0xCzAJBgNVBAYTAmVz
-    MRIwEAYKCZImiZPyLGQBGRYCZXUxFDASBgoJkiaJk/IsZAEZFgRjaXNlMR4wHAYD
-    VQQKDBVldS5jaXNlLmVzIHNpZ25pbmcgQ0ExFDASBgNVBAsMC0pSQyBUZXN0QmVk
-    MR4wHAYDVQQLDBVldS5jaXNlLmVzIHNpZ25pbmcgQ0ExHjAcBgNVBAMMFWV1LmNp
-    c2UuZXMgc2lnbmluZyBDQTAeFw0xODAyMjExMDE2NTdaFw0xOTAzMDMxMDE2NTda
-    MIGVMQswCQYDVQQGEwJlczESMBAGCgmSJomT8ixkARkWAmV1MRQwEgYKCZImiZPy
-    LGQBGRYEY2lzZTEQMA4GA1UECgwHZ2MtbHMwMTEXMBUGA1UECwwObGVnYWN5IHN5
-    c3RlbXMxFDASBgNVBAsMC0pSQyBUZXN0QmVkMRswGQYDVQQDDBJldS5jaXNlLmVz
-    LmdjLWxzMDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCtAOY+JoY3
-    ltfBrCnAPwiUhedJnveqnxNCEh6NHUGEqkk1a9OqhE6pzQTcWCVkeQrH49epFxpq
-    F7/Xv3fnk399L9tsFF9JJDmi89QxPUbTzCp9tZJm331lz0vv3vIvDr0L6/lkcnW7
-    CF101TMke39o++y7iXNhZhrhJeQiYpALA4nBXlqIDSfl5DNuqRLi78cITeTenyjs
-    fH+O4uZ87mlCYxgdCDkd36Y7tt9/GVJ76j2+3v+FcQ30uLOMUwuNQvMjxidcp3xd
-    Hd5zdJjYZd4eun0OP41h4H2h7hoeiIfYgeUd+nmirSErKRYIlWeT7gTvId0J0eNi
-    7ZJH2DPND36bAgMBAAGjggF9MIIBeTAJBgNVHRMEAjAAMBEGCWCGSAGG+EIBAQQE
-    AwIGQDBABglghkgBhvhCAQ0EMxYxU2VydmVyIGNlcnRpZmljYXRlIGdlbmVyYXRl
-    ZCBmb3IgSlJDIENJU0UgVGVzdGJlZDAdBgNVHQ4EFgQUNnu3RRLUuAxHJB/Gbm6Z
-    yQ9kqbQwgdIGA1UdIwSByjCBx4AUZBhvJRkCRpYQbTknrZCa+HfRpQOhgaqkgacw
-    gaQxGzAZBgNVBAMMEmV1LmNpc2UuZXMgcm9vdCBDQTEUMBIGA1UECwwLSlJDIFRl
-    c3RCZWQxGzAZBgNVBAsMEmV1LmNpc2UuZXMgcm9vdCBDQTEbMBkGA1UECgwSZXUu
-    Y2lzZS5lcyByb290IENBMRIwEAYKCZImiZPyLGQBGRYCZXUxFDASBgoJkiaJk/Is
-    ZAEZFgRjaXNlMQswCQYDVQQGEwJlc4ICEAAwDgYDVR0PAQH/BAQDAgWgMBMGA1Ud
-    JQQMMAoGCCsGAQUFBwMBMA0GCSqGSIb3DQEBCwUAA4IBAQAxHpMj44EWLi1mP7OU
-    MltCph4oW9SVEsRCeBpccZ7zFtJwM60wq5ZKj1zywECYY/y1bGs/pXJvQljsMng2
-    HdDjC5YaiWlcyRwfcKXrp96xa/0IMaWnKhU0lqz3lVLl7XXUz7SYCFTlgm3cyfxg
-    bBNIkIaDlA13zBs6hShKFxkAdsvX42zbeKm5fI186ztA/6gJ9XdQvzp11xgnI962
-    +BonHnBZGnUznUWfqkRgLiQJ/hkPwHyERGD3em3GA4nrUhhmlqONy+45TVCcloQQ
-    L532gv1aQzWusvx5aCpt6rdPV3EBEVAkVFId5jCLBadEYIt5IW1qQsoucoi4abDq
-    0m5x</X509Certificate></X509Data></KeyInfo></Signature>
-    <DiscoveryProfiles>
-        <ServiceOperation>Push</ServiceOperation>
-        <ServiceType>VesselService</ServiceType>
-    </DiscoveryProfiles>
+    </Payload>
+    <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <SignedInfo>
+            <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+            <Reference URI="">
+                <Transforms>
+                    <Transform Algorithm="http://www.w3.org/TR/1999/REC-xslt-19991116">
+                        <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:s="http://www.w3.org/2000/09/xmldsig#">
+                            <xsl:strip-space elements="*"/>
+                            <xsl:output indent="false" method="xml" omit-xml-declaration="yes"/>
+                            <xsl:template match="*[not(self::s:Signature)]">
+                                <xsl:element name="{local-name()}">
+                                    <xsl:apply-templates select="*|text()"/>
+                                </xsl:element>
+                            </xsl:template>
+                            <xsl:template match="s:Signature"/>
+                        </xsl:stylesheet>
+                    </Transform>
+                    <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                </Transforms>
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                <DigestValue>J2H4A8s60cZy6LTJKR3J1Q2eOXo=</DigestValue>
+            </Reference>
+        </SignedInfo>
+        <SignatureValue>u5MlZk2fKZJJjGyeg3NrQv9LaSfY8bLnI8QKZQBj4ZmCec2V5gBA2Kz0mlnpWacVJhfzZyqETjjk
+            dgBW4Uv9Z5fqy8XG3KtyEIa08GvBwJbJexIf9SkfZtR06j3mncGq18KxSeBfeXF1Zjx+wJUPcc4R
+            qCg/y0SkanRYulhgLI+f462xUojKETeqq2g8yD7SQdqiyWX/XghPdKdYhEdybo4FpcrQEQp8mAo7
+            qM+0JVb4DzSzGbBwckxVaeNDnLwCf+fN0hWN+tC7z0OthjVnR8iefrTlLwxWH/C+daOb59LWb10w
+            METE2IySjIFjNBuXHzybOKBqIJIkQfhS7yfusw==</SignatureValue>
+        <KeyInfo>
+            <X509Data>
+                <X509SubjectName>CN=sim1-node01.node01.eucise.fr, OU=Participants, O=sim1-node01.node01, DC=eucise, C=fr</X509SubjectName>
+                <X509Certificate>MIIESTCCAzGgAwIBAgICEAEwDQYJKoZIhvcNAQELBQAwPTELMAkGA1UEBhMCZnIxDzANBgNVBAoM
+                    BmV1Y2lzZTEdMBsGA1UEAwwUc2lnbmluZy1jYS5ldWNpc2UuZnIwHhcNMTkwNTE0MTUzMDM4WhcN
+                    MjkwNTExMTUzMDM4WjCBgDELMAkGA1UEBhMCZnIxFjAUBgoJkiaJk/IsZAEZFgZldWNpc2UxGzAZ
+                    BgNVBAoMEnNpbTEtbm9kZTAxLm5vZGUwMTEVMBMGA1UECwwMUGFydGljaXBhbnRzMSUwIwYDVQQD
+                    DBxzaW0xLW5vZGUwMS5ub2RlMDEuZXVjaXNlLmZyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+                    CgKCAQEAxXlOAXQd3Ov8+td5x13WQcL9GiYJ9PpUJ5HVDPFLp4PU+5hZ+JkZHzXevsNQIjaxIzhK
+                    HUtOWX4H3cDhBG1kGnSpbY7+zVnSIXkZsddA0BXI1S2CHaYH29vAw+AAPcpmKdRwKH+LneVA4ORZ
+                    Vu25JoWU5tbDOVeJhkdkKoSKdInT8mTVPesV73kdztfsBoGlHa/W92OoxIvLYCV910+GDWO0xZuX
+                    wHSnxQ0G4rCblF4dO/NdMrHx/3qM3egJFLrxQpOH40sY9GkTidnswPiKUzOvHciSAmtY+N2YK5E+
+                    rN4jY6R3wTmq9Afgs+cb5CLxFXQS+lPyJOpPG9G7THqrgQIDAQABo4IBDTCCAQkwCQYDVR0TBAIw
+                    ADARBglghkgBhvhCAQEEBAMCBkAwQAYJYIZIAYb4QgENBDMWMVNlcnZlciBjZXJ0aWZpY2F0ZSBn
+                    ZW5lcmF0ZWQgZm9yIEpSQyBDSVNFIFRlc3RiZWQwHQYDVR0OBBYEFEJSO2HV1FTcDRGVtRJQg++u
+                    DoleMGMGA1UdIwRcMFqAFBN3ETO20MPMQuDu3Zc2aUjg+ZTCoT6kPDA6MQswCQYDVQQGEwJmcjEP
+                    MA0GA1UECgwGZXVjaXNlMRowGAYDVQQDDBFyb290LWNhLmV1Y2lzZS5mcoICEAAwDgYDVR0PAQH/
+                    BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA0GCSqGSIb3DQEBCwUAA4IBAQAsIhMMIUCXjzbm
+                    DQrfCFKQgtLLsF7MK+oS+vkxZOf18oxRktT0nb8573t9MMHybIBGOhkeTCNjnvzGGvtpJxSA2JjX
+                    7wwpZq60JvRpunWOO79TiTOfyP/o5Zb+XPD90JeAeTK89HX6PEar0RQ27dAKIul4dJkqfeW//3o9
+                    JvxLIPhnId2GfdYRBAXcEo1JbGuiJ/dy85q3qKD6ztR4eprniDG3riycIcquxppDR9RTpo0q/6mm
+                    PHxSWwLS7lGtpd+0O7ZsKQddyhVmai55UjRBhKjJwO36D2ttRjb9RaOKuzw7HPi91oQp2QmSH6mc
+                    a3oBzCAhu1e7QE5m1KDfz0BB</X509Certificate>
+            </X509Data>
+        </KeyInfo>
+    </Signature>
 </ns4:Push>

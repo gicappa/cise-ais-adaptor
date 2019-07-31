@@ -1,17 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--
+  ~ Copyright CISE AIS Adaptor (c) 2018-2019, European Union
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without
+  ~ modification, are permitted provided that the following conditions are met:
+  ~     * Redistributions of source code must retain the above copyright
+  ~       notice, this list of conditions and the following disclaimer.
+  ~     * Redistributions in binary form must reproduce the above copyright
+  ~       notice, this list of conditions and the following disclaimer in the
+  ~       documentation and/or other materials provided with the distribution.
+  ~     * Neither the name of the <organization> nor the
+  ~       names of its contributors may be used to endorse or promote products
+  ~       derived from this software without specific prior written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ~ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+  ~ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  ~ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  ~ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ~ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  ~ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <artifactId>cise-signature</artifactId>
-  <name>cise-signature</name>
   <groupId>eu.europa.ec.jrc.marex</groupId>
-  <version>1.0-SNAPSHOT</version>
-
+  <version>1.1-SNAPSHOT</version>
+  <name>cise-signature</name>
+  <scm>
+    <connection>
+      scm:git:https://webgate.ec.europa.eu/CITnet/stash/scm/marex/cise-signature.git
+    </connection>
+    <developerConnection>
+      scm:git:https://webgate.ec.europa.eu/CITnet/stash/scm/marex/cise-signature.git
+    </developerConnection>
+    <url>
+      https://webgate.ec.europa.eu/CITnet/stash/projects/MAREX/repos/cise-signature/browse
+    </url>
+    <tag>HEAD</tag>
+  </scm>
   <build>
     <plugins>
-
       <!-- tester plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -173,7 +207,6 @@
             <artifactId>asciidoctorj-diagram</artifactId>
             <version>1.5.16</version>
           </dependency>
-
 <!-- Still in the process of searching for a library to enhance the UI impact of the documentation
           <dependency>
             <groupId>io.spring.docresources</groupId>
@@ -230,13 +263,13 @@
     <dependency>
       <artifactId>eucise-model-helpers</artifactId>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <version>1.0.8</version>
+      <version>1.0.9</version>
     </dependency>
 
     <dependency>
       <artifactId>eucise-service-model</artifactId>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
     </dependency>
 
     <dependency>
@@ -249,12 +282,14 @@
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
       <version>1.7.25</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -265,35 +300,48 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>local-repo</id>
-      <url>file://${main.basedir}/ais-mvn-repo/snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
+  <profiles>
+    <profile>
+      <id>ciBuild</id>
+      <properties>
+        <useFile>true</useFile>
+      </properties>
+    </profile>
 
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <testcase.excludedGroups />
+        <useFile>true</useFile>
+      </properties>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
     <repository>
-      <id>local-repo-r</id>
-      <url>file://${main.basedir}/ais-mvn-repo/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
+      <id>digit releases</id>
+      <name>DG DIGIT Repository</name>
+      <url>https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc
+      </url>
     </repository>
-  </repositories>
+    <snapshotRepository>
+      <id>digit snapshots</id>
+      <name>DG DIGIT Snapshot Repository</name>
+      <url>
+        https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/jrc-snapshots
+      </url>
+    </snapshotRepository>
+
+  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <docs.resources.version>0.1.3.RELEASE</docs.resources.version>
-    <main.basedir>${project.basedir}/..</main.basedir>
+    <main.basedir>../${project.basedir}</main.basedir>
   </properties>
 </project>

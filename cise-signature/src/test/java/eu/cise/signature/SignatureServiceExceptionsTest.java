@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,11 +30,8 @@ package eu.cise.signature;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Message;
 import eu.cise.servicemodel.v1.message.XmlEntityPayload;
-import eu.cise.signature.certificates.DefaultCertificateRegistry;
-import eu.cise.signature.certificates.KeyStoreInfo;
 import eu.cise.signature.exceptions.InvalidMessageSignatureEx;
 import eu.cise.signature.exceptions.SigningCACertInvalidSignatureEx;
-import eu.cise.signature.verifiers.DefaultDomVerifier;
 import eu.eucise.xml.DefaultXmlMapper;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -50,8 +47,8 @@ public class SignatureServiceExceptionsTest extends SignatureServiceTest {
 
     @Before
     public void before() {
-        super.before();
 
+        super.before();
         otherSignature = newSignatureService(xmlMapper)
                 .withKeyStoreName("adaptor_other_fr_ca.jks")
                 .withKeyStorePassword("eucise")
@@ -63,6 +60,7 @@ public class SignatureServiceExceptionsTest extends SignatureServiceTest {
 
     @Test(expected = InvalidMessageSignatureEx.class)
     public void it_fails_if_message_id_is_tampered() {
+
         Message signedMsg = signature.sign(message);
 
         // tampering the messageID
@@ -86,15 +84,6 @@ public class SignatureServiceExceptionsTest extends SignatureServiceTest {
         Message signedMsg = signature.sign(buildMessage());
 
         otherSignature.verify(signedMsg);
-    }
-
-    @Test
-    @Ignore
-    public void it_verify_the_signature_produced_by_a_LightClient() throws Exception {
-        String messageXML = file("/SignedPushVessels.xml");
-        Message signedMsg = new DefaultXmlMapper.PrettyNotValidating().fromXML(messageXML);
-
-        signature.verify(signedMsg);
     }
 
     private Vessel extractVesselPayload(Message signedMsg) {

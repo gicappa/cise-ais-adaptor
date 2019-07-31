@@ -259,13 +259,13 @@
       <dependency>
         <artifactId>eucise-model-helpers</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.8</version>
+        <version>1.0.9</version>
       </dependency>
 
       <dependency>
         <artifactId>eucise-service-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
       </dependency>
 
       <dependency>

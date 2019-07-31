@@ -19,7 +19,7 @@ ifdef::epub[:leveloffset: -1]
 
 The CISE Signature is a library that allow to sign and verify CISE Messages
 exchanged by the node and the adaptor of the CISE environment.
-It may be used by both adaptor and nod implementer and uses
+It may be used by both adaptor and node implementer and uses.
 
 
 [[usage]]
@@ -201,6 +201,9 @@ KEY-PAIR(sim1-node01.node01.eucise.fr) <- adaptor public and private keys
 
 [[todo]]
 === TODO
-Check that the certificate is valid within the current date
-Check that the sender id and the certificate issuer are the same when receiving a message from
-an adaptor
+Check that the sender id and the certificate Common Name is the same of the participant
+sending the message. This is not possible to be done if the participant is not present in the
+message itself. So in the future it shall be mandatory to add it in the message.
+The participant should be used in order to load the private key/certificate instead of specifying
+the keystore alias
+
