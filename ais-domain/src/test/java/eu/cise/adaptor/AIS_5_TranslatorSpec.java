@@ -138,18 +138,18 @@ public class AIS_5_TranslatorSpec {
                 });
                 context("Involved Event with a port name", () -> {
                     final AisMsg m1 = new AisMsg.Builder(5)
-                            .withUserId(12345678)
-                            .withShipName("QUEEN MARY III")
-                            .withDimensionA(100)
-                            .withDimensionB(20)
-                            .withDimensionC(10)
-                            .withDimensionD(20)
-                            .withCallSign("C1PP4")
-                            .withDraught(34.5F)
-                            .withIMONumber(123456)
-                            .withShipType(84)
-                            .withDestination("Le Havre")
-                            .build();
+                        .withUserId(12345678)
+                        .withShipName("QUEEN MARY III")
+                        .withDimensionA(100)
+                        .withDimensionB(20)
+                        .withDimensionC(10)
+                        .withDimensionD(20)
+                        .withCallSign("C1PP4")
+                        .withDraught(34.5F)
+                        .withIMONumber(123456)
+                        .withShipType(84)
+                        .withDestination("Le Havre")
+                        .build();
 
                     final Movement mo = getMovement(translator.translate(m1));
 
@@ -160,7 +160,6 @@ public class AIS_5_TranslatorSpec {
                         assertThat(getLocation(mo).getPortName(), is("Le Havre"));
                     });
                 });
-
             });
         });
     }

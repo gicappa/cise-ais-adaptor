@@ -28,6 +28,7 @@
 package eu.cise.adaptor.context;
 
 import eu.cise.adaptor.*;
+import eu.cise.adaptor.AdaptorLogger.Slf4j;
 import eu.cise.adaptor.dispatch.ErrorCatchingDispatcher;
 import eu.cise.adaptor.signature.SignatureDispatcherDecorator;
 import eu.cise.adaptor.translate.AisMsgToVessel;
@@ -44,9 +45,11 @@ import static eu.cise.signature.SignatureServiceBuilder.newSignatureService;
 public abstract class AbstractAppContext implements AppContext {
 
     private final AdaptorExtConfig config;
+    private final Slf4j logger;
 
     AbstractAppContext(AdaptorExtConfig config) {
         this.config = config;
+        this.logger = new Slf4j();
     }
 
     @Override
@@ -55,7 +58,7 @@ public abstract class AbstractAppContext implements AppContext {
     @Override
     public DefaultPipeline makeStreamProcessor() {
         return new DefaultPipeline(
-                new StringFluxToAisMsgFlux(),
+                new StringFluxToAisMsgFlux(logger),
                 new AisMsgToVessel(config),
                 new VesselToPushMessage(config, new ServiceProfileReader()),
                 config);
@@ -63,7 +66,7 @@ public abstract class AbstractAppContext implements AppContext {
 
     @Override
     public AdaptorLogger makeLogger() {
-        return new AdaptorLogger.Slf4j();
+        return logger;
     }
 
     @Override

@@ -27,6 +27,20 @@
 
 package eu.cise.adaptor.translate;
 
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.AGROUND;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.AT_ANCHOR;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.CONSTRAINED_BY_HER_DRAUGHT;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.ENGAGED_IN_FISHING;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.MOORED;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.NOT_UNDER_COMMAND;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.OTHER;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.POWER_DRIVEN_VESSEL_TOWIG_AHEAD_OR_PUSHING_ALONGSIDE;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.POWER_DRIVEN_VESSEL_TOWING_ASTERN;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.RESTRICTED_MANOEUVRABILITY;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDEFINED_DEFAULT;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_SAILING;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+
 import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.adaptor.AisMsg;
 import eu.cise.adaptor.exceptions.AdaptorException;
@@ -40,15 +54,12 @@ import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
-import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * This object translate messages of type 5 into CISE Vessel objects.
@@ -68,10 +79,9 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     /**
-     * Main method to translate an AIS message into a CISE Vessel object.
-     * Each and every field is translated in the corresponding vessel field
-     * respecting corner cases, special encoding and different base scale
-     * of the data.
+     * Main method to translate an AIS message into a CISE Vessel object. Each and every field is
+     * translated in the corresponding vessel field respecting corner cases, special encoding and
+     * different base scale of the data.
      *
      * @param message the AIS message
      * @return a translated CISE vessel
@@ -79,7 +89,6 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     @Override
     public Vessel translate(AisMsg message) {
 
-        // casting float to double
         // casting float to double
         Long mmsi = Long.valueOf(message.getUserId());
 
@@ -92,14 +101,14 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
 
         vessel.setMMSI(mmsi);
         vessel.getLocationRels().add(getLocationRel(latitude(message),
-                longitude(message),
-                fromPositionAccuracy(message),
-                fromCourseOverGround(message.getCOG()),
-                fromTrueHeading(message.getTrueHeading()),
-                message.getTimestamp(),
-                fromSpeedOverGround(message.getSOG())));
+            longitude(message),
+            fromPositionAccuracy(message),
+            fromCourseOverGround(message.getCOG()),
+            fromTrueHeading(message.getTrueHeading()),
+            message.getTimestamp(),
+            fromSpeedOverGround(message.getSOG())));
         vessel.setNavigationalStatus(
-                fromNavigationStatus(message.getNavigationStatus()));
+            fromNavigationStatus(message.getNavigationStatus()));
 
         return vessel;
     }
@@ -108,17 +117,17 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
 
     private LocationQualitativeAccuracyType fromPositionAccuracy(AisMsg aisMsg) {
         return aisMsg.getPositionAccuracy() == 1 ?
-                LocationQualitativeAccuracyType.HIGH :
-                LocationQualitativeAccuracyType.LOW;
+            LocationQualitativeAccuracyType.HIGH :
+            LocationQualitativeAccuracyType.LOW;
     }
 
     private Objet.LocationRel getLocationRel(String latitude,
-                                             String longitude,
-                                             LocationQualitativeAccuracyType lqat,
-                                             Double cog,
-                                             Double heading,
-                                             Instant timestamp,
-                                             Double sog) {
+        String longitude,
+        LocationQualitativeAccuracyType lqat,
+        Double cog,
+        Double heading,
+        Instant timestamp,
+        Double sog) {
 
         Objet.LocationRel locationRel = new Objet.LocationRel();
         locationRel.setLocation(toLocation(latitude, longitude, lqat));
@@ -143,11 +152,14 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         return locationRel;
     }
 
-    private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes, int seconds) {
+    private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes,
+        int seconds) {
         try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(year, month, day, hours, minutes, seconds, 0, 0);
+            return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(year, month, day, hours, minutes, seconds, 0, 0);
         } catch (DatatypeConfigurationException e) {
-            throw new AdaptorException("Can't create a correct XMLGregorianCalendar DATE/TIME out of the instant ", e);
+            throw new AdaptorException(
+                "Can't create a correct XMLGregorianCalendar DATE/TIME out of the instant ", e);
         }
     }
 
@@ -169,7 +181,8 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         return Float.toString(aisMsg.getLatitude());
     }
 
-    private Location toLocation(String latitude, String longitude, LocationQualitativeAccuracyType lqat) {
+    private Location toLocation(String latitude, String longitude,
+        LocationQualitativeAccuracyType lqat) {
         Location location = new Location();
         Geometry geometry = new Geometry();
         geometry.setLatitude(latitude);

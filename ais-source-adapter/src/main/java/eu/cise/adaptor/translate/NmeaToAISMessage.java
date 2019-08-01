@@ -31,7 +31,6 @@ import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 import eu.cise.adaptor.exceptions.AdaptorException;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -84,8 +83,8 @@ public class NmeaToAISMessage implements Translator<NMEAMessage, Optional<AISMes
 
             if (nmeaMessage.getNumberOfFragments() == messageFragments.size()) {
                 AISMessage aisMessage
-                        = AISMessage.create(new Metadata(source),
-                                            messageFragments.toArray(new NMEAMessage[messageFragments.size()]));
+                    = AISMessage.create(new Metadata(source),
+                    messageFragments.toArray(new NMEAMessage[messageFragments.size()]));
 
                 messageFragments.clear();
                 return Optional.of(aisMessage);

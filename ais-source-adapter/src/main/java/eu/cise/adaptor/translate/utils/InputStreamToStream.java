@@ -32,6 +32,7 @@ import eu.cise.adaptor.DelimiterType;
 import java.io.InputStream;
 import java.util.Scanner;
 import java.util.Spliterator;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -61,6 +62,14 @@ public class InputStreamToStream {
     }
 
     public Stream<String> stream() {
-        return StreamSupport.stream(split, false).onClose(scanner::close).map(m -> prefix + m);
+        AtomicLong count = new AtomicLong();
+        return StreamSupport.stream(split, false)
+            .onClose(scanner::close)
+            .peek(m-> {
+                count.getAndIncrement();
+                System.out.println(count.get());
+            })
+            .map(m -> prefix + m);
+
     }
 }
