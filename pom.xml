@@ -246,14 +246,14 @@
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>
         <artifactId>cise-signature</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
       </dependency>
 
       <!-- EUCISE dependencies -->
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.5.3.11</version>
+        <version>1.5.3.12</version>
       </dependency>
 
       <dependency>

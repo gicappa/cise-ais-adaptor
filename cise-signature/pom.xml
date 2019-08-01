@@ -257,7 +257,7 @@
     <dependency>
       <artifactId>cise-data-model</artifactId>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <version>1.5.3.11</version>
+      <version>1.5.3.12</version>
     </dependency>
 
     <dependency>
