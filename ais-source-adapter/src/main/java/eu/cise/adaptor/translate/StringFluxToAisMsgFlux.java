@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,29 +27,28 @@
 
 package eu.cise.adaptor.translate;
 
+import eu.cise.adaptor.AdaptorLogger;
 import eu.cise.adaptor.AisMsg;
 import eu.cise.adaptor.StringToAisMsg;
+import java.util.Optional;
 import reactor.core.publisher.Flux;
 
-import java.util.Optional;
-
-@SuppressWarnings("ununsed")
 public class StringFluxToAisMsgFlux implements StringToAisMsg {
 
     private final StringToNmea stringToNmea;
     private final NmeaToAISMessage nmeaToAISMessage;
     private final AisMessageToAisMsg aisMessageToAisMsg;
 
-    public StringFluxToAisMsgFlux() {
+    public StringFluxToAisMsgFlux(AdaptorLogger logger) {
         this.stringToNmea = new StringToNmea();
         this.nmeaToAISMessage = new NmeaToAISMessage("SRC");
-        this.aisMessageToAisMsg = new AisMessageToAisMsg();
+        this.aisMessageToAisMsg = new AisMessageToAisMsg(logger);
     }
 
-    @SuppressWarnings("ununsed")
+    @SuppressWarnings("unused")
     public StringFluxToAisMsgFlux(StringToNmea stringToNmea,
-                                  NmeaToAISMessage nmeaToAISMessage,
-                                  AisMessageToAisMsg aisMessageToAISMsg) {
+        NmeaToAISMessage nmeaToAISMessage,
+        AisMessageToAisMsg aisMessageToAISMsg) {
         this.stringToNmea = stringToNmea;
         this.nmeaToAISMessage = nmeaToAISMessage;
         this.aisMessageToAisMsg = aisMessageToAISMsg;
@@ -58,10 +57,12 @@ public class StringFluxToAisMsgFlux implements StringToAisMsg {
     @Override
     public Flux<AisMsg> translate(Flux<String> stringFlux) {
         return stringFlux
-                .map(stringToNmea::translate)
-                .map(nmeaToAISMessage::translate)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(aisMessageToAisMsg::translate);
+            .map(stringToNmea::translate)
+            .map(nmeaToAISMessage::translate)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(aisMessageToAisMsg::translate)
+            .filter(Optional::isPresent)
+            .map(Optional::get);
     }
 }

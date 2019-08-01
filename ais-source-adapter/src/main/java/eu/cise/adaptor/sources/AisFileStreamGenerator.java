@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
 
         if (config.getAISSourceFilename() == null)
             throw new AdaptorException("The 'ais-source.file.name' property is not " +
-                    "set in the ais-adaptor.properties file");
+                                               "set in the ais-adaptor.properties file");
     }
 
     /**
@@ -81,7 +81,7 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
                             " directory nor in the classpath");
         }
 
-        return new InputStreamToStream().stream(inputStream);
+        return new InputStreamToStream(inputStream).stream();
     }
 
     /**

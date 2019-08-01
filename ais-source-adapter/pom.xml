@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright CISE AIS Adaptor (c) 2018, European Union
+  ~ Copyright CISE AIS Adaptor (c) 2018-2019, European Union
   ~ All rights reserved.
   ~
   ~ Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,11 @@
       <scope>test</scope>
     </dependency>
 
-  </dependencies>
+    <dependency>
+      <groupId>co.unruly</groupId>
+      <artifactId>java-8-matchers</artifactId>
+      <scope>test</scope>
+    </dependency>  </dependencies>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>

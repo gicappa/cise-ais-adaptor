@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,6 +27,9 @@
 
 package eu.cise.adaptor.translate.utils;
 
+import static java.lang.Math.abs;
+import static org.apache.commons.lang3.ObjectUtils.min;
+
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -34,90 +37,81 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 /**
- * The string format of the eta is "18-07 17:00"
- * ETA:
- * Estimated time of arrival; MMDDHHMM UTC
- * Bits 19-16: month; 1-12; 0 = not available = default
- * Bits 15-11: day; 1-31; 0 = not available = default
- * Bits 10-6: hour; 0-23; 24 = not available = default
- * Bits 5-0: minute; 0-59; 60 = not available = default
+ * The string format of the eta is "18-07 17:00" ETA: Estimated time of arrival; MMDDHHMM UTC Bits
+ * 19-16: month; 1-12; 0 = not available = default Bits 15-11: day; 1-31; 0 = not available =
+ * default Bits 10-6: hour; 0-23; 24 = not available = default Bits 5-0: minute; 0-59; 60 = not
+ * available = default
+ * <p>
+ * To infer the YEAR of the ETA that is not specified the following algorithm will be implemented.
+ * Three dates will be created user ETA Month-Day and: - current year - next year - previous year
+ * The current date will be compared with each of these dates and the closest ETA (shortest period
+ * of time in absolute terms) will be selected.
+ * <p>
+ * Requirements: If the ETA Month or Day are not valid: the ETA should be null If the ETA Hour  or
+ * Minute are not valid: the only Date part should be taken into account
  */
 public class Eta {
+
     private final Clock clock;
+    private final EtaDate etaDate;
+    private final EtaTime etaTime;
 
-    public Eta(Clock clock) {
+    public Eta(Clock clock, EtaDate etaDate, EtaTime etaTime) {
         this.clock = clock;
+        this.etaDate = etaDate;
+        this.etaTime = etaTime;
     }
 
-    public Instant computeETA(String etaString) {
-        if (etaString == null) return null;
+    /**
+     * Will translate the eta from AIS format to an ISO one. When in doubt will chose the ETA year
+     * with the minor time difference from today.
+     *
+     * @param etaStr the ETA string in the format "13-04 15:39"
+     * @return an Instant with the corresponding date time
+     */
+    public Instant computeETA(String etaStr) {
+        try {
+            if (etaStr == null)
+                return null;
 
-        Instant eta = Instant.parse(getDateTime(etaString));
+            // returns null in case of unspecified month or day
+            if (etaDate.getMonthDayISOFormat(etaStr) == null)
+                return null;
 
-        if (eta.isBefore(Instant.now(clock)) && eta.isAfter(Instant.parse("1971-01-01T00:00:00Z")))
-            eta = eta.plus(365, ChronoUnit.DAYS);
+            // calculating three eta for the current year
+            // previous and next: the closest to the time of
+            // today will be selected.
+            Instant etaThisYear = Instant.parse(getDateTime(getCurrentYear(), etaStr));
+            Instant etaNextYear = Instant.parse(getDateTime(getCurrentYear() + 1, etaStr));
+            Instant etaPrevYear = Instant.parse(getDateTime(getCurrentYear() - 1, etaStr));
 
-        return eta;
+            long diffThisYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaThisYear));
+            long diffNextYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaNextYear));
+            long diffPrevYear = abs(ChronoUnit.DAYS.between(Instant.now(clock), etaPrevYear));
+
+            // compute the minimum of the three time difference
+            long diffMin = min(diffThisYear, min(diffNextYear, diffPrevYear));
+
+            // returns the ETA with the year of the minimum
+            // time difference from today
+            if (diffMin == diffThisYear)
+                return etaThisYear;
+            else if (diffMin == diffNextYear)
+                return etaNextYear;
+            else
+                return etaPrevYear;
+        } catch (Exception e) {
+            // In this case the ETA has a parsing or decoding issue that is unhandled.
+            return null;
+        }
     }
 
-    private String getDefaultMonth(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getMonth(eta);
+
+    private String getDateTime(int year, String eta) {
+        return year + "-" + etaDate.getMonthDayISOFormat(eta) + "T" + etaTime.getTime(eta);
     }
 
-    private String getDefaultDay(String eta, String defaultValue) {
-        return getMonth(eta).equals("00") ? defaultValue : getDay(eta);
-    }
-
-    private String getDefaultHours(String eta, String defaultValue) {
-        return getHours(eta).equals("24") ? defaultValue : getHours(eta);
-    }
-
-    private String getDefaultMinutes(String eta, String defaultValue) {
-        return getMinutes(eta).equals("60") ? defaultValue : getMinutes(eta);
-    }
-
-    private String getDateTime(String eta) {
-        return getDate(eta) + "T" + getTime(eta);
-    }
-
-    private String getTime(String eta) {
-        return getDefaultHours(eta, "00") + ":" + getDefaultMinutes(eta, "00") + ":00.000Z";
-    }
-
-    private String getHoursColumnMinutes(String etaStr) {
-        return etaStr.split(" ")[1];
-    }
-
-    private String getHours(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[0];
-    }
-
-    private String getMinutes(String etaStr) {
-        return getHoursColumnMinutes(etaStr).split(":")[1];
-    }
-
-    private String getDate(String eta) {
-        return getCurrentYear(eta) + "-" +
-                getDefaultMonth(eta, "01") + "-" +
-                getDefaultDay(eta, "01");
-    }
-
-    private String getDay(String eta) {
-        return getMonthDashDay(eta).split("-")[0];
-    }
-
-    private String getMonth(String eta) {
-        return getMonthDashDay(eta).split("-")[1];
-    }
-
-    private String getMonthDashDay(String eta) {
-        return eta.split(" ")[0];
-    }
-
-    private int getCurrentYear(String etaStr) {
-        if (getDay(etaStr).equals("00") || getMonth(etaStr).equals("00"))
-            return 1970;
-
+    private int getCurrentYear() {
         return LocalDateTime.ofInstant(Instant.now(clock), ZoneOffset.UTC).getYear();
     }
 

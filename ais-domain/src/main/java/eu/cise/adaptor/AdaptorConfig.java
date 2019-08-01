@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -263,6 +263,58 @@ public interface AdaptorConfig extends Config {
      */
     @Key("profile.${profile.number}.service_type")
     String getProfileServiceType();
+
+    /**
+     * The AppContext configure the application in order to plug the
+     * necessaries. The possible values are: e "file", "tcp" and "auth-tcp".
+     *
+     * @return a class corresponding to the file tcp or auth-tcp app context.
+     */
+    @Key("app-context.type")
+    String getAppContextType();
+
+    /**
+     * The character used to delimit the AIS stream. The default value is
+     * a CR/LF but the it's possible to configure it otherwise.
+     *
+     * @return the specified delimiter.
+     */
+    @Key("ais-source.delimiter.char")
+    @DefaultValue("\n")
+    String getDelimiterChar();
+
+    /**
+     * By default the delimiter character is stripped by the AIS stream flow
+     * of information (i.e. the CR/LF chars are not present in the AIS message
+     * string passed to the ais-domain module. It's possible to keep the delimiter
+     * when using a char that is part of the stream as a delimiter.
+     *
+     * Example:
+     *   !MSG1111!MSG2222!MSG3333
+     *
+     *   using delimiterChar=! and delimiterType=KEEP would generate a stream of string like this:
+     *   "!MSG1111" "!MSG2222" "!MSG3333"
+     *
+     *   while using delimiterChar=! and delimiterType=STRIP would end up with:
+     *   "MSG1111" "MSG2222" "MSG3333"
+     *
+     * @return the delimiter type configured in the property file.
+     */
+    @Key("ais-source.delimiter.type")
+    @DefaultValue("STRIP")
+    DelimiterType getDelimiterType();
+
+    /**
+     * @return the legal name of the organization of the vessel
+     */
+    @Key("organization.legal-name")
+    String getOrgLegalName();
+
+    /**
+     * @return the alternative name of the organization of the vessel
+     */
+    @Key("organization.alternative-name")
+    String getOrgAlternativeName();
 
     /**
      * A convenience method to print all the properties

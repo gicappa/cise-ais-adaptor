@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@ import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 import eu.cise.adaptor.exceptions.AdaptorException;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -47,47 +46,55 @@ public class NmeaToAISMessage implements Translator<NMEAMessage, Optional<AISMes
 
     @Override
     public Optional<AISMessage> translate(NMEAMessage nmeaMessage) {
-        if (!nmeaMessage.isValid()) {
-            throw new AdaptorException("NMEA to AISMessage transformation error");
-        }
+        try {
+            if (!nmeaMessage.isValid()) {
+                throw new AdaptorException("NMEA to AISMessage transformation error");
+            }
 
-        int numberOfFragments = nmeaMessage.getNumberOfFragments();
-        if (numberOfFragments <= 0) {
-            messageFragments.clear();
+            int numberOfFragments = nmeaMessage.getNumberOfFragments();
+            if (numberOfFragments <= 0) {
+                messageFragments.clear();
+                return Optional.empty();
+            }
+
+            if (numberOfFragments == 1) {
+                messageFragments.clear();
+                return Optional.of(AISMessage.create(new Metadata(source), nmeaMessage));
+            }
+
+            int fragmentNumber = nmeaMessage.getFragmentNumber();
+            if (fragmentNumber < 0) {
+                messageFragments.clear();
+                return Optional.empty();
+            }
+
+            if (fragmentNumber > numberOfFragments) {
+                messageFragments.clear();
+                return Optional.empty();
+            }
+
+            int expectedFragmentNumber = messageFragments.size() + 1;
+            if (expectedFragmentNumber != fragmentNumber) {
+                messageFragments.clear();
+                return Optional.empty();
+            }
+
+            messageFragments.add(nmeaMessage);
+
+            if (nmeaMessage.getNumberOfFragments() == messageFragments.size()) {
+                AISMessage aisMessage
+                    = AISMessage.create(new Metadata(source),
+                    messageFragments.toArray(new NMEAMessage[messageFragments.size()]));
+
+                messageFragments.clear();
+                return Optional.of(aisMessage);
+            }
+
+            return Optional.empty();
+
+        } catch (Exception e) {
+            // It catches possible exceptions like InvalidMessage or similar
             return Optional.empty();
         }
-
-        if (numberOfFragments == 1) {
-            messageFragments.clear();
-            return Optional.of(AISMessage.create(new Metadata(source), nmeaMessage));
-        }
-
-        int fragmentNumber = nmeaMessage.getFragmentNumber();
-        if (fragmentNumber < 0) {
-            messageFragments.clear();
-            return Optional.empty();
-        }
-
-        if (fragmentNumber > numberOfFragments) {
-            messageFragments.clear();
-            return Optional.empty();
-        }
-
-        int expectedFragmentNumber = messageFragments.size() + 1;
-        if (expectedFragmentNumber != fragmentNumber) {
-            messageFragments.clear();
-            return Optional.empty();
-        }
-
-        messageFragments.add(nmeaMessage);
-
-        if (nmeaMessage.getNumberOfFragments() == messageFragments.size()) {
-            AISMessage aisMessage = AISMessage.create(new Metadata(source), messageFragments.toArray(new NMEAMessage[messageFragments.size()]));
-
-            messageFragments.clear();
-            return Optional.of(aisMessage);
-        }
-
-        return Optional.empty();
     }
 }

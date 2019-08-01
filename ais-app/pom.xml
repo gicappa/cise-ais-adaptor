@@ -97,7 +97,7 @@
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
-      <artifactId>cise-ais-signature</artifactId>
+      <artifactId>cise-signature</artifactId>
     </dependency>
 
     <dependency>

@@ -53,10 +53,12 @@ After cloning the git repository is possible to compile the project using maven.
 
 WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps.
 
+WARNING: With the version 1.1 of the adaptor also a new version of the ais-mvn-repo libraries has been released. Please ask the new library if you plan to upgrade the ais-adaptor software to the 1.1 version.
+
 [source,bash]
 ----
 ...$ cd cise-ais-adaptor
-...$ tar xvfz cise-mvn-repo.tgz
+...$ tar xvfz cise-mvn-repo-1.1.tgz
 ...$ mvn clean install -U
 ----
 

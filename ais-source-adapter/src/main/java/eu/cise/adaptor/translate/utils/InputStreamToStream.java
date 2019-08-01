@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,16 +27,45 @@
 
 package eu.cise.adaptor.translate.utils;
 
-import java.io.BufferedReader;
+import eu.cise.adaptor.DelimiterType;
+
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.util.Scanner;
+import java.util.Spliterator;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static eu.cise.adaptor.DelimiterType.KEEP;
+import static eu.cise.adaptor.DelimiterType.STRIP;
+import static java.lang.Long.MAX_VALUE;
+import static java.util.Spliterator.NONNULL;
+import static java.util.Spliterator.ORDERED;
+import static java.util.Spliterators.spliterator;
 
 public class InputStreamToStream {
 
-    public Stream<String> stream(InputStream is) {
-        return new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())).lines();
+    private static final String DELIMITER_DEFAULT = "\n";
+    private final String prefix;
+    private final Scanner scanner;
+    private final Spliterator<String> split;
+    private final AtomicLong count = new AtomicLong();
+
+    public InputStreamToStream(InputStream is) {
+        this(is, DELIMITER_DEFAULT, STRIP);
     }
 
+    public InputStreamToStream(InputStream is, String delimiter, DelimiterType type) {
+        this.scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
+        this.split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
+        this.prefix = type.equals(KEEP) ? delimiter : "";
+
+    }
+
+    public Stream<String> stream() {
+        return StreamSupport.stream(split, false)
+            .onClose(scanner::close)
+            .peek(m-> count.getAndIncrement())
+            .map(m -> prefix + m);
+    }
 }

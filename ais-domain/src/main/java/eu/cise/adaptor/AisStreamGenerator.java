@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,12 @@ import java.util.stream.Stream;
  * <br>
  * In the domain of the current module the expected strings are NMEA messages,
  * but this constraint is not described into the interface.
+ *
+ * TODO: add an abstraction to handle the lifecycle of this generator that
+ * should be created, started and stopped.
+ * Example: the creation should just configure the generator, while the start
+ * could perform connections and use resources, finally the stop should
+ * gracefully close the resourced before ending the adaptor.
  */
 @FunctionalInterface
 public interface AisStreamGenerator {
