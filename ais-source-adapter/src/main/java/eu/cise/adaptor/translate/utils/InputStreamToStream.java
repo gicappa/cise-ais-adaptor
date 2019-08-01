@@ -49,6 +49,7 @@ public class InputStreamToStream {
     private final String prefix;
     private final Scanner scanner;
     private final Spliterator<String> split;
+    private final AtomicLong count = new AtomicLong();
 
     public InputStreamToStream(InputStream is) {
         this(is, DELIMITER_DEFAULT, STRIP);
@@ -62,14 +63,9 @@ public class InputStreamToStream {
     }
 
     public Stream<String> stream() {
-        AtomicLong count = new AtomicLong();
         return StreamSupport.stream(split, false)
             .onClose(scanner::close)
-            .peek(m-> {
-                count.getAndIncrement();
-                System.out.println(count.get());
-            })
+            .peek(m-> count.getAndIncrement())
             .map(m -> prefix + m);
-
     }
 }
