@@ -1,17 +1,17 @@
 == Configuring the AIS Adaptor
-The current document describes how to configure the adaptor prototype in order to:
+This chapter describes the procedure to configure the adaptor prototype in order to:
 
- - Connect to a Node and send CISE messages
- - Specify the information source of the CISE services (AIS tracks)
- - Push information to other partners using the Node (Push Unknown communication pattern) 
- - Provide information (publish) to other partners under subscription (Publish/Subscribe communication pattern)
- - Set up security for information exchange: configure the certificates files and path for the signatures
+ - Configure the connection from the adaptor to the CISE Node endpoint;
+ - Configure the source of information where to get the ais messages from (AIS tracks);
+ - Configure how to send the CISE Messages to several partners through Push Unknown messages;
+ - Configure the adaptor in order to provide a publish service to the CISE partners (Publish/Subscribe communication pattern)
+ - Configure the java keystore path in order to secure the information exchange through the signature process.
 
-NOTE: The current version of the adaptor prototype does not support the complete interaction with the Node according to the CISE Service model. It is capable of sending information to other Nodes/Participants but does not process their requests or feedback (e.g., Acknowledgments or other kind of CISE messages) from the node but will only be able to send out messages to the node. 
+NOTE: The current version of the adaptor prototype does not support the complete interaction with the Node according to the CISE Service model. It is capable of sending information to other Nodes/Participants but does not accept possible requests or feedback incoming from the node (e.g., Acknowledgments or other kind of CISE messages).
 
-=== Gateway/Node and general configuration
+=== Configuration of the connection to the CISE Node
 
-The configuration settings of the adaptor are stored in the file ais-adaptor.properties, which contains a list of configuration properties, such as the gateway/node address for the adaptor. The following table describes the main properties that should be set up before running the AIS adaptor.
+The configuration of the adaptor are stored in the file `ais-adaptor.properties`, which contains a list of properties that will be used in the adaptor at runtime. The following table describes the main properties that should be set up before running the AIS adaptor.
 
 .General configurations
 [%header,cols="d,v"]
@@ -34,14 +34,14 @@ This property must be set to *`false`*.
 
 |override-timestamps
 |Boolean. +
-True to overwrite the timestamp arrived from the AIS transponder with the timestamp in which the AIS message is processed in the adaptor.
+Se it to True to overwrite the timestamp incoming from the AIS transponder with the current timestamp of the processing time.
 
 
 |processing.idle.time
-|Delay (in ms) between the processing of two AIS messages. It can lower the stress of the server running the adaptor.
+|Delay (in ms) between the processing of two AIS messages. It can lower the CPU stress of the server running the adaptor. It is also useful to avoid to send too many messages per second to the node.
 
 |#processing.entities-per-message#
-|Number of entities in each CISE Message (Vessel entities in this case). +
+|Number of entities containes by each CISE Message (Vessel entities in this case). +
 The adaptor will send a CISE message only after processing the specified number of entities from the information source.
 Please check `processing.sending.timeout`.
 
@@ -70,11 +70,11 @@ Every CISE message departing from the adaptor contains the information described
 
 |sender.service.participant.url
 |URL (endpoint) of the adaptor.  Example: `http://localhost:8080/api/messages` +
-Required but not used in this version. The adaptor is not able to accept any incoming messages from the node.  
+Required but not used in this version. The adaptor is not able to accept any incoming messages from the node. The specification of this url has no impact on the adaptor.
 
 |sender.service.operation
 |Can be set to `Push` or `Subscribe`. +
-Please check the following sections for more information.
+Please check the following sections for a complete information.
 
 |sender.service.sea-basin-type
 |Possible values: `ArcticOcean`, `Atlantic`, `BalticSea`, `BlackSea`, `Mediterranean`, `NorthSea`, `OutermostRegions`,   `NonSpecified`.
@@ -95,7 +95,7 @@ The adaptor supports two CISE communication patterns:
 
 The adaptor can send AIS information to other partners using Push messages and dynamic discovery (from the service registry in the Node). 
 
-NOTE: The Light Client in the Node cannot manage information from Push services.
+NOTE: The Light Client in the CISE Node cannot manage information from Push services.
 
 To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
 
@@ -136,17 +136,15 @@ The CISE messages will be sent to all the Italian participants belonging to the 
 
 ====  Publish/Subscribe (only Publish)
 
-The adaptor can also send AIS information to other partners, which had previously subscribed to the service in the Node. For this type of interaction, the adaptor uses Push messages in conformance to the CISE Service model.
+The adaptor can also send AIS information to the CISE partners that subscribed to its subscription service. The adptor must be added to the CISE Node administration console with the ServiceOperation set to 'subscribe' and the ServiceRole to 'provider'.
 
 To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
 
 .	Set `sender.service.operation` = `Subscribe`
-.	Set the `subscription.service.id` to the identifier of the VesselService subscription service (consumer), which should have been defined in the Node. +
-For each Subscribe service defined in the Node, the Node will provide a consumer Subscribe service to the adaptor(s) to handle the information to be published.
 
-The adaptor will deliver a set of `Push` messages with service operation = `Subscribe` to the service `subscription.service.id`  in the Node. The Node will handle the information published by the adaptor and will deliver it to all the subscribers in the network. 
+The adaptor will deliver a set of `Push` messages with ServiceOperation = `Subscribe` without specifying a recipient or ServiceProfile in the message but adding the PullType parameter to `Subscribe`. The CISE Node will handle the information as a notification to all the subscriber of the ais-adaptor service.
 
-NOTE: The discovery profiles are ignored for this communication pattern.
+NOTE: The discovery profiles settings in the ais-adaptor.properties file are ignored for this communication pattern.
 
 === Property file template
 [source,properties]
