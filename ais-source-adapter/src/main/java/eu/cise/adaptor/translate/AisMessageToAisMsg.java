@@ -72,8 +72,6 @@ public class AisMessageToAisMsg implements Translator<AISMessage, Optional<AisMs
             Integer type = m.getMessageType().getCode();
             AisMsg.Builder b = new AisMsg.Builder(type);
 
-            // TODO the remaining fields are not supported by other type of messages
-            // than message type 1,2,3
             if (messageTypeIsNot1235(type))
                 return Optional.empty();
 

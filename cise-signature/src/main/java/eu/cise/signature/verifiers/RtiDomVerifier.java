@@ -112,9 +112,6 @@ public class RtiDomVerifier implements DomVerifier {
     }
 
     /**
-     * TODO the code here is just checking one level because in the for loop it always
-     * TODO does not switch from one certificate to the other
-     *
      * @param x509certificateToVerify        certificate to be verified
      * @param collectionX509CertificateChain list of certificates
      */

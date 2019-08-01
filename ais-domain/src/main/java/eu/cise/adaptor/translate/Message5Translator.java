@@ -72,8 +72,6 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
 
         Long imoNumber = getImoNumber(message);
 
-        // todo check if it should be added the check on the config
-        // to override the MMSI
         if (imoNumber != null) {
             vessel.setIMONumber(imoNumber);
         }
