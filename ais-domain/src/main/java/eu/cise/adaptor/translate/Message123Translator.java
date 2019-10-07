@@ -118,7 +118,7 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     private LocationQualitativeAccuracyType fromPositionAccuracy(AisMsg aisMsg) {
         return aisMsg.getPositionAccuracy() == 1 ?
             LocationQualitativeAccuracyType.HIGH :
-            LocationQualitativeAccuracyType.LOW;
+            LocationQualitativeAccuracyType.MEDIUM;
     }
 
     private Objet.LocationRel getLocationRel(String latitude,

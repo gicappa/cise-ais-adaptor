@@ -27,28 +27,37 @@
 
 package eu.cise.adaptor;
 
+import static com.greghaskins.spectrum.Spectrum.describe;
+import static com.greghaskins.spectrum.Spectrum.it;
+import static com.greghaskins.spectrum.dsl.specification.Specification.context;
+import static eu.cise.adaptor.heplers.Utils.extractGeometry;
+import static eu.cise.adaptor.heplers.Utils.extractLocationRel;
+import static eu.cise.adaptor.heplers.Utils.xmlDate;
+import static eu.cise.adaptor.heplers.Utils.xmlTime;
+import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
+import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
+import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.Message123Translator;
 import eu.cise.datamodel.v1.entity.object.SensorType;
 import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import java.time.Instant;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
-
-import java.time.Instant;
-
-import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.it;
-import static eu.cise.adaptor.heplers.Utils.*;
-import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
-import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("all")
 @RunWith(Spectrum.class)
 public class AIS_1_2_3_TranslatorSpec {
+
     {
         describe("an AIS to CISE message translator", () -> {
 
@@ -56,16 +65,16 @@ public class AIS_1_2_3_TranslatorSpec {
             Message123Translator translator = new Message123Translator(config);
 
             final AisMsg m = new AisMsg.Builder(1)
-                    .withLatitude(47.443634F)
-                    .withLongitude(-6.9895167F)
-                    .withPositionAccuracy(1)
-                    .withCOG(2119.0F)
-                    .withTrueHeading(210)
-                    .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
-                    .withSOG(138.0F)
-                    .withUserId(538005989)
-                    .withNavigationStatus(UnderwayUsingEngine)
-                    .build();
+                .withLatitude(47.443634F)
+                .withLongitude(-6.9895167F)
+                .withPositionAccuracy(1)
+                .withCOG(2119.0F)
+                .withTrueHeading(210)
+                .withTimestamp(Instant.parse("2018-02-19T14:43:16.550Z"))
+                .withSOG(138.0F)
+                .withUserId(538005989)
+                .withNavigationStatus(UnderwayUsingEngine)
+                .build();
 
             describe("when a message type is 1,2,3", () -> {
                 final Vessel v = translator.translate(m);
@@ -75,9 +84,11 @@ public class AIS_1_2_3_TranslatorSpec {
 
                     assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
 
-                    assertThat(extractLocationRel(v).getLocation().getGeometries(), is(not(empty())));
+                    assertThat(extractLocationRel(v).getLocation().getGeometries(),
+                        is(not(empty())));
 
-                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0), is(notNullValue()));
+                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0),
+                        is(notNullValue()));
                 });
 
                 it("returns a Vessel with latitude", () -> {
@@ -88,8 +99,20 @@ public class AIS_1_2_3_TranslatorSpec {
                     assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
                 });
 
-                it("returns a Vessel with location qualitative  accuracy", () -> {
-                    assertThat(extractLocationRel(v).getLocation().getLocationQualitativeAccuracy(), is(HIGH));
+                context("returns a Vessel with location qualitative accuracy", () -> {
+
+                    it("HIGH for AIS position accuracy 1", () -> {
+                        assertThat(extractLocationRel(v).getLocation()
+                            .getLocationQualitativeAccuracy(), is(HIGH));
+                    });
+
+                    it("MEDIUM for AIS position accuracy 0", () -> {
+                        AisMsg mMedium = new AisMsg.Builder(1).withPositionAccuracy(0).build();
+                        Vessel vMedium = translator.translate(mMedium);
+
+                        assertThat(extractLocationRel(vMedium).getLocation()
+                            .getLocationQualitativeAccuracy(), is(MEDIUM));
+                    });
                 });
 
                 it("returns a Vessel with cog (in degrees instead of 1/10 od degrees)", () -> {
@@ -98,8 +121,8 @@ public class AIS_1_2_3_TranslatorSpec {
 
                 it("returns a Vessel with cog (null for cog=3600)", () -> {
                     AisMsg mc = new AisMsg.Builder(1)
-                            .withCOG(3600f)
-                            .build();
+                        .withCOG(3600f)
+                        .build();
 
                     Vessel vc = translator.translate(mc);
 
@@ -112,8 +135,8 @@ public class AIS_1_2_3_TranslatorSpec {
 
                 it("returns a Vessel with heading (null for trueHeading=511)", () -> {
                     AisMsg mh = new AisMsg.Builder(1)
-                            .withTrueHeading(511)
-                            .build();
+                        .withTrueHeading(511)
+                        .build();
 
                     Vessel vh = translator.translate(mh);
 
@@ -125,7 +148,8 @@ public class AIS_1_2_3_TranslatorSpec {
                 });
 
                 it("returns a Vessel with sensor type", () -> {
-                    assertThat(extractLocationRel(v).getSensorType(), is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
+                    assertThat(extractLocationRel(v).getSensorType(),
+                        is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
                 });
 
                 it("returns a Vessel with sog (in knots instead of 1/10th of knots)", () -> {
@@ -134,8 +158,8 @@ public class AIS_1_2_3_TranslatorSpec {
 
                 it("returns a Vessel with sog (null for SOG=1023)", () -> {
                     AisMsg ms = new AisMsg.Builder(1)
-                            .withSOG(1023f)
-                            .build();
+                        .withSOG(1023f)
+                        .build();
 
                     Vessel vs = translator.translate(ms);
                     assertThat(extractLocationRel(vs).getSOG(), is(nullValue()));
@@ -144,13 +168,13 @@ public class AIS_1_2_3_TranslatorSpec {
                 it("returns a Vessel with periodOfTime.startDate", () -> {
                     //"2018-02-19T14:43:16.550Z"
                     assertThat(extractLocationRel(v).getPeriodOfTime().getStartDate(),
-                            is(xmlDate(2018, 2, 19)));
+                        is(xmlDate(2018, 2, 19)));
                 });
 
                 it("returns a Vessel with periodOfTime.startTime", () -> {
                     //"2018-02-19T14:43:16.550Z"
                     assertThat(extractLocationRel(v).getPeriodOfTime().getStartTime(),
-                            is(xmlTime(14, 43, 16)));
+                        is(xmlTime(14, 43, 16)));
                 });
 
                 it("returns a Vessel with MMSI", () -> {
@@ -158,7 +182,8 @@ public class AIS_1_2_3_TranslatorSpec {
                 });
 
                 it("returns a Vessel with navigationStatus", () -> {
-                    assertThat(v.getNavigationalStatus(), is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
+                    assertThat(v.getNavigationalStatus(),
+                        is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
                 });
             });
 
