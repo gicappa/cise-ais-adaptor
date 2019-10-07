@@ -79,24 +79,43 @@ public class AIS_1_2_3_TranslatorSpec {
             describe("when a message type is 1,2,3", () -> {
                 final Vessel v = translator.translate(m);
 
-                it("returns a Vessel with a geometry", () -> {
-                    assertThat(v.getLocationRels(), is(not(empty())));
+                context("when returns a Vessel with a geometry", () -> {
 
-                    assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
+                    it("the geometry elements are not null and well formed", () -> {
+                        assertThat(v.getLocationRels(), is(not(empty())));
 
-                    assertThat(extractLocationRel(v).getLocation().getGeometries(),
-                        is(not(empty())));
+                        assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
 
-                    assertThat(extractLocationRel(v).getLocation().getGeometries().get(0),
-                        is(notNullValue()));
-                });
+                        assertThat(extractLocationRel(v).getLocation().getGeometries(),
+                            is(not(empty())));
 
-                it("returns a Vessel with latitude", () -> {
-                    assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
-                });
+                        assertThat(extractLocationRel(v).getLocation().getGeometries().get(0),
+                            is(notNullValue()));
+                    });
 
-                it("returns a Vessel with longitude", () -> {
-                    assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+                    it("the latitude is extracted correctly", () -> {
+                        assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
+                    });
+
+                    it("the longitude is extracted correctly", () -> {
+                        assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+                    });
+
+                    it("the latitude is null when ais defaults to 91", () -> {
+                        AisMsg m91 = new AisMsg.Builder(1)
+                            .withLatitude(91F).withLongitude(-6.9895167F).build();
+                        Vessel v91 = translator.translate(m91);
+
+                        assertThat(extractGeometry(v91).getLatitude(), nullValue());
+                    });
+
+                    it("the longitude is null when ais defaults to 181", () -> {
+                        AisMsg m181 = new AisMsg.Builder(1)
+                            .withLatitude(47.443634F).withLongitude(181F).build();
+                        Vessel v181 = translator.translate(m181);
+
+                        assertThat(extractGeometry(v181).getLongitude(), nullValue());
+                    });
                 });
 
                 context("returns a Vessel with location qualitative accuracy", () -> {

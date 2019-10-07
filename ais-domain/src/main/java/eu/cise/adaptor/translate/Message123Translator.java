@@ -174,11 +174,11 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     private String longitude(AisMsg aisMsg) {
-        return Float.toString(aisMsg.getLongitude());
+        return aisMsg.getLongitude() != 181 ? Float.toString(aisMsg.getLongitude()) : null;
     }
 
     private String latitude(AisMsg aisMsg) {
-        return Float.toString(aisMsg.getLatitude());
+        return aisMsg.getLatitude() != 91 ? Float.toString(aisMsg.getLatitude()) : null;
     }
 
     private Location toLocation(String latitude, String longitude,
