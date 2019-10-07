@@ -39,8 +39,10 @@ Possible values:
 
 |ais-source.delimiter.char
 |The character used to delimit the AIS stream. The default value is
-a CR/LF but the it's possible to configure it otherwise. In some cases there is no specific character to delimit messages so it should be used the `!` char.
-ais-source.delimiter.char=\n
+a LF but the it's possible to configure it otherwise. In some cases there is no specific character to delimit messages so it should be used the `!` char.
+This property is usually linked to the `ais-source.delimiter.type` to select the desired behaviour of the application.
+ais-source.delimiter.char=\r\n    use this conf in case of dos new line ending
+ais-source.delimiter.char=\n      the default configuration is in case of UNIX line ending
 
 |ais-source.delimiter.type
 a|Possible values are:
