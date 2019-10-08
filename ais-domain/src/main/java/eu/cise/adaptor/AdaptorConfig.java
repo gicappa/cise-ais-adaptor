@@ -64,6 +64,18 @@ public interface AdaptorConfig extends Config {
     boolean isOverridingTimestamps();
 
     /**
+     * Setting this property to true will delete the <Location /> tag in the <LocationRel /> tag
+     * when the latitude and longitude are not available in the ais message.
+     * In an AIS Message, latitude and longitude are considered unavailable when they have a value of 91 and 181 degrees, respectively.
+     * Setting this property to false will keep the <Location /> in the <LocationRel /> without
+     * modifying their values of 91 and 181.
+     *
+     * @return true to delete location for unavailable location, false otherwise
+     */
+    @Key("delete-location-unavailable")
+    boolean deleteLocationUnavailable();
+
+    /**
      * Address of the gateway that will receive the messages from the current
      * adaptor.
      *

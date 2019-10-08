@@ -111,6 +111,14 @@ This property must be set to *`false`*.
 |Boolean. +
 Se it to True to overwrite the timestamp incoming from the AIS transponder with the current timestamp of the processing time.
 
+|delete-location-unavailable
+|Boolean. +
+Setting this property to true will delete the <Location /> tag in the <LocationRel /> tag
+when the latitude and longitude are not available in the ais message.
+In an AIS Message, latitude and longitude are considered unavailable when they have a value of 91 and 181 degrees, respectively.
+Setting this property to false will keep the <Location /> in the <LocationRel /> without
+modifying their values of 91 and 181.
+
 
 |processing.idle.time
 |Delay (in ms) between the processing of two AIS messages. It can lower the CPU stress of the server running the adaptor. It is also useful to avoid to send too many messages per second to the node.

@@ -100,15 +100,17 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             vessel.setIMONumber(mmsi);
 
         vessel.setMMSI(mmsi);
-        vessel.getLocationRels().add(getLocationRel(latitude(message),
-            longitude(message),
-            fromPositionAccuracy(message),
-            fromCourseOverGround(message.getCOG()),
-            fromTrueHeading(message.getTrueHeading()),
-            message.getTimestamp(),
-            fromSpeedOverGround(message.getSOG())));
-        vessel.setNavigationalStatus(
-            fromNavigationStatus(message.getNavigationStatus()));
+        vessel.getLocationRels().add(
+            getLocationRel(
+                toLocation(
+                    message.getLatitude(),
+                    message.getLongitude(),
+                    fromPositionAccuracy(message)),
+                fromCourseOverGround(message.getCOG()),
+                fromTrueHeading(message.getTrueHeading()),
+                message.getTimestamp(),
+                fromSpeedOverGround(message.getSOG())));
+        vessel.setNavigationalStatus(fromNavigationStatus(message.getNavigationStatus()));
 
         return vessel;
     }
@@ -121,16 +123,15 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             LocationQualitativeAccuracyType.MEDIUM;
     }
 
-    private Objet.LocationRel getLocationRel(String latitude,
-        String longitude,
-        LocationQualitativeAccuracyType lqat,
+    private Objet.LocationRel getLocationRel(
+        Location location,
         Double cog,
         Double heading,
         Instant timestamp,
         Double sog) {
 
         Objet.LocationRel locationRel = new Objet.LocationRel();
-        locationRel.setLocation(toLocation(latitude, longitude, lqat));
+        locationRel.setLocation(location);
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
 
@@ -173,20 +174,17 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         return toXMLCalendar(1970, 01, 01, l.getHour(), l.getMinute(), l.getSecond());
     }
 
-    private String longitude(AisMsg aisMsg) {
-        return aisMsg.getLongitude() != 181 ? Float.toString(aisMsg.getLongitude()) : null;
-    }
+    private Location toLocation(
+        Float latitude, Float longitude, LocationQualitativeAccuracyType lqat) {
 
-    private String latitude(AisMsg aisMsg) {
-        return aisMsg.getLatitude() != 91 ? Float.toString(aisMsg.getLatitude()) : null;
-    }
+        if (config.deleteLocationUnavailable() && (longitude == 181 || latitude == 91)) {
+            return null;
+        }
 
-    private Location toLocation(String latitude, String longitude,
-        LocationQualitativeAccuracyType lqat) {
         Location location = new Location();
         Geometry geometry = new Geometry();
-        geometry.setLatitude(latitude);
-        geometry.setLongitude(longitude);
+        geometry.setLatitude(Float.toString(latitude));
+        geometry.setLongitude(Float.toString(longitude));
         location.getGeometries().add(geometry);
         location.setLocationQualitativeAccuracy(lqat);
         return location;

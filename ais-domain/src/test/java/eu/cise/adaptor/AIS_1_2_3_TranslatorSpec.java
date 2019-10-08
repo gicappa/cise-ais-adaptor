@@ -29,8 +29,10 @@ package eu.cise.adaptor;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
+import static com.greghaskins.spectrum.dsl.specification.Specification.beforeAll;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
 import static eu.cise.adaptor.heplers.Utils.extractGeometry;
+import static eu.cise.adaptor.heplers.Utils.extractLocation;
 import static eu.cise.adaptor.heplers.Utils.extractLocationRel;
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
 import static eu.cise.adaptor.heplers.Utils.xmlTime;
@@ -43,6 +45,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.Message123Translator;
@@ -51,7 +55,6 @@ import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import java.time.Instant;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
 @SuppressWarnings("all")
@@ -61,7 +64,7 @@ public class AIS_1_2_3_TranslatorSpec {
     {
         describe("an AIS to CISE message translator", () -> {
 
-            AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
+            AdaptorConfig config = mock(AdaptorConfig.class);
             Message123Translator translator = new Message123Translator(config);
 
             final AisMsg m = new AisMsg.Builder(1)
@@ -101,20 +104,48 @@ public class AIS_1_2_3_TranslatorSpec {
                         assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
                     });
 
-                    it("the latitude is null when ais defaults to 91", () -> {
-                        AisMsg m91 = new AisMsg.Builder(1)
-                            .withLatitude(91F).withLongitude(-6.9895167F).build();
-                        Vessel v91 = translator.translate(m91);
+                    context("when the config deleteIncorrectGeoLocation is true", () -> {
+                        beforeAll(()->{
+                            when(config.deleteLocationUnavailable()).thenReturn(true);
+                        });
 
-                        assertThat(extractGeometry(v91).getLatitude(), nullValue());
+                        it("the latitude is null when ais defaults to 91", () -> {
+                            AisMsg m91 = new AisMsg.Builder(1)
+                                .withLatitude(91F).withLongitude(-6.9895167F).build();
+                            Vessel v91 = translator.translate(m91);
+
+                            assertThat(extractLocation(v91), nullValue());
+                        });
+
+                        it("the longitude is null when ais defaults to 181", () -> {
+                            AisMsg m181 = new AisMsg.Builder(1)
+                                .withLatitude(47.443634F).withLongitude(181F).build();
+                            Vessel v181 = translator.translate(m181);
+
+                            assertThat(extractLocation(v181), nullValue());
+                        });
                     });
 
-                    it("the longitude is null when ais defaults to 181", () -> {
-                        AisMsg m181 = new AisMsg.Builder(1)
-                            .withLatitude(47.443634F).withLongitude(181F).build();
-                        Vessel v181 = translator.translate(m181);
+                    context("when the config deleteLocationIfNotProvided is false", () -> {
+                        beforeAll(()->{
+                            when(config.deleteLocationUnavailable()).thenReturn(false);
+                        });
 
-                        assertThat(extractGeometry(v181).getLongitude(), nullValue());
+                        it("the latitude is 91 when ais defaults to 91", () -> {
+                            AisMsg m91 = new AisMsg.Builder(1)
+                                .withLatitude(91F).withLongitude(-6.9895167F).build();
+                            Vessel v91 = translator.translate(m91);
+
+                            assertThat(extractGeometry(v91).getLatitude(), is("91.0"));
+                        });
+
+                        it("the longitude is 181 when ais defaults to 181", () -> {
+                            AisMsg m181 = new AisMsg.Builder(1)
+                                .withLatitude(47.443634F).withLongitude(181F).build();
+                            Vessel v181 = translator.translate(m181);
+
+                            assertThat(extractGeometry(v181).getLongitude(), is("181.0"));
+                        });
                     });
                 });
 
