@@ -91,7 +91,7 @@ public class VesselToPushMessageTest {
   }
 
   @Test
-  public void it_doesent_specifies_a_recipient_in_a_push_subscribe() {
+  public void it_doesnt_specifies_a_recipient_in_a_push_subscribe() {
     vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
@@ -100,7 +100,7 @@ public class VesselToPushMessageTest {
   }
 
   @Test
-  public void it_doesent_specifies_a_profile_in_a_push_subscribe() {
+  public void it_doesnt_specifies_a_profile_in_a_push_subscribe() {
     vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
