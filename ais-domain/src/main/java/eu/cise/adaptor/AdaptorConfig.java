@@ -68,9 +68,13 @@ public interface AdaptorConfig extends Config {
      * degrees, respectively. Setting this property to false will keep the <Location /> in the
      * <LocationRel /> without modifying their values of 91 and 181.
      *
+     * The @DefaultValue has been added to avoid incompatibilities with the previous version of
+     * the ais-adaptor.properties.
+     *
      * @return true to delete location for unavailable location, false otherwise
      */
     @Key("delete-location-unavailable")
+    @DefaultValue("false")
     boolean deleteLocationUnavailable();
 
     /**
