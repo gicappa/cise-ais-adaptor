@@ -61,6 +61,13 @@ public class InputStreamToStreamTest {
     }
 
     @Test
+    public void it_translate_an_InputStream_to_a_Stream_of_Strings_NOTHING() {
+        ByteArrayInputStream is = getAisInputStream(getAisMessages("\n"));
+        InputStreamToStream toStream = new InputStreamToStream(is, "\n", STRIP);
+
+        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
+    }
+    @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_EXCLAMATION() {
         ByteArrayInputStream is = getAisInputStream(getAisMessages(""));
 
@@ -69,8 +76,8 @@ public class InputStreamToStreamTest {
         assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
     }
 
-    private String getAisMessages(String delimiter) {
-        return aisOne + delimiter + aisTwo + delimiter + aisThree + delimiter;
+    private String getAisMessages(String separator) {
+        return aisOne + separator + aisTwo + separator + aisThree + separator;
     }
 
     private ByteArrayInputStream getAisInputStream(String s) {

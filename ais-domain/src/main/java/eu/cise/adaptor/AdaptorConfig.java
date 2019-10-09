@@ -27,26 +27,24 @@
 
 package eu.cise.adaptor;
 
+import java.io.PrintStream;
+import java.time.Duration;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 import org.aeonbits.owner.converters.DurationConverter;
 
-import java.io.PrintStream;
-import java.time.Duration;
-
 /**
- * This file is containing the adaptor application configuration with different
- * details about the senders and receivers services.
+ * This file is containing the adaptor application configuration with different details about the
+ * senders and receivers services.
  */
 @Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
+    "classpath:ais-adaptor.properties"})
 public interface AdaptorConfig extends Config {
 
     /**
-     * In the CISE demo environment of the JRC is needed that all the vessels
-     * have an IMO number (PK in a database). To avoid breaking the demo when
-     * this flag is set to true the MMSI number will be copied over to the IMO
-     * number.
+     * In the CISE demo environment of the JRC is needed that all the vessels have an IMO number (PK
+     * in a database). To avoid breaking the demo when this flag is set to true the MMSI number will
+     * be copied over to the IMO number.
      *
      * @return true if is a cise demo internal to JRC false otherwise
      */
@@ -54,9 +52,9 @@ public interface AdaptorConfig extends Config {
     boolean isDemoEnvironment();
 
     /**
-     * Setting this property to true will override the timestamp coming from the
-     * AIS message with the current processing time. This could be necessary for
-     * systems with strict policies or filtering of messaging non belonging
+     * Setting this property to true will override the timestamp coming from the AIS message with
+     * the current processing time. This could be necessary for systems with strict policies or
+     * filtering of messaging non belonging
      *
      * @return true if the timestamp should be regenerated false otherwise
      */
@@ -65,10 +63,10 @@ public interface AdaptorConfig extends Config {
 
     /**
      * Setting this property to true will delete the <Location /> tag in the <LocationRel /> tag
-     * when the latitude and longitude are not available in the ais message.
-     * In an AIS Message, latitude and longitude are considered unavailable when they have a value of 91 and 181 degrees, respectively.
-     * Setting this property to false will keep the <Location /> in the <LocationRel /> without
-     * modifying their values of 91 and 181.
+     * when the latitude and longitude are not available in the ais message. In an AIS Message,
+     * latitude and longitude are considered unavailable when they have a value of 91 and 181
+     * degrees, respectively. Setting this property to false will keep the <Location /> in the
+     * <LocationRel /> without modifying their values of 91 and 181.
      *
      * @return true to delete location for unavailable location, false otherwise
      */
@@ -76,8 +74,7 @@ public interface AdaptorConfig extends Config {
     boolean deleteLocationUnavailable();
 
     /**
-     * Address of the gateway that will receive the messages from the current
-     * adaptor.
+     * Address of the gateway that will receive the messages from the current adaptor.
      *
      * @return the string with the gateway address
      */
@@ -93,8 +90,8 @@ public interface AdaptorConfig extends Config {
     String getServiceId();
 
     /**
-     * A parameter indicating the data freshness to inform the receivers.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the data freshness to inform the receivers. Please refer to the entity
+     * data model to know the possible values.
      *
      * @return the string with the data freshness.
      */
@@ -102,8 +99,8 @@ public interface AdaptorConfig extends Config {
     String getDataFreshnessType();
 
     /**
-     * A parameter indicating the sea basin of the receivers.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the sea basin of the receivers. Please refer to the entity data model
+     * to know the possible values.
      *
      * @return the string with the sea basin.
      */
@@ -119,9 +116,8 @@ public interface AdaptorConfig extends Config {
     String getEndpointUrl();
 
     /**
-     * Service operation of the sender that sending the messages.
-     * It can be 'PullRequest', 'PullResponse', 'Push'.
-     * If unsure use 'Push'
+     * Service operation of the sender that sending the messages. It can be 'PullRequest',
+     * 'PullResponse', 'Push'. If unsure use 'Push'
      *
      * @return the string with the service operation
      */
@@ -129,18 +125,8 @@ public interface AdaptorConfig extends Config {
     String getServiceOperation();
 
     /**
-     * This field will be used when creating the Push message for a
-     * subscription. The NODE needs a recipient even if the message won't
-     * be sent to it but to the list of subscribers for validity reasons.
-     *
-     * @return the string with the subscription recipient service id
-     */
-    @Key("subscription.service.id")
-    String getSubscribeServiceId();
-
-    /**
-     * A parameter indicating the priority of the message.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the priority of the message. Please refer to the entity data model to
+     * know the possible values.
      *
      * @return the string with the priority
      */
@@ -148,8 +134,8 @@ public interface AdaptorConfig extends Config {
     String getMessagePriority();
 
     /**
-     * A parameter indicating the security level of the message.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the security level of the message. Please refer to the entity data
+     * model to know the possible values.
      *
      * @return the string with the security level
      */
@@ -157,8 +143,8 @@ public interface AdaptorConfig extends Config {
     String getSecurityLevel();
 
     /**
-     * A parameter indicating the sensitivity of the message.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the sensitivity of the message. Please refer to the entity data model
+     * to know the possible values.
      *
      * @return the string with the sensitivity
      */
@@ -166,8 +152,8 @@ public interface AdaptorConfig extends Config {
     String getSensitivity();
 
     /**
-     * A parameter indicating the purpose of the message.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the purpose of the message. Please refer to the entity data model to
+     * know the possible values.
      *
      * @return the string with the purpose
      */
@@ -175,8 +161,8 @@ public interface AdaptorConfig extends Config {
     String getPurpose();
 
     /**
-     * A parameter indicating the idle time of the message.
-     * Please refer to the entity data model to know the possible values.
+     * A parameter indicating the idle time of the message. Please refer to the entity data model to
+     * know the possible values.
      *
      * @return the string with the idle time
      */
@@ -184,8 +170,8 @@ public interface AdaptorConfig extends Config {
     long getProcessingIdleTime();
 
     /**
-     * A parameter indicating the number of entities that will be sent to the
-     * sender in a single CISE message.
+     * A parameter indicating the number of entities that will be sent to the sender in a single
+     * CISE message.
      *
      * @return the number of entities
      */
@@ -277,8 +263,8 @@ public interface AdaptorConfig extends Config {
     String getProfileServiceType();
 
     /**
-     * The AppContext configure the application in order to plug the
-     * necessaries. The possible values are: e "file", "tcp" and "auth-tcp".
+     * The AppContext configure the application in order to plug the necessaries. The possible
+     * values are: e "file", "tcp" and "auth-tcp".
      *
      * @return a class corresponding to the file tcp or auth-tcp app context.
      */
@@ -286,8 +272,8 @@ public interface AdaptorConfig extends Config {
     String getAppContextType();
 
     /**
-     * The character used to delimit the AIS stream. The default value is
-     * a CR/LF but the it's possible to configure it otherwise.
+     * The character used to delimit the AIS stream. The default value is a CR/LF but the it's
+     * possible to configure it otherwise.
      *
      * @return the specified delimiter.
      */
@@ -296,19 +282,18 @@ public interface AdaptorConfig extends Config {
     String getDelimiterChar();
 
     /**
-     * By default the delimiter character is stripped by the AIS stream flow
-     * of information (i.e. the CR/LF chars are not present in the AIS message
-     * string passed to the ais-domain module. It's possible to keep the delimiter
-     * when using a char that is part of the stream as a delimiter.
-     *
-     * Example:
-     *   !MSG1111!MSG2222!MSG3333
-     *
-     *   using delimiterChar=! and delimiterType=KEEP would generate a stream of string like this:
-     *   "!MSG1111" "!MSG2222" "!MSG3333"
-     *
-     *   while using delimiterChar=! and delimiterType=STRIP would end up with:
-     *   "MSG1111" "MSG2222" "MSG3333"
+     * By default the delimiter character is stripped by the AIS stream flow of information (i.e.
+     * the CR/LF chars are not present in the AIS message string passed to the ais-domain module.
+     * It's possible to keep the delimiter when using a char that is part of the stream as a
+     * delimiter.
+     * <p>
+     * Example: !MSG1111!MSG2222!MSG3333
+     * <p>
+     * using delimiterChar=! and delimiterType=KEEP would generate a stream of string like this:
+     * "!MSG1111" "!MSG2222" "!MSG3333"
+     * <p>
+     * while using delimiterChar=! and delimiterType=STRIP would end up with: "MSG1111" "MSG2222"
+     * "MSG3333"
      *
      * @return the delimiter type configured in the property file.
      */

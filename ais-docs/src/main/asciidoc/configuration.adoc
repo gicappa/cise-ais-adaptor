@@ -202,8 +202,6 @@ where:
 
 * *value* is the value of the property.
 
-NOTE: The `subscription.service.id` property is not used in the `Push Unknown` pattern. 
-
 ===== Examples
 
 `profile.0.service_id=eu.cise.greek.push.consumer.id2`

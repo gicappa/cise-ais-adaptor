@@ -61,6 +61,7 @@ public class InputStreamToStream {
         return StreamSupport.stream(split, false)
             .onClose(scanner::close)
             .peek(m -> count.getAndIncrement())
+//            .filter(m -> !m.isEmpty())
             .map(m -> delimiter + m);
     }
 }
