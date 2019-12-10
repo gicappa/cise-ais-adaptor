@@ -137,12 +137,6 @@ public class AisNormalizerMsg5Test {
     public void it_maps_voyage_message_ETA_on_null_when_month_and_day_are_not_available() {
         assertThat(n.translate(voyageMsgNoMonthDay()).get().getEta(), is(nullValue()));
     }
-//
-//    //00-00 24:60
-//    @Test
-//    public void it_maps_voyage_message_ETA_on_null_when_month_and_day_are_not_available() {
-//        assertThat(n.translate(voyageMsgNoMonthDay()).getEta(), is(nullValue()));
-//    }
 
     @Test
     public void it_maps_voyage_message_imo_number() {

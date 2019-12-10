@@ -115,13 +115,13 @@ public class Message5Translator implements Translator<AisMsg, Vessel> {
     }
 
     private Period getETAPeriod(AisMsg message) {
-        Period period = new Period();
-
-        if (message.getEta() != null) {
-            period.setStartDate(xmlDate(message.getEta()));
-            period.setStartTime(xmlTime(message.getEta()));
+        if (message.getEta() == null) {
+            return null;
         }
 
+        Period period = new Period();
+        period.setStartDate(xmlDate(message.getEta()));
+        period.setStartTime(xmlTime(message.getEta()));
         return period;
     }
 

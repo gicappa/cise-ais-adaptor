@@ -27,49 +27,55 @@
 
 package eu.cise.adaptor;
 
-import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.Message5Translator;
-import eu.cise.datamodel.v1.entity.location.PortLocation;
-import eu.cise.datamodel.v1.entity.movement.Movement;
-import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.datamodel.v1.entity.vessel.VesselType;
-import eu.eucise.xml.DefaultXmlMapper;
-import org.junit.runner.RunWith;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.Instant;
-
-import static com.greghaskins.spectrum.Spectrum.*;
+import static com.greghaskins.spectrum.Spectrum.describe;
+import static com.greghaskins.spectrum.Spectrum.fit;
+import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
 import static eu.cise.adaptor.heplers.Utils.xmlTime;
 import static eu.cise.datamodel.v1.entity.event.LocationRoleInEventType.END_PLACE;
 import static eu.cise.datamodel.v1.entity.movement.MovementType.VOYAGE;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.translate.Message5Translator;
+import eu.cise.datamodel.v1.entity.event.Event.LocationRel;
+import eu.cise.datamodel.v1.entity.location.PortLocation;
+import eu.cise.datamodel.v1.entity.movement.Movement;
+import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import eu.cise.datamodel.v1.entity.vessel.VesselType;
+import eu.eucise.xml.DefaultXmlMapper;
+import java.time.Instant;
+import org.junit.runner.RunWith;
 
 @SuppressWarnings("all")
 @RunWith(Spectrum.class)
 public class AIS_5_TranslatorSpec {
+
     {
         describe("an AIS to CISE message translator", () -> {
 
             Message5Translator translator = new Message5Translator();
 
             final AisMsg m = new AisMsg.Builder(5)
-                    .withUserId(12345678)
-                    .withShipName("QUEEN MARY III")
-                    .withDimensionA(100)
-                    .withDimensionB(20)
-                    .withDimensionC(10)
-                    .withDimensionD(20)
-                    .withCallSign("myCallSign")
-                    .withDraught(34.5F)
-                    .withIMONumber(123456)
-                    .withShipType(84)
-                    .withDestination("FRLEH")
-                    .withEta(Instant.parse("2019-06-19T15:43:00Z"))
-                    .build();
+                .withUserId(12345678)
+                .withShipName("QUEEN MARY III")
+                .withDimensionA(100)
+                .withDimensionB(20)
+                .withDimensionC(10)
+                .withDimensionD(20)
+                .withCallSign("myCallSign")
+                .withDraught(34.5F)
+                .withIMONumber(123456)
+                .withShipType(84)
+                .withDestination("FRLEH")
+                .withEta(Instant.parse("2019-06-19T15:43:00Z"))
+                .build();
 
             describe("when a message type is 5", () -> {
                 final Vessel v = translator.translate(m);
@@ -115,11 +121,25 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationRel", () -> {
                         assertThat(mo.getLocationRels(), is(not(empty())));
                     });
+                    fit("returns a Vessel without datetime when ETA is null", () -> {
+                        final AisMsg mon = new AisMsg.Builder(5)
+                            .withUserId(12345678)
+                            .withShipName("QUEEN MARY III")
+                            .withEta(null)
+                            .build();
+
+                        LocationRel locationRel =
+                            getMovement(translator.translate(mon)).getLocationRels().get(0);
+
+                        assertThat(locationRel.getDateTime(), is(nullValue()));
+                    });
                     it("returns a Vessel with an ETA date", () -> {
-                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartDate(), is(xmlDate(Instant.parse("2019-06-19T00:00:00Z"))));
+                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartDate(),
+                            is(xmlDate(Instant.parse("2019-06-19T00:00:00Z"))));
                     });
                     it("returns a Vessel with an ETA time", () -> {
-                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartTime(), is(xmlTime(Instant.parse("1970-01-01T15:43:00Z"))));
+                        assertThat(mo.getLocationRels().get(0).getDateTime().getStartTime(),
+                            is(xmlTime(Instant.parse("1970-01-01T15:43:00Z"))));
                     });
                     it("returns a Vessel with location role", () -> {
                         assertThat(mo.getLocationRels().get(0).getLocationRole(), is(END_PLACE));

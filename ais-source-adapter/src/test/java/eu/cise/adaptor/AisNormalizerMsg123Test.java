@@ -78,17 +78,17 @@ public class AisNormalizerMsg123Test {
     }
 
     @Test
-    public void it_maps__MMSI() {
+    public void it_maps_MMSI() {
         assertThat(n.translate(t.positionMsg()).get().getUserId(), is(538005989));
     }
 
     @Test
-    public void it_maps__COG() {
+    public void it_maps_COG() {
         assertThat(n.translate(t.positionMsg()).get().getCOG(), is(211.9F));
     }
 
     @Test
-    public void it_maps__true_heading() {
+    public void it_maps_true_heading() {
         assertThat(n.translate(t.positionMsg()).get().getTrueHeading(), is(210));
     }
 
