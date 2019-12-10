@@ -114,7 +114,6 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     // PRIVATE HELPERS /////////////////////////////////////////////////////////
-
     private LocationQualitativeAccuracyType fromPositionAccuracy(AisMsg aisMsg) {
         return aisMsg.getPositionAccuracy() == 1 ?
             LocationQualitativeAccuracyType.HIGH :
@@ -197,11 +196,11 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     private Double fromCourseOverGround(Float cog) {
-        return cog == 3600 ? null : f2d(cog) / 10D;
+        return cog == 360.0F ? null : f2d(cog);
     }
 
     private Double fromSpeedOverGround(Float sog) {
-        return sog == 1023 ? null : f2d(sog) / 10D;
+        return sog == 102.3F ? null : f2d(sog);
     }
 
     private Double fromTrueHeading(int th) {

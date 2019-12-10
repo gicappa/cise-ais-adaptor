@@ -33,6 +33,10 @@
     </encoder>
   </appender>
 
+  <!-- set this logger to DEBUG in order to see the messages that are processed -->
+  <logger name="eu.cise.adaptor.EndToEndBulkConversionTest" level="INFO" />
+  <logger name="ch.qos.logback.classic" level="OFF" />
+
   <root level="DEBUG">
     <appender-ref ref="STDOUT" />
   </root>

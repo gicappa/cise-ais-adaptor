@@ -39,7 +39,7 @@ import java.time.Duration;
  * details about the senders and receivers services.
  */
 @Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
+        "classpath:${prefix.dir}ais-adaptor.properties"})
 public interface AdaptorConfig extends Config {
 
     /**
