@@ -44,7 +44,6 @@ import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.service.DataFreshnessType;
 import eu.cise.servicemodel.v1.service.ServiceOperationType;
 import eu.eucise.helpers.PushBuilder;
-import eu.eucise.helpers.ServiceBuilder;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -88,19 +87,6 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
             message.addProfiles(profiles.list());
         }
         return message.build();
-    }
-
-    /**
-     * Create a recipient for the case of a Subscription Push message that is required (even if it's
-     * useless) by the parsing and verification of the node.
-     *
-     * @return a ServiceBuilder with the subscriber id the service type and operation
-     */
-    private ServiceBuilder createSubscriptionRecipient() {
-        return newService()
-            .id(config.getSubscribeServiceId())
-            .operation(SUBSCRIBE)
-            .type(VESSEL_SERVICE);
     }
 
     /**

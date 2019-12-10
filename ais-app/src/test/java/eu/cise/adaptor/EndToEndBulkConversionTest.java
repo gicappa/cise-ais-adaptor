@@ -74,6 +74,7 @@ public class EndToEndBulkConversionTest {
 
             assertEquals(96, testRestServer.countInvocations());
         } catch (InterruptedException e) {
+            e.printStackTrace();
             testRestServer.shutdown();
             fail("An exception occurred");
         }

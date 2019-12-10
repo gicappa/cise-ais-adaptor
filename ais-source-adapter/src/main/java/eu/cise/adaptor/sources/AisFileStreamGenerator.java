@@ -30,42 +30,39 @@ package eu.cise.adaptor.sources;
 import eu.cise.adaptor.AisStreamGenerator;
 import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.adaptor.translate.utils.InputStreamToStream;
-import org.aeonbits.owner.ConfigFactory;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.stream.Stream;
+import org.aeonbits.owner.ConfigFactory;
 
 /**
- * This stream generator opens a file and reads it line by line interpreting the
- * AIS message information in a textual format. Each message is separated by the
- * others through a line feed (LF) character and as soon as is read is sent to
- * the {@link java.util.stream.Stream} of {@link String}.
+ * This stream generator opens a file and reads it line by line interpreting the AIS message
+ * information in a textual format. Each message is separated by the others through a line feed (LF)
+ * character and as soon as is read is sent to the {@link java.util.stream.Stream} of {@link
+ * String}.
  */
 public class AisFileStreamGenerator implements AisStreamGenerator {
 
     private final AisFileAdaptorConfig config;
 
     /**
-     * Construct the stream generator by reading a file specified in the
-     * configuration file.
+     * Construct the stream generator by reading a file specified in the configuration file.
      * <p>
-     * the property {@code ais-source.file.name} specifies the file name that
-     * could be found in the filesystem or in the classpath.
+     * the property {@code ais-source.file.name} specifies the file name that could be found in the
+     * filesystem or in the classpath.
      */
     public AisFileStreamGenerator() {
         config = ConfigFactory.create(AisFileAdaptorConfig.class);
 
         if (config.getAISSourceFilename() == null)
             throw new AdaptorException("The 'ais-source.file.name' property is not " +
-                                               "set in the ais-adaptor.properties file");
+                "set in the ais-adaptor.properties file");
     }
 
     /**
-     * The generate method tries to open an input stream from the file name
-     * and returns a {@link java.util.stream.Stream} of strings with the
-     * AIS message in every string.
+     * The generate method tries to open an input stream from the file name and returns a {@link
+     * java.util.stream.Stream} of strings with the AIS message in every string.
      *
      * @return the Stream with the messages
      * @throws AdaptorException if the file does not exists
@@ -76,19 +73,22 @@ public class AisFileStreamGenerator implements AisStreamGenerator {
 
         if (inputStream == null) {
             throw new AdaptorException(
-                    "The file '" + config.getAISSourceFilename() +
-                            "' does not exists neither in the /conf/" +
-                            " directory nor in the classpath");
+                "The file '" + config.getAISSourceFilename() +
+                    "' does not exists neither in the /conf/" +
+                    " directory nor in the classpath");
         }
 
-        return new InputStreamToStream(inputStream).stream();
+        return new InputStreamToStream(
+            inputStream,
+            config.getDelimiterChar(),
+            config.getDelimiterType()
+        ).stream();
     }
 
     /**
-     * It checks if there is a resource matching the file name and returns the
-     * {@link java.io.InputStream} with the data.
-     * Otherwise it checks for a file in the filesystem with that name and
-     * returns the {@link java.io.InputStream} with the data.
+     * It checks if there is a resource matching the file name and returns the {@link
+     * java.io.InputStream} with the data. Otherwise it checks for a file in the filesystem with
+     * that name and returns the {@link java.io.InputStream} with the data.
      *
      * @param filename is the filename to be opened
      * @return the {@link java.io.InputStream} or null if it does not find the file.

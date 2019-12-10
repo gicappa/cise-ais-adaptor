@@ -27,7 +27,7 @@
 
 package eu.cise.adaptor;
 
-import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.LOW;
+import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.core.Is.is;
@@ -94,8 +94,8 @@ public class EndToEndSingleMessageTest {
             assertThat(locationRelInfo(vessel).getHeading(), is(127D));
             assertThat(geometryInfo(vessel).getLatitude(), is("50.854515")); //50.8545167
             assertThat(geometryInfo(vessel).getLongitude(), is("-1.348565")); //1.3485667
-            assertThat(locationInfo(vessel).getLocationQualitativeAccuracy(), is(LOW));
-            System.out.println(locationRelInfo(vessel).getPeriodOfTime()); // To be checked
+            assertThat(locationInfo(vessel).getLocationQualitativeAccuracy(), is(MEDIUM));
+            // System.out.println(locationRelInfo(vessel).getPeriodOfTime()); // To be checked
 
 
         } catch (InterruptedException e) {

@@ -63,7 +63,7 @@ public class AIS_5_TranslatorSpec {
                     .withDimensionB(20)
                     .withDimensionC(10)
                     .withDimensionD(20)
-                    .withCallSign("C1PP4")
+                    .withCallSign("myCallSign")
                     .withDraught(34.5F)
                     .withIMONumber(123456)
                     .withShipType(84)
@@ -82,7 +82,7 @@ public class AIS_5_TranslatorSpec {
                     assertThat(v.getBeam(), is(30));
                 });
                 it("returns a Vessel with a call sign", () -> {
-                    assertThat(v.getCallSign(), is("C1PP4"));
+                    assertThat(v.getCallSign(), is("myCallSign"));
                 });
                 it("returns a Vessel with a draught", () -> {
                     assertThat(v.getDraught(), is(34.5D));
@@ -144,7 +144,7 @@ public class AIS_5_TranslatorSpec {
                         .withDimensionB(20)
                         .withDimensionC(10)
                         .withDimensionD(20)
-                        .withCallSign("C1PP4")
+                        .withCallSign("myCallSign")
                         .withDraught(34.5F)
                         .withIMONumber(123456)
                         .withShipType(84)
