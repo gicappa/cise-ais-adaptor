@@ -28,7 +28,6 @@
 package eu.cise.adaptor;
 
 import static com.greghaskins.spectrum.Spectrum.describe;
-import static com.greghaskins.spectrum.Spectrum.fit;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static com.greghaskins.spectrum.dsl.specification.Specification.context;
 import static eu.cise.adaptor.heplers.Utils.xmlDate;
@@ -121,7 +120,7 @@ public class AIS_5_TranslatorSpec {
                     it("returns a Vessel with a LocationRel", () -> {
                         assertThat(mo.getLocationRels(), is(not(empty())));
                     });
-                    fit("returns a Vessel without datetime when ETA is null", () -> {
+                    it("returns a Vessel without datetime when ETA is null", () -> {
                         final AisMsg mon = new AisMsg.Builder(5)
                             .withUserId(12345678)
                             .withShipName("QUEEN MARY III")
