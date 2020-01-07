@@ -54,6 +54,7 @@ import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -135,7 +136,7 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         locationRel.setHeading(heading);
 
         if (config.isOverridingTimestamps()) {
-            timestamp = Instant.now();
+            timestamp = Instant.now(Clock.systemUTC());
         }
 
         if (!timestamp.equals(Instant.MIN)) {
@@ -235,19 +236,14 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             case UnderwaySailing:
                 return UNDER_WAY_SAILING;
             case ReservedForFutureUse9:
-                return OTHER;
+            case ReservedForFutureUse13:
             case ReservedForFutureUse10:
+            case SartMobOrEpirb:
                 return OTHER;
             case PowerDrivenVesselTowingAstern:
                 return POWER_DRIVEN_VESSEL_TOWING_ASTERN;
             case PowerDrivenVesselPushingAheadOrTowingAlongside:
                 return POWER_DRIVEN_VESSEL_TOWIG_AHEAD_OR_PUSHING_ALONGSIDE;
-            case ReservedForFutureUse13:
-                return OTHER;
-            case SartMobOrEpirb:
-                return OTHER;
-            case Undefined:
-                return UNDEFINED_DEFAULT;
             default:
                 return UNDEFINED_DEFAULT;
         }

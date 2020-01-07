@@ -31,6 +31,8 @@ import dk.tbsalling.aismessages.ais.messages.AISMessage;
 import dk.tbsalling.aismessages.ais.messages.Metadata;
 import dk.tbsalling.aismessages.nmea.messages.NMEAMessage;
 import eu.cise.adaptor.exceptions.AdaptorException;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -39,9 +41,15 @@ public class NmeaToAISMessage implements Translator<NMEAMessage, Optional<AISMes
 
     private final String source;
     private final ArrayList<NMEAMessage> messageFragments = new ArrayList<>();
+    private Clock clock;
 
     public NmeaToAISMessage(String source) {
+        this(source, Clock.systemUTC());
+    }
+
+    public NmeaToAISMessage(String source, Clock clock) {
         this.source = source;
+        this.clock = clock;
     }
 
     @Override
@@ -59,7 +67,8 @@ public class NmeaToAISMessage implements Translator<NMEAMessage, Optional<AISMes
 
             if (numberOfFragments == 1) {
                 messageFragments.clear();
-                return Optional.of(AISMessage.create(new Metadata(source), nmeaMessage));
+                return Optional
+                    .of(AISMessage.create(new Metadata(source, Instant.now(clock)), nmeaMessage));
             }
 
             int fragmentNumber = nmeaMessage.getFragmentNumber();
