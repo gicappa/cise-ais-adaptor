@@ -1,0 +1,239 @@
+== Configuring the AIS Adaptor
+This chapter describes the procedure to configure the adaptor prototype in order to:
+
+ - Configure the connection from the adaptor to the CISE Node endpoint;
+ - Configure the source of information where to get the ais messages from (AIS tracks);
+ - Configure how to send the CISE Messages to several partners through Push Unknown messages;
+ - Configure the adaptor in order to provide a publish service to the CISE partners (Publish/Subscribe communication pattern)
+ - Configure the java keystore path in order to secure the information exchange through the signature process.
+
+NOTE: The current version of the adaptor prototype does not support the complete interaction with the Node according to the CISE Service model. It is capable of sending information to other Nodes/Participants but does not accept possible requests or feedback incoming from the node (e.g., Acknowledgments or other kind of CISE messages).
+
+=== Configuration of the connection to the CISE Node
+
+The configuration of the adaptor are stored in the file `ais-adaptor.properties`, which contains a list of properties that will be used in the adaptor at runtime. The following table describes the main properties that should be set up before running the AIS adaptor.
+
+.General configurations
+[%header,cols="d,v"]
+|===
+|Property Name
+|Description
+
+|#gateway.address# 
+|#The URL of the the node/gateway (Common Services endpoint)# +
+
+Examples: `http://localhost:18080/sim-EGN/rest/CISEMessageServiceREST`
+
+|app-context.type
+a|This property selects which context will be used in the adaptor application.
+The context is needed to define the source type of the AIS information.
+These data may be read from a file in the filesystem or from a tcp socket
+open in some server and there is also a context that support a simple
+authentication protocol over the Tcp socket as an example.
+The default is file.
+Possible values:
+
+* #tcp#: will read the ais stream from a socket
+* #auth-tcp#: same as tcp but supporting a simple authentication mechanism;
+* #file#: will read the ais stream from a file
+
+|ais-source.delimiter.char
+|The character used to delimit the AIS stream. The default value is
+a LF but the it's possible to configure it otherwise. In some cases there is no specific character to delimit messages so it should be used the `!` char.
+This property is usually linked to the `ais-source.delimiter.type` to select the desired behaviour of the application.
+ais-source.delimiter.char=\r\n    use this conf in case of dos new line ending
+ais-source.delimiter.char=\n      the default configuration is in case of UNIX line ending
+
+|ais-source.delimiter.type
+a|Possible values are:
+
+- STRIP
+- KEEP
+
+By default the delimiter character is stripped by the AIS stream flow
+of information (i.e. the CR/LF chars are not present in the AIS message
+string passed to the ais-domain module. It's possible to keep the delimiter
+when using a char that is part of the stream as a delimiter. +
+
+Example: +
+
+  !MSG1111!MSG2222!MSG3333 +
+
+  using delimiterChar=! and delimiterType=KEEP would generate a stream of string like this: +
+  "!MSG1111" "!MSG2222" "!MSG3333" +
+
+  while using delimiterChar=! and delimiterType=STRIP would end up with: +
+  "MSG1111" "MSG2222" "MSG3333"
+
+|#ais-source.file.name# 
+|Absolute path to the file with the AIS tracks. +
+The current version of the prototype loads the AIS tracks from a file as an example. *The source of information can be customized by each public authority according to the requirements of their legacy systems. In order to customize the information source, please check the interface `AisStreamGenerator` in the `ais-source-adapter` module*. +
+If a custom information source is used, this property is not needed.
+
+|ais-source.socket.host +
+ais-source.socket.port
+|When using the `"ais.context=tcp"` property (AisTcpStreamGenerator)
+and the "ais.context=auth-tcp" property (AuthTcpStreamGenerator)
+In this case there is a server at `host` that can be contacted at `port`
+that will stream the AIS information through a socket connection
+
+Examples: +
+  ais-source.socket.host=localhost
+  ais-source.socket.port=64738
+
+|ais-source.login.username
+ais-source.login.password
+|#ONLY when using the `AuthTcpStreamGenerator`#.
+In addition to the previous configurations this configuration are needed
+when there is the need of authentication over the socket connection with
+a simple authentication string containing username and password
+
+Examples: +
+  ais-source.login.username=admin
+  ais-source.login.password=secret
+
+|ais-source.login.request.template
+ais-source.login.success.template
+|The string will be formatted as per the request.template and the socket
+will send a response equals to the success.template
+In this example the AuthTcpStreamGenerator will send to the socket the
+string `"AUTH=admin:secret"` and will receive `"AUTH-SUCCESS"` as a response
+
+Examples: +
+  ais-source.login.request.template=AUTH=%s:%s
+  ais-source.login.success.template=AUTH-SUCCESS
+
+|demo-environment
+|_Deprecated_ +
+This property must be set to *`false`*.
+
+|override-timestamps
+|Boolean. +
+Se it to True to overwrite the timestamp incoming from the AIS transponder with the current timestamp of the processing time.
+
+|delete-location-unavailable
+|Boolean. +
+Setting this property to true will delete the <Location /> tag in the <LocationRel /> tag
+when the latitude and longitude are not available in the ais message.
+In an AIS Message, latitude and longitude are considered unavailable when they have a value of 91 and 181 degrees, respectively.
+Setting this property to false will keep the <Location /> in the <LocationRel /> without
+modifying their values of 91 and 181.
+
+
+|processing.idle.time
+|Delay (in ms) between the processing of two AIS messages. It can lower the CPU stress of the server running the adaptor. It is also useful to avoid to send too many messages per second to the node.
+
+|#processing.entities-per-message#
+|Number of entities containes by each CISE Message (Vessel entities in this case). +
+The adaptor will send a CISE message only after processing the specified number of entities from the information source.
+Please check `processing.sending.timeout`.
+
+
+|processing.sending.timeout
+|Timeout to send a CISE message. +
+The unit of measure is specified with the following convention in time units: ns, nano, nanos, nanosecond, nanoseconds us, µs, micro, micros, microsecond, microseconds ms, milli, millis, millisecond, milliseconds s, second, seconds m, minute, minutes h, hour, hours d, day, days. +
+When `processing.entities-per-message` > 1, this property defines the maximum period in which a CISE message can stay in the buffer before being sent (e.g., because it is incomplete). +
+ *Example of valid expressions:* +
+ 
+100ns +
+1 hour +
+20s +
+ 
+|===
+
+=== Sender Configuration
+Every CISE message departing from the adaptor contains the information described in the following table to identify the sender of the message. 
+
+.Sender configuration
+[%header,cols=2*]
+|===
+|Property Name |Description
+|#sender.service.id# 
+|#Service ID (consumer) of the sender (configured and registered in the Node)#
+
+|sender.service.participant.url
+|URL (endpoint) of the adaptor.  Example: `http://localhost:8080/api/messages` +
+Required but not used in this version. The adaptor is not able to accept any incoming messages from the node. The specification of this url has no impact on the adaptor.
+
+|sender.service.operation
+|Can be set to `Push` or `Subscribe`. +
+Please check the following sections for a complete information.
+
+|sender.service.sea-basin-type
+|Possible values: `ArcticOcean`, `Atlantic`, `BalticSea`, `BlackSea`, `Mediterranean`, `NorthSea`, `OutermostRegions`,   `NonSpecified`.
+
+|sender.service.data-freshness-type 
+|Possible values: `RealTime`, `NearlyRealTime`, `Historic`, `Unknown`.
+|===
+
+
+=== Supported Communication Patterns
+
+The adaptor supports two CISE communication patterns:
+
+- Push Unknown
+- Publish/Subscribe (only Publish)
+
+==== Push Unknown
+
+The adaptor can send AIS information to other partners using Push messages and dynamic discovery (from the service registry in the Node). 
+
+NOTE: The Light Client in the CISE Node cannot manage information from Push services.
+
+To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
+
+.	Set `sender.service.operation` = `Push`
+.	Define the discovery profiles (discovery metadata) for the recipient(s) of these messages. It is possible to define one or many profiles using the following syntax (property-like): +
+`profile .` *_N_* `.` *_property_name_* = *_value_* + 
+where: 
+
+* *_N_* - profile identifier, integer starting from 0. The IDs *MUST* be consecutive (otherwise none of profiles will be loaded).
+* *_property_name_* is a property of the DiscoveryProfile. The valid properties are:
+
+**  service_id
+**  community
+**  country
+**  data_freshness
+**  function
+**  sea_basin
+**  _service_operation_ (optional, default: Push)
+**  _service_role_ (optional, default: consumer)
+**  _service_type_ (optional, default: VesselService)
+
+* *value* is the value of the property.
+
+===== Examples
+
+`profile.0.service_id=eu.cise.greek.push.consumer.id2`
+
+The CISE messages will be sent to a single service with the id `eu.cise.greek.push.consumer.id2` (if exists). This profile can be used to simulate the behavior of the Push communication pattern.
+
+---
+
+`profile.1.community=FisheriesControl`
+`profile.1.country=IT`
+
+The CISE messages will be sent to all the Italian participants belonging to the Fisheries Control community.
+
+====  Publish/Subscribe (only Publish)
+
+The adaptor can also send AIS information to the CISE partners that subscribed to its subscription service. The adptor must be added to the CISE Node administration console with the ServiceOperation set to 'subscribe' and the ServiceRole to 'provider'.
+To enable this pattern, please configure the following properties in the `ais-adaptor.properties` file:
+
+.	Set `sender.service.operation` = `Subscribe`
+
+The adaptor will deliver a set of `Push` messages with ServiceOperation = `Subscribe` without specifying a recipient or ServiceProfile in the message but adding the PullType parameter to `Subscribe`. The CISE Node will handle the information as a notification to all the subscriber of the ais-adaptor service.
+
+NOTE: The discovery profiles settings in the ais-adaptor.properties file are ignored for this communication pattern.
+
+=== Property file template
+ifdef::env-github[]
+Please refer to the link:../../../../ais-domain/src/main/resources/ais-adaptor.properties[ais properties file] for a configuration example.
+endif::[]
+
+ifndef::env-github[]
+[source,properties]
+----
+include::../../../../ais-domain/src/main/resources/ais-adaptor.properties[]
+----
+endif::[]

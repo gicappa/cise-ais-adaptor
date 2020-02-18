@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,41 +27,109 @@
 
 package eu.cise.adaptor;
 
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.SUBSCRIBE;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.adaptor.translate.ServiceProfileReader;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
 import eu.cise.servicemodel.v1.service.ServiceProfile;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.Properties;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class VesselToPushMessageTest {
 
-    private VesselToPushMessage vesselToPush;
-    private ServiceProfileReader profiles;
+  private VesselToPushMessage vesselToPush;
+  private ServiceProfileReader profiles;
 
-    @Before
-    public void before() {
-        AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-        profiles = mock(ServiceProfileReader.class);
+  @Before
+  public void before() {
+    profiles = mock(ServiceProfileReader.class);
+  }
 
-        vesselToPush = new VesselToPushMessage(config, profiles);
+  @Test
+  public void it_translate_a_list_of_vessel_to_a_push() {
+    vesselToPush = new VesselToPushMessage(configUsingPush(), profiles);
+
+    when(profiles.list()).thenReturn(asList(new ServiceProfile(), new ServiceProfile()));
+
+    Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+    assertThat(actual.getDiscoveryProfiles(), hasSize(2));
+  }
+
+  @Test
+  public void it_translate_a_list_of_vessel_to_a_push_subscribe() {
+    vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+    Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+    assertThat(actual.getSender().getServiceOperation(), is(SUBSCRIBE));
+  }
+
+  @Test
+  public void it_doesnt_use_DiscoveryProfile_in_a_push_subscribe() {
+    vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+    Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+    assertThat(actual.getDiscoveryProfiles(), hasSize(0));
+  }
+
+  @Test
+  public void it_doesnt_specifies_a_recipient_in_a_push_subscribe() {
+    vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+    Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+    assertThat(actual.getRecipient(), is(nullValue()));
+  }
+
+  @Test
+  public void it_doesnt_specifies_a_profile_in_a_push_subscribe() {
+    vesselToPush = new VesselToPushMessage(configUsingSubscribe(), null);
+
+    Push actual = vesselToPush.translate(singletonList(new Vessel()));
+
+    assertThat(actual.getDiscoveryProfiles().size(), is(0));
+  }
+
+  private AdaptorConfig configUsingPush() {
+    return adaptorConfigFromFile("/ais-adaptor-push.properties");
+  }
+
+  private AdaptorConfig configUsingSubscribe() {
+    return adaptorConfigFromFile("/ais-adaptor-subscribe.properties");
+  }
+
+  private AdaptorConfig adaptorConfigFromFile(String filename) {
+    try {
+      Properties props = new Properties();
+      InputStream inStream = resourceToInputStream(filename);
+
+      props.load(inStream);
+      return ConfigFactory.create(AdaptorConfig.class, props);
+    } catch (IOException ioe) {
+      throw new AdaptorException(ioe);
     }
+  }
 
-    @Test
-    public void it_translate_a_list_of_vessel_to_a_push() {
-        when(profiles.list()).thenReturn(asList(new ServiceProfile(), new ServiceProfile()));
-
-        Push actual = vesselToPush.translate(singletonList(new Vessel()));
-
-        assertThat(actual.getDiscoveryProfiles(), hasSize(2));
-    }
+  private InputStream resourceToInputStream(String pathname) {
+    return Optional.ofNullable(getClass().getResourceAsStream(pathname))
+        .orElseThrow(() -> new AdaptorException("Can't find file " + pathname));
+  }
 }

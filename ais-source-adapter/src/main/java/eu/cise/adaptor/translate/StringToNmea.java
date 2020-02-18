@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@ public class StringToNmea implements Translator<String, NMEAMessage> {
         try {
             return NMEAMessage.fromString(nmeaString);
         } catch (Exception e) {
-            throw new AdaptorException("string to NMEA translation error", e);
+            throw new AdaptorException("|string->NMEA|error|" + nmeaString, e);
         }
     }
 }

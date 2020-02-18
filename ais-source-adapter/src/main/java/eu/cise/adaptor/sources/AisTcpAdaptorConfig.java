@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@ import org.aeonbits.owner.Config;
  */
 @SuppressWarnings("unused")
 @Config.Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
+        "classpath:${prefix.dir}ais-adaptor.properties"})
 public interface AisTcpAdaptorConfig extends AdaptorConfig {
 
     @Key("ais-source.socket.host")

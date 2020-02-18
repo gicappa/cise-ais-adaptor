@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,25 +27,30 @@
 
 package eu.cise.adaptor.translate;
 
-import eu.cise.adaptor.AdaptorConfig;
-import eu.cise.datamodel.v1.entity.Entity;
-import eu.cise.servicemodel.v1.authority.SeaBasinType;
-import eu.cise.servicemodel.v1.message.*;
-import eu.cise.servicemodel.v1.service.DataFreshnessType;
-import eu.cise.servicemodel.v1.service.ServiceOperationType;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
+import static eu.cise.servicemodel.v1.service.ServiceOperationType.SUBSCRIBE;
 import static eu.cise.servicemodel.v1.service.ServiceType.VESSEL_SERVICE;
 import static eu.eucise.helpers.ParticipantBuilder.newParticipant;
 import static eu.eucise.helpers.PushBuilder.newPush;
 import static eu.eucise.helpers.ServiceBuilder.newService;
 
+import eu.cise.adaptor.AdaptorConfig;
+import eu.cise.datamodel.v1.entity.Entity;
+import eu.cise.servicemodel.v1.authority.SeaBasinType;
+import eu.cise.servicemodel.v1.message.InformationSecurityLevelType;
+import eu.cise.servicemodel.v1.message.InformationSensitivityType;
+import eu.cise.servicemodel.v1.message.PriorityType;
+import eu.cise.servicemodel.v1.message.PurposeType;
+import eu.cise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.service.DataFreshnessType;
+import eu.cise.servicemodel.v1.service.ServiceOperationType;
+import eu.eucise.helpers.PushBuilder;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 /**
- * This transformer will map a vessel entity into a cise message ready to be
- * sent out in a HTTP request
+ * This transformer will map a vessel entity into a cise message ready to be sent out in a HTTP
+ * request
  */
 public class VesselToPushMessage implements Translator<List<Entity>, Push> {
 
@@ -63,40 +68,62 @@ public class VesselToPushMessage implements Translator<List<Entity>, Push> {
     }
 
     /**
-     * The method will translate the list of vessel entities into a cise message
-     * adding the service model around the payload. Being in a List form the
-     * payload can be
+     * The method will translate the list of vessel entities into a cise message adding the service
+     * model around the payload.
+     * <p>
+     * If the config.getServiceOperation() is equals to Subscribe the message will be sent without
+     * recipient nor DiscoveryProfile according to the document "EUCISE2020 Interface Control
+     * Document x National Adaptors.pdf". Otherwise the adaptor will assume that the message must be
+     * sent as a normal Push and the profile list will be parsed and added to the message.
      *
      * @param entities a list of vessel entities objects
      * @return a new cise message with the list of entities as a payload
      */
     @Override
     public Push translate(List<Entity> entities) {
+        PushBuilder message = translateCommon(entities);
+
+        if (!isSubscribeMessage()) {
+            message.addProfiles(profiles.list());
+        }
+        return message.build();
+    }
+
+    /**
+     * Actually create the message with all the details specified by the configuration file.
+     *
+     * @param entities a list of vessel entities objects
+     * @return a new cise message with the list of entities as a payload
+     */
+    private PushBuilder translateCommon(List<Entity> entities) {
         return newPush()
-                .id(UUID.randomUUID().toString())
-                .contextId(UUID.randomUUID().toString())
-                .correlationId(UUID.randomUUID().toString())
-                .creationDateTime(new Date())
-                .sender(newService()
-                                .id(config.getServiceId())
-                                .type(VESSEL_SERVICE)
-                                .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
-                                .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
-                                .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
-                                .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
-//                .recipient(newService()
-//                                   .id(config.getRecipientServiceId())
-//                                   .operation(ServiceOperationType.fromValue(config.getRecipientServiceOperation()))
-//                                   .type(VESSEL_SERVICE)
-//                          )
-                .priority(PriorityType.fromValue(config.getMessagePriority()))
-                .isRequiresAck(false)
-                .informationSecurityLevel(InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
-                .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
-                .isPersonalData(false)
-                .purpose(PurposeType.fromValue(config.getPurpose()))
-                .addEntities(entities)
-                .addProfiles(profiles.list())
-                .build();
+            .id(UUID.randomUUID().toString())
+            .contextId(UUID.randomUUID().toString())
+            .correlationId(UUID.randomUUID().toString())
+            .creationDateTime(new Date())
+            .sender(newService()
+                .id(config.getServiceId())
+                .type(VESSEL_SERVICE)
+                .dataFreshness(DataFreshnessType.fromValue(config.getDataFreshnessType()))
+                .seaBasin(SeaBasinType.fromValue(config.getSeaBasinType()))
+                .operation(ServiceOperationType.fromValue(config.getServiceOperation()))
+                .participant(newParticipant().endpointUrl(config.getEndpointUrl())))
+            .priority(PriorityType.fromValue(config.getMessagePriority()))
+            .isRequiresAck(false)
+            .informationSecurityLevel(
+                InformationSecurityLevelType.fromValue(config.getSecurityLevel()))
+            .informationSensitivity(InformationSensitivityType.fromValue(config.getSensitivity()))
+            .isPersonalData(false)
+            .purpose(PurposeType.fromValue(config.getPurpose()))
+            .addEntities(entities);
+    }
+
+    /**
+     * True if  the service operation of the sender is 'Subscribe'
+     *
+     * @return true for subscription protocol
+     */
+    private boolean isSubscribeMessage() {
+        return ServiceOperationType.fromValue(config.getServiceOperation()).equals(SUBSCRIBE);
     }
 }

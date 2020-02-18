@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,6 +27,20 @@
 
 package eu.cise.adaptor.translate;
 
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.AGROUND;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.AT_ANCHOR;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.CONSTRAINED_BY_HER_DRAUGHT;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.ENGAGED_IN_FISHING;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.MOORED;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.NOT_UNDER_COMMAND;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.OTHER;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.POWER_DRIVEN_VESSEL_TOWIG_AHEAD_OR_PUSHING_ALONGSIDE;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.POWER_DRIVEN_VESSEL_TOWING_ASTERN;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.RESTRICTED_MANOEUVRABILITY;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDEFINED_DEFAULT;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_SAILING;
+import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+
 import eu.cise.adaptor.AdaptorConfig;
 import eu.cise.adaptor.AisMsg;
 import eu.cise.adaptor.exceptions.AdaptorException;
@@ -40,15 +54,13 @@ import eu.cise.datamodel.v1.entity.object.SourceType;
 import eu.cise.datamodel.v1.entity.period.Period;
 import eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
-import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * This object translate messages of type 5 into CISE Vessel objects.
@@ -68,10 +80,9 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     /**
-     * Main method to translate an AIS message into a CISE Vessel object.
-     * Each and every field is translated in the corresponding vessel field
-     * respecting corner cases, special encoding and different base scale
-     * of the data.
+     * Main method to translate an AIS message into a CISE Vessel object. Each and every field is
+     * translated in the corresponding vessel field respecting corner cases, special encoding and
+     * different base scale of the data.
      *
      * @param message the AIS message
      * @return a translated CISE vessel
@@ -79,7 +90,6 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     @Override
     public Vessel translate(AisMsg message) {
 
-        // casting float to double
         // casting float to double
         Long mmsi = Long.valueOf(message.getUserId());
 
@@ -91,42 +101,42 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             vessel.setIMONumber(mmsi);
 
         vessel.setMMSI(mmsi);
-        vessel.getLocationRels().add(getLocationRel(latitude(message),
-                longitude(message),
-                fromPositionAccuracy(message),
+        vessel.getLocationRels().add(
+            getLocationRel(
+                toLocation(
+                    message.getLatitude(),
+                    message.getLongitude(),
+                    fromPositionAccuracy(message)),
                 fromCourseOverGround(message.getCOG()),
                 fromTrueHeading(message.getTrueHeading()),
                 message.getTimestamp(),
                 fromSpeedOverGround(message.getSOG())));
-        vessel.setNavigationalStatus(
-                fromNavigationStatus(message.getNavigationStatus()));
+        vessel.setNavigationalStatus(fromNavigationStatus(message.getNavigationStatus()));
 
         return vessel;
     }
 
     // PRIVATE HELPERS /////////////////////////////////////////////////////////
-
     private LocationQualitativeAccuracyType fromPositionAccuracy(AisMsg aisMsg) {
         return aisMsg.getPositionAccuracy() == 1 ?
-                LocationQualitativeAccuracyType.HIGH :
-                LocationQualitativeAccuracyType.LOW;
+            LocationQualitativeAccuracyType.HIGH :
+            LocationQualitativeAccuracyType.MEDIUM;
     }
 
-    private Objet.LocationRel getLocationRel(String latitude,
-                                             String longitude,
-                                             LocationQualitativeAccuracyType lqat,
-                                             Double cog,
-                                             Double heading,
-                                             Instant timestamp,
-                                             Double sog) {
+    private Objet.LocationRel getLocationRel(
+        Location location,
+        Double cog,
+        Double heading,
+        Instant timestamp,
+        Double sog) {
 
         Objet.LocationRel locationRel = new Objet.LocationRel();
-        locationRel.setLocation(toLocation(latitude, longitude, lqat));
+        locationRel.setLocation(location);
         locationRel.setCOG(cog);
         locationRel.setHeading(heading);
 
         if (config.isOverridingTimestamps()) {
-            timestamp = Instant.now();
+            timestamp = Instant.now(Clock.systemUTC());
         }
 
         if (!timestamp.equals(Instant.MIN)) {
@@ -143,11 +153,14 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         return locationRel;
     }
 
-    private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes, int seconds) {
+    private XMLGregorianCalendar toXMLCalendar(int year, int month, int day, int hours, int minutes,
+        int seconds) {
         try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(year, month, day, hours, minutes, seconds, 0, 0);
+            return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(year, month, day, hours, minutes, seconds, 0, 0);
         } catch (DatatypeConfigurationException e) {
-            throw new AdaptorException("Can't create a correct XMLGregorianCalendar DATE/TIME out of the instant ", e);
+            throw new AdaptorException(
+                "Can't create a correct XMLGregorianCalendar DATE/TIME out of the instant ", e);
         }
     }
 
@@ -161,19 +174,17 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
         return toXMLCalendar(1970, 01, 01, l.getHour(), l.getMinute(), l.getSecond());
     }
 
-    private String longitude(AisMsg aisMsg) {
-        return Float.toString(aisMsg.getLongitude());
-    }
+    private Location toLocation(
+        Float latitude, Float longitude, LocationQualitativeAccuracyType lqat) {
 
-    private String latitude(AisMsg aisMsg) {
-        return Float.toString(aisMsg.getLatitude());
-    }
+        if (config.deleteLocationUnavailable() && (longitude == 181 || latitude == 91)) {
+            return null;
+        }
 
-    private Location toLocation(String latitude, String longitude, LocationQualitativeAccuracyType lqat) {
         Location location = new Location();
         Geometry geometry = new Geometry();
-        geometry.setLatitude(latitude);
-        geometry.setLongitude(longitude);
+        geometry.setLatitude(Float.toString(latitude));
+        geometry.setLongitude(Float.toString(longitude));
         location.getGeometries().add(geometry);
         location.setLocationQualitativeAccuracy(lqat);
         return location;
@@ -184,11 +195,11 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
     }
 
     private Double fromCourseOverGround(Float cog) {
-        return cog == 3600 ? null : f2d(cog) / 10D;
+        return cog == 360.0F ? null : f2d(cog);
     }
 
     private Double fromSpeedOverGround(Float sog) {
-        return sog == 1023 ? null : f2d(sog) / 10D;
+        return sog == 102.3F ? null : f2d(sog);
     }
 
     private Double fromTrueHeading(int th) {
@@ -225,19 +236,14 @@ public class Message123Translator implements Translator<AisMsg, Vessel> {
             case UnderwaySailing:
                 return UNDER_WAY_SAILING;
             case ReservedForFutureUse9:
-                return OTHER;
+            case ReservedForFutureUse13:
             case ReservedForFutureUse10:
+            case SartMobOrEpirb:
                 return OTHER;
             case PowerDrivenVesselTowingAstern:
                 return POWER_DRIVEN_VESSEL_TOWING_ASTERN;
             case PowerDrivenVesselPushingAheadOrTowingAlongside:
                 return POWER_DRIVEN_VESSEL_TOWIG_AHEAD_OR_PUSHING_ALONGSIDE;
-            case ReservedForFutureUse13:
-                return OTHER;
-            case SartMobOrEpirb:
-                return OTHER;
-            case Undefined:
-                return UNDEFINED_DEFAULT;
             default:
                 return UNDEFINED_DEFAULT;
         }

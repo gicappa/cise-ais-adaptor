@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,18 +30,15 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.translate.AisMsgToVessel;
 import eu.cise.adaptor.translate.VesselToPushMessage;
 import eu.cise.servicemodel.v1.message.Message;
+import java.util.Optional;
 import reactor.core.publisher.Flux;
 
-import java.util.Optional;
-
 /**
- * An AIS Stream Processor object is meant to transform a string of NMEA messages
- * into a Flux of messages. Flux is a class of Reactor library and is meant to
- * handle a stream of information giving the possibility to handle simply
- * different parameters like buffering of the information (a number of objects
- * of the stream to be collected before sending a message) backpressure strategy
- * (how to handle a congestion of messages coming from the source of information)
- * and so on.
+ * An AIS Stream Processor object is meant to transform a string of NMEA messages into a Flux of
+ * messages. Flux is a class of Reactor library and is meant to handle a stream of information
+ * giving the possibility to handle simply different parameters like buffering of the information (a
+ * number of objects of the stream to be collected before sending a message) backpressure strategy
+ * (how to handle a congestion of messages coming from the source of information) and so on.
  */
 public class DefaultPipeline implements Pipeline<String, Message> {
 
@@ -51,8 +48,8 @@ public class DefaultPipeline implements Pipeline<String, Message> {
     private final AdaptorConfig config;
 
     /**
-     * The constructor will use these collaborators to streamline the
-     * transformation from NMEA to CISE messages.
+     * The constructor will use these collaborators to streamline the transformation from NMEA to
+     * CISE messages.
      *
      * @param stringToAisMsg      transformer from string to ais
      * @param aisMsgToVessel      transformer from ais to vessel
@@ -60,9 +57,9 @@ public class DefaultPipeline implements Pipeline<String, Message> {
      * @param config              configuration object
      */
     public DefaultPipeline(StringToAisMsg stringToAisMsg,
-                           AisMsgToVessel aisMsgToVessel,
-                           VesselToPushMessage vesselToPushMessage,
-                           AdaptorConfig config) {
+        AisMsgToVessel aisMsgToVessel,
+        VesselToPushMessage vesselToPushMessage,
+        AdaptorConfig config) {
 
         this.stringToAisMsg = stringToAisMsg;
         this.aisMsgToVessel = aisMsgToVessel;
@@ -71,8 +68,7 @@ public class DefaultPipeline implements Pipeline<String, Message> {
     }
 
     /**
-     * The pipeline will process NMEA message strings into a number of CISE push
-     * messages.
+     * The pipeline will process NMEA message strings into a number of CISE push messages.
      *
      * @param nmeaStringFlux the flux of NMEA strings
      * @return a flux of CISE push message objects.
@@ -84,10 +80,10 @@ public class DefaultPipeline implements Pipeline<String, Message> {
 
     Flux<Message> toPushMessageFlux(Flux<AisMsg> aisMsgFlux) {
         return aisMsgFlux.map(aisMsgToVessel::translate)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .bufferTimeout(config.getNumberOfEntitiesPerMessage(),
-                               config.getEntityBufferTimeout())
-                .map(vesselToPushMessage::translate);
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .bufferTimeout(config.getNumberOfEntitiesPerMessage(),
+                config.getEntityBufferTimeout())
+            .map(vesselToPushMessage::translate);
     }
 }

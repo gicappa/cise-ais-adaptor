@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,8 @@ public class MainAppIdeLauncher {
 
     @Test
     public void run() {
-        new MainApp(ConfigFactory.create(CertificateConfig.class)).run();
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
+
+        new MainApp(config).run();
     }
 }
