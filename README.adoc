@@ -1,6 +1,11 @@
 = CISE Adaptor for AIS data
 Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
 v1.1, 2019-01-11
+
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]
+
 :page-layout: docs
 :imagesdir: assets/images
 :homepage: https://github.com/ec-jrc/cise-ais-adaptor
@@ -20,7 +25,6 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 :source-language: bash
-
 
 == Overview
 The CISE Adaptor for AIS data is an application to read AIS tracks encoded with NMEA messages, translate them into a stream of CISE Data Model compliant objects and to dispatch CISE Push messages to a connected CISE Gateway.
