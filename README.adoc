@@ -1,6 +1,11 @@
 = CISE Adaptor for AIS data
 Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
 v1.1, 2019-01-11
+
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]
+image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]
+
 :page-layout: docs
 :imagesdir: assets/images
 :homepage: https://github.com/ec-jrc/cise-ais-adaptor
@@ -18,9 +23,6 @@ ifdef::env-github[]
 :important-caption: :heavy_exclamation_mark:
 :caution-caption: :fire:
 :warning-caption: :warning:
-image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]
-image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]
-image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]
 endif::[]
 :source-language: bash
 
