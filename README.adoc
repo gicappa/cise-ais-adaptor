@@ -21,6 +21,11 @@ ifdef::env-github[]
 endif::[]
 :source-language: bash
 
+[![security status](https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security)](pacegia@webgate.ec.europa.eu/citnet/stash/scm/marex/cise-ais-adaptor.git)
+
+[![stability status](https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability)](pacegia@webgate.ec.europa.eu/citnet/stash/scm/marex/cise-ais-adaptor.git)
+
+[![licensing status](https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing)](pacegia@webgate.ec.europa.eu/citnet/stash/scm/marex/cise-ais-adaptor.git)
 
 == Overview
 The CISE Adaptor for AIS data is an application to read AIS tracks encoded with NMEA messages, translate them into a stream of CISE Data Model compliant objects and to dispatch CISE Push messages to a connected CISE Gateway.
