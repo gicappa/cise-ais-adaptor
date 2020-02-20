@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   ~ Copyright CISE AIS Adaptor (c) 2018-2019, European Union
   ~ All rights reserved.
@@ -25,10 +25,7 @@
   ~ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cise-signature</artifactId>
   <groupId>eu.europa.ec.jrc.marex</groupId>
@@ -255,6 +252,21 @@
   </build>
 
   <dependencies>
+    <dependency>
+      <artifactId>commons-collections</artifactId>
+      <groupId>commons-collections</groupId>
+      <version>3.2.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>commons-beanutils</artifactId>
+      <groupId>commons-beanutils</groupId>
+      <version>1.9.4</version>
+    </dependency>
+    <dependency>
+      <artifactId>xstream</artifactId>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <version>1.4.11.1</version>
+    </dependency>
     <!-- EUCISE dependencies -->
     <dependency>
       <artifactId>cise-data-model</artifactId>
@@ -277,13 +289,13 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.25</version>
+      <version>1.7.30</version>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.25</version>
+      <version>1.7.30</version>
       <scope>test</scope>
     </dependency>
 

@@ -69,7 +69,7 @@ public class AisNormalizerMsg123Test {
 
     @Test
     public void it_maps_position_longitude() {
-        assertThat(n.translate(t.positionMsg()).get().getLongitude(), is(-6.9895167F));
+        assertThat(n.translate(t.positionMsg()).get().getLongitude(), is(-6.989518F));
     }
 
     @Test

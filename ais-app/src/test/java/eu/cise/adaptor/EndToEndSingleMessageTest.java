@@ -93,7 +93,7 @@ public class EndToEndSingleMessageTest {
             assertThat(vessel.getNavigationalStatus(), is(UNDER_WAY_USING_ENGINE));
             assertThat(locationRelInfo(vessel).getHeading(), is(127D));
             assertThat(geometryInfo(vessel).getLatitude(), is("50.854515")); //50.8545167
-            assertThat(geometryInfo(vessel).getLongitude(), is("-1.348565")); //1.3485667
+            assertThat(geometryInfo(vessel).getLongitude(), is("-1.3485667")); //1.3485667
             assertThat(locationInfo(vessel).getLocationQualitativeAccuracy(), is(MEDIUM));
             // System.out.println(locationRelInfo(vessel).getPeriodOfTime()); // To be checked
 
