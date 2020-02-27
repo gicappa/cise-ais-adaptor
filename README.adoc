@@ -2,9 +2,10 @@
 Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
 v1.1, 2019-01-11
 
-https://www.meterian.com/projects/?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]]
-https://www.meterian.com/projects/?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]]
-https://www.meterian.com/projects/?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]]
+https://www.meterian.com/projects.html?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]]
+https://www.meterian.com/projects.html?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]]
+https://www.meterian.com/projects.html?pid=4d02dd4c-9d8e-4364-86ee-24550874bb78&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]]
+
 
 :page-layout: docs
 :imagesdir: assets/images
