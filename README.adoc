@@ -44,8 +44,16 @@ The application should preferably installed on a linux machine. Theoretically sh
 
 The server should be installed with:
 
-- Java 1.8
+- JDK 1.8
 - Maven 3.5+
+
+NOTE: We have been reported an issue compiling the software with the JDK 1.8 from IBM since it is missing a security provider.
+The following JDK have been proved to be building the application properly:
+- GraalVM https://www.graalvm.org/docs/getting-started/
+- Amazon Corretto https://aws.amazon.com/it/corretto/
+- AdoptOpenJDK https://adoptopenjdk.net/
+- Zulu OpenJDK https://www.azul.com/downloads/zulu-community/?package=jdk
+- Liberica JDK https://bell-sw.com/
 
 == Compilation
 Clone the git repository:
