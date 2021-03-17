@@ -2,10 +2,9 @@
 Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
 v1.1, 2019-01-11
 
-https://www.meterian.com/projects.html?pid=2c276d07-eaa1-494e-b77b-2f390b949dde&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/security[security status]]
-https://www.meterian.com/projects.html?pid=2c276d07-eaa1-494e-b77b-2f390b949dde&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/stability[stability status]]
-https://www.meterian.com/projects.html?pid=2c276d07-eaa1-494e-b77b-2f390b949dde&branch=master&mode=eli[image:https://www.meterian.io/badge/pb/4d02dd4c-9d8e-4364-86ee-24550874bb78/licensing[licensing status]]
-
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/security?branch=master[security status]]	
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/stability?branch=master[stability status]]	
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/licensing?branch=master[licensing status]]
 
 :page-layout: docs
 :imagesdir: assets/images
@@ -44,8 +43,18 @@ The application should preferably installed on a linux machine. Theoretically sh
 
 The server should be installed with:
 
-- Java 1.8
+- JDK 1.8
 - Maven 3.5+
+
+NOTE: We have been reported an issue compiling the software with the JDK 1.8 from IBM since it is missing a security provider.
+
+The following JDK have been proved to build the cise-ais-adaptor properly:
+
+- GraalVM https://www.graalvm.org/docs/getting-started/
+- Amazon Corretto https://aws.amazon.com/it/corretto/
+- AdoptOpenJDK https://adoptopenjdk.net/
+- Zulu OpenJDK https://www.azul.com/downloads/zulu-community/?package=jdk
+- Liberica JDK https://bell-sw.com/
 
 == Compilation
 Clone the git repository:
