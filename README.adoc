@@ -43,10 +43,10 @@ The application should preferably installed on a linux machine. Theoretically sh
 
 The server should be installed with:
 
-- JDK 1.8
+- JDK 11+
 - Maven 3.5+
 
-NOTE: We have been reported an issue compiling the software with the JDK 1.8 from IBM since it is missing a security provider.
+NOTE: We have been reported an issue compiling the software with the JDK 11 from IBM since it is missing a security provider.
 
 The following JDK have been proved to build the cise-ais-adaptor properly:
 
@@ -64,20 +64,14 @@ Clone the git repository:
 ----
 
 After cloning the git repository is possible to compile the project using maven.
-
-WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps.
-
-WARNING: With the version 1.1 of the adaptor also a new version of the ais-mvn-repo libraries has been released. Please ask the new library if you plan to upgrade the ais-adaptor software to the 1.1 version.
-
 [source,bash]
 ----
 ...$ cd cise-ais-adaptor
-...$ tar xvfz ais-mvn-repo-1.1.tgz
 ...$ mvn clean install -U
 ----
 
 == Preparing the software
-When the compilation will be finished (with a BUILD SUCCESSFUL in the standard output) it will be created a distribution package that can be used to run the software.
+After the compilation is finished, it will be created a distribution package that can be used to run the software.
 
 [source,bash]
 ----
