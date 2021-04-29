@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,16 +27,19 @@
 
 package eu.cise.signature;
 
+import static eu.cise.signature.Scenario.buildMessage;
+import static eu.cise.signature.Scenario.file;
+import static eu.cise.signature.SignatureServiceBuilder.newSignatureService;
+
 import eu.cise.servicemodel.v1.message.Message;
 import eu.eucise.xml.DefaultXmlMapper;
 import eu.eucise.xml.DefaultXmlValidator;
 import eu.eucise.xml.XmlMapper;
 import eu.eucise.xml.XmlValidator;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.Test;
-
-import static eu.cise.signature.Scenario.buildMessage;
-import static eu.cise.signature.SignatureServiceBuilder.newSignatureService;
 
 public class SignatureServiceTest {
 
@@ -54,15 +57,15 @@ public class SignatureServiceTest {
         message = buildMessage();
 
         signature = newSignatureService(xmlMapper)
-                .withKeyStoreName("adaptor.jks")
-                .withKeyStorePassword("eucise")
-                .withPrivateKeyAlias("sim1-node01.node01.eucise.fr")
-                .withPrivateKeyPassword("eucise")
-                .build();
+            .withKeyStoreName("adaptor.jks")
+            .withKeyStorePassword("eucise")
+            .withPrivateKeyAlias("sim1-node01.node01.eucise.fr")
+            .withPrivateKeyPassword("eucise")
+            .build();
     }
 
     @Test
-    public void it_should_sign_and_verify_a_message() {
+    public void it_sign_and_verify_a_message() {
         Message signedMsg = signature.sign(message);
 
         String messageXML = xmlMapper.toXML(signedMsg);
@@ -72,5 +75,24 @@ public class SignatureServiceTest {
         signedMsg = xmlMapper.fromXML(messageXML);
 
         signature.verify(signedMsg);
+    }
+
+    /**
+     * There was an issue on the verification of pretty printed messages because the XMLSignature
+     * element was unmarshalling the xml element counting also the spaces as xml nodes.
+     * <p>
+     * The fix has been released in the cise-model-generator-java.
+     *
+     * @throws IOException        when is not able to load the xml file
+     * @throws URISyntaxException when the file name has issues.
+     */
+    @Test
+    public void it_load_an_xml_produced_by_RTI_adaptor_and_verify_it()
+        throws IOException, URISyntaxException {
+        String messageXML = file("/SignedPushVessels.xml");
+
+        Message msgPretty = xmlMapper.fromXML(messageXML);
+
+        signature.verify(msgPretty);
     }
 }

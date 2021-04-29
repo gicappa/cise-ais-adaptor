@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,8 @@ public interface AdaptorLogger {
 
     void logDispatchError(Throwable throwable);
 
+    void logNMEADecodingError(String nmeaMessage, Throwable error);
+
     class Slf4j implements AdaptorLogger {
 
         Logger logger = LoggerFactory.getLogger(AdaptorLogger.class);
@@ -49,6 +51,12 @@ public interface AdaptorLogger {
         @Override
         public void logDispatchError(Throwable throwable) {
             logger.error("dispatching error", throwable);
+        }
+
+        @Override
+        public void logNMEADecodingError(String nmeaMessage, Throwable error) {
+            logger.error("the following AIS message caused an unhandled "
+                + "exception in the application.\n{}", nmeaMessage);
         }
     }
 }

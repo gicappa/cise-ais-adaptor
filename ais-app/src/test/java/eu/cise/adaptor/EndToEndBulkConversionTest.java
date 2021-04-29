@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,40 +27,54 @@
 
 package eu.cise.adaptor;
 
+import static java.lang.Thread.sleep;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import eu.cise.adaptor.server.TestRestServer;
 import eu.eucise.xml.DefaultXmlMapper;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-public class EndToEndConversionTest {
+public class EndToEndBulkConversionTest {
 
     private Thread threadMainApp;
     private TestRestServer testRestServer;
     private DefaultXmlMapper xmlMapper;
+    private Logger logger;
+    private AdaptorExtConfig config;
 
     @Before
     public void before() {
-        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
+        System.setProperty("prefix.dir", "e2e-bulk-");
+
+        config = ConfigFactory.create(AdaptorExtConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
         threadMainApp = new Thread(new MainApp(config));
         xmlMapper = new DefaultXmlMapper();
+        logger = LoggerFactory.getLogger(EndToEndBulkConversionTest.class);
     }
 
     @Test
     public void it_deserialize_a_message_from_a_file() {
         try {
             threadMainApp.start();
-            testRestServer.checkRequest(r -> xmlMapper.fromXML(r));
-            threadMainApp.join(180000);
+            testRestServer.checkRequest(r -> {
+                logger.debug(r);
+                xmlMapper.fromXML(r);
+            });
+            threadMainApp.join(30000);
+
+            sleep(5);
 
             assertEquals(96, testRestServer.countInvocations());
         } catch (InterruptedException e) {
+            e.printStackTrace();
             testRestServer.shutdown();
             fail("An exception occurred");
         }

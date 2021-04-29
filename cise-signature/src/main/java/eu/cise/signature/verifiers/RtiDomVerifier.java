@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -112,9 +112,6 @@ public class RtiDomVerifier implements DomVerifier {
     }
 
     /**
-     * TODO the code here is just checking one level because in the for loop it always
-     * TODO does not switch from one certificate to the other
-     *
      * @param x509certificateToVerify        certificate to be verified
      * @param collectionX509CertificateChain list of certificates
      */

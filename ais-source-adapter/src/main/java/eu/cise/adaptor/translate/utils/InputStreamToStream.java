@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,40 +27,41 @@
 
 package eu.cise.adaptor.translate.utils;
 
-import eu.cise.adaptor.DelimiterType;
-
-import java.io.InputStream;
-import java.util.Scanner;
-import java.util.Spliterator;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import static eu.cise.adaptor.DelimiterType.KEEP;
-import static eu.cise.adaptor.DelimiterType.STRIP;
 import static java.lang.Long.MAX_VALUE;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliterator;
 
+import eu.cise.adaptor.DelimiterType;
+import java.io.InputStream;
+import java.util.Scanner;
+import java.util.Spliterator;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 public class InputStreamToStream {
 
-    private static final String DELIMITER_DEFAULT = "\n";
-    private final String prefix;
+    private final String delimiter;
     private final Scanner scanner;
     private final Spliterator<String> split;
-
-    public InputStreamToStream(InputStream is) {
-        this(is, DELIMITER_DEFAULT, STRIP);
-    }
+    private final AtomicLong count = new AtomicLong();
 
     public InputStreamToStream(InputStream is, String delimiter, DelimiterType type) {
-        this.scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
-        this.split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
-        this.prefix = type.equals(KEEP) ? delimiter : "";
 
+        this.scanner = new Scanner(is, "UTF-8").useDelimiter(delimiter);
+
+        this.split = spliterator(scanner, MAX_VALUE, ORDERED | NONNULL);
+
+        this.delimiter = type.equals(KEEP) ? delimiter : "";
     }
 
     public Stream<String> stream() {
-        return StreamSupport.stream(split, false).onClose(scanner::close).map(m -> prefix + m);
+        return StreamSupport.stream(split, false)
+            .onClose(scanner::close)
+            .peek(m -> count.getAndIncrement())
+//            .filter(m -> !m.isEmpty())
+            .map(m -> delimiter + m);
     }
 }

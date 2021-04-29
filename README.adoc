@@ -1,6 +1,11 @@
 = CISE Adaptor for AIS data
 Gian_Carlo Pace <giancarlo.pace@ec.europa.eu>
 v1.1, 2019-01-11
+
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/security?branch=master[security status]]	
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/stability?branch=master[stability status]]	
+https://www.meterian.com/projects/?pid=2c276d07-eaa1-494e-b77b-2f390b949dde[image:https://www.meterian.com/badge/pb/2c276d07-eaa1-494e-b77b-2f390b949dde/licensing?branch=master[licensing status]]
+
 :page-layout: docs
 :imagesdir: assets/images
 :homepage: https://github.com/ec-jrc/cise-ais-adaptor
@@ -21,7 +26,6 @@ ifdef::env-github[]
 endif::[]
 :source-language: bash
 
-
 == Overview
 The CISE Adaptor for AIS data is an application to read AIS tracks encoded with NMEA messages, translate them into a stream of CISE Data Model compliant objects and to dispatch CISE Push messages to a connected CISE Gateway.
 
@@ -39,8 +43,18 @@ The application should preferably installed on a linux machine. Theoretically sh
 
 The server should be installed with:
 
-- Java 1.8
+- JDK 1.8
 - Maven 3.5+
+
+NOTE: We have been reported an issue compiling the software with the JDK 1.8 from IBM since it is missing a security provider.
+
+The following JDK have been proved to build the cise-ais-adaptor properly:
+
+- GraalVM https://www.graalvm.org/docs/getting-started/
+- Amazon Corretto https://aws.amazon.com/it/corretto/
+- AdoptOpenJDK https://adoptopenjdk.net/
+- Zulu OpenJDK https://www.azul.com/downloads/zulu-community/?package=jdk
+- Liberica JDK https://bell-sw.com/
 
 == Compilation
 Clone the git repository:
@@ -53,11 +67,13 @@ After cloning the git repository is possible to compile the project using maven.
 
 WARNING: To compile the software it's mandatory to send an email to the JRC CISE Team <JRC-CISE@ec.europa.eu> requesting the content of the ais-mvn-repo directory. Once received, *please copy the file ais-mvn-repo.tgz in the project directory* and proceed with the following steps.
 
+WARNING: With the version 1.1 of the adaptor also a new version of the ais-mvn-repo libraries has been released. Please ask the new library if you plan to upgrade the ais-adaptor software to the 1.1 version.
+
 [source,bash]
 ----
 ...$ cd cise-ais-adaptor
-...$ tar xvfz cise-mvn-repo.tgz
-...$ mvn clean install
+...$ tar xvfz ais-mvn-repo-1.1.tgz
+...$ mvn clean install -U
 ----
 
 == Preparing the software

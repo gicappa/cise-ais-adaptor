@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@ package eu.cise.adaptor.heplers;
 
 import eu.cise.adaptor.exceptions.AdaptorException;
 import eu.cise.datamodel.v1.entity.location.Geometry;
+import eu.cise.datamodel.v1.entity.location.Location;
 import eu.cise.datamodel.v1.entity.object.Objet;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import eu.cise.servicemodel.v1.message.Push;
@@ -77,8 +78,12 @@ public class Utils {
         return v.getLocationRels().get(0);
     }
 
+    public static Location extractLocation(Vessel v) {
+        return v.getLocationRels().get(0).getLocation();
+    }
+
     public static Geometry extractGeometry(Vessel v) {
-        return v.getLocationRels().get(0).getLocation().getGeometries().get(0);
+        return extractLocation(v).getGeometries().get(0);
     }
 
     public static Vessel extractVessel(Push translate) {

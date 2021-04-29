@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,12 @@ package eu.cise.adaptor;
 import static org.aeonbits.owner.Config.Sources;
 
 /**
- * Extending the {AdaptorConfig} configuration object adding properties
- * specific to the Certificate and Signature
+ * Extending the {AdaptorConfig} configuration object adding properties specific to the Certificate
+ * and Signature
  */
 @SuppressWarnings("unused")
 @Sources({"file:${conf.dir}ais-adaptor.properties",
-        "classpath:ais-adaptor.properties"})
+    "classpath:${prefix.dir}ais-adaptor.properties"})
 public interface AdaptorExtConfig extends AdaptorConfig {
 
     @Key("signature.private-key.alias")

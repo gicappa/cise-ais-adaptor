@@ -1,5 +1,5 @@
 /*
- * Copyright CISE AIS Adaptor (c) 2018, European Union
+ * Copyright CISE AIS Adaptor (c) 2018-2019, European Union
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -136,7 +136,7 @@ public class DefaultDomVerifier implements DomVerifier {
     }
 
     private void forEachSignatureIn(Document doc, Consumer<Node> consumer) {
-        NodeList nodeList = doc.getElementsByTagName("Signature");
+        NodeList nodeList = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
 
         if (nodeList.getLength() <= 0) throw new SignatureNotPresentEx();
 
