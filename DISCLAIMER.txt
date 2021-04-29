@@ -8,7 +8,6 @@ Apache 2: Objenesis
 Apache License 2.0: Javassist
 Apache Software Licenses: Log4j Implemented Over SLF4J
 BSD-Style License: JAXB2 Basics - Basic Plugins, JAXB2 Basics - Runtime, JAXB2 Basics - Tools
-BSD style: XStream Core
 CC0: reactive-streams
 CDDL 1.1: javax.ws.rs-api
 CDDL+GPL License: jersey-core-client, jersey-core-common, jersey-repackaged-guava

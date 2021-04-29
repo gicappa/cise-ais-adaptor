@@ -225,11 +225,6 @@
         <artifactId>commons-beanutils</artifactId>
         <version>1.9.4</version>
       </dependency>
-      <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
-        <artifactId>xstream</artifactId>
-        <version>1.4.11.1</version>
-      </dependency>
       <!-- CISE Internal Dependencies -->
       <dependency>
         <groupId>eu.europa.ec.jrc.marex</groupId>

@@ -49,11 +49,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>dk.tbsalling</groupId>
       <artifactId>aismessages</artifactId>
     </dependency>
