@@ -46,11 +46,6 @@
       <groupId>commons-beanutils</groupId>
     </dependency>
 
-    <dependency>
-      <artifactId>xstream</artifactId>
-      <groupId>com.thoughtworks.xstream</groupId>
-    </dependency>
-
     <!-- internal dependencies -->
     <dependency>
       <artifactId>cise-data-model</artifactId>
