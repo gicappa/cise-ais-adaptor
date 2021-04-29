@@ -206,20 +206,6 @@
             <artifactId>asciidoctorj-diagram</artifactId>
             <version>1.5.16</version>
           </dependency>
-          <!-- Still in the process of searching for a library to enhance the UI impact of the documentation
-                    <dependency>
-                      <groupId>io.spring.docresources</groupId>
-                      <artifactId>spring-doc-resources</artifactId>
-                      <version>0.1.2.RELEASE</version>
-                      <type>zip</type>
-                      <optional>true</optional>
-                    </dependency>
-                    <dependency>
-                      <groupId>io.spring.asciidoctor</groupId>
-                      <artifactId>spring-asciidoctor-extensions</artifactId>
-                      <version>${docs.resources.version}</version>
-                    </dependency>
-          -->
         </dependencies>
       </plugin>
 
@@ -294,10 +280,10 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-    <!-- XXXXXXXXXXXXXXX -->
+
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
@@ -321,7 +307,6 @@
       <artifactId>javax.activation</artifactId>
       <version>${javax.activation.version}</version>
     </dependency>
-    <!-- XXXXXXXXXXXXXXX -->
   </dependencies>
 
   <repositories>
