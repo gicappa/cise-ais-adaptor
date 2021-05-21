@@ -29,7 +29,6 @@ package eu.cise.adaptor;
 
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
-import static java.lang.Thread.sleep;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -81,9 +80,9 @@ public class EndToEndSingleMessageTest {
         try {
             threadMainApp.start();
             testRestServer.checkRequest(r -> atomicReference.set(xmlMapper.fromXML(r)));
-            threadMainApp.join(2000);
+            threadMainApp.join(30000);
 
-            sleep(2);
+            Thread.sleep(10);
 
             Vessel vessel = extractVessel(atomicReference.get());
 
