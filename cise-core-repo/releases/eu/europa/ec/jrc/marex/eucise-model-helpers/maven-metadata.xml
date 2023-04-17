@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>eu.europa.ec.jrc.marex</groupId>
+  <artifactId>eucise-model-helpers</artifactId>
+  <versioning>
+    <release>${cise.models.version}</release>
+    <versions>
+      <version>${cise.models.version}</version>
+    </versions>
+    <lastUpdated>20230417125033</lastUpdated>
+  </versioning>
+</metadata>

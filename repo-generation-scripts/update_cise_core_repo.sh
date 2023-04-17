@@ -35,8 +35,7 @@ echo "Deleting previous $DUMMY_REPO"
 rm -rf $DUMMY_REPO
 echo "Creating $DUMMY_REPO"
 
-mvn -X -U org.apache.maven.plugins:maven-dependency-plugin:2.9:copy-dependencies -DincludeGroupIds=eu.europa.ec.jrc.marex -DoutputDirectory=$DUMMY_REPO -Dmdep.copyPom=true -Dmdep.addParentPoms=true -DoverWriteReleases=true
-exit 1
+mvn -U org.apache.maven.plugins:maven-dependency-plugin:2.9:copy-dependencies -DincludeGroupIds=eu.europa.ec.jrc.marex -DoutputDirectory=$DUMMY_REPO -Dmdep.copyPom=true -Dmdep.addParentPoms=true -DoverWriteReleases=true
 mvn -U org.apache.maven.plugins:maven-dependency-plugin:2.9:copy -DoutputDirectory=$DUMMY_REPO
 
 # go through the poms
@@ -59,4 +58,4 @@ for pomFile in $(find $DUMMY_REPO -type f -name \*.pom); do
 done
 
 cd ..
-#rm -rf sampleProject
+rm -rf sampleProject

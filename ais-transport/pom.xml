@@ -51,6 +51,7 @@
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-ais-domain</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
