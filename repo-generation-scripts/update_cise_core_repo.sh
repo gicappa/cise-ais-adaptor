@@ -62,4 +62,4 @@ for pomFile in $(find $DUMMY_REPO -type f -name \*.pom); do
 done
 
 cd ..
-#rm -rf sampleProject
+rm -rf sampleProject
