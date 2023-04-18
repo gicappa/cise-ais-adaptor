@@ -47,6 +47,10 @@ for pomFile in $(find $DUMMY_REPO -type f -name \*.pom); do
    echo "   $artifactId"
    echo "   $groupId"
    echo "   $version"
+   if [ "$version" == "\${cise.models.version}" ]; then
+     version="2.3.0"
+     echo "Fixed version to $version"
+   fi
    mavenJarFile=$pomFile
    jarFile=$(find . -type f -name "$artifactId-$version.jar")
    if [ -s "$jarFile" ]; then
