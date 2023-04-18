@@ -47,8 +47,8 @@ for pomFile in $(find $DUMMY_REPO -type f -name \*.pom); do
    echo "   $artifactId"
    echo "   $groupId"
    echo "   $version"
-   if [ "$version" == "\${cise.models.version}" ]; then
-     version="2.3.0"
+   if ! [[ "$version" =~ ^[0-9]+\.[0-9]+ ]]; then
+     version=$(echo ${pomFile##*-} | sed 's/.pom//g')
      echo "Fixed version to $version"
    fi
    mavenJarFile=$pomFile
@@ -62,4 +62,4 @@ for pomFile in $(find $DUMMY_REPO -type f -name \*.pom); do
 done
 
 cd ..
-rm -rf sampleProject
+#rm -rf sampleProject
