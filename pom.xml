@@ -75,6 +75,8 @@
               <include>**/*Spec.java</include>
               <include>**/*Test*.java</include>
             </includes>
+            <argLine>${surefire.java.args}</argLine>
+
           </configuration>
         </plugin>
 
@@ -437,6 +439,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <cise.libraries.version>2.3.0</cise.libraries.version>
     <cise.slf4j-bom.version>2.3.0</cise.slf4j-bom.version>
+    <surefire.java.args>-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0</surefire.java.args>
   </properties>
 
 </project>
