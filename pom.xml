@@ -36,7 +36,6 @@
   <name>cise-ais-adaptor</name>
 
   <modules>
-    <module>cise-signature</module>
     <module>ais-app</module>
     <module>ais-domain</module>
     <module>ais-source-adapter</module>
@@ -76,6 +75,8 @@
               <include>**/*Spec.java</include>
               <include>**/*Test*.java</include>
             </includes>
+            <argLine>${surefire.java.args}</argLine>
+
           </configuration>
         </plugin>
 
@@ -178,9 +179,31 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>2.7</version>
       </plugin>
+      <!-- maven dependencies plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>eu.europa.ec.jrc.marex</groupId>
+              <artifactId>cise-slf4j-bom</artifactId>
+              <version>${cise.slf4j-bom.version}</version>
+              <type>pom</type>
+            </artifactItem>
+            <artifactItem>
+              <groupId>eu.europa.ec.jrc.marex</groupId>
+              <artifactId>cise-models-bom</artifactId>
+              <version>${cise.libraries.version}</version>
+              <type>pom</type>
+            </artifactItem>
+          </artifactItems>
+          <!-- other configurations here -->
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <dependencyManagement>
 
     <dependencies>
@@ -194,54 +217,30 @@
         <artifactId>commons-beanutils</artifactId>
         <version>1.9.4</version>
       </dependency>
-      <!-- CISE Internal Dependencies -->
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-domain</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
+      <!-- CISE dependencies -->
 
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-source-adapter</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-transport</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-ais-app</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-
-      <dependency>
-        <groupId>eu.europa.ec.jrc.marex</groupId>
-        <artifactId>cise-signature</artifactId>
-        <version>1.1-SNAPSHOT</version>
-      </dependency>
-
-      <!-- EUCISE dependencies -->
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.5.3.12</version>
+        <version>${cise.libraries.version}</version>
       </dependency>
 
       <dependency>
         <artifactId>eucise-model-helpers</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.9</version>
+        <version>${cise.libraries.version}</version>
       </dependency>
 
       <dependency>
         <artifactId>eucise-service-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
-        <version>1.0.7</version>
+        <version>${cise.libraries.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-signature</artifactId>
+        <version>${cise.libraries.version}</version>
       </dependency>
 
       <dependency>
@@ -401,10 +400,11 @@
 
   </dependencyManagement>
 
+
   <repositories>
     <repository>
-      <id>local-repo</id>
-      <url>file://${main.basedir}/ais-mvn-repo/snapshots</url>
+      <id>file-snapshots</id>
+      <url>file://${main.basedir}/cise-core-repo/snapshots</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -414,8 +414,8 @@
     </repository>
 
     <repository>
-      <id>local-repo-r</id>
-      <url>file://${main.basedir}/ais-mvn-repo/releases</url>
+      <id>file-releases</id>
+      <url>file://${main.basedir}/cise-core-repo/releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -424,7 +424,6 @@
       </releases>
     </repository>
   </repositories>
-
   <properties>
     <dropwizard.version>1.2.3</dropwizard.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -435,9 +434,12 @@
     <jackson.jaxrs.version>2.9.4</jackson.jaxrs.version>
     <curator.apache.version>4.0.0</curator.apache.version>
     <rabbitmq.client.version>5.0.0</rabbitmq.client.version>
-    <main.basedir>${project.basedir}/..</main.basedir>
+    <main.basedir>${project.basedir}</main.basedir>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <cise.libraries.version>2.3.0</cise.libraries.version>
+    <cise.slf4j-bom.version>2.3.0</cise.slf4j-bom.version>
+    <surefire.java.args>-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0</surefire.java.args>
   </properties>
 
 </project>
