@@ -95,6 +95,9 @@ ${SW_RUN_CMD} 2>&1
 
 function sw_run_cmd {
 
+# FIX for java version 11 and above where XPath limit has been introduced
+JAVA_OPTS="${JAVA_OPTS} -Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0"
+
 if [ "$JAVA_VERSION" == "1.9" ]; then
     JAVA_OPTS="${JAVA_OPTS} --add-modules java.xml.bind"
 fi

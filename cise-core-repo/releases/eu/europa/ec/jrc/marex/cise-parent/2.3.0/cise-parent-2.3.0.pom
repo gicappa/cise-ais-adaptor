@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>eu.europa.ec.jrc.marex</groupId>
+  <artifactId>cise-parent</artifactId>
+  <name>CISE Parent pom</name>
+  <version>2.3.0</version>
+  <packaging>pom</packaging>
+
+  <scm>
+    <url>https://github.com/jrc-cise/cise-parent/</url>
+    <connection>scm:git:https://github.com/jrc-cise/cise-parent.git</connection>
+    <developerConnection>scm:git:git@github.com:jrc-cise/cise-parent.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <cise.parent.version>2.3.0</cise.parent.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>11</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+
+  <modules>
+    <!-- BOMs and parent POM -->
+    <module>build-parent</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <!--
+            ## IMPORTANT ##
+            In your ~/.m2/settings.xml you need to add and edit the following profile:
+            <profile>
+                <id>release</id>
+                <properties>
+                    <gpg.useagent>false</gpg.useagent>
+                    <gpg.executable>/usr/local/Cellar/gnupg@1.4/1.4.23_1/bin/gpg1</gpg.executable> <- use gpg1 on Mac OS X <gpg.homedir>~/.gnupg</gpg.homedir>  <- Update to your own directory <gpg.passphrase>******</gpg.passphrase> <- Add your passphrase </properties>
+            </profile>
+             -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

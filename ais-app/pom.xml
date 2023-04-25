@@ -88,16 +88,21 @@
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-ais-domain</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-ais-transport</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
+
+
 
     <dependency>
       <groupId>eu.europa.ec.jrc.marex</groupId>
       <artifactId>cise-ais-source-adapter</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -125,10 +130,18 @@
       <artifactId>logback-classic</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>19</maven.compiler.source>
+    <maven.compiler.target>19</maven.compiler.target>
+    <maven.compiler.release>19</maven.compiler.release>
+    <main.basedir>${project.basedir}/../</main.basedir>
   </properties>
 </project>
