@@ -84,10 +84,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.11.0</version>
           <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
+            <source>19</source>
+            <target>19</target>
+            <release>19</release>
           </configuration>
         </plugin>
 
@@ -429,7 +430,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jersey.version>2.21</jersey.version>
-    <java.version>11</java.version>
+    <java.version>19</java.version>
     <jackson.version>2.9.4</jackson.version>
     <jackson.jaxrs.version>2.9.4</jackson.jaxrs.version>
     <curator.apache.version>4.0.0</curator.apache.version>
@@ -437,6 +438,7 @@
     <main.basedir>${project.basedir}</main.basedir>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
     <cise.libraries.version>2.3.0</cise.libraries.version>
     <cise.slf4j-bom.version>2.3.0</cise.slf4j-bom.version>
     <surefire.java.args>-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0</surefire.java.args>
