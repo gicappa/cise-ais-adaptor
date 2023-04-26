@@ -29,17 +29,17 @@ package eu.cise.adaptor;
 
 import eu.cise.adaptor.exceptions.AdaptorException;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.function.Function;
 
 /**
- * The implementation of a the RESTful client using the Jersey interface.
- * The implementation uses the {@link javax.ws.rs.client.Client} class and is
+ * The implementation of a RESTful client using the Jersey interface.
+ * The implementation uses the {@link jakarta.ws.rs.client.Client} class and is
  * bound to send an XML payload (application/xml media type).
  */
 public class JerseyRestClient implements RestClient {
@@ -59,7 +59,7 @@ public class JerseyRestClient implements RestClient {
      *
      * @param address the address to contact to deliver the request
      * @param payload the payload to be delivered
-     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     * @return a {@link eu.cise.adaptor.RestResult} with the response details
      */
     @Override
     public RestResult post(String address, String payload) {
@@ -70,7 +70,7 @@ public class JerseyRestClient implements RestClient {
      * Concrete implementation of a GET request using Jersey.
      *
      * @param address the address to contact to deliver the request
-     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     * @return a {@link eu.cise.adaptor.RestResult} with the response details
      */
     @Override
     public RestResult get(String address) {
@@ -81,7 +81,7 @@ public class JerseyRestClient implements RestClient {
      * Concrete implementation of a DELETE request using Jersey.
      *
      * @param address the address to contact to deliver the request
-     * @return a {@link eu.cise.adaptor.RestResult} withe the response details
+     * @return a {@link eu.cise.adaptor.RestResult} with the response details
      */
     @Override
     public RestResult delete(String address) {

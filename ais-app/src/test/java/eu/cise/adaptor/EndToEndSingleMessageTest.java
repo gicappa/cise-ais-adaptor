@@ -29,9 +29,9 @@ package eu.cise.adaptor;
 
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import eu.cise.adaptor.server.TestRestServer;
 import eu.cise.datamodel.v1.entity.location.Geometry;
@@ -43,13 +43,12 @@ import eu.cise.servicemodel.v1.message.XmlEntityPayload;
 import eu.eucise.xml.DefaultXmlMapper;
 import java.util.concurrent.atomic.AtomicReference;
 import org.aeonbits.owner.ConfigFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class EndToEndSingleMessageTest {
 
-    private AdaptorExtConfig config;
     private Thread threadMainApp;
     private TestRestServer testRestServer;
     private DefaultXmlMapper xmlMapper;
@@ -64,10 +63,10 @@ public class EndToEndSingleMessageTest {
      * @formatter:on
      */
 
-    @Before
+    @BeforeEach
     public void before() {
         System.setProperty("prefix.dir", "e2e-single-");
-        config = ConfigFactory.create(AdaptorExtConfig.class);
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
         threadMainApp = new Thread(new MainApp(config));
@@ -119,7 +118,7 @@ public class EndToEndSingleMessageTest {
         return (Vessel) ((XmlEntityPayload) message.getPayload()).getAnies().get(0);
     }
 
-    @After
+    @AfterEach
     public void after() {
         testRestServer.shutdown();
     }

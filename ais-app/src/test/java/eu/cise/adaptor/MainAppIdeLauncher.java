@@ -28,7 +28,7 @@
 package eu.cise.adaptor;
 
 import org.aeonbits.owner.ConfigFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MainAppIdeLauncher {
 

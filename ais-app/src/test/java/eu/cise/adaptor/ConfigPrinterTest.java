@@ -28,22 +28,22 @@
 package eu.cise.adaptor;
 
 import org.aeonbits.owner.ConfigFactory;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConfigPrinterTest {
 
     private String configOuput;
 
-    @Before
+    @BeforeEach
     public void before() {
         AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
 
@@ -53,7 +53,7 @@ public class ConfigPrinterTest {
 
         printer.print();
 
-        configOuput = new String(baos.toByteArray(), UTF_8);
+        configOuput = baos.toString(UTF_8);
     }
 
     @Test

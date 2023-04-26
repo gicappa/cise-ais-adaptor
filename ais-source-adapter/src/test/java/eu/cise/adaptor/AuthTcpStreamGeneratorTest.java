@@ -27,27 +27,32 @@
 
 package eu.cise.adaptor;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import eu.cise.adaptor.exceptions.AdaptorException;
-import eu.cise.adaptor.server.TcpServerRule;
+import eu.cise.adaptor.server.TcpServerExtension;
+import eu.cise.adaptor.server.TcpWorkerFactory;
 import eu.cise.adaptor.sources.AuthTcpStreamGenerator;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-
 import java.net.Socket;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.fail;
-
+@ExtendWith(TcpServerExtension.class)
 public class AuthTcpStreamGeneratorTest {
 
-    public @Rule
-    TcpServerRule serverRule = new TcpServerRule();
+    private final TcpWorkerFactory workerFactory;
+
+    public AuthTcpStreamGeneratorTest(TcpWorkerFactory workerFactory) {
+        this.workerFactory = workerFactory;
+    }
 
     @Test
     public void it_waits_for_the_first_ais_message_in_the_stream() {
         try {
-            AisStreamGenerator streamGenerator
-                    = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
+            var streamGenerator
+                = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
 
             streamGenerator.generate().forEach(ais -> System.out.println("RCVD[" + ais + "]"));
 
@@ -57,15 +62,14 @@ public class AuthTcpStreamGeneratorTest {
         }
     }
 
-    @Test(expected = AdaptorException.class)
-    @Ignore
+    @Test
+    @Disabled
     public void it_exits_if_the_login_string_is_wrong_or_missing() {
-        serverRule.getWorkerFactory().setAuthString("AUTH=wrong:wrong");
+        workerFactory.setAuthString("AUTH=wrong:wrong");
 
-        AisStreamGenerator streamGenerator
-                = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
+        var streamGenerator
+            = new AuthTcpStreamGenerator("localhost", 64738, new Socket());
 
-        streamGenerator.generate();
+        assertThrows(AdaptorException.class, streamGenerator::generate);
     }
-
 }

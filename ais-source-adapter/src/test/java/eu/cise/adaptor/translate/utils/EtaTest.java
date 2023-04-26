@@ -27,17 +27,15 @@
 
 package eu.cise.adaptor.translate.utils;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 
 /**
  * Recap of the rules:
@@ -62,7 +60,7 @@ public class EtaTest {
     private EtaDate etaDate;
     private EtaTime etaTime;
 
-    @Before
+    @BeforeEach
     public void before() {
         etaDate = new EtaDate();
         etaTime = new EtaTime();

@@ -28,21 +28,21 @@
 package eu.cise.adaptor;
 
 import eu.cise.adaptor.translate.utils.InputStreamToStream;
-import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import org.junit.jupiter.api.Test;
 
 import static co.unruly.matchers.StreamMatchers.contains;
 import static eu.cise.adaptor.DelimiterType.KEEP;
 import static eu.cise.adaptor.DelimiterType.STRIP;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InputStreamToStreamTest {
 
-    private String aisOne = "!AIVDM,1,1,,B,13P88o@02=OqlrHM6FATwCvf08=E,0*73";
-    private String aisTwo = "!AIVDM,1,1,,A,13P88o@uB=Oqm2<M6EkTvkvp0@@b,0*44";
-    private String aisThree = "!AIVDM,1,1,,A,13P88o@uB=OqmFPM6DSTukwB0<1G,0*7D";
+    private final String aisOne = "!AIVDM,1,1,,B,13P88o@02=OqlrHM6FATwCvf08=E,0*73";
+    private final String aisTwo = "!AIVDM,1,1,,A,13P88o@uB=Oqm2<M6EkTvkvp0@@b,0*44";
+    private final String aisThree = "!AIVDM,1,1,,A,13P88o@uB=OqmFPM6DSTukwB0<1G,0*7D";
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_CR_LF() {

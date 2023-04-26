@@ -27,24 +27,24 @@
 
 package eu.cise.adaptor.server;
 
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
 
 @SuppressWarnings("unused")
-public class TcpServerRule extends ExternalResource {
+public class TcpServerExtension implements ParameterResolver, BeforeEachCallback, AfterEachCallback {
 
     private TcpWorkerFactory workerFactory;
     private TcpServer testRestServer;
 
     @Override
-    protected void before() {
+    public void beforeEach(ExtensionContext extensionContext) {
         workerFactory = new TcpWorkerFactory();
         testRestServer = new TcpServer(workerFactory, 64738, 1);
         new Thread(testRestServer).start();
-    }
-
-    @Override
-    protected void after() {
-        testRestServer.shutdown();
     }
 
     public TcpWorkerFactory getWorkerFactory() {
@@ -53,5 +53,22 @@ public class TcpServerRule extends ExternalResource {
 
     public TcpServer getServer() {
         return testRestServer;
+    }
+
+    @Override
+    public void afterEach(ExtensionContext extensionContext) {
+        testRestServer.shutdown();
+    }
+
+    @Override
+    public boolean supportsParameter(ParameterContext parameterContext,
+        ExtensionContext extensionContext) throws ParameterResolutionException {
+        return parameterContext.getParameter().getType().equals(TcpWorkerFactory.class);
+    }
+
+    @Override
+    public Object resolveParameter(ParameterContext parameterContext,
+        ExtensionContext extensionContext) throws ParameterResolutionException {
+        return null;
     }
 }

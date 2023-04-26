@@ -54,29 +54,20 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.20</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.surefire</groupId>
-              <artifactId>surefire-junit47</artifactId>
-              <version>2.20</version>
-            </dependency>
-          </dependencies>
+          <version>3.0.0</version>
           <configuration>
+            <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
             <!-- This conf avoid parallel execution on different JVM -->
             <!-- Useful when spawning servers on junit rules -->
             <forkCount>1</forkCount>
             <reuseForks>false</reuseForks>
             <!-- === -->
-
             <useFile>${useFile}</useFile>
-            <excludedGroups>${testcase.excludedGroups}</excludedGroups>
             <includes>
               <include>**/*Spec.java</include>
               <include>**/*Test*.java</include>
             </includes>
             <argLine>${surefire.java.args}</argLine>
-
           </configuration>
         </plugin>
 
@@ -94,7 +85,7 @@
 
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
           <configuration>
             <archive>
               <manifest>
@@ -209,17 +200,36 @@
 
     <dependencies>
       <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.2.2</version>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-domain</artifactId>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-transport</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>eu.europa.ec.jrc.marex</groupId>
+        <artifactId>cise-ais-source-adapter</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>4.4</version>
+      </dependency>
+
       <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
         <version>1.9.4</version>
       </dependency>
-      <!-- CISE dependencies -->
 
+      <!-- CISE dependencies -->
       <dependency>
         <artifactId>cise-data-model</artifactId>
         <groupId>eu.europa.ec.jrc.marex</groupId>
@@ -247,25 +257,25 @@
       <dependency>
         <artifactId>guava</artifactId>
         <groupId>com.google.guava</groupId>
-        <version>22.0</version>
+        <version>31.1-jre</version>
       </dependency>
 
       <dependency>
         <groupId>org.aeonbits.owner</groupId>
         <artifactId>owner</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.12</version>
       </dependency>
 
       <dependency>
         <groupId>org.aeonbits.owner</groupId>
         <artifactId>owner-java8</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.12</version>
       </dependency>
 
       <dependency>
         <groupId>org.aeonbits.owner</groupId>
         <artifactId>owner-java8-extras</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.12</version>
       </dependency>
 
       <dependency>
@@ -277,25 +287,25 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.30</version>
+        <version>2.0.7</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>log4j-over-slf4j</artifactId>
-        <version>1.7.30</version>
+        <version>2.0.7</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jul-to-slf4j</artifactId>
-        <version>1.7.30</version>
+        <version>2.0.7</version>
       </dependency>
 
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version>
+        <version>1.4.7</version>
       </dependency>
 
       <dependency>
@@ -307,7 +317,7 @@
       <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-client</artifactId>
-        <version>2.19</version>
+        <version>3.0.10</version>
       </dependency>
 
       <dependency>
@@ -343,16 +353,23 @@
       </dependency>
 
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.1</version>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
         <scope>test</scope>
       </dependency>
 
       <dependency>
         <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>2.28.2</version>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>5.3.1</version>
         <scope>test</scope>
       </dependency>
 
@@ -373,14 +390,14 @@
       <dependency>
         <groupId>com.greghaskins</groupId>
         <artifactId>spectrum</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
         <scope>test</scope>
       </dependency>
 
       <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
-        <version>3.0.3</version>
+        <version>5.3.0</version>
         <scope>test</scope>
       </dependency>
 
@@ -435,6 +452,7 @@
     <jackson.jaxrs.version>2.9.4</jackson.jaxrs.version>
     <curator.apache.version>4.0.0</curator.apache.version>
     <rabbitmq.client.version>5.0.0</rabbitmq.client.version>
+    <junit-jupiter.version>5.9.2</junit-jupiter.version>
     <main.basedir>${project.basedir}</main.basedir>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -442,6 +460,7 @@
     <cise.libraries.version>2.3.0</cise.libraries.version>
     <cise.slf4j-bom.version>2.3.0</cise.slf4j-bom.version>
     <surefire.java.args>-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0</surefire.java.args>
+    <useFile>true</useFile>
   </properties>
 
 </project>

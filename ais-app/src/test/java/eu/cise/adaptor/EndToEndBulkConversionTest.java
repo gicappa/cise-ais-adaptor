@@ -28,15 +28,15 @@
 package eu.cise.adaptor;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import eu.cise.adaptor.server.TestRestServer;
 import eu.eucise.xml.DefaultXmlMapper;
 import org.aeonbits.owner.ConfigFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +46,12 @@ public class EndToEndBulkConversionTest {
     private TestRestServer testRestServer;
     private DefaultXmlMapper xmlMapper;
     private Logger logger;
-    private AdaptorExtConfig config;
 
-    @Before
+    @BeforeEach
     public void before() {
         System.setProperty("prefix.dir", "e2e-bulk-");
 
-        config = ConfigFactory.create(AdaptorExtConfig.class);
+        AdaptorExtConfig config = ConfigFactory.create(AdaptorExtConfig.class);
         testRestServer = new TestRestServer(64738, 10);
         new Thread(testRestServer).start();
         threadMainApp = new Thread(new MainApp(config));
@@ -80,7 +79,7 @@ public class EndToEndBulkConversionTest {
         }
     }
 
-    @After
+    @AfterEach
     public void after() {
         testRestServer.shutdown();
     }

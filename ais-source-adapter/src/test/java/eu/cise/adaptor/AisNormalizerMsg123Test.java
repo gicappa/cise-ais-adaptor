@@ -30,14 +30,14 @@ package eu.cise.adaptor;
 import eu.cise.adaptor.AdaptorLogger.Slf4j;
 import eu.cise.adaptor.helper.TestScenario;
 import eu.cise.adaptor.translate.AisMessageToAisMsg;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.time.Instant;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 // !AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15
 // {rateOfTurn=-4, metadata=Metadata{source='SRC', received=2018-02-15T09:52:25.049Z}, navigationStatus=UnderwayUsingEngine, trueHeading=210, latitude=47.443634, courseOverGround=211.9, positionAccuracy=false, speedOverGround=13.8, nmeaMessages=[Ldk.tbsalling.aismessages.nmea.messages.NMEAMessage;@5a106b26, sourceMmsi.MMSI=538005989, raimFlag=false, second=41, valid=true, communicationState.syncState=UTCDirect, messageType=PositionReportClassAScheduled, specialManeuverIndicator=NotAvailable, repeatIndicator=2, transponderClass=A, longitude=-6.9895167}
@@ -45,9 +45,9 @@ import static org.junit.Assert.assertThat;
 public class AisNormalizerMsg123Test {
 
     private AisMessageToAisMsg n;
-    private TestScenario t = new TestScenario();
+    private final TestScenario t = new TestScenario();
 
-    @Before
+    @BeforeEach
     public void before() {
         n = new AisMessageToAisMsg(new Slf4j());
     }
