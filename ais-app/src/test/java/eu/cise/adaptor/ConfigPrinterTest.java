@@ -35,9 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConfigPrinterTest {
 
@@ -58,11 +56,11 @@ public class ConfigPrinterTest {
 
     @Test
     public void it_should_avoid_printing_passwords() {
-        assertThat(configOuput, not(containsString("cisecise")));
+        assertThat(configOuput).doesNotContain("cisecise");
     }
 
     @Test
     public void it_should_print_stars_instead() {
-        assertThat(configOuput, containsString("=********"));
+        assertThat(configOuput).contains("=********");
     }
 }

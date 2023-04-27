@@ -29,8 +29,7 @@ package eu.cise.adaptor;
 
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
 import static eu.cise.datamodel.v1.entity.vessel.NavigationalStatusType.UNDER_WAY_USING_ENGINE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import eu.cise.adaptor.server.TestRestServer;
@@ -83,16 +82,16 @@ public class EndToEndSingleMessageTest {
 
             Thread.sleep(10);
 
-            Vessel vessel = extractVessel(atomicReference.get());
+            var vessel = extractVessel(atomicReference.get());
 
-            assertThat(locationRelInfo(vessel).getCOG(), is(127.7D));
-            assertThat(locationRelInfo(vessel).getSOG(), is(14.1D));
-            assertThat(vessel.getMMSI(), is(235014365L));
-            assertThat(vessel.getNavigationalStatus(), is(UNDER_WAY_USING_ENGINE));
-            assertThat(locationRelInfo(vessel).getHeading(), is(127D));
-            assertThat(geometryInfo(vessel).getLatitude(), is("50.854515")); //50.8545167
-            assertThat(geometryInfo(vessel).getLongitude(), is("-1.3485667")); //1.3485667
-            assertThat(locationInfo(vessel).getLocationQualitativeAccuracy(), is(MEDIUM));
+            assertThat(locationRelInfo(vessel).getCOG()).isEqualTo(127.7D);
+            assertThat(locationRelInfo(vessel).getSOG()).isEqualTo(14.1D);
+            assertThat(vessel.getMMSI()).isEqualTo(235014365L);
+            assertThat(vessel.getNavigationalStatus()).isEqualTo(UNDER_WAY_USING_ENGINE);
+            assertThat(locationRelInfo(vessel).getHeading()).isEqualTo(127D);
+            assertThat(geometryInfo(vessel).getLatitude()).isEqualTo("50.854515"); //50.8545167
+            assertThat(geometryInfo(vessel).getLongitude()).isEqualTo("-1.3485667"); //1.3485667
+            assertThat(locationInfo(vessel).getLocationQualitativeAccuracy()).isEqualTo(MEDIUM);
             // System.out.println(locationRelInfo(vessel).getPeriodOfTime()); // To be checked
 
 

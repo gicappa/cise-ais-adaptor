@@ -30,10 +30,8 @@ package eu.cise.adaptor;
 import static eu.cise.servicemodel.v1.service.ServiceOperationType.SUBSCRIBE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -69,7 +67,7 @@ public class VesselToPushMessageTest {
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
-    assertThat(actual.getDiscoveryProfiles(), hasSize(2));
+    assertThat(actual.getDiscoveryProfiles()).hasSize(2);
   }
 
   @Test
@@ -78,7 +76,7 @@ public class VesselToPushMessageTest {
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
-    assertThat(actual.getSender().getServiceOperation(), is(SUBSCRIBE));
+    assertThat(actual.getSender().getServiceOperation()).isEqualTo(SUBSCRIBE);
   }
 
   @Test
@@ -87,7 +85,7 @@ public class VesselToPushMessageTest {
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
-    assertThat(actual.getDiscoveryProfiles(), hasSize(0));
+    assertThat(actual.getDiscoveryProfiles()).hasSize(0);
   }
 
   @Test
@@ -96,7 +94,7 @@ public class VesselToPushMessageTest {
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
-    assertThat(actual.getRecipient(), is(nullValue()));
+    assertThat(actual.getRecipient()).isNull();
   }
 
   @Test
@@ -105,7 +103,7 @@ public class VesselToPushMessageTest {
 
     Push actual = vesselToPush.translate(singletonList(new Vessel()));
 
-    assertThat(actual.getDiscoveryProfiles().size(), is(0));
+    assertThat(actual.getDiscoveryProfiles().size()).isEqualTo(0);
   }
 
   private AdaptorConfig configUsingPush() {

@@ -27,96 +27,97 @@
 
 package eu.cise.adaptor;
 
+import static com.greghaskins.spectrum.Spectrum.describe;
+import static com.greghaskins.spectrum.Spectrum.it;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.greghaskins.spectrum.Spectrum;
 import eu.cise.adaptor.translate.AisMsgToVessel;
-import eu.cise.datamodel.v1.entity.Entity;
-import eu.cise.datamodel.v1.entity.organization.Organization;
-import eu.cise.datamodel.v1.entity.uniqueidentifier.UniqueIdentifier;
 import eu.cise.datamodel.v1.entity.vessel.Vessel;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.runner.RunWith;
 
-import java.util.Optional;
-
-import static com.greghaskins.spectrum.Spectrum.*;
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-
 @RunWith(Spectrum.class)
 public class ModelTranslatorSpec {
+
     {
         describe("an AIS to CISE model translator", () -> {
 
-            AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-            AisMsgToVessel translator = new AisMsgToVessel(config);
+            var config = ConfigFactory.create(AdaptorConfig.class);
+            var translator = new AisMsgToVessel(config);
 
             describe("when a message type is not supported", () -> {
                 asList(4, 6, 7, 8, 9, 10, 11)
-                        .forEach((n) ->
-                                         it("returns an empty optional / " + n, () -> {
-                                             assertThat(translator.translate(new AisMsg.Builder(8).build()), is(Optional.empty()));
-                                         })
-                                );
+                    .forEach((n) ->
+                        it("returns an empty optional / " + n, () -> {
+                            assertThat(translator.translate(new AisMsg.Builder(8).build()))
+                                .isEmpty();
+                        })
+                    );
             });
 
             describe("when a message type is 1,2,3 or 5", () -> {
 
                 asList(1, 2, 3, 5).forEach((n) -> {
-                    final AisMsg m = new AisMsg.Builder(n)
-                            .withUserId(538005989)
-                            .build();
+                    final var m = new AisMsg.Builder(n)
+                        .withUserId(538005989)
+                        .build();
 
                     it("returns an optional with an entity / " + n, () ->
-                            assertThat(translator.translate(m), is(not(Optional.empty()))));
+                        assertThat(translator.translate(m)).isNotEmpty());
 
                     it("returns an Optional<Vessel> / " + n, () -> {
-                        Optional<Entity> entity = translator.translate(m);
+                        var entity = translator.translate(m);
 
-                        assertThat("The element in the payload must be a Vessel",
-                                   entity.get(), instanceOf(Vessel.class));
+                        assertThat(entity.get()).isInstanceOf(Vessel.class)
+                            .describedAs("The element in the payload must be a Vessel");
                     });
 
                     it("returns a vessel with a uuid / " + n, () -> {
-                        Vessel vessel = ((Vessel) translator.translate(m).get());
+                        var vessel = ((Vessel) translator.translate(m).get());
 
-                        assertThat("the uuid is not null",
-                                   vessel.getIdentifier(), notNullValue());
+                        assertThat(vessel.getIdentifier()).isNotNull()
+                            .describedAs("the uuid is not null");
                     });
 
                     it("returns a uuid with an organization / " + n, () -> {
-                        UniqueIdentifier id
-                                = ((Vessel) translator.translate(m).get()).getIdentifier();
+                        var id
+                            = ((Vessel) translator.translate(m).get()).getIdentifier();
 
-                        assertThat("the org is not null", id.getGeneratedBy(), notNullValue());
+                        assertThat(id.getGeneratedBy()).isNotNull()
+                            .describedAs("the org is not null");
                     });
 
                     it("returns a legalName in the org object / " + n, () -> {
-                        Organization org = ((Vessel) translator.translate(m).get())
-                                .getIdentifier().getGeneratedBy();
+                        var org = ((Vessel) translator.translate(m).get())
+                            .getIdentifier().getGeneratedBy();
 
-                        assertThat("the legalName is not null",
-                                   org.getLegalName(), notNullValue());
+                        assertThat(org.getLegalName()).isNotNull()
+                            .describedAs("the legalName is not null");
 
-                        assertThat("the legalName is the one specified in the config",
-                                   org.getLegalName(), is(config.getOrgLegalName()));
+                        assertThat(org.getLegalName()).isEqualTo(config.getOrgLegalName())
+                            .describedAs("the legalName is the one specified in the config");
                     });
 
                     it("returns a alternativeName in the org object / " + n, () -> {
-                        Organization org = ((Vessel) translator.translate(m).get())
-                                .getIdentifier().getGeneratedBy();
+                        var org = ((Vessel) translator.translate(m).get())
+                            .getIdentifier().getGeneratedBy();
 
-                        assertThat("the legalName is not null",
-                                   org.getAlternativeName(), notNullValue());
+                        assertThat(org.getAlternativeName()).isNotNull()
+                            .describedAs("the legalName is not null");
 
-                        assertThat("the legalName is the one specified in the config",
-                                   org.getAlternativeName(), is(config.getOrgAlternativeName()));
+                        assertThat(org.getAlternativeName())
+                            .isEqualTo(config.getOrgAlternativeName())
+                            .describedAs("the legalName is the one specified in the config");
                     });
                     it("returns an uuid string not null / " + n, () -> {
-                        UniqueIdentifier uuid= ((Vessel) translator.translate(m).get()).getIdentifier();
+                        var uuid = ((Vessel) translator.translate(m)
+                            .get()).getIdentifier();
 
                         System.out.println(uuid.getUUID());
-                        assertThat("the uuid is not null", uuid.getUUID(), notNullValue());
+                        assertThat(uuid.getUUID()).isNotNull()
+                            .describedAs("the uuid is not null");
                     });
                 });
             });

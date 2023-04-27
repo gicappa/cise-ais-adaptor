@@ -32,11 +32,10 @@ import eu.cise.adaptor.translate.utils.InputStreamToStream;
 import java.io.ByteArrayInputStream;
 import org.junit.jupiter.api.Test;
 
-import static co.unruly.matchers.StreamMatchers.contains;
 import static eu.cise.adaptor.DelimiterType.KEEP;
 import static eu.cise.adaptor.DelimiterType.STRIP;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class InputStreamToStreamTest {
 
@@ -46,34 +45,33 @@ public class InputStreamToStreamTest {
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_CR_LF() {
-        ByteArrayInputStream is = getAisInputStream(getAisMessages("\r\n"));
-        InputStreamToStream toStream = new InputStreamToStream(is, "\r\n", STRIP);
+        var is = getAisInputStream(getAisMessages("\r\n"));
+        var toStream = new InputStreamToStream(is, "\r\n", STRIP);
 
-        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream()).contains(aisOne, aisTwo, aisThree);
     }
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_CR() {
-        ByteArrayInputStream is = getAisInputStream(getAisMessages("\n"));
-        InputStreamToStream toStream = new InputStreamToStream(is, "\n", STRIP);
+        var is = getAisInputStream(getAisMessages("\n"));
+        var toStream = new InputStreamToStream(is, "\n", STRIP);
 
-        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream()).contains(aisOne, aisTwo, aisThree);
     }
 
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_NOTHING() {
-        ByteArrayInputStream is = getAisInputStream(getAisMessages("\n"));
-        InputStreamToStream toStream = new InputStreamToStream(is, "\n", STRIP);
+        var is = getAisInputStream(getAisMessages("\n"));
+        var toStream = new InputStreamToStream(is, "\n", STRIP);
 
-        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream()).contains(aisOne, aisTwo, aisThree);
     }
     @Test
     public void it_translate_an_InputStream_to_a_Stream_of_Strings_EXCLAMATION() {
-        ByteArrayInputStream is = getAisInputStream(getAisMessages(""));
+        var is = getAisInputStream(getAisMessages(""));
+        var toStream = new InputStreamToStream(is, "!", KEEP);
 
-        InputStreamToStream toStream = new InputStreamToStream(is, "!", KEEP);
-
-        assertThat(toStream.stream(), contains(aisOne, aisTwo, aisThree));
+        assertThat(toStream.stream()).contains(aisOne, aisTwo, aisThree);
     }
 
     private String getAisMessages(String separator) {

@@ -36,8 +36,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 // !AIVDM,1,1,,A,1`15Aq@vj:OP0BRK9L18AnUB0000,0*15
 // {rateOfTurn=-4, metadata=Metadata{source='SRC', received=2018-02-15T09:52:25.049Z}, navigationStatus=UnderwayUsingEngine, trueHeading=210, latitude=47.443634, courseOverGround=211.9, positionAccuracy=false, speedOverGround=13.8, nmeaMessages=[Ldk.tbsalling.aismessages.nmea.messages.NMEAMessage;@5a106b26, sourceMmsi.MMSI=538005989, raimFlag=false, second=41, valid=true, communicationState.syncState=UTCDirect, messageType=PositionReportClassAScheduled, specialManeuverIndicator=NotAvailable, repeatIndicator=2, transponderClass=A, longitude=-6.9895167}
@@ -54,64 +53,64 @@ public class AisNormalizerMsg123Test {
 
     @Test
     public void it_maps_position_message_type() {
-        assertThat(n.translate(t.positionMsg()).get().getMessageType(), is(1));
+        assertThat(n.translate(t.positionMsg()).get().getMessageType()).isEqualTo(1);
     }
 
     @Test
     public void it_maps_voyage_message_type() {
-        assertThat(n.translate(t.voyageMsg()).get().getMessageType(), is(5));
+        assertThat(n.translate(t.voyageMsg()).get().getMessageType()).isEqualTo(5);
     }
 
     @Test
     public void it_maps_position_latitude() {
-        assertThat(n.translate(t.positionMsg()).get().getLatitude(), is(47.443634F));
+        assertThat(n.translate(t.positionMsg()).get().getLatitude()).isEqualTo(47.443634F);
     }
 
     @Test
     public void it_maps_position_longitude() {
-        assertThat(n.translate(t.positionMsg()).get().getLongitude(), is(-6.989518F));
+        assertThat(n.translate(t.positionMsg()).get().getLongitude()).isEqualTo(-6.989518F);
     }
 
     @Test
     public void it_maps_location_accuracy() {
-        assertThat(n.translate(t.positionMsg()).get().getPositionAccuracy(), is(0));
+        assertThat(n.translate(t.positionMsg()).get().getPositionAccuracy()).isEqualTo(0);
     }
 
     @Test
     public void it_maps_MMSI() {
-        assertThat(n.translate(t.positionMsg()).get().getUserId(), is(538005989));
+        assertThat(n.translate(t.positionMsg()).get().getUserId()).isEqualTo(538005989);
     }
 
     @Test
     public void it_maps_COG() {
-        assertThat(n.translate(t.positionMsg()).get().getCOG(), is(211.9F));
+        assertThat(n.translate(t.positionMsg()).get().getCOG()).isEqualTo(211.9F);
     }
 
     @Test
     public void it_maps_true_heading() {
-        assertThat(n.translate(t.positionMsg()).get().getTrueHeading(), is(210));
+        assertThat(n.translate(t.positionMsg()).get().getTrueHeading()).isEqualTo(210);
     }
 
     @Test
     public void it_maps_Instant_MIN_when_timestamp_is_null() {
-        assertThat(n.translate(t.positionMsg()).get().getTimestamp(), is(Instant.MIN));
+        assertThat(n.translate(t.positionMsg()).get().getTimestamp()).isEqualTo(Instant.MIN);
     }
 
     @Test
     public void it_maps_timestamp() {
         Instant dateTime = Instant.parse("2018-02-19T14:43:16.550Z");
 
-        assertThat(n.translate(t.positionMsgWithTime(dateTime)).get().getTimestamp(), is(dateTime)); // 2018-02-15T09:52:25.049Z
+        assertThat(n.translate(t.positionMsgWithTime(dateTime)).get().getTimestamp()).isEqualTo(dateTime); // 2018-02-15T09:52:25.049Z
     }
 
     @Test
     public void it_maps_SOG() {
-        assertThat(n.translate(t.positionMsg()).get().getSOG(), is(13.8F));
+        assertThat(n.translate(t.positionMsg()).get().getSOG()).isEqualTo(13.8F);
     }
 
     @Test
     public void it_maps_navigational_status() {
-        assertThat(n.translate(t.positionMsg()).get().getNavigationStatus(), is(UnderwayUsingEngine));
+        assertThat(n.translate(t.positionMsg()).get().getNavigationStatus()).isEqualTo(UnderwayUsingEngine);
     }
 
 }

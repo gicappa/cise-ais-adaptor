@@ -39,12 +39,7 @@ import static eu.cise.adaptor.heplers.Utils.xmlTime;
 import static eu.cise.adaptor.translate.utils.NavigationStatus.UnderwayUsingEngine;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.HIGH;
 import static eu.cise.datamodel.v1.entity.location.LocationQualitativeAccuracyType.MEDIUM;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -85,23 +80,18 @@ public class AIS_1_2_3_TranslatorSpec {
                 context("when returns a Vessel with a geometry", () -> {
 
                     it("the geometry elements are not null and well formed", () -> {
-                        assertThat(v.getLocationRels(), is(not(empty())));
-
-                        assertThat(extractLocationRel(v).getLocation(), is(notNullValue()));
-
-                        assertThat(extractLocationRel(v).getLocation().getGeometries(),
-                            is(not(empty())));
-
-                        assertThat(extractLocationRel(v).getLocation().getGeometries().get(0),
-                            is(notNullValue()));
+                        assertThat(v.getLocationRels()).isNotEmpty();
+                        assertThat(extractLocationRel(v).getLocation()).isNotNull();
+                        assertThat(extractLocationRel(v).getLocation().getGeometries()).isNotEmpty();
+                        assertThat(extractLocationRel(v).getLocation().getGeometries().get(0)).isNotNull();
                     });
 
                     it("the latitude is extracted correctly", () -> {
-                        assertThat(extractGeometry(v).getLatitude(), is("47.443634"));
+                        assertThat(extractGeometry(v).getLatitude()).isEqualTo("47.443634");
                     });
 
                     it("the longitude is extracted correctly", () -> {
-                        assertThat(extractGeometry(v).getLongitude(), is("-6.9895167"));
+                        assertThat(extractGeometry(v).getLongitude()).isEqualTo("-6.9895167");
                     });
 
                     context("when the config deleteIncorrectGeoLocation is true", () -> {
@@ -114,7 +104,7 @@ public class AIS_1_2_3_TranslatorSpec {
                                 .withLatitude(91F).withLongitude(-6.9895167F).build();
                             Vessel v91 = translator.translate(m91);
 
-                            assertThat(extractLocation(v91), nullValue());
+                            assertThat(extractLocation(v91)).isNull();
                         });
 
                         it("the longitude is null when ais defaults to 181", () -> {
@@ -122,7 +112,7 @@ public class AIS_1_2_3_TranslatorSpec {
                                 .withLatitude(47.443634F).withLongitude(181F).build();
                             Vessel v181 = translator.translate(m181);
 
-                            assertThat(extractLocation(v181), nullValue());
+                            assertThat(extractLocation(v181)).isNull();
                         });
                     });
 
@@ -136,7 +126,7 @@ public class AIS_1_2_3_TranslatorSpec {
                                 .withLatitude(91F).withLongitude(-6.9895167F).build();
                             Vessel v91 = translator.translate(m91);
 
-                            assertThat(extractGeometry(v91).getLatitude(), is("91.0"));
+                            assertThat(extractGeometry(v91).getLatitude()).isEqualTo("91.0");
                         });
 
                         it("the longitude is 181 when ais defaults to 181", () -> {
@@ -144,7 +134,7 @@ public class AIS_1_2_3_TranslatorSpec {
                                 .withLatitude(47.443634F).withLongitude(181F).build();
                             Vessel v181 = translator.translate(m181);
 
-                            assertThat(extractGeometry(v181).getLongitude(), is("181.0"));
+                            assertThat(extractGeometry(v181).getLongitude()).isEqualTo("181.0");
                         });
                     });
                 });
@@ -153,7 +143,7 @@ public class AIS_1_2_3_TranslatorSpec {
 
                     it("HIGH for AIS position accuracy 1", () -> {
                         assertThat(extractLocationRel(v).getLocation()
-                            .getLocationQualitativeAccuracy(), is(HIGH));
+                            .getLocationQualitativeAccuracy()).isEqualTo(HIGH);
                     });
 
                     it("MEDIUM for AIS position accuracy 0", () -> {
@@ -161,12 +151,12 @@ public class AIS_1_2_3_TranslatorSpec {
                         Vessel vMedium = translator.translate(mMedium);
 
                         assertThat(extractLocationRel(vMedium).getLocation()
-                            .getLocationQualitativeAccuracy(), is(MEDIUM));
+                            .getLocationQualitativeAccuracy()).isEqualTo(MEDIUM);
                     });
                 });
 
                 it("returns a Vessel with cog (in degrees instead of 1/10 od degrees)", () -> {
-                    assertThat(extractLocationRel(v).getCOG(), is(211.9D));
+                    assertThat(extractLocationRel(v).getCOG()).isEqualTo(211.9D);
                 });
 
                 it("returns a Vessel with cog (null for cog=3600)", () -> {
@@ -176,11 +166,11 @@ public class AIS_1_2_3_TranslatorSpec {
 
                     Vessel vc = translator.translate(mc);
 
-                    assertThat(extractLocationRel(vc).getCOG(), is(nullValue()));
+                    assertThat(extractLocationRel(vc).getCOG()).isNull();
                 });
 
                 it("returns a Vessel with true heading", () -> {
-                    assertThat(extractLocationRel(v).getHeading(), is(210D));
+                    assertThat(extractLocationRel(v).getHeading()).isEqualTo(210D);
                 });
 
                 it("returns a Vessel with heading (null for trueHeading=511)", () -> {
@@ -190,20 +180,19 @@ public class AIS_1_2_3_TranslatorSpec {
 
                     Vessel vh = translator.translate(mh);
 
-                    assertThat(extractLocationRel(vh).getHeading(), is(nullValue()));
+                    assertThat(extractLocationRel(vh).getHeading()).isNull();
                 });
 
                 it("returns a Vessel with source type", () -> {
-                    assertThat(extractLocationRel(v).getSourceType(), is(SourceType.DECLARATION));
+                    assertThat(extractLocationRel(v).getSourceType()).isEqualTo(SourceType.DECLARATION);
                 });
 
                 it("returns a Vessel with sensor type", () -> {
-                    assertThat(extractLocationRel(v).getSensorType(),
-                        is(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM));
+                    assertThat(extractLocationRel(v).getSensorType()).isEqualTo(SensorType.AUTOMATIC_IDENTIFICATION_SYSTEM);
                 });
 
                 it("returns a Vessel with sog (in knots instead of 1/10th of knots)", () -> {
-                    assertThat(extractLocationRel(v).getSOG(), is(13.8D));
+                    assertThat(extractLocationRel(v).getSOG()).isEqualTo(13.8D);
                 });
 
                 it("returns a Vessel with sog (null for SOG=1023)", () -> {
@@ -212,28 +201,28 @@ public class AIS_1_2_3_TranslatorSpec {
                         .build();
 
                     Vessel vs = translator.translate(ms);
-                    assertThat(extractLocationRel(vs).getSOG(), is(nullValue()));
+                    assertThat(extractLocationRel(vs).getSOG()).isNull();
                 });
 
                 it("returns a Vessel with periodOfTime.startDate", () -> {
                     //"2018-02-19T14:43:16.550Z"
-                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartDate(),
-                        is(xmlDate(2018, 2, 19)));
+                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartDate())
+                        .isEqualTo(xmlDate(2018, 2, 19));
                 });
 
                 it("returns a Vessel with periodOfTime.startTime", () -> {
                     //"2018-02-19T14:43:16.550Z"
-                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartTime(),
-                        is(xmlTime(14, 43, 16)));
+                    assertThat(extractLocationRel(v).getPeriodOfTime().getStartTime())
+                        .isEqualTo(xmlTime(14, 43, 16));
                 });
 
                 it("returns a Vessel with MMSI", () -> {
-                    assertThat(v.getMMSI(), is(538005989L));
+                    assertThat(v.getMMSI()).isEqualTo(538005989L);
                 });
 
                 it("returns a Vessel with navigationStatus", () -> {
-                    assertThat(v.getNavigationalStatus(),
-                        is(NavigationalStatusType.UNDER_WAY_USING_ENGINE));
+                    assertThat(v.getNavigationalStatus())
+                        .isEqualTo(NavigationalStatusType.UNDER_WAY_USING_ENGINE);
                 });
             });
 

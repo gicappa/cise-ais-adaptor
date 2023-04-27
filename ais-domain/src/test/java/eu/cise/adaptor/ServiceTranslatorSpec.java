@@ -27,60 +27,62 @@
 
 package eu.cise.adaptor;
 
-import com.greghaskins.spectrum.Spectrum;
-import eu.cise.adaptor.translate.ServiceProfileReader;
-import eu.cise.adaptor.translate.VesselToPushMessage;
-import eu.cise.datamodel.v1.entity.vessel.Vessel;
-import eu.cise.servicemodel.v1.message.XmlEntityPayload;
-import org.aeonbits.owner.ConfigFactory;
-import org.junit.runner.RunWith;
-
-import java.util.List;
-import java.util.Optional;
-
 import static com.greghaskins.spectrum.Spectrum.describe;
 import static com.greghaskins.spectrum.Spectrum.it;
 import static eu.cise.adaptor.heplers.Utils.extractPayload;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+
+import com.greghaskins.spectrum.Spectrum;
+import eu.cise.adaptor.translate.ServiceProfileReader;
+import eu.cise.adaptor.translate.VesselToPushMessage;
+import eu.cise.datamodel.v1.entity.vessel.Vessel;
+import eu.cise.servicemodel.v1.message.Push;
+import eu.cise.servicemodel.v1.message.XmlEntityPayload;
+import java.util.List;
+import org.aeonbits.owner.ConfigFactory;
+import org.junit.runner.RunWith;
 
 @SuppressWarnings("ClassInitializerMayBeStatic")
 @RunWith(Spectrum.class)
-public class ServiceTranslatorSpec {{
+public class ServiceTranslatorSpec {
+
+    {
         describe("the cise service model added to the entity", () -> {
 
-                     AdaptorConfig config = ConfigFactory.create(AdaptorConfig.class);
-                     VesselToPushMessage translator =
-                             new VesselToPushMessage(config, mock(ServiceProfileReader.class));
+            var config = ConfigFactory.create(AdaptorConfig.class);
+            var translator =
+                new VesselToPushMessage(config, mock(ServiceProfileReader.class));
 
-                     Vessel vessel = new Vessel();
+            var vessel = new Vessel();
 
-                     it("returns an optional with a push message", () ->
-                             assertThat(translator.translate(singletonList(vessel)),
-                                        is(not(Optional.empty()))));
+            it("returns an optional with a push message", () ->
+                assertThat(translator.translate(singletonList(vessel)))
+                    .isInstanceOf(Push.class));
 
-                     it("returns an Optional<Push> with an XmlEntityPayload", () -> {
-                         XmlEntityPayload payload
-                                 = extractPayload(translator.translate(singletonList(vessel)));
+            it("returns an Optional<Push> with an XmlEntityPayload", () -> {
+                var payload
+                    = extractPayload(translator.translate(singletonList(vessel)));
 
-                         assertThat("The XmlEntityPayload has not been created",
-                                    payload, is(notNullValue()));
-                     });
+                assertThat(payload)
+                    .describedAs("The XmlEntityPayload has not been created")
+                    .isNotNull();
+            });
 
-                     it("returns an Optional<Push> with a vessel", () -> {
-                         XmlEntityPayload payload
-                                 = extractPayload(translator.translate(singletonList(vessel)));
-                         List<Object> vessels = payload.getAnies();
-                         assertThat("There must be at least one vessel element i the payload",
-                                    vessels, is(not(empty())));
+            it("returns an Optional<Push> with a vessel", () -> {
+                XmlEntityPayload payload
+                    = extractPayload(translator.translate(singletonList(vessel)));
+                List<Object> vessels = payload.getAnies();
+                assertThat(vessels)
+                    .describedAs("There must be at least one vessel element i the payload")
+                    .isNotEmpty();
 
-                         assertThat("The element in the payload must be a Vessel",
-                                    vessels.get(0), instanceOf(Vessel.class));
-                     });
-                 }
-                );
+                assertThat(vessels.get(0))
+                    .isInstanceOf(Vessel.class)
+                    .describedAs("The element in the payload must be a Vessel");
+            });
+        });
     }
 }
 
